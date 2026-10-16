@@ -1,0 +1,27 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "BigSaltyMan/moonclip"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn copy_path(Array[Point64]) -> Array[Point64]
+
+pub fn copy_paths(Array[Array[Point64]]) -> Array[Array[Point64]]
+
+// Errors
+
+// Types and methods
+pub(all) struct Point64 {
+  x : Int64
+  y : Int64
+} derive(Eq, @debug.Debug)
+pub fn Point64::new(Int64, Int64) -> Self
+
+// Type aliases
+pub type Path64 = Array[Point64]
+
+pub type Paths64 = Array[Array[Point64]]
+
+// Traits

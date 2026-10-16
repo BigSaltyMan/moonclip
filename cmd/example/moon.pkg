@@ -1,0 +1,5 @@
+import {
+  "BigSaltyMan/moonclip",
+}
+
+pkgtype(kind: "executable")

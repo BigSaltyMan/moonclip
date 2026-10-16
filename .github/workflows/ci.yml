@@ -1,0 +1,39 @@
+name: native
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  native:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Install fixed MoonBit toolchain
+        shell: bash
+        run: |
+          set -euo pipefail
+          version='0.10.13%2Bcbb11c36f'
+          export MOON_HOME="$RUNNER_TEMP/moonclip-moon"
+          mkdir -p "$MOON_HOME/lib"
+          curl --fail --location --retry 3 \
+            "https://cli.moonbitlang.com/binaries/$version/moonbit-linux-x86_64.tar.gz" \
+            --output "$RUNNER_TEMP/moonbit.tar.gz"
+          curl --fail --location --retry 3 \
+            "https://cli.moonbitlang.com/cores/core-$version.tar.gz" \
+            --output "$RUNNER_TEMP/core.tar.gz"
+          echo "ef643f267d5ee075dbafd54b44b0a26c55116340515dca07294c2a0b83479a8b  $RUNNER_TEMP/moonbit.tar.gz" | sha256sum --check
+          echo "d36b64c42df3019d9da87291e40738e90623c0380d0e200a62156091fb00c176  $RUNNER_TEMP/core.tar.gz" | sha256sum --check
+          tar -xzf "$RUNNER_TEMP/moonbit.tar.gz" -C "$MOON_HOME"
+          tar -xzf "$RUNNER_TEMP/core.tar.gz" -C "$MOON_HOME/lib"
+          chmod +x "$MOON_HOME"/bin/* "$MOON_HOME/bin/internal/tcc"
+          export PATH="$MOON_HOME/bin:$PATH"
+          moon -C "$MOON_HOME/lib/core" bundle --target native --warn-list -a
+          echo "MOON_HOME=$MOON_HOME" >> "$GITHUB_ENV"
+          echo "$MOON_HOME/bin" >> "$GITHUB_PATH"
+      - name: Check native library and example
+        run: bash scripts/check.sh
