@@ -1,4 +1,4 @@
-name: native
+name: geometry
 
 on:
   push:
@@ -8,7 +8,7 @@ permissions:
   contents: read
 
 jobs:
-  native:
+  native-js:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
@@ -33,7 +33,8 @@ jobs:
           chmod +x "$MOON_HOME"/bin/* "$MOON_HOME/bin/internal/tcc"
           export PATH="$MOON_HOME/bin:$PATH"
           moon -C "$MOON_HOME/lib/core" bundle --target native --warn-list -a
+          moon -C "$MOON_HOME/lib/core" bundle --target js --warn-list -a
           echo "MOON_HOME=$MOON_HOME" >> "$GITHUB_ENV"
           echo "$MOON_HOME/bin" >> "$GITHUB_PATH"
-      - name: Check native library and example
+      - name: Check native and JS geometry
         run: bash scripts/check.sh

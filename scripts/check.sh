@@ -18,9 +18,14 @@ if [[ -n "$untracked_interfaces" ]]; then
   printf 'Untracked public interfaces; review and stage them:\n%s\n' "$untracked_interfaces" >&2
   exit 1
 fi
+printf 'Checking native target\n'
 moon check --target native --deny-warn
 moon test --target native
 moon build --target native
 moon run --target native cmd/example
+printf 'Checking JS target\n'
+node --version
+moon check --target js --deny-warn
+moon test --target js
 moon fmt --check
 git diff --check

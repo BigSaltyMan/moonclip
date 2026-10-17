@@ -22,11 +22,24 @@
 
 C# 源码作为主要阅读与后续移植参考；固定版本的 C++ 实现作为独立对照。MoonClip 运行库由 MoonBit 实现，不依赖外部几何运行时；参考程序只用于后续测试数据生成。
 
+
+## Commit 2 几何参考与实现（2026-10-17）
+
+本次重新读取固定提交 `CSharp/Clipper2Lib/Clipper.Core.cs` 的 `CrossProductSign`、`ProductsAreEqual` / `IsCollinear` 与 `PointInPolygon`，比较上游的精确符号、边界与奇偶判定设计。没有直接改写这些函数体。
+
+| 上游文件或设计 | MoonBit 文件 | 实际关系与修改 |
+| --- | --- | --- |
+| `Clipper.Core.cs` 的 `CrossProductSign`、`IsCollinear` | `geometry.mbt` | 阅读参考。MoonClip 根据限定到 ±10^9 的坐标自行实现统一三点 Int64 行列式及闭区间判断；上游使用 UInt128 乘积比较，未移植其实现。 |
+| `Clipper.Core.cs` 的 `PointInPolygon` | `geometry.mbt` | 阅读边界/奇偶语义参考。MoonClip 自行实现先检查边界、半开 y 区间和叉积右射线计数；空、单点和两点按本项目契约处理，没有沿用上游少于三点一律 Outside 的行为。 |
+| 无直接对应上游代码 | `geometry.mbt` 的 `bounds`、`area2` | 自行实现最值扫描和精确鞋带公式，面积在溢出前从 Int64 切换到标准库 BigInt。 |
+| 无直接对应上游代码 | `limits.mbt`、`normalize.mbt` | 自行实现坐标预检、共享原始输入预算、英文结构化错误及显式开放/闭合重复点整理；不进行面积过滤或拓扑修复。 |
+
+本笔仍未直接移植上游函数体；新增实现版权为 BigSaltyMan 2026，BSL-1.0。MoonBit 标准库 BigInt 是运行时库依赖，来自同一固定工具链的官方 core 归档（Apache-2.0），不是复制进仓库的上游几何代码。native / JS 后端与固定版本说明见 [整数几何说明](numerics.md)。
+
 ## 计划范围（尚未移植或实现）
 
 | 上游参考文件 | 计划用途与目标 |
 | --- | --- |
-| `CSharp/Clipper2Lib/Clipper.Core.cs` 中的几何辅助逻辑 | Commit 2：几何谓词、输入整理、坐标边界及错误契约；具体移植关系实现时补录。 |
 | `CPP/Clipper2Lib/include/clipper2/clipper.h` 与固定提交 C++ 实现 | Commit 3：`tools/oracle/` 适配器、版本化数据格式、生成脚本和独立对照数据。 |
 | `CSharp/Clipper2Lib/Clipper.Engine.cs` | 后续扫描线与布尔运算引擎；尚未建立 MoonBit 对应文件。 |
 | `CSharp/Clipper2Lib/Clipper.Offset.cs` | 后续偏移与描边；尚未建立 MoonBit 对应文件。 |

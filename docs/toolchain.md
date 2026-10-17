@@ -19,3 +19,11 @@ Windows 通过 Git Bash 运行 `bash scripts/check.sh`（本机 Git Bash 位于 
 2026-10-16 已实际通过：native `check --deny-warn`、`test`、`build` 与示例。测试总数 **18**，通过 **18**，失败 **0**，全部是通过公开接口验证的黑盒测试。示例输出 `MoonClip data model OK`。Git Bash 统一入口、格式检查均已通过；从 cmd/example 目录调用同一入口也通过。额外使用临时公开 API 验证了接口漂移会令脚本失败，随后已清理探针并重新通过统一检查。
 
 本笔尚无几何算法对照数据或兼容性通过数。远端 Linux CI 的结果以对应提交的 GitHub Actions 运行记录为准，不能由本地结果推断。
+
+## Commit 2 本地结果（2026-10-17）
+
+沿用上述固定工具链 `0.10.13+cbb11c36f`，未新增外部依赖。core 的 BigInt 支持 native 和 JS；CI 同时 bundle 两目标。具体数值实现与 core 许可见 [整数几何说明](numerics.md)。本机 JS 测试使用 Node.js v24.18.0，检查脚本同时打印 Node.js 版本。
+
+同一批测试共 **71** 项：保留原有 18 项，新增 53 项（含 5 项内部数值白盒测试）。本地 native **71/71**，JS **71/71**；这不是 142 个独立用例。两目标 `check --deny-warn` 均通过；native 构建与扩充后的示例实际成功，输出 `MoonClip geometry foundation OK`。面积回退实际触发，包含最终抵消的案例，没有浮点近似例外。
+
+Linux native / JS 的实际结果以本次提交的 GitHub Actions 日志为准，本地结果与远端结果分别核对。上游参考程序与完整输出比较器仍由 Commit 3 交付。

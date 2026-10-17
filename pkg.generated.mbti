@@ -2,22 +2,109 @@
 package "BigSaltyMan/moonclip"
 
 import {
+  "moonbitlang/core/bigint",
   "moonbitlang/core/debug",
 }
 
 // Values
+pub const COORDINATE_LIMIT : Int64 = 1_000_000_000
+
+pub fn area2(Array[Point64], limits? : Limits) -> Result[@bigint.BigInt, ClipError]
+
+pub fn bounds(Array[Point64], limits? : Limits) -> Result[Bounds64?, ClipError]
+
 pub fn copy_path(Array[Point64]) -> Array[Point64]
 
 pub fn copy_paths(Array[Array[Point64]]) -> Array[Array[Point64]]
 
+pub fn cross(Point64, Point64, Point64, limits? : Limits) -> Result[Int64, ClipError]
+
+pub fn normalize_path(Array[Point64], PathMode, limits? : Limits) -> Result[Array[Point64], ClipError]
+
+pub fn normalize_paths(Array[Array[Point64]], PathMode, limits? : Limits) -> Result[Array[Array[Point64]], ClipError]
+
+pub fn orientation(Point64, Point64, Point64, limits? : Limits) -> Result[Orientation, ClipError]
+
+pub fn point_in_polygon(Point64, Array[Point64], limits? : Limits) -> Result[PointLocation, ClipError]
+
+pub fn point_on_segment(Point64, Point64, Point64, limits? : Limits) -> Result[Bool, ClipError]
+
+pub fn validate_paths(Array[Array[Point64]], limits? : Limits) -> Result[Unit, ClipError]
+
 // Errors
 
 // Types and methods
+pub(all) enum Axis {
+  X
+  Y
+} derive(Eq, @debug.Debug)
+
+pub(all) struct Bounds64 {
+  min_x : Int64
+  min_y : Int64
+  max_x : Int64
+  max_y : Int64
+} derive(Eq, @debug.Debug)
+
+pub(all) enum ClipError {
+  InvalidInput(ErrorLocation, String)
+  CoordinateOutOfRange(ErrorLocation, Axis, Int64)
+  NumericFailure(ErrorLocation, String)
+  ResourceLimitExceeded(ErrorLocation, ResourceKind, Int)
+} derive(Eq, @debug.Debug)
+pub fn ClipError::message(Self) -> String
+
+pub(all) struct ErrorLocation {
+  stage : Stage
+  path_index : Int?
+  vertex_index : Int?
+} derive(Eq, @debug.Debug)
+
+pub(all) struct Limits {
+  max_input_paths : Int
+  max_input_vertices : Int
+} derive(Eq, @debug.Debug)
+pub impl Default for Limits
+
+pub(all) enum Orientation {
+  CounterClockwise
+  Clockwise
+  Collinear
+} derive(Eq, @debug.Debug)
+
+pub(all) enum PathMode {
+  Open
+  Closed
+} derive(Eq, @debug.Debug)
+
 pub(all) struct Point64 {
   x : Int64
   y : Int64
 } derive(Eq, @debug.Debug)
 pub fn Point64::new(Int64, Int64) -> Self
+
+pub(all) enum PointLocation {
+  Outside
+  Inside
+  OnBoundary
+} derive(Eq, @debug.Debug)
+
+pub(all) enum ResourceKind {
+  InputPaths
+  InputVertices
+} derive(Eq, @debug.Debug)
+
+pub(all) enum Stage {
+  ValidateInputs
+  Cross
+  Orientation
+  Bounds
+  Area2
+  PointOnSegment
+  PointInPolygon
+  NormalizePath
+  NormalizePaths
+} derive(Eq, @debug.Debug)
 
 // Type aliases
 pub type Path64 = Array[Point64]
