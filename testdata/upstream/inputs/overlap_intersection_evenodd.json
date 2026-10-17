@@ -1,0 +1,55 @@
+{
+  "case_id": "overlap_intersection_evenodd",
+  "clip": [
+    [
+      [
+        5,
+        0
+      ],
+      [
+        15,
+        0
+      ],
+      [
+        15,
+        10
+      ],
+      [
+        5,
+        10
+      ]
+    ]
+  ],
+  "fill_rule": "EvenOdd",
+  "format_version": 1,
+  "operation": "Intersection",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "source": {
+    "group": "overlap",
+    "intent": "Partial overlap and asymmetric Difference",
+    "kind": "moonclip_constructed"
+  },
+  "subject": [
+    [
+      [
+        0,
+        0
+      ],
+      [
+        10,
+        0
+      ],
+      [
+        10,
+        10
+      ],
+      [
+        0,
+        10
+      ]
+    ]
+  ]
+}

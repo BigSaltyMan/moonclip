@@ -153,6 +153,19 @@ git diff --check
 
 修改公开 API 后，运行 `moon info --target native` 与 `moon fmt`，审查并提交 `.mbti`。检查脚本会拒绝未提交的接口变化与格式变化。
 
+## 固定上游参考与离线检查
+
+已建立固定 Clipper2 2.0.1 C++ 参考适配器，生成 136 个闭合路径布尔参考案例，并建立保留绕向、顶点数量和孔洞归属的轮廓/PolyTree 比较器。案例均标记 `reference_only`；MoonClip 运行库当前仍是数据模型与几何基础，布尔裁剪、偏移和描边尚未实现。
+
+普通检查使用 Python 3.11+ 标准库读取已提交数据，不下载上游、不构建或调用 C++：
+
+```bash
+python -m unittest discover -s tools/conformance -p "test_*.py"
+python scripts/check_reference.py --manifest testdata/manifest.json --strict
+```
+
+两项已接入 `bash scripts/check.sh` 与普通 CI。参考重建通过独立脚本和手动 `rebuild-reference` workflow 完成；操作方法、协议、固定依赖与实际构建环境见 [参考工具说明](tools/oracle/README.md)，覆盖和计数见 [参考案例记录](docs/reference-cases.md)。参考生成数与工具测试数不计作 MoonClip 布尔兼容性通过数。
+
 ## 来源与许可
 
-固定参考 [Clipper2 2.0.1](https://github.com/AngusJohnson/Clipper2/tree/21ebba05db8894f0c7217ad35ea518080f324946)，使用 BSL-1.0 许可。参考范围、版权和移植状态见 [来源记录](docs/upstream.md)；完整许可见 [LICENSE](LICENSE)。运行库由 MoonBit 实现，固定版本 C++ 实现将用于后续独立对照。当前没有几何算法兼容性报告。
+固定参考 [Clipper2 2.0.1](https://github.com/AngusJohnson/Clipper2/tree/21ebba05db8894f0c7217ad35ea518080f324946)，使用 BSL-1.0 许可。参考范围、版权和移植状态见 [来源记录](docs/upstream.md)；完整许可见 [LICENSE](LICENSE)。运行库由 MoonBit 实现，固定版本 C++ 实现已用于独立参考数据生成。当前没有几何算法兼容性报告。

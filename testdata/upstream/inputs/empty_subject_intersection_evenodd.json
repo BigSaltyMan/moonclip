@@ -1,0 +1,36 @@
+{
+  "case_id": "empty_subject_intersection_evenodd",
+  "clip": [
+    [
+      [
+        0,
+        0
+      ],
+      [
+        10,
+        0
+      ],
+      [
+        10,
+        10
+      ],
+      [
+        0,
+        10
+      ]
+    ]
+  ],
+  "fill_rule": "EvenOdd",
+  "format_version": 1,
+  "operation": "Intersection",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "source": {
+    "group": "empty_subject",
+    "intent": "Empty subject and operand-sensitive Difference",
+    "kind": "moonclip_constructed"
+  },
+  "subject": []
+}

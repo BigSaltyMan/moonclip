@@ -1,0 +1,19 @@
+{
+  "adapter_protocol_version": 1,
+  "case_id": "empty_subject_difference_nonzero",
+  "format_version": 1,
+  "input_sha256": "eac77880fe1f2aa98de558db6f88a4a444f63bc1166704bb0858e3491def3543",
+  "metrics": {
+    "hole_count": 0,
+    "path_count": 0,
+    "paths": [],
+    "tree_depth": 0,
+    "vertex_count": 0
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [],
+  "status": "success",
+  "tree": {
+    "children": []
+  }
+}

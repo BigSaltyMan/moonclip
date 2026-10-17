@@ -1,0 +1,822 @@
+{
+  "cases": [
+    {
+      "case_id": "coincident_difference_evenodd",
+      "expected": "testdata/upstream/expected/coincident_difference_evenodd.json",
+      "input": "testdata/upstream/inputs/coincident_difference_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "coincident_difference_nonzero",
+      "expected": "testdata/upstream/expected/coincident_difference_nonzero.json",
+      "input": "testdata/upstream/inputs/coincident_difference_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "coincident_intersection_evenodd",
+      "expected": "testdata/upstream/expected/coincident_intersection_evenodd.json",
+      "input": "testdata/upstream/inputs/coincident_intersection_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "coincident_intersection_nonzero",
+      "expected": "testdata/upstream/expected/coincident_intersection_nonzero.json",
+      "input": "testdata/upstream/inputs/coincident_intersection_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "coincident_union_evenodd",
+      "expected": "testdata/upstream/expected/coincident_union_evenodd.json",
+      "input": "testdata/upstream/inputs/coincident_union_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "coincident_union_nonzero",
+      "expected": "testdata/upstream/expected/coincident_union_nonzero.json",
+      "input": "testdata/upstream/inputs/coincident_union_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "coincident_xor_evenodd",
+      "expected": "testdata/upstream/expected/coincident_xor_evenodd.json",
+      "input": "testdata/upstream/inputs/coincident_xor_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "coincident_xor_nonzero",
+      "expected": "testdata/upstream/expected/coincident_xor_nonzero.json",
+      "input": "testdata/upstream/inputs/coincident_xor_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "concave_difference_evenodd",
+      "expected": "testdata/upstream/expected/concave_difference_evenodd.json",
+      "input": "testdata/upstream/inputs/concave_difference_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "concave_difference_nonzero",
+      "expected": "testdata/upstream/expected/concave_difference_nonzero.json",
+      "input": "testdata/upstream/inputs/concave_difference_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "concave_intersection_evenodd",
+      "expected": "testdata/upstream/expected/concave_intersection_evenodd.json",
+      "input": "testdata/upstream/inputs/concave_intersection_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "concave_intersection_nonzero",
+      "expected": "testdata/upstream/expected/concave_intersection_nonzero.json",
+      "input": "testdata/upstream/inputs/concave_intersection_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "concave_union_evenodd",
+      "expected": "testdata/upstream/expected/concave_union_evenodd.json",
+      "input": "testdata/upstream/inputs/concave_union_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "concave_union_nonzero",
+      "expected": "testdata/upstream/expected/concave_union_nonzero.json",
+      "input": "testdata/upstream/inputs/concave_union_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "concave_xor_evenodd",
+      "expected": "testdata/upstream/expected/concave_xor_evenodd.json",
+      "input": "testdata/upstream/inputs/concave_xor_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "concave_xor_nonzero",
+      "expected": "testdata/upstream/expected/concave_xor_nonzero.json",
+      "input": "testdata/upstream/inputs/concave_xor_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "contained_difference_evenodd",
+      "expected": "testdata/upstream/expected/contained_difference_evenodd.json",
+      "input": "testdata/upstream/inputs/contained_difference_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "contained_difference_nonzero",
+      "expected": "testdata/upstream/expected/contained_difference_nonzero.json",
+      "input": "testdata/upstream/inputs/contained_difference_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "contained_intersection_evenodd",
+      "expected": "testdata/upstream/expected/contained_intersection_evenodd.json",
+      "input": "testdata/upstream/inputs/contained_intersection_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "contained_intersection_nonzero",
+      "expected": "testdata/upstream/expected/contained_intersection_nonzero.json",
+      "input": "testdata/upstream/inputs/contained_intersection_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "contained_union_evenodd",
+      "expected": "testdata/upstream/expected/contained_union_evenodd.json",
+      "input": "testdata/upstream/inputs/contained_union_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "contained_union_nonzero",
+      "expected": "testdata/upstream/expected/contained_union_nonzero.json",
+      "input": "testdata/upstream/inputs/contained_union_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "contained_xor_evenodd",
+      "expected": "testdata/upstream/expected/contained_xor_evenodd.json",
+      "input": "testdata/upstream/inputs/contained_xor_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "contained_xor_nonzero",
+      "expected": "testdata/upstream/expected/contained_xor_nonzero.json",
+      "input": "testdata/upstream/inputs/contained_xor_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "direction_ccw_difference_negative",
+      "expected": "testdata/upstream/expected/direction_ccw_difference_negative.json",
+      "input": "testdata/upstream/inputs/direction_ccw_difference_negative.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "direction_ccw_difference_positive",
+      "expected": "testdata/upstream/expected/direction_ccw_difference_positive.json",
+      "input": "testdata/upstream/inputs/direction_ccw_difference_positive.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "direction_ccw_intersection_negative",
+      "expected": "testdata/upstream/expected/direction_ccw_intersection_negative.json",
+      "input": "testdata/upstream/inputs/direction_ccw_intersection_negative.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "direction_ccw_intersection_positive",
+      "expected": "testdata/upstream/expected/direction_ccw_intersection_positive.json",
+      "input": "testdata/upstream/inputs/direction_ccw_intersection_positive.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "direction_ccw_union_negative",
+      "expected": "testdata/upstream/expected/direction_ccw_union_negative.json",
+      "input": "testdata/upstream/inputs/direction_ccw_union_negative.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "direction_ccw_union_positive",
+      "expected": "testdata/upstream/expected/direction_ccw_union_positive.json",
+      "input": "testdata/upstream/inputs/direction_ccw_union_positive.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "direction_ccw_xor_negative",
+      "expected": "testdata/upstream/expected/direction_ccw_xor_negative.json",
+      "input": "testdata/upstream/inputs/direction_ccw_xor_negative.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "direction_ccw_xor_positive",
+      "expected": "testdata/upstream/expected/direction_ccw_xor_positive.json",
+      "input": "testdata/upstream/inputs/direction_ccw_xor_positive.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "direction_cw_difference_negative",
+      "expected": "testdata/upstream/expected/direction_cw_difference_negative.json",
+      "input": "testdata/upstream/inputs/direction_cw_difference_negative.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "direction_cw_difference_positive",
+      "expected": "testdata/upstream/expected/direction_cw_difference_positive.json",
+      "input": "testdata/upstream/inputs/direction_cw_difference_positive.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "direction_cw_intersection_negative",
+      "expected": "testdata/upstream/expected/direction_cw_intersection_negative.json",
+      "input": "testdata/upstream/inputs/direction_cw_intersection_negative.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "direction_cw_intersection_positive",
+      "expected": "testdata/upstream/expected/direction_cw_intersection_positive.json",
+      "input": "testdata/upstream/inputs/direction_cw_intersection_positive.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "direction_cw_union_negative",
+      "expected": "testdata/upstream/expected/direction_cw_union_negative.json",
+      "input": "testdata/upstream/inputs/direction_cw_union_negative.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "direction_cw_union_positive",
+      "expected": "testdata/upstream/expected/direction_cw_union_positive.json",
+      "input": "testdata/upstream/inputs/direction_cw_union_positive.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "direction_cw_xor_negative",
+      "expected": "testdata/upstream/expected/direction_cw_xor_negative.json",
+      "input": "testdata/upstream/inputs/direction_cw_xor_negative.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "direction_cw_xor_positive",
+      "expected": "testdata/upstream/expected/direction_cw_xor_positive.json",
+      "input": "testdata/upstream/inputs/direction_cw_xor_positive.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "disjoint_difference_evenodd",
+      "expected": "testdata/upstream/expected/disjoint_difference_evenodd.json",
+      "input": "testdata/upstream/inputs/disjoint_difference_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "disjoint_difference_nonzero",
+      "expected": "testdata/upstream/expected/disjoint_difference_nonzero.json",
+      "input": "testdata/upstream/inputs/disjoint_difference_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "disjoint_intersection_evenodd",
+      "expected": "testdata/upstream/expected/disjoint_intersection_evenodd.json",
+      "input": "testdata/upstream/inputs/disjoint_intersection_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "disjoint_intersection_nonzero",
+      "expected": "testdata/upstream/expected/disjoint_intersection_nonzero.json",
+      "input": "testdata/upstream/inputs/disjoint_intersection_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "disjoint_union_evenodd",
+      "expected": "testdata/upstream/expected/disjoint_union_evenodd.json",
+      "input": "testdata/upstream/inputs/disjoint_union_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "disjoint_union_nonzero",
+      "expected": "testdata/upstream/expected/disjoint_union_nonzero.json",
+      "input": "testdata/upstream/inputs/disjoint_union_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "disjoint_xor_evenodd",
+      "expected": "testdata/upstream/expected/disjoint_xor_evenodd.json",
+      "input": "testdata/upstream/inputs/disjoint_xor_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "disjoint_xor_nonzero",
+      "expected": "testdata/upstream/expected/disjoint_xor_nonzero.json",
+      "input": "testdata/upstream/inputs/disjoint_xor_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "empty_both_difference_evenodd",
+      "expected": "testdata/upstream/expected/empty_both_difference_evenodd.json",
+      "input": "testdata/upstream/inputs/empty_both_difference_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "empty_both_difference_nonzero",
+      "expected": "testdata/upstream/expected/empty_both_difference_nonzero.json",
+      "input": "testdata/upstream/inputs/empty_both_difference_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "empty_both_intersection_evenodd",
+      "expected": "testdata/upstream/expected/empty_both_intersection_evenodd.json",
+      "input": "testdata/upstream/inputs/empty_both_intersection_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "empty_both_intersection_nonzero",
+      "expected": "testdata/upstream/expected/empty_both_intersection_nonzero.json",
+      "input": "testdata/upstream/inputs/empty_both_intersection_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "empty_both_union_evenodd",
+      "expected": "testdata/upstream/expected/empty_both_union_evenodd.json",
+      "input": "testdata/upstream/inputs/empty_both_union_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "empty_both_union_nonzero",
+      "expected": "testdata/upstream/expected/empty_both_union_nonzero.json",
+      "input": "testdata/upstream/inputs/empty_both_union_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "empty_both_xor_evenodd",
+      "expected": "testdata/upstream/expected/empty_both_xor_evenodd.json",
+      "input": "testdata/upstream/inputs/empty_both_xor_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "empty_both_xor_nonzero",
+      "expected": "testdata/upstream/expected/empty_both_xor_nonzero.json",
+      "input": "testdata/upstream/inputs/empty_both_xor_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "empty_clip_difference_evenodd",
+      "expected": "testdata/upstream/expected/empty_clip_difference_evenodd.json",
+      "input": "testdata/upstream/inputs/empty_clip_difference_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "empty_clip_difference_nonzero",
+      "expected": "testdata/upstream/expected/empty_clip_difference_nonzero.json",
+      "input": "testdata/upstream/inputs/empty_clip_difference_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "empty_clip_intersection_evenodd",
+      "expected": "testdata/upstream/expected/empty_clip_intersection_evenodd.json",
+      "input": "testdata/upstream/inputs/empty_clip_intersection_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "empty_clip_intersection_nonzero",
+      "expected": "testdata/upstream/expected/empty_clip_intersection_nonzero.json",
+      "input": "testdata/upstream/inputs/empty_clip_intersection_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "empty_clip_union_evenodd",
+      "expected": "testdata/upstream/expected/empty_clip_union_evenodd.json",
+      "input": "testdata/upstream/inputs/empty_clip_union_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "empty_clip_union_nonzero",
+      "expected": "testdata/upstream/expected/empty_clip_union_nonzero.json",
+      "input": "testdata/upstream/inputs/empty_clip_union_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "empty_clip_xor_evenodd",
+      "expected": "testdata/upstream/expected/empty_clip_xor_evenodd.json",
+      "input": "testdata/upstream/inputs/empty_clip_xor_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "empty_clip_xor_nonzero",
+      "expected": "testdata/upstream/expected/empty_clip_xor_nonzero.json",
+      "input": "testdata/upstream/inputs/empty_clip_xor_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "empty_subject_difference_evenodd",
+      "expected": "testdata/upstream/expected/empty_subject_difference_evenodd.json",
+      "input": "testdata/upstream/inputs/empty_subject_difference_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "empty_subject_difference_nonzero",
+      "expected": "testdata/upstream/expected/empty_subject_difference_nonzero.json",
+      "input": "testdata/upstream/inputs/empty_subject_difference_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "empty_subject_intersection_evenodd",
+      "expected": "testdata/upstream/expected/empty_subject_intersection_evenodd.json",
+      "input": "testdata/upstream/inputs/empty_subject_intersection_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "empty_subject_intersection_nonzero",
+      "expected": "testdata/upstream/expected/empty_subject_intersection_nonzero.json",
+      "input": "testdata/upstream/inputs/empty_subject_intersection_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "empty_subject_union_evenodd",
+      "expected": "testdata/upstream/expected/empty_subject_union_evenodd.json",
+      "input": "testdata/upstream/inputs/empty_subject_union_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "empty_subject_union_nonzero",
+      "expected": "testdata/upstream/expected/empty_subject_union_nonzero.json",
+      "input": "testdata/upstream/inputs/empty_subject_union_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "empty_subject_xor_evenodd",
+      "expected": "testdata/upstream/expected/empty_subject_xor_evenodd.json",
+      "input": "testdata/upstream/inputs/empty_subject_xor_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "empty_subject_xor_nonzero",
+      "expected": "testdata/upstream/expected/empty_subject_xor_nonzero.json",
+      "input": "testdata/upstream/inputs/empty_subject_xor_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "hole_difference_evenodd",
+      "expected": "testdata/upstream/expected/hole_difference_evenodd.json",
+      "input": "testdata/upstream/inputs/hole_difference_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "hole_difference_nonzero",
+      "expected": "testdata/upstream/expected/hole_difference_nonzero.json",
+      "input": "testdata/upstream/inputs/hole_difference_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "hole_intersection_evenodd",
+      "expected": "testdata/upstream/expected/hole_intersection_evenodd.json",
+      "input": "testdata/upstream/inputs/hole_intersection_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "hole_intersection_nonzero",
+      "expected": "testdata/upstream/expected/hole_intersection_nonzero.json",
+      "input": "testdata/upstream/inputs/hole_intersection_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "hole_union_evenodd",
+      "expected": "testdata/upstream/expected/hole_union_evenodd.json",
+      "input": "testdata/upstream/inputs/hole_union_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "hole_union_nonzero",
+      "expected": "testdata/upstream/expected/hole_union_nonzero.json",
+      "input": "testdata/upstream/inputs/hole_union_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "hole_xor_evenodd",
+      "expected": "testdata/upstream/expected/hole_xor_evenodd.json",
+      "input": "testdata/upstream/inputs/hole_xor_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "hole_xor_nonzero",
+      "expected": "testdata/upstream/expected/hole_xor_nonzero.json",
+      "input": "testdata/upstream/inputs/hole_xor_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "island_difference_evenodd",
+      "expected": "testdata/upstream/expected/island_difference_evenodd.json",
+      "input": "testdata/upstream/inputs/island_difference_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "island_difference_nonzero",
+      "expected": "testdata/upstream/expected/island_difference_nonzero.json",
+      "input": "testdata/upstream/inputs/island_difference_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "island_intersection_evenodd",
+      "expected": "testdata/upstream/expected/island_intersection_evenodd.json",
+      "input": "testdata/upstream/inputs/island_intersection_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "island_intersection_nonzero",
+      "expected": "testdata/upstream/expected/island_intersection_nonzero.json",
+      "input": "testdata/upstream/inputs/island_intersection_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "island_union_evenodd",
+      "expected": "testdata/upstream/expected/island_union_evenodd.json",
+      "input": "testdata/upstream/inputs/island_union_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "island_union_nonzero",
+      "expected": "testdata/upstream/expected/island_union_nonzero.json",
+      "input": "testdata/upstream/inputs/island_union_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "island_xor_evenodd",
+      "expected": "testdata/upstream/expected/island_xor_evenodd.json",
+      "input": "testdata/upstream/inputs/island_xor_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "island_xor_nonzero",
+      "expected": "testdata/upstream/expected/island_xor_nonzero.json",
+      "input": "testdata/upstream/inputs/island_xor_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "multipart_difference_evenodd",
+      "expected": "testdata/upstream/expected/multipart_difference_evenodd.json",
+      "input": "testdata/upstream/inputs/multipart_difference_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "multipart_difference_nonzero",
+      "expected": "testdata/upstream/expected/multipart_difference_nonzero.json",
+      "input": "testdata/upstream/inputs/multipart_difference_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "multipart_intersection_evenodd",
+      "expected": "testdata/upstream/expected/multipart_intersection_evenodd.json",
+      "input": "testdata/upstream/inputs/multipart_intersection_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "multipart_intersection_nonzero",
+      "expected": "testdata/upstream/expected/multipart_intersection_nonzero.json",
+      "input": "testdata/upstream/inputs/multipart_intersection_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "multipart_union_evenodd",
+      "expected": "testdata/upstream/expected/multipart_union_evenodd.json",
+      "input": "testdata/upstream/inputs/multipart_union_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "multipart_union_nonzero",
+      "expected": "testdata/upstream/expected/multipart_union_nonzero.json",
+      "input": "testdata/upstream/inputs/multipart_union_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "multipart_xor_evenodd",
+      "expected": "testdata/upstream/expected/multipart_xor_evenodd.json",
+      "input": "testdata/upstream/inputs/multipart_xor_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "multipart_xor_nonzero",
+      "expected": "testdata/upstream/expected/multipart_xor_nonzero.json",
+      "input": "testdata/upstream/inputs/multipart_xor_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "negative_collinear_difference_evenodd",
+      "expected": "testdata/upstream/expected/negative_collinear_difference_evenodd.json",
+      "input": "testdata/upstream/inputs/negative_collinear_difference_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "negative_collinear_difference_nonzero",
+      "expected": "testdata/upstream/expected/negative_collinear_difference_nonzero.json",
+      "input": "testdata/upstream/inputs/negative_collinear_difference_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "negative_collinear_intersection_evenodd",
+      "expected": "testdata/upstream/expected/negative_collinear_intersection_evenodd.json",
+      "input": "testdata/upstream/inputs/negative_collinear_intersection_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "negative_collinear_intersection_nonzero",
+      "expected": "testdata/upstream/expected/negative_collinear_intersection_nonzero.json",
+      "input": "testdata/upstream/inputs/negative_collinear_intersection_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "negative_collinear_union_evenodd",
+      "expected": "testdata/upstream/expected/negative_collinear_union_evenodd.json",
+      "input": "testdata/upstream/inputs/negative_collinear_union_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "negative_collinear_union_nonzero",
+      "expected": "testdata/upstream/expected/negative_collinear_union_nonzero.json",
+      "input": "testdata/upstream/inputs/negative_collinear_union_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "negative_collinear_xor_evenodd",
+      "expected": "testdata/upstream/expected/negative_collinear_xor_evenodd.json",
+      "input": "testdata/upstream/inputs/negative_collinear_xor_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "negative_collinear_xor_nonzero",
+      "expected": "testdata/upstream/expected/negative_collinear_xor_nonzero.json",
+      "input": "testdata/upstream/inputs/negative_collinear_xor_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "overlap_difference_evenodd",
+      "expected": "testdata/upstream/expected/overlap_difference_evenodd.json",
+      "input": "testdata/upstream/inputs/overlap_difference_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "overlap_difference_nonzero",
+      "expected": "testdata/upstream/expected/overlap_difference_nonzero.json",
+      "input": "testdata/upstream/inputs/overlap_difference_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "overlap_intersection_evenodd",
+      "expected": "testdata/upstream/expected/overlap_intersection_evenodd.json",
+      "input": "testdata/upstream/inputs/overlap_intersection_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "overlap_intersection_nonzero",
+      "expected": "testdata/upstream/expected/overlap_intersection_nonzero.json",
+      "input": "testdata/upstream/inputs/overlap_intersection_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "overlap_union_evenodd",
+      "expected": "testdata/upstream/expected/overlap_union_evenodd.json",
+      "input": "testdata/upstream/inputs/overlap_union_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "overlap_union_nonzero",
+      "expected": "testdata/upstream/expected/overlap_union_nonzero.json",
+      "input": "testdata/upstream/inputs/overlap_union_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "overlap_xor_evenodd",
+      "expected": "testdata/upstream/expected/overlap_xor_evenodd.json",
+      "input": "testdata/upstream/inputs/overlap_xor_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "overlap_xor_nonzero",
+      "expected": "testdata/upstream/expected/overlap_xor_nonzero.json",
+      "input": "testdata/upstream/inputs/overlap_xor_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "self_crossing_difference_evenodd",
+      "expected": "testdata/upstream/expected/self_crossing_difference_evenodd.json",
+      "input": "testdata/upstream/inputs/self_crossing_difference_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "self_crossing_difference_nonzero",
+      "expected": "testdata/upstream/expected/self_crossing_difference_nonzero.json",
+      "input": "testdata/upstream/inputs/self_crossing_difference_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "self_crossing_intersection_evenodd",
+      "expected": "testdata/upstream/expected/self_crossing_intersection_evenodd.json",
+      "input": "testdata/upstream/inputs/self_crossing_intersection_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "self_crossing_intersection_nonzero",
+      "expected": "testdata/upstream/expected/self_crossing_intersection_nonzero.json",
+      "input": "testdata/upstream/inputs/self_crossing_intersection_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "self_crossing_union_evenodd",
+      "expected": "testdata/upstream/expected/self_crossing_union_evenodd.json",
+      "input": "testdata/upstream/inputs/self_crossing_union_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "self_crossing_union_nonzero",
+      "expected": "testdata/upstream/expected/self_crossing_union_nonzero.json",
+      "input": "testdata/upstream/inputs/self_crossing_union_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "self_crossing_xor_evenodd",
+      "expected": "testdata/upstream/expected/self_crossing_xor_evenodd.json",
+      "input": "testdata/upstream/inputs/self_crossing_xor_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "self_crossing_xor_nonzero",
+      "expected": "testdata/upstream/expected/self_crossing_xor_nonzero.json",
+      "input": "testdata/upstream/inputs/self_crossing_xor_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "touch_edge_difference_evenodd",
+      "expected": "testdata/upstream/expected/touch_edge_difference_evenodd.json",
+      "input": "testdata/upstream/inputs/touch_edge_difference_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "touch_edge_difference_nonzero",
+      "expected": "testdata/upstream/expected/touch_edge_difference_nonzero.json",
+      "input": "testdata/upstream/inputs/touch_edge_difference_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "touch_edge_intersection_evenodd",
+      "expected": "testdata/upstream/expected/touch_edge_intersection_evenodd.json",
+      "input": "testdata/upstream/inputs/touch_edge_intersection_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "touch_edge_intersection_nonzero",
+      "expected": "testdata/upstream/expected/touch_edge_intersection_nonzero.json",
+      "input": "testdata/upstream/inputs/touch_edge_intersection_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "touch_edge_union_evenodd",
+      "expected": "testdata/upstream/expected/touch_edge_union_evenodd.json",
+      "input": "testdata/upstream/inputs/touch_edge_union_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "touch_edge_union_nonzero",
+      "expected": "testdata/upstream/expected/touch_edge_union_nonzero.json",
+      "input": "testdata/upstream/inputs/touch_edge_union_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "touch_edge_xor_evenodd",
+      "expected": "testdata/upstream/expected/touch_edge_xor_evenodd.json",
+      "input": "testdata/upstream/inputs/touch_edge_xor_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "touch_edge_xor_nonzero",
+      "expected": "testdata/upstream/expected/touch_edge_xor_nonzero.json",
+      "input": "testdata/upstream/inputs/touch_edge_xor_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "touch_vertex_difference_evenodd",
+      "expected": "testdata/upstream/expected/touch_vertex_difference_evenodd.json",
+      "input": "testdata/upstream/inputs/touch_vertex_difference_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "touch_vertex_difference_nonzero",
+      "expected": "testdata/upstream/expected/touch_vertex_difference_nonzero.json",
+      "input": "testdata/upstream/inputs/touch_vertex_difference_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "touch_vertex_intersection_evenodd",
+      "expected": "testdata/upstream/expected/touch_vertex_intersection_evenodd.json",
+      "input": "testdata/upstream/inputs/touch_vertex_intersection_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "touch_vertex_intersection_nonzero",
+      "expected": "testdata/upstream/expected/touch_vertex_intersection_nonzero.json",
+      "input": "testdata/upstream/inputs/touch_vertex_intersection_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "touch_vertex_union_evenodd",
+      "expected": "testdata/upstream/expected/touch_vertex_union_evenodd.json",
+      "input": "testdata/upstream/inputs/touch_vertex_union_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "touch_vertex_union_nonzero",
+      "expected": "testdata/upstream/expected/touch_vertex_union_nonzero.json",
+      "input": "testdata/upstream/inputs/touch_vertex_union_nonzero.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "touch_vertex_xor_evenodd",
+      "expected": "testdata/upstream/expected/touch_vertex_xor_evenodd.json",
+      "input": "testdata/upstream/inputs/touch_vertex_xor_evenodd.json",
+      "status": "reference_only"
+    },
+    {
+      "case_id": "touch_vertex_xor_nonzero",
+      "expected": "testdata/upstream/expected/touch_vertex_xor_nonzero.json",
+      "input": "testdata/upstream/inputs/touch_vertex_xor_nonzero.json",
+      "status": "reference_only"
+    }
+  ],
+  "format_version": 1,
+  "oracle_lock": "tools/oracle/upstream-lock.json"
+}

@@ -1,0 +1,19 @@
+{
+  "adapter_protocol_version": 1,
+  "case_id": "empty_both_intersection_evenodd",
+  "format_version": 1,
+  "input_sha256": "dadff11c88c44b318abc0145ed32d873b352f6659c7ebb386670b6ce2936172a",
+  "metrics": {
+    "hole_count": 0,
+    "path_count": 0,
+    "paths": [],
+    "tree_depth": 0,
+    "vertex_count": 0
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [],
+  "status": "success",
+  "tree": {
+    "children": []
+  }
+}

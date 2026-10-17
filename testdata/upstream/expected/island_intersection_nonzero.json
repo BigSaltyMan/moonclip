@@ -1,0 +1,19 @@
+{
+  "adapter_protocol_version": 1,
+  "case_id": "island_intersection_nonzero",
+  "format_version": 1,
+  "input_sha256": "4411db7a5e3f6dec725818ef81b83218fde2c7c78364c55655f02242f210705d",
+  "metrics": {
+    "hole_count": 0,
+    "path_count": 0,
+    "paths": [],
+    "tree_depth": 0,
+    "vertex_count": 0
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [],
+  "status": "success",
+  "tree": {
+    "children": []
+  }
+}

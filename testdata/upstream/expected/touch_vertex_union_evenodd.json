@@ -1,0 +1,120 @@
+{
+  "adapter_protocol_version": 1,
+  "case_id": "touch_vertex_union_evenodd",
+  "format_version": 1,
+  "input_sha256": "ab2cf4cc75669ed805466cd586449f59ccf0dd7dca552a80ce078d7ea1a9bbf2",
+  "metrics": {
+    "hole_count": 0,
+    "path_count": 2,
+    "paths": [
+      {
+        "area2": "200",
+        "bounds": [
+          10,
+          10,
+          20,
+          20
+        ],
+        "vertices": 4
+      },
+      {
+        "area2": "200",
+        "bounds": [
+          0,
+          0,
+          10,
+          10
+        ],
+        "vertices": 4
+      }
+    ],
+    "tree_depth": 1,
+    "vertex_count": 8
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        20,
+        20
+      ],
+      [
+        10,
+        20
+      ],
+      [
+        10,
+        10
+      ],
+      [
+        20,
+        10
+      ]
+    ],
+    [
+      [
+        10,
+        10
+      ],
+      [
+        0,
+        10
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        10,
+        0
+      ]
+    ]
+  ],
+  "status": "success",
+  "tree": {
+    "children": [
+      {
+        "children": [],
+        "path": [
+          [
+            20,
+            20
+          ],
+          [
+            10,
+            20
+          ],
+          [
+            10,
+            10
+          ],
+          [
+            20,
+            10
+          ]
+        ]
+      },
+      {
+        "children": [],
+        "path": [
+          [
+            10,
+            10
+          ],
+          [
+            0,
+            10
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            10,
+            0
+          ]
+        ]
+      }
+    ]
+  }
+}

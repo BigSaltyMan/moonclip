@@ -1,0 +1,19 @@
+{
+  "adapter_protocol_version": 1,
+  "case_id": "direction_ccw_intersection_positive",
+  "format_version": 1,
+  "input_sha256": "76c20998412c55b6ab1fc8d1824e714c7667458f9d110b4938b43f90840a08b8",
+  "metrics": {
+    "hole_count": 0,
+    "path_count": 0,
+    "paths": [],
+    "tree_depth": 0,
+    "vertex_count": 0
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [],
+  "status": "success",
+  "tree": {
+    "children": []
+  }
+}

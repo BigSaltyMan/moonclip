@@ -1,0 +1,19 @@
+{
+  "adapter_protocol_version": 1,
+  "case_id": "direction_ccw_xor_negative",
+  "format_version": 1,
+  "input_sha256": "788dc7cd6a0777774b317d9efd089a62a9a6f3cc0ead34dabcc41316aa59e205",
+  "metrics": {
+    "hole_count": 0,
+    "path_count": 0,
+    "paths": [],
+    "tree_depth": 0,
+    "vertex_count": 0
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [],
+  "status": "success",
+  "tree": {
+    "children": []
+  }
+}

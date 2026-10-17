@@ -1,0 +1,55 @@
+{
+  "case_id": "contained_union_nonzero",
+  "clip": [
+    [
+      [
+        2,
+        2
+      ],
+      [
+        8,
+        2
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        2,
+        8
+      ]
+    ]
+  ],
+  "fill_rule": "NonZero",
+  "format_version": 1,
+  "operation": "Union",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "source": {
+    "group": "contained",
+    "intent": "Complete containment and a hole under Difference",
+    "kind": "moonclip_constructed"
+  },
+  "subject": [
+    [
+      [
+        0,
+        0
+      ],
+      [
+        10,
+        0
+      ],
+      [
+        10,
+        10
+      ],
+      [
+        0,
+        10
+      ]
+    ]
+  ]
+}

@@ -27,3 +27,9 @@ Windows 通过 Git Bash 运行 `bash scripts/check.sh`（本机 Git Bash 位于 
 同一批测试共 **71** 项：保留原有 18 项，新增 53 项（含 5 项内部数值白盒测试）。本地 native **71/71**，JS **71/71**；这不是 142 个独立用例。两目标 `check --deny-warn` 均通过；native 构建与扩充后的示例实际成功，输出 `MoonClip geometry foundation OK`。面积回退实际触发，包含最终抵消的案例，没有浮点近似例外。
 
 Linux native / JS 的实际结果以本次提交的 GitHub Actions 日志为准，本地结果与远端结果分别核对。上游参考程序与完整输出比较器仍由 Commit 3 交付。
+
+## Commit 3 参考工具本地结果（2026-10-17）
+
+MoonBit 工具链继续固定为上述版本，运行库和公开接口不因参考工具改变。C++ 参考工具实际使用 GNU C++ 14.2.0（MinGW-W64）、CMake 3.30.2、Ninja 1.12.1、Python 3.11.9，以 C++17 / Release 构建。136 个参考案例实际生成并重复重建核对成功；55 项离线工具测试与 10 项实际适配器集成测试通过。库的原有 71 项测试保持原样，本地 native 71/71、JS 71/71 均实际通过，native 构建和示例成功。
+
+普通 CI 不构建 C++；独立手动参考 workflow 另验证实际构建及全部重建。版本锁与来源见 tools/oracle/upstream-lock.json，参数、协议及验证细节见 [参考工具说明](../tools/oracle/README.md)。实际远端结果以对应提交的两份 Actions 日志为准，离线 CI 成功不替代参考构建/运行的证据。

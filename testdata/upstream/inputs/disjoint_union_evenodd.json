@@ -1,0 +1,55 @@
+{
+  "case_id": "disjoint_union_evenodd",
+  "clip": [
+    [
+      [
+        20,
+        0
+      ],
+      [
+        30,
+        0
+      ],
+      [
+        30,
+        10
+      ],
+      [
+        20,
+        10
+      ]
+    ]
+  ],
+  "fill_rule": "EvenOdd",
+  "format_version": 1,
+  "operation": "Union",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "source": {
+    "group": "disjoint",
+    "intent": "Separated components and empty intersection",
+    "kind": "moonclip_constructed"
+  },
+  "subject": [
+    [
+      [
+        0,
+        0
+      ],
+      [
+        10,
+        0
+      ],
+      [
+        10,
+        10
+      ],
+      [
+        0,
+        10
+      ]
+    ]
+  ]
+}

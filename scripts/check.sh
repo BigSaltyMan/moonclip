@@ -28,4 +28,8 @@ node --version
 moon check --target js --deny-warn
 moon test --target js
 moon fmt --check
+printf 'Checking offline reference tools\n'
+python --version
+python -m unittest discover -s tools/conformance -p "test_*.py"
+python scripts/check_reference.py --manifest testdata/manifest.json --strict
 git diff --check

@@ -1,0 +1,55 @@
+{
+  "case_id": "hole_difference_evenodd",
+  "clip": [
+    [
+      [
+        -10,
+        -10
+      ],
+      [
+        10,
+        -10
+      ],
+      [
+        10,
+        10
+      ],
+      [
+        -10,
+        10
+      ]
+    ]
+  ],
+  "fill_rule": "EvenOdd",
+  "format_version": 1,
+  "operation": "Difference",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "source": {
+    "group": "hole",
+    "intent": "Outer contour with a hole under Difference",
+    "kind": "moonclip_constructed"
+  },
+  "subject": [
+    [
+      [
+        -20,
+        -20
+      ],
+      [
+        20,
+        -20
+      ],
+      [
+        20,
+        20
+      ],
+      [
+        -20,
+        20
+      ]
+    ]
+  ]
+}

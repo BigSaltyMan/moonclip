@@ -1,0 +1,121 @@
+{
+  "adapter_protocol_version": 1,
+  "case_id": "contained_difference_evenodd",
+  "format_version": 1,
+  "input_sha256": "96cf858523172130b9c46a0ef212881120580d0efb71009f258069a657d9cda6",
+  "metrics": {
+    "hole_count": 1,
+    "path_count": 2,
+    "paths": [
+      {
+        "area2": "200",
+        "bounds": [
+          0,
+          0,
+          10,
+          10
+        ],
+        "vertices": 4
+      },
+      {
+        "area2": "-72",
+        "bounds": [
+          2,
+          2,
+          8,
+          8
+        ],
+        "vertices": 4
+      }
+    ],
+    "tree_depth": 2,
+    "vertex_count": 8
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        10,
+        10
+      ],
+      [
+        0,
+        10
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        10,
+        0
+      ]
+    ],
+    [
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        2
+      ]
+    ]
+  ],
+  "status": "success",
+  "tree": {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [],
+            "path": [
+              [
+                2,
+                2
+              ],
+              [
+                2,
+                8
+              ],
+              [
+                8,
+                8
+              ],
+              [
+                8,
+                2
+              ]
+            ]
+          }
+        ],
+        "path": [
+          [
+            10,
+            10
+          ],
+          [
+            0,
+            10
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            10,
+            0
+          ]
+        ]
+      }
+    ]
+  }
+}

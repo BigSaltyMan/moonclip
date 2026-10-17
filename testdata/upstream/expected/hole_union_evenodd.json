@@ -1,0 +1,71 @@
+{
+  "adapter_protocol_version": 1,
+  "case_id": "hole_union_evenodd",
+  "format_version": 1,
+  "input_sha256": "16c1a05092eee26b155eaa5ca083f2419ad12a9b0f9e068dfec5226d055105d3",
+  "metrics": {
+    "hole_count": 0,
+    "path_count": 1,
+    "paths": [
+      {
+        "area2": "3200",
+        "bounds": [
+          -20,
+          -20,
+          20,
+          20
+        ],
+        "vertices": 4
+      }
+    ],
+    "tree_depth": 1,
+    "vertex_count": 4
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        20,
+        20
+      ],
+      [
+        -20,
+        20
+      ],
+      [
+        -20,
+        -20
+      ],
+      [
+        20,
+        -20
+      ]
+    ]
+  ],
+  "status": "success",
+  "tree": {
+    "children": [
+      {
+        "children": [],
+        "path": [
+          [
+            20,
+            20
+          ],
+          [
+            -20,
+            20
+          ],
+          [
+            -20,
+            -20
+          ],
+          [
+            20,
+            -20
+          ]
+        ]
+      }
+    ]
+  }
+}

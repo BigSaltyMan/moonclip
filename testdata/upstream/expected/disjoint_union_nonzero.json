@@ -1,0 +1,120 @@
+{
+  "adapter_protocol_version": 1,
+  "case_id": "disjoint_union_nonzero",
+  "format_version": 1,
+  "input_sha256": "2ba4434be5a9dad7b0a4fda995eb9b4c2c819f881d59cebb77f7ad0a3c6a958b",
+  "metrics": {
+    "hole_count": 0,
+    "path_count": 2,
+    "paths": [
+      {
+        "area2": "200",
+        "bounds": [
+          0,
+          0,
+          10,
+          10
+        ],
+        "vertices": 4
+      },
+      {
+        "area2": "200",
+        "bounds": [
+          20,
+          0,
+          30,
+          10
+        ],
+        "vertices": 4
+      }
+    ],
+    "tree_depth": 1,
+    "vertex_count": 8
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        10,
+        10
+      ],
+      [
+        0,
+        10
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        10,
+        0
+      ]
+    ],
+    [
+      [
+        30,
+        10
+      ],
+      [
+        20,
+        10
+      ],
+      [
+        20,
+        0
+      ],
+      [
+        30,
+        0
+      ]
+    ]
+  ],
+  "status": "success",
+  "tree": {
+    "children": [
+      {
+        "children": [],
+        "path": [
+          [
+            10,
+            10
+          ],
+          [
+            0,
+            10
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            10,
+            0
+          ]
+        ]
+      },
+      {
+        "children": [],
+        "path": [
+          [
+            30,
+            10
+          ],
+          [
+            20,
+            10
+          ],
+          [
+            20,
+            0
+          ],
+          [
+            30,
+            0
+          ]
+        ]
+      }
+    ]
+  }
+}

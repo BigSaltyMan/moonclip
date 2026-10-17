@@ -1,0 +1,55 @@
+{
+  "case_id": "touch_vertex_intersection_evenodd",
+  "clip": [
+    [
+      [
+        10,
+        10
+      ],
+      [
+        20,
+        10
+      ],
+      [
+        20,
+        20
+      ],
+      [
+        10,
+        20
+      ]
+    ]
+  ],
+  "fill_rule": "EvenOdd",
+  "format_version": 1,
+  "operation": "Intersection",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "source": {
+    "group": "touch_vertex",
+    "intent": "Single shared vertex without area overlap",
+    "kind": "moonclip_constructed"
+  },
+  "subject": [
+    [
+      [
+        0,
+        0
+      ],
+      [
+        10,
+        0
+      ],
+      [
+        10,
+        10
+      ],
+      [
+        0,
+        10
+      ]
+    ]
+  ]
+}

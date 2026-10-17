@@ -1,0 +1,36 @@
+{
+  "case_id": "direction_ccw_xor_negative",
+  "clip": [],
+  "fill_rule": "Negative",
+  "format_version": 1,
+  "operation": "Xor",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "source": {
+    "group": "direction_ccw",
+    "intent": "Directional filling with explicit contour orientation",
+    "kind": "moonclip_constructed"
+  },
+  "subject": [
+    [
+      [
+        -10,
+        -10
+      ],
+      [
+        10,
+        -10
+      ],
+      [
+        10,
+        10
+      ],
+      [
+        -10,
+        10
+      ]
+    ]
+  ]
+}

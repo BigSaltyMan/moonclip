@@ -1,0 +1,72 @@
+{
+  "case_id": "island_xor_nonzero",
+  "clip": [],
+  "fill_rule": "NonZero",
+  "format_version": 1,
+  "operation": "Xor",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "source": {
+    "group": "island",
+    "intent": "Depth-three nesting: outer, hole, island",
+    "kind": "moonclip_constructed"
+  },
+  "subject": [
+    [
+      [
+        -30,
+        -30
+      ],
+      [
+        30,
+        -30
+      ],
+      [
+        30,
+        30
+      ],
+      [
+        -30,
+        30
+      ]
+    ],
+    [
+      [
+        -20,
+        20
+      ],
+      [
+        20,
+        20
+      ],
+      [
+        20,
+        -20
+      ],
+      [
+        -20,
+        -20
+      ]
+    ],
+    [
+      [
+        -10,
+        -10
+      ],
+      [
+        10,
+        -10
+      ],
+      [
+        10,
+        10
+      ],
+      [
+        -10,
+        10
+      ]
+    ]
+  ]
+}

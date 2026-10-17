@@ -1,0 +1,63 @@
+{
+  "case_id": "concave_difference_evenodd",
+  "clip": [
+    [
+      [
+        2,
+        2
+      ],
+      [
+        8,
+        2
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        2,
+        8
+      ]
+    ]
+  ],
+  "fill_rule": "EvenOdd",
+  "format_version": 1,
+  "operation": "Difference",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "source": {
+    "group": "concave",
+    "intent": "Concave L against a rectangle",
+    "kind": "moonclip_constructed"
+  },
+  "subject": [
+    [
+      [
+        0,
+        0
+      ],
+      [
+        12,
+        0
+      ],
+      [
+        12,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        4,
+        12
+      ],
+      [
+        0,
+        12
+      ]
+    ]
+  ]
+}

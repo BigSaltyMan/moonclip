@@ -1,0 +1,59 @@
+{
+  "case_id": "negative_collinear_union_evenodd",
+  "clip": [
+    [
+      [
+        -15,
+        -15
+      ],
+      [
+        -5,
+        -15
+      ],
+      [
+        -5,
+        5
+      ],
+      [
+        -15,
+        5
+      ]
+    ]
+  ],
+  "fill_rule": "EvenOdd",
+  "format_version": 1,
+  "operation": "Union",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "source": {
+    "group": "negative_collinear",
+    "intent": "Negative coordinates, horizontal edges, removable collinear vertex",
+    "kind": "moonclip_constructed"
+  },
+  "subject": [
+    [
+      [
+        -20,
+        -10
+      ],
+      [
+        -10,
+        -10
+      ],
+      [
+        0,
+        -10
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        -20,
+        0
+      ]
+    ]
+  ]
+}

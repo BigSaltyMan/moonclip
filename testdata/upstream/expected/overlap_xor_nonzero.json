@@ -1,0 +1,120 @@
+{
+  "adapter_protocol_version": 1,
+  "case_id": "overlap_xor_nonzero",
+  "format_version": 1,
+  "input_sha256": "3a135d9348130b03e6e599526320b9c9ebd45f995999c006717bf7823f08f9b2",
+  "metrics": {
+    "hole_count": 0,
+    "path_count": 2,
+    "paths": [
+      {
+        "area2": "100",
+        "bounds": [
+          0,
+          0,
+          5,
+          10
+        ],
+        "vertices": 4
+      },
+      {
+        "area2": "100",
+        "bounds": [
+          10,
+          0,
+          15,
+          10
+        ],
+        "vertices": 4
+      }
+    ],
+    "tree_depth": 1,
+    "vertex_count": 8
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        5,
+        0
+      ],
+      [
+        5,
+        10
+      ],
+      [
+        0,
+        10
+      ],
+      [
+        0,
+        0
+      ]
+    ],
+    [
+      [
+        15,
+        10
+      ],
+      [
+        10,
+        10
+      ],
+      [
+        10,
+        0
+      ],
+      [
+        15,
+        0
+      ]
+    ]
+  ],
+  "status": "success",
+  "tree": {
+    "children": [
+      {
+        "children": [],
+        "path": [
+          [
+            5,
+            0
+          ],
+          [
+            5,
+            10
+          ],
+          [
+            0,
+            10
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "children": [],
+        "path": [
+          [
+            15,
+            10
+          ],
+          [
+            10,
+            10
+          ],
+          [
+            10,
+            0
+          ],
+          [
+            15,
+            0
+          ]
+        ]
+      }
+    ]
+  }
+}

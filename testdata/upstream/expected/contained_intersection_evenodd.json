@@ -1,0 +1,71 @@
+{
+  "adapter_protocol_version": 1,
+  "case_id": "contained_intersection_evenodd",
+  "format_version": 1,
+  "input_sha256": "28d622728ae93d0bd0c66f4b404ca5e904f965c9ebe299424c25ce09191f6378",
+  "metrics": {
+    "hole_count": 0,
+    "path_count": 1,
+    "paths": [
+      {
+        "area2": "72",
+        "bounds": [
+          2,
+          2,
+          8,
+          8
+        ],
+        "vertices": 4
+      }
+    ],
+    "tree_depth": 1,
+    "vertex_count": 4
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        8,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        8,
+        2
+      ]
+    ]
+  ],
+  "status": "success",
+  "tree": {
+    "children": [
+      {
+        "children": [],
+        "path": [
+          [
+            8,
+            8
+          ],
+          [
+            2,
+            8
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            8,
+            2
+          ]
+        ]
+      }
+    ]
+  }
+}

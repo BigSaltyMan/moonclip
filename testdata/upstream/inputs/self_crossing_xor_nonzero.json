@@ -1,0 +1,55 @@
+{
+  "case_id": "self_crossing_xor_nonzero",
+  "clip": [
+    [
+      [
+        -6,
+        -6
+      ],
+      [
+        6,
+        -6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        -6,
+        6
+      ]
+    ]
+  ],
+  "fill_rule": "NonZero",
+  "format_version": 1,
+  "operation": "Xor",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "source": {
+    "group": "self_crossing",
+    "intent": "Self-intersection and split lobes",
+    "kind": "moonclip_constructed"
+  },
+  "subject": [
+    [
+      [
+        -8,
+        -8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        -8,
+        8
+      ],
+      [
+        8,
+        -8
+      ]
+    ]
+  ]
+}

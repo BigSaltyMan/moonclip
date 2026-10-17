@@ -1,0 +1,87 @@
+{
+  "adapter_protocol_version": 1,
+  "case_id": "concave_intersection_evenodd",
+  "format_version": 1,
+  "input_sha256": "73d4af30548499e3c9b766b910e4e00e3de58bb75e7a9e4b1b4788ba0eeb10f7",
+  "metrics": {
+    "hole_count": 0,
+    "path_count": 1,
+    "paths": [
+      {
+        "area2": "40",
+        "bounds": [
+          2,
+          2,
+          8,
+          8
+        ],
+        "vertices": 6
+      }
+    ],
+    "tree_depth": 1,
+    "vertex_count": 6
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        8,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        4,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        8,
+        2
+      ]
+    ]
+  ],
+  "status": "success",
+  "tree": {
+    "children": [
+      {
+        "children": [],
+        "path": [
+          [
+            8,
+            4
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            4,
+            8
+          ],
+          [
+            2,
+            8
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            8,
+            2
+          ]
+        ]
+      }
+    ]
+  }
+}

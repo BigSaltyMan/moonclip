@@ -1,0 +1,36 @@
+{
+  "case_id": "empty_clip_xor_nonzero",
+  "clip": [],
+  "fill_rule": "NonZero",
+  "format_version": 1,
+  "operation": "Xor",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "source": {
+    "group": "empty_clip",
+    "intent": "Empty clip and operation-specific identity",
+    "kind": "moonclip_constructed"
+  },
+  "subject": [
+    [
+      [
+        0,
+        0
+      ],
+      [
+        10,
+        0
+      ],
+      [
+        10,
+        10
+      ],
+      [
+        0,
+        10
+      ]
+    ]
+  ]
+}

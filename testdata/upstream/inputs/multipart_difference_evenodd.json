@@ -1,0 +1,73 @@
+{
+  "case_id": "multipart_difference_evenodd",
+  "clip": [
+    [
+      [
+        5,
+        -5
+      ],
+      [
+        25,
+        -5
+      ],
+      [
+        25,
+        5
+      ],
+      [
+        5,
+        5
+      ]
+    ]
+  ],
+  "fill_rule": "EvenOdd",
+  "format_version": 1,
+  "operation": "Difference",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "source": {
+    "group": "multipart",
+    "intent": "Multiple independent input and output regions",
+    "kind": "moonclip_constructed"
+  },
+  "subject": [
+    [
+      [
+        0,
+        0
+      ],
+      [
+        10,
+        0
+      ],
+      [
+        10,
+        10
+      ],
+      [
+        0,
+        10
+      ]
+    ],
+    [
+      [
+        20,
+        0
+      ],
+      [
+        30,
+        0
+      ],
+      [
+        30,
+        10
+      ],
+      [
+        20,
+        10
+      ]
+    ]
+  ]
+}
