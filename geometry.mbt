@@ -279,3 +279,143 @@ fn scan_project(
   }
   result
 }
+
+///|
+/// C++ ordinary GetLineIntersectPt branch: truncate final coordinates to zero.
+fn intersection_integer(value : Double) -> Int64 raise ScanAbort {
+  if value.is_nan() ||
+    value.is_inf() ||
+    value < -1000000000.0 ||
+    value > 1000000000.0 {
+    raise ScanAbort(
+      NumericFailure(
+        location(Intersections, None, None),
+        "Intersection coordinate is not finite or in range",
+      ),
+    )
+  }
+  value.to_int64()
+}
+
+///|
+/// Inputs are validated; all differences <=2e9, Double products <=4e18.
+/// Deliberately follows the fixed ordinary C++ operation order, not TopX rounding.
+fn line_intersection(
+  a : Point64,
+  b : Point64,
+  c : Point64,
+  d : Point64,
+) -> Point64? raise ScanAbort {
+  let dx1 = (b.x - a.x).to_double()
+  let dy1 = (b.y - a.y).to_double()
+  let dx2 = (d.x - c.x).to_double()
+  let dy2 = (d.y - c.y).to_double()
+  let det = dy1 * dx2 - dy2 * dx1
+  if det == 0.0 {
+    return None
+  }
+  let t = ((a.x - c.x).to_double() * dy2 - (a.y - c.y).to_double() * dx2) / det
+  if t.is_nan() || t.is_inf() {
+    raise ScanAbort(
+      NumericFailure(
+        location(Intersections, None, None),
+        "Non-finite line parameter",
+      ),
+    )
+  }
+  if t <= 0.0 {
+    Some(a)
+  } else if t >= 1.0 {
+    Some(b)
+  } else {
+    Some(
+      Point64::new(
+        intersection_integer(a.x.to_double() + t * dx1),
+        intersection_integer(a.y.to_double() + t * dy1),
+      ),
+    )
+  }
+}
+
+///|
+/// Clipper2 GetClosestPointOnSegment: ties-even displacement, not truncation.
+fn closest_on_segment(
+  p : Point64,
+  a : Point64,
+  b : Point64,
+) -> Point64 raise ScanAbort {
+  if a == b {
+    return a
+  }
+  let dx = (b.x - a.x).to_double()
+  let dy = (b.y - a.y).to_double()
+  let q0 = ((p.x - a.x).to_double() * dx + (p.y - a.y).to_double() * dy) /
+    (dx * dx + dy * dy)
+  if q0.is_nan() || q0.is_inf() {
+    raise ScanAbort(
+      NumericFailure(
+        location(Intersections, None, None),
+        "Non-finite closest-point parameter",
+      ),
+    )
+  }
+  let q = if q0 < 0.0 { 0.0 } else if q0 > 1.0 { 1.0 } else { q0 }
+  let x = a.x + scan_round_displacement(q * dx)
+  let y = a.y + scan_round_displacement(q * dy)
+  if x < -COORDINATE_LIMIT ||
+    x > COORDINATE_LIMIT ||
+    y < -COORDINATE_LIMIT ||
+    y > COORDINATE_LIMIT {
+    raise ScanAbort(
+      NumericFailure(
+        location(Intersections, None, None),
+        "Closest point is out of range",
+      ),
+    )
+  }
+  Point64::new(x, y)
+}
+
+///|
+/// TopX endpoint look-ahead may extrapolate beyond the other edge's segment.
+/// Compare without casting a possibly huge projection (|delta|<=4e18).
+fn scan_outgoing_compare(
+  bot : Point64,
+  top : Point64,
+  point : Point64,
+) -> Int raise ScanAbort {
+  if bot.y == top.y {
+    raise ScanAbort(
+      InvalidInput(
+        location(HorizontalEvents, None, None),
+        "Horizontal outgoing comparison",
+      ),
+    )
+  }
+  let delta = (top.x - bot.x).to_double() /
+    (top.y - bot.y).to_double() *
+    (point.y - bot.y).to_double()
+  if delta.is_nan() || delta.is_inf() {
+    raise ScanAbort(
+      NumericFailure(
+        location(HorizontalEvents, None, None),
+        "Non-finite outgoing projection",
+      ),
+    )
+  }
+  if delta > 2000000000.5 {
+    return 1
+  }
+  if delta < -2000000000.5 {
+    return -1
+  }
+  let rounded = scan_round_displacement(delta)
+  let x = bot.x + rounded
+  if x < point.x {
+    -1
+  } else if x > point.x {
+    1
+  } else {
+    0
+  }
+}

@@ -68,7 +68,23 @@ C# 源码作为主要阅读与后续移植参考；固定版本的 C++ 实现作
 
 | 上游参考文件 | 计划用途与目标 |
 | --- | --- |
-| `CSharp/Clipper2Lib/Clipper.Engine.cs` / C++ 引擎的其余部分 | 后续交点、水平重叠、输出连接及布尔引擎；尚未实现。 |
+| `CSharp/Clipper2Lib/Clipper.Engine.cs` / C++ 引擎的其余部分 | 后续运算贡献判定、填充规则、完整布尔分派与孔洞树；尚未实现。 |
 | `CSharp/Clipper2Lib/Clipper.Offset.cs` | 后续偏移与描边；尚未建立 MoonBit 对应文件。 |
 
 已提供 C++ 参考适配器；MoonClip 算法兼容性尚未运行。后续引擎、偏移等按实际实现继续补充逐文件来源记录。
+
+
+## Commit 5 交点、水平交互与输出（2026-10-17）
+
+继续固定同一完整 SHA，实际读取 C++ `clipper.core.h` / `clipper.engine.cpp` 的以下函数。MoonBit 改写文件保留 Angus Johnson 2010-2025、BigSaltyMan 2026 与 BSL-1.0 声明。
+
+| 上游函数/结构 | MoonBit 文件 | 实际改写与差异 |
+| --- | --- | --- |
+| GetLineIntersectPt 普通分支、GetClosestPointOnSegment、AddNewIntersectNode | geometry.mbt、intersections.mbt | 固定普通分支的运算顺序、向零截断及分支式带外修正；最近点复用统一位移舍入，补充有限性与范围错误。 |
+| BuildIntersectList、IntersectListSort、ProcessIntersectList | intersections.mbt | 稳定数组归并配合独立 SEL；事件带代次、边段与带身份；有预算的相邻搜索，找不到合法事件明确失败。额外保留非交换的带顶网格接触候选。 |
+| DoHorizontal、ResetHorzDirection | horizontals.mbt、engine.mbt | 按水平运动方向处理真实相邻交互和端点后续转向；输出动作由显式回调提供，不移植四种操作的贡献策略。 |
+| OutPt/OutRec、AddOutPt、SwapOutrecs、JoinOutrecPaths、ProcessHorzJoins | output.mbt、horizontals.mbt | 索引环、独立节点身份、活动端双向关联、完成环的拆分/合并和单独重定向；候选保存节点而非坐标。无需指针所有权及物理释放，alive 与错误检查控制生命周期。 |
+| CleanCollinear、IsVerySmallTriangle、FixSelfIntersects、DoSplitOp | output.mbt | 独立输出整理，沿用尖刺、小三角形及局部自交/微交叉条件。严格相交预判与面积阈值改用精确整数，缩放及与上游浮点累加的差异见 numerics.md。 |
+| MoonClip 自行实现 | engine.mbt、其余新增文件 | 显式贡献决策队列、跨组件累计预算、输出环诊断、错误终止、来源和拆分记录；没有孔洞归属推断或公开 Boolean API。 |
+
+参考 CMake 现显式指定 `CLIPPER2_HI_PRECISION=0`，原来未定义该宏时选择的也是普通分支；构建报告增加 compile_definitions。因固定影响结果的编译选项，重新验证实际适配器和全部参考重建。未改动 136 例预期与 reference_only 状态；内部事件组合测试不计为上游布尔兼容性通过。

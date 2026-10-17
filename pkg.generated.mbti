@@ -111,6 +111,9 @@ pub(all) enum Stage {
   ActiveEdges
   ScanBand
   ScanTop
+  Intersections
+  HorizontalEvents
+  OutputTopology
 } derive(Eq, @debug.Debug)
 
 // Type aliases

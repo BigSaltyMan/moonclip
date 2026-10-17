@@ -86,6 +86,7 @@ priv struct ActiveEdge {
   mut in_sel : Bool
   mut queued_horizontal : Bool
   mut at_exit : Bool
+  mut output_end : OutputEnd?
 }
 
 ///|
@@ -139,6 +140,10 @@ priv struct ScanStats {
   mut heights : Int
   mut comparisons : Int
   mut horizontal_steps : Int
+  mut intersection_events : Int
+  mut horizontal_joins : Int
+  mut output_records : Int
+  mut output_points : Int
 } derive(Eq, Debug)
 
 ///|
@@ -156,6 +161,12 @@ priv struct ScanState {
   free_slots : Array[Int]
   horizontal_queue : Array[EdgeId]
   exits : Array[ExitEvent]
+  output : OutputState
+  intersections : Array[IntersectEvent]
+  mut intersection_cursor : Int
+  mut band_built : Int64?
+  pending_connections : Array[EngineEvent]
+  mut connection_cursor : Int
   mut entry_contact : (VertexId, EdgeId, EdgeId)?
   mut held_horizontal : EdgeId?
   mut ael_head : EdgeId?
@@ -186,6 +197,10 @@ fn new_scan_state(limits : ScanLimits) -> ScanState {
       heights: 0,
       comparisons: 0,
       horizontal_steps: 0,
+      intersection_events: 0,
+      horizontal_joins: 0,
+      output_records: 0,
+      output_points: 0,
     },
     vertices: [],
     paths: [],
@@ -198,6 +213,12 @@ fn new_scan_state(limits : ScanLimits) -> ScanState {
     free_slots: [],
     horizontal_queue: [],
     exits: [],
+    output: new_output_state(),
+    intersections: [],
+    intersection_cursor: 0,
+    band_built: None,
+    pending_connections: [],
+    connection_cursor: 0,
     entry_contact: None,
     held_horizontal: None,
     ael_head: None,
@@ -357,6 +378,7 @@ fn edge_allocate(state : ScanState, chain_id : Int) -> EdgeId raise ScanAbort {
     in_sel: false,
     queued_horizontal: false,
     at_exit: false,
+    output_end: None,
   }
   let index = match state.free_slots.pop() {
     Some(index) => index
@@ -384,7 +406,10 @@ fn edge_release(state : ScanState, id : EdgeId) -> Unit raise ScanAbort {
     AwaitMaxima(_, a, b) => id == a || id == b
     _ => false
   }
-  if entry_reference ||
+  if edge.output_end is Some(_) ||
+    state.intersection_cursor < state.intersections.length() ||
+    state.connection_cursor < state.pending_connections.length() ||
+    entry_reference ||
     phase_reference ||
     edge.prev_ael is Some(_) ||
     edge.next_ael is Some(_) ||
@@ -535,6 +560,15 @@ fn scan_cleanup(state : ScanState) -> Unit {
   state.heap.clear()
   state.heights.clear()
   state.entries.clear()
+  state.intersections.clear()
+  state.pending_connections.clear()
+  state.intersection_cursor = 0
+  state.connection_cursor = 0
+  state.band_built = None
+  state.output.points.clear()
+  state.output.records.clear()
+  state.output.horizontals.clear()
+  state.output.joins.clear()
   state.ael_head = None
   state.sel_head = None
   state.held_horizontal = None

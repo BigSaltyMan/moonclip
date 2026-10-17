@@ -20,6 +20,9 @@ pub(all) enum Stage {
   ActiveEdges
   ScanBand
   ScanTop
+  Intersections
+  HorizontalEvents
+  OutputTopology
 } derive(Eq, Debug)
 
 ///|

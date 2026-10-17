@@ -72,7 +72,7 @@ def main():
     report = {"cmake_sha256": sha256((ROOT / "tools/oracle/CMakeLists.txt").read_bytes()), "adapter_sha256": sha256((ROOT / "tools/oracle/adapter.cpp").read_bytes()), "lock_sha256": sha256((ROOT / "tools/oracle/upstream-lock.json").read_bytes()), "binary_sha256": sha256(binary.read_bytes()), "oracle_commit": lock["commit"], "archive_sha256": upstream["sha256"],
               "compiler": subprocess.check_output([compiler, "--version"], text=True).splitlines()[0],
               "cmake": subprocess.check_output(["cmake", "--version"], text=True).splitlines()[0],
-              "python": sys.version.split()[0], "configure_command": command, "seconds": round(time.monotonic()-started, 3)}
+              "python": sys.version.split()[0], "compile_definitions": {"CLIPPER2_HI_PRECISION": 0}, "configure_command": command, "seconds": round(time.monotonic()-started, 3)}
     (build / "environment.json").write_bytes(canonical_bytes(report))
     print(json.dumps(report, indent=2))
     return 0

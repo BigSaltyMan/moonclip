@@ -6,6 +6,8 @@
 
 参考版本为 Clipper2 2.0.1，标签 `Clipper2_2.0.1`，完整 SHA `21ebba05db8894f0c7217ad35ea518080f324946`。完整 SHA 是身份依据。`upstream-lock.json` 固定下载 URL、归档 SHA256、编译输入、协议版本与额外依赖。获取归档后逐字节验证整个已解压源码树，任何修改、多出文件、链接或校验失败均停止，不回退到 main 或其他版本。
 
+Commit 5 显式固定 `CLIPPER2_HI_PRECISION=0`，reference 库及适配器共用该定义，构建报告 environment.json 的 compile_definitions 记录为 0。此前未定义此宏，同样进入固定源码的普通分支；没有切换数值算法。
+
 实际编译 `CPP/Clipper2Lib/src/clipper.engine.cpp`，并包含该固定提交的 `CPP/Clipper2Lib/include/clipper2/` 头文件。JSON 解析使用 nlohmann/json 3.12.0 的单头文件，固定其 SHA256 和 MIT 许可文本的 SHA256。它只供适配器使用。版权和完整 MIT 许可见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)；下载的上游文件保留原版权和 BSL-1.0 许可。
 
 2026-10-17 本地实际验证环境：Windows Git Bash、GNU C++ 14.2.0（MinGW-W64 x86_64-ucrt-mcf-seh）、CMake 3.30.2、Ninja 1.12.1、Python 3.11.9。使用 C++17、Ninja、`CMAKE_BUILD_TYPE=Release`，并行度 2。路径参数转换为 CMake 可用的正斜杠形式。
