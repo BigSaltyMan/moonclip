@@ -10,7 +10,7 @@
 
 2026-10-16 核验：`git ls-remote` 返回该标签指向上述完整 SHA；发布页显示 `Clipper2_2.0.1` / `21ebba0`。已读取该提交的完整 LICENSE，并将原文（前置 MoonClip 版权行）写入根目录 LICENSE。另已读取该提交的 C# `Clipper.Core.cs`，核对 Point64 构造、坐标比较和 Path64 / Paths64 声明。该源码头部版权为 `Angus Johnson 2010-2025`，许可指向 Boost Software License 1.0。
 
-## 已发生的参考
+## Commit 1 已发生的参考
 
 | 上游文件 | MoonBit 文件 | 类型与修改说明 |
 | --- | --- | --- |
@@ -50,11 +50,25 @@ C# 源码作为主要阅读与后续移植参考；固定版本的 C++ 实现作
 
 上游 C++ 文件保留 Angus Johnson 2010-2025 的版权与 BSL-1.0 许可头。上游源码与编译产物不提交；工具及自行构造数据为 BigSaltyMan 2026，BSL-1.0。构建源身份、依赖和许可核验见 [参考工具说明](../tools/oracle/README.md)。C# 继续是主要阅读与后续移植参考，C++ 是独立预期结果的生成实现。
 
+## Commit 4 内部扫描结构与投影（2026-10-17）
+
+本笔首次将固定引擎的部分结构与函数路线改写到 MoonBit。实际读取固定提交的 C++ `clipper.engine.h`、`clipper.engine.cpp` 及 C# `Clipper.Engine.cs`；所有参考仍固定到同一个完整 SHA。
+
+| 上游文件 / 结构或函数 | MoonBit 文件 | 实际改写与范围 |
+| --- | --- | --- |
+| C++ `clipper.engine.h` 的 Vertex、LocalMinima、Active、PathType、AEL/SEL 字段 | `engine_types.mbt` | 沿用结构分工与角色，指针改成数组索引/None；增加原始来源、slot+generation 句柄、集中池和独立成员标记。没有引入 OutPt/OutRec 或布尔输出结构。 |
+| C++ / C# `TopX` | `geometry.mbt` 的 `scan_project` | 沿用先舍入相对位移再加 bot.x、端点和垂直直接返回的顺序；以明确 floor/奇偶规则实现 ties-to-even，补充有限性、转换和加法检查。水平状态不使用无穷哨兵。 |
+| C++ / C# `IsValidAelOrder` 的闭合路径规则 | `scanbeam.mbt` 的 `resident_before_new` | 改用精确整数谓词；保留后续转向、左右边界及另一侧边界判断，扩展连续共线点查找，最后用输入来源稳定区分。只用于状态插入，不作通用排序。开放路径规则与输出连接未接入。 |
+| C# `ExecuteInternal` 的阶段组织 | `scanbeam.mbt` 的 `scan_step` | 改为显式阶段与 Await 边界；真实完成事件准备、水平链/边段推进和配对生命周期，未接入的交点、水平交叉与输出消费必须明确等待，不能假装已执行。 |
+| MoonClip 自行实现 | `engine_types.mbt`、`scanbeam.mbt` | 原始索引快照、平台分组、堆/集合高度队列、代次池、共享预算、不变量诊断和错误终止；复用 Commit 2 的校验及 Closed 整理契约。 |
+
+实际改写部分保留 Angus Johnson 2010-2025 版权与 BSL-1.0，MoonClip 新增部分版权为 BigSaltyMan 2026；对应源码和根 LICENSE 均有声明。几何符号继续由统一精确行列式实现。没有改变 C++ 适配器、协议或参考数据，136 例仍为 reference_only，本笔不新增布尔兼容性通过数。
+
 ## 计划范围（尚未移植或实现）
 
 | 上游参考文件 | 计划用途与目标 |
 | --- | --- |
-| `CSharp/Clipper2Lib/Clipper.Engine.cs` | 后续扫描线与布尔运算引擎；尚未建立 MoonBit 对应文件。 |
+| `CSharp/Clipper2Lib/Clipper.Engine.cs` / C++ 引擎的其余部分 | 后续交点、水平重叠、输出连接及布尔引擎；尚未实现。 |
 | `CSharp/Clipper2Lib/Clipper.Offset.cs` | 后续偏移与描边；尚未建立 MoonBit 对应文件。 |
 
 已提供 C++ 参考适配器；MoonClip 算法兼容性尚未运行。后续引擎、偏移等按实际实现继续补充逐文件来源记录。

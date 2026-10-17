@@ -15,6 +15,11 @@ pub(all) enum Stage {
   PointInPolygon
   NormalizePath
   NormalizePaths
+  EnginePrepare
+  ScanEvents
+  ActiveEdges
+  ScanBand
+  ScanTop
 } derive(Eq, Debug)
 
 ///|
@@ -27,6 +32,8 @@ pub(all) enum Axis {
 pub(all) enum ResourceKind {
   InputPaths
   InputVertices
+  InternalNodes
+  ScanWork
 } derive(Eq, Debug)
 
 ///|
@@ -61,6 +68,8 @@ pub fn ClipError::message(self : ClipError) -> String {
       let name = match resource {
         InputPaths => "input paths"
         InputVertices => "input vertices"
+        InternalNodes => "internal nodes"
+        ScanWork => "scan work"
       }
       "Resource limit exceeded for \{name} (limit \{limit})"
     }

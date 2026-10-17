@@ -26,7 +26,13 @@ pub(all) struct Bounds64 {
 /// Validated coordinates: |difference| <= 2e9, |product| <= 4e18;
 /// |cross| <= 8e18 < 9223372036854775807. Re-audit before raising the limit.
 fn cross_validated(a : Point64, b : Point64, c : Point64) -> Int64 {
-  (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x)
+  cross_components(b.x - a.x, b.y - a.y, c.x - a.x, c.y - a.y)
+}
+
+///|
+/// All components are validated coordinate differences, bounded by +/-2e9.
+fn cross_components(ax : Int64, ay : Int64, bx : Int64, by : Int64) -> Int64 {
+  ax * by - ay * bx
 }
 
 ///|
@@ -201,4 +207,75 @@ pub fn point_in_polygon(
     a = b
   }
   Ok(if inside { Inside } else { Outside })
+}
+
+///|
+/// Internal grid displacement rounding. Explicit ties-to-even on both targets.
+fn scan_round_displacement(value : Double) -> Int64 raise ScanAbort {
+  let loc = location(ScanBand, None, None)
+  if value.is_nan() ||
+    value.is_inf() ||
+    value < -2000000001.0 ||
+    value > 2000000001.0 {
+    raise ScanAbort(
+      NumericFailure(loc, "Non-finite or out-of-range scan displacement"),
+    )
+  }
+  let floor_value = @double.floor(value)
+  let lower = floor_value.to_int64()
+  let fraction = value - floor_value
+  let result = if fraction > 0.5 || (fraction == 0.5 && lower % 2L != 0L) {
+    lower + 1L
+  } else {
+    lower
+  }
+  if result < -2000000000L || result > 2000000000L {
+    raise ScanAbort(
+      NumericFailure(loc, "Rounded scan displacement is out of range"),
+    )
+  }
+  result
+}
+
+// Clipper2-derived projection: Copyright (c) Angus Johnson 2010-2025.
+// Distributed under BSL-1.0; see LICENSE.
+
+///|
+/// Adapted from fixed Clipper2 TopX. Round the displacement, never bot.x+delta.
+/// Coordinates have already passed the integer-core input check.
+fn scan_project(
+  bot : Point64,
+  top : Point64,
+  y : Int64,
+) -> Int64 raise ScanAbort {
+  let loc = location(ScanBand, None, None)
+  if bot.y <= top.y || y > bot.y || y < top.y {
+    raise ScanAbort(
+      InvalidInput(
+        loc, "Projection requires a descending nonhorizontal segment and an in-range height",
+      ),
+    )
+  }
+  if y == top.y || bot.x == top.x {
+    return top.x
+  }
+  if y == bot.y {
+    return bot.x
+  }
+  let dx = (top.x - bot.x).to_double() / (top.y - bot.y).to_double()
+  if dx.is_nan() || dx.is_inf() {
+    raise ScanAbort(NumericFailure(loc, "Non-finite scan slope"))
+  }
+  let displacement = scan_round_displacement(dx * (y - bot.y).to_double())
+  if (displacement > 0L && bot.x > 9223372036854775807L - displacement) ||
+    (displacement < 0L && bot.x < -9223372036854775808L - displacement) {
+    raise ScanAbort(NumericFailure(loc, "Scan projection addition overflow"))
+  }
+  let result = bot.x + displacement
+  if result < -COORDINATE_LIMIT || result > COORDINATE_LIMIT {
+    raise ScanAbort(
+      NumericFailure(loc, "Scan projection exceeds the coordinate limit"),
+    )
+  }
+  result
 }
