@@ -1,0 +1,63 @@
+{
+  "adapter_protocol_version": 6,
+  "case_id": "simplify_decimal_saw_open_p0_e2",
+  "collapsed_indices": [],
+  "degenerate_indices": [],
+  "format_version": 6,
+  "input_degenerate_indices": [],
+  "input_sha256": "5958f13082527567d6c07356d1b7d784e0f19f2ffbda71363f622d415d9493d0",
+  "metrics": {
+    "path_count": 1,
+    "vertex_count": 4
+  },
+  "mode": "Open",
+  "operation": "SimplifyD",
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        0,
+        0
+      ],
+      [
+        8,
+        0
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        0,
+        8
+      ]
+    ]
+  ],
+  "paths_d": [
+    [
+      [
+        0.0,
+        0.0
+      ],
+      [
+        8.0,
+        0.0
+      ],
+      [
+        8.0,
+        8.0
+      ],
+      [
+        0.0,
+        8.0
+      ]
+    ]
+  ],
+  "precision": 0,
+  "reference_route": "DecimalGrid",
+  "removed_per_path": [
+    3
+  ],
+  "removed_vertices": 3,
+  "status": "success"
+}

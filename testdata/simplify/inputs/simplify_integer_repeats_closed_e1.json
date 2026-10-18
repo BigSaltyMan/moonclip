@@ -1,0 +1,50 @@
+{
+  "case_id": "simplify_integer_repeats_closed_e1",
+  "epsilon": 1,
+  "format_version": 6,
+  "mode": "Closed",
+  "normalization": "ConsecutiveDuplicatesAndClosedSeam",
+  "operation": "Simplify64",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        10,
+        0
+      ],
+      [
+        10,
+        10
+      ],
+      [
+        0,
+        10
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        0
+      ]
+    ]
+  ],
+  "reference_route": "Integer",
+  "source": {
+    "group": "repeats",
+    "intent": "Ordered local distance deletion; simplify_integer_repeats_closed_e1",
+    "kind": "moonclip_constructed"
+  }
+}

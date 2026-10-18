@@ -1,0 +1,54 @@
+{
+  "case_id": "simplify_integer_rectangle_closed_e1",
+  "epsilon": 1,
+  "format_version": 6,
+  "mode": "Closed",
+  "normalization": "ConsecutiveDuplicatesAndClosedSeam",
+  "operation": "Simplify64",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [
+      [
+        0,
+        0
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        10,
+        0
+      ],
+      [
+        10,
+        5
+      ],
+      [
+        10,
+        10
+      ],
+      [
+        5,
+        10
+      ],
+      [
+        0,
+        10
+      ],
+      [
+        0,
+        5
+      ]
+    ]
+  ],
+  "reference_route": "Integer",
+  "source": {
+    "group": "rectangle",
+    "intent": "Ordered local distance deletion; simplify_integer_rectangle_closed_e1",
+    "kind": "moonclip_constructed"
+  }
+}

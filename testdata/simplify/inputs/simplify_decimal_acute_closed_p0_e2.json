@@ -1,0 +1,44 @@
+{
+  "case_id": "simplify_decimal_acute_closed_p0_e2",
+  "epsilon": 2,
+  "format_version": 6,
+  "grid": "DecimalHalfAwayFromZero",
+  "mode": "Closed",
+  "normalization": "ConsecutiveDuplicatesAndClosedSeam",
+  "operation": "SimplifyD",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [
+      [
+        -0.25,
+        -0.25
+      ],
+      [
+        19.75,
+        -0.25
+      ],
+      [
+        20.75,
+        9.75
+      ],
+      [
+        19.75,
+        0.75
+      ],
+      [
+        -0.25,
+        9.75
+      ]
+    ]
+  ],
+  "precision": 0,
+  "reference_route": "DecimalGrid",
+  "source": {
+    "group": "acute",
+    "intent": "Ordered local distance deletion; simplify_decimal_acute_closed_p0_e2",
+    "kind": "moonclip_constructed"
+  }
+}

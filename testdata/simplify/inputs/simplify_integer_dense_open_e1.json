@@ -1,0 +1,50 @@
+{
+  "case_id": "simplify_integer_dense_open_e1",
+  "epsilon": 1,
+  "format_version": 6,
+  "mode": "Open",
+  "normalization": "ConsecutiveDuplicatesAndClosedSeam",
+  "operation": "Simplify64",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        0,
+        4
+      ]
+    ]
+  ],
+  "reference_route": "Integer",
+  "source": {
+    "group": "dense",
+    "intent": "Ordered local distance deletion; simplify_integer_dense_open_e1",
+    "kind": "moonclip_constructed"
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "adapter_protocol_version": 6,
+  "case_id": "simplify_decimal_notch_closed_p0_e2",
+  "collapsed_indices": [],
+  "degenerate_indices": [],
+  "format_version": 6,
+  "input_degenerate_indices": [],
+  "input_sha256": "d43370fbb069736036190ef620b2c7776163168f4d0b8e6ac7ef653683afbd79",
+  "metrics": {
+    "path_count": 1,
+    "vertex_count": 7
+  },
+  "mode": "Closed",
+  "operation": "SimplifyD",
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        0,
+        0
+      ],
+      [
+        12,
+        0
+      ],
+      [
+        12,
+        12
+      ],
+      [
+        7,
+        12
+      ],
+      [
+        5,
+        2
+      ],
+      [
+        5,
+        12
+      ],
+      [
+        0,
+        12
+      ]
+    ]
+  ],
+  "paths_d": [
+    [
+      [
+        0.0,
+        0.0
+      ],
+      [
+        12.0,
+        0.0
+      ],
+      [
+        12.0,
+        12.0
+      ],
+      [
+        7.0,
+        12.0
+      ],
+      [
+        5.0,
+        2.0
+      ],
+      [
+        5.0,
+        12.0
+      ],
+      [
+        0.0,
+        12.0
+      ]
+    ]
+  ],
+  "precision": 0,
+  "reference_route": "DecimalGrid",
+  "removed_per_path": [
+    1
+  ],
+  "removed_vertices": 1,
+  "status": "success"
+}

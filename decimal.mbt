@@ -499,3 +499,51 @@ fn decimal_scaled_options(
     arc_tolerance=decimal_parameter(options.arc_tolerance, precision),
   )
 }
+
+///|
+// Simplification alone reports closed degeneracy, rather than applying region input rules.
+fn decimal_simplify_execute(
+  paths : PathsD,
+  precision : Precision,
+  options : SimplifyOptions,
+  limits : ScanLimits,
+  budget? : CallBudget,
+) -> Result[SimplifyResultD, ClipError] {
+  let budget = match budget {
+    Some(value) => value
+    None => new_call_budget(limits)
+  }
+  try {
+    ignore(simplify_epsilon(options.epsilon))
+    let scaled = decimal_parameter(options.epsilon, precision)
+    let square = simplify_epsilon(scaled)
+    decimal_precheck(paths, [], precision, budget)
+    // false skips only closed-region validation, never range/merge diagnostics.
+    let (grid, _) = decimal_quantize(paths, [], precision, false, budget)
+    let value = simplify_validated(
+      grid,
+      SimplifyOptions::new(epsilon=scaled, mode=options.mode),
+      square,
+      budget,
+    )
+    let decoded = decimal_output(value.stored_paths, precision, budget)
+    budget_spend(budget, 1, 1, location(SimplifyReport, None, None))
+    Ok({ stored_paths: decoded, report: value.report, })
+  } catch {
+    ScanAbort(error) => Err(decimal_error(error, precision))
+  }
+}
+
+///|
+pub fn simplify_paths_d(
+  paths : PathsD,
+  precision? : Precision = Default::default(),
+  options? : SimplifyOptions = Default::default(),
+  limits? : Limits = Default::default(),
+) -> Result[SimplifyResultD, ClipError] {
+  decimal_simplify_execute(paths, precision, options, {
+    input: limits,
+    max_nodes: 500000,
+    max_work: 5000000,
+  })
+}

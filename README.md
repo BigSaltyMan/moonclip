@@ -2,7 +2,7 @@
 
 MoonClip 是用 MoonBit 实现的整数多边形几何库，目前处于开发初期。目标版本为 `0.1.0`，尚未发布到 Mooncakes，模块名称的可用性将在发布前确认。
 
-目前已实现：不可变 `Int64` 点、有序路径与轮廓集合、结构比较、独立复制，以及精确叉积与方向、边界框、精确两倍有向面积、EvenOdd 点包含判断和开放/闭合模式的重复点整理。另已建立内部扫描线、活动边、交点事件、水平交互及输出环连接原语，采用节点复用和共享工作量预算；公开支持 EvenOdd 与 NonZero 下的 Intersection、Union、Difference、Xor。孔洞树由 boolean_tree 提供；闭合区域偏移已公开 Miter、Bevel、Square、Round，以及 MiterLimit / ArcTolerance。开放描边已由 stroke_polyline 提供；小数 Boolean、Offset、Stroke 已接入统一十进制精度，显式简化仍在后续计划中。
+目前已实现：不可变 `Int64` 点、有序路径与轮廓集合、结构比较、独立复制，以及精确叉积与方向、边界框、精确两倍有向面积、EvenOdd 点包含判断和开放/闭合模式的重复点整理。另已建立内部扫描线、活动边、交点事件、水平交互及输出环连接原语，采用节点复用和共享工作量预算；公开支持 EvenOdd 与 NonZero 下的 Intersection、Union、Difference、Xor。孔洞树由 boolean_tree 提供；闭合区域偏移已公开 Miter、Bevel、Square、Round，以及 MiterLimit / ArcTolerance。开放描边已由 stroke_polyline 提供；小数 Boolean、Offset、Stroke 已接入统一十进制精度，显式整数/小数简化及删点、退化报告已由 simplify_paths / simplify_paths_d 提供，详见 [简化契约](docs/simplify.md)。
 
 ## 数据契约
 
@@ -43,7 +43,8 @@ moon run --target native cmd/example
 示例代码位于 [`cmd/example/main.mbt`](cmd/example/main.mbt)，通过公开接口验证复制隔离、负坐标边界框、方向、精确面积和点包含，整理重复点后检查源数据未变，并捕获坐标及预算错误。当前完整示例还检查四种布尔操作、孔洞树、闭合偏移，以及下面三类组合；成功输出：
 
 ```text
-MoonClip geometry, Boolean, PolyTree, offset, stroke, composition and decimal OK
+Simplify vertices: 9 -> 8; input_degenerate=[2]; degenerate=[2]; collapsed=[]; offset/tree OK
+MoonClip geometry, Boolean, PolyTree, offset, stroke, composition, decimal and simplify OK
 ```
 
 对应示例包导入根库后，可直接调用公开接口：
@@ -274,7 +275,7 @@ moon test --target js --filter "reference stroke paths: *"
 moon run --target native cmd/conformance -- --manifest testdata/manifest.json --offset-manifest testdata/offset-manifest.json --stroke-manifest testdata/stroke-manifest.json --report-json _build/conformance/report.json --report-md docs/compatibility.md --strict
 ```
 
-整数和小数接口均已提供；三类组合验收已接入，显式轮廓简化留给 Commit 14。
+整数和小数接口均已提供；三类组合和显式简化后的偏移/孔洞树验收均已接入。
 
 
 ## 组合流程与资源保护
@@ -296,4 +297,13 @@ Commit 12 验收为 native、JS 同一批各 **1414 项**（1330 回归＋24 组
 
 输出精确遵循网格整数除以倍率，零规范为+0.0。Double并非任意十进制精确数；输入量化、交点投影和圆弧近似是不同误差来源，半格局部坐标界不构成整体拓扑保证。固定ClipperD使用二进制倍率，因此报告单列196条十进制网格参考和24条真实ClipperD共同网格参考，不泛化为全部ClipperD兼容。详见[小数契约](docs/decimal.md)。
 
-当前同一批native、JS各1714项（1414回归＋220对照＋80功能），小数过滤各220；工具209、真实适配器65分别计数。独立参考为992条，旧772条输入、预期及清单/选择保持字节不变。普通CI和独立Cpp重建分别核对，报告保留操作、精度、参考路线、网格及原单位差异。
+当前同一批native、JS各2010项（1714回归＋224简化对照＋72简化功能），简化过滤各224、小数过滤各220；工具240、真实适配器77分别计数。独立参考为1216条，旧992条输入、预期及清单/选择保持字节不变。普通CI和独立Cpp重建分别核对，报告保留操作、精度、参考路线、网格及原单位差异。
+
+
+## 显式简化
+
+`simplify_paths(paths, options=SimplifyOptions::new(epsilon=0.25, mode=Closed))` 返回私有存储的 SimplifyResult；小数入口 `simplify_paths_d` 增加 Precision，epsilon 使用原单位。完整受检示例检查报告后显式过滤空路径，实际偏移并重建孔洞树；源数据保持不变。结果路径及统计/索引数组访问器均返回独立副本。
+
+epsilon=0 仅整理连续重复点及闭合重复首点，保留普通共线点；正阈值采用固定局部直线距离算法，保留候选顺序和 Open 端点。结果不自动丢弃退化路径，三类索引区分原有退化、最终退化与新塌缩。小数分类基于选定网格，原有闭合退化仅在简化入口报告，其他小数运算仍严格检查。详见 [参数、顺序、统计与预算](docs/simplify.md)。
+
+简化可能改变孔洞、窄通道及自交关系；epsilon 不是全局 Hausdorff 距离或面积变化上限，不保证全局最优。Boolean/Offset/Stroke 不会自动简化。独立简化参考224条，Integer80、DecimalGrid144；运行器逐点比较有序结果和报告，小数同时精确检查网格解码。

@@ -34,6 +34,10 @@ pub(all) enum Stage {
   DecimalParameters
   DecimalQuantize
   DecimalOutput
+  SimplifyParameters
+  SimplifyEvaluate
+  SimplifyReport
+  SimplifyOutput
 } derive(Eq, Debug)
 
 ///|

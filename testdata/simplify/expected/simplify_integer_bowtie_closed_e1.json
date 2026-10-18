@@ -1,0 +1,42 @@
+{
+  "adapter_protocol_version": 6,
+  "case_id": "simplify_integer_bowtie_closed_e1",
+  "collapsed_indices": [],
+  "degenerate_indices": [],
+  "format_version": 6,
+  "input_degenerate_indices": [],
+  "input_sha256": "851f7e26a1013a6d9a733dccc025d40ccf577af210b8962ff98c1a1ba9b7bf3d",
+  "metrics": {
+    "path_count": 1,
+    "vertex_count": 4
+  },
+  "mode": "Closed",
+  "operation": "Simplify64",
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        0,
+        0
+      ],
+      [
+        10,
+        10
+      ],
+      [
+        0,
+        10
+      ],
+      [
+        10,
+        0
+      ]
+    ]
+  ],
+  "reference_route": "Integer",
+  "removed_per_path": [
+    0
+  ],
+  "removed_vertices": 0,
+  "status": "success"
+}

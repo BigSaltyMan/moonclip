@@ -1,0 +1,95 @@
+{
+  "adapter_protocol_version": 6,
+  "case_id": "simplify_decimal_notch_open_p6_e0_25",
+  "collapsed_indices": [],
+  "degenerate_indices": [],
+  "format_version": 6,
+  "input_degenerate_indices": [],
+  "input_sha256": "26b3cc39b1d347b99ca93b91a05e689e74666d27885d9ae755c24e254d51459b",
+  "metrics": {
+    "path_count": 1,
+    "vertex_count": 8
+  },
+  "mode": "Open",
+  "operation": "SimplifyD",
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        -250000,
+        -250000
+      ],
+      [
+        11750000,
+        -250000
+      ],
+      [
+        11750000,
+        11750000
+      ],
+      [
+        6750000,
+        11750000
+      ],
+      [
+        6750000,
+        1750000
+      ],
+      [
+        4750000,
+        1750000
+      ],
+      [
+        4750000,
+        11750000
+      ],
+      [
+        -250000,
+        11750000
+      ]
+    ]
+  ],
+  "paths_d": [
+    [
+      [
+        -0.25,
+        -0.25
+      ],
+      [
+        11.75,
+        -0.25
+      ],
+      [
+        11.75,
+        11.75
+      ],
+      [
+        6.75,
+        11.75
+      ],
+      [
+        6.75,
+        1.75
+      ],
+      [
+        4.75,
+        1.75
+      ],
+      [
+        4.75,
+        11.75
+      ],
+      [
+        -0.25,
+        11.75
+      ]
+    ]
+  ],
+  "precision": 6,
+  "reference_route": "DecimalGrid",
+  "removed_per_path": [
+    0
+  ],
+  "removed_vertices": 0,
+  "status": "success"
+}

@@ -1,0 +1,73 @@
+{
+  "case_id": "simplify_integer_mixed_open_e0_5",
+  "epsilon": 0.5,
+  "format_version": 6,
+  "mode": "Open",
+  "normalization": "ConsecutiveDuplicatesAndClosedSeam",
+  "operation": "Simplify64",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [],
+    [
+      [
+        1,
+        1
+      ]
+    ],
+    [
+      [
+        0,
+        0
+      ],
+      [
+        10,
+        0
+      ]
+    ],
+    [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ]
+    ],
+    [
+      [
+        0,
+        0
+      ],
+      [
+        10,
+        0
+      ],
+      [
+        10,
+        10
+      ],
+      [
+        0,
+        10
+      ]
+    ]
+  ],
+  "reference_route": "Integer",
+  "source": {
+    "group": "mixed",
+    "intent": "Ordered local distance deletion; simplify_integer_mixed_open_e0_5",
+    "kind": "moonclip_constructed"
+  }
+}

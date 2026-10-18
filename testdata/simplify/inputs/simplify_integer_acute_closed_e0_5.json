@@ -1,0 +1,42 @@
+{
+  "case_id": "simplify_integer_acute_closed_e0_5",
+  "epsilon": 0.5,
+  "format_version": 6,
+  "mode": "Closed",
+  "normalization": "ConsecutiveDuplicatesAndClosedSeam",
+  "operation": "Simplify64",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [
+      [
+        0,
+        0
+      ],
+      [
+        20,
+        0
+      ],
+      [
+        21,
+        10
+      ],
+      [
+        20,
+        1
+      ],
+      [
+        0,
+        10
+      ]
+    ]
+  ],
+  "reference_route": "Integer",
+  "source": {
+    "group": "acute",
+    "intent": "Ordered local distance deletion; simplify_integer_acute_closed_e0_5",
+    "kind": "moonclip_constructed"
+  }
+}

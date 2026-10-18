@@ -455,6 +455,62 @@ class AdapterTests(unittest.TestCase):
         c=self.decimal_case();c['reference_route']='ClipperDCommonGrid';c['subject'][0][0][0]=0.1;self.rejected(c)
         c=self.decimal_case('decimal_stroke_miter_butt_p3');c['reference_route']='ClipperDCommonGrid';self.rejected(c)
 
+    def simplify_case(self,decimal=False):
+        _,records=read_manifest(ROOT,ROOT/'testdata/simplify-manifest.json')
+        return copy.deepcopy(next(c for _,c,_,_ in records if c['operation']==('SimplifyD' if decimal else 'Simplify64')))
+
+    def test_simplify_actual_224_ordered_results(self):
+        _,records=read_manifest(ROOT,ROOT/'testdata/simplify-manifest.json')
+        for _,c,d,v in records:
+            r=decode(self.call(c).stdout);compare(v,r,c['case_id'])
+
+    def test_simplify_missing_extra_fields(self):
+        c=self.simplify_case()
+        for k in c:
+            bad=copy.deepcopy(c);del bad[k];self.rejected(bad)
+        c['extra']=1;self.rejected(c)
+
+    def test_simplify_negative_zero_huge_epsilon_rejected(self):
+        for epsilon in (-1,0,-0.0,1e308,True):
+            c=self.simplify_case();c['epsilon']=epsilon;self.rejected(c)
+
+    def test_simplify_unknown_mode_route_version_normalization(self):
+        for k,v in [('mode','Ring'),('reference_route','DecimalGrid'),('format_version',True),('normalization','Auto')]:
+            c=self.simplify_case();c[k]=v;self.rejected(c)
+
+    def test_simplify_raw_limits(self):
+        for paths in ([[]]*10001,[[[0,0]]*100001]):
+            c=self.simplify_case();c['paths']=paths;self.rejected(c)
+
+    def test_simplify_closed_collapsed_and_short_kept(self):
+        c=self.simplify_case();c.update(paths=[[],[[0,0]],[[0,0],[10,0]],[[0,0],[10,0],[10,10],[0,10]]],mode='Closed',epsilon=100)
+        r=decode(self.call(c).stdout);self.assertEqual(r['paths'],[[],[[0,0]],[[0,0],[10,0]],[[10,0],[0,10]]]);self.assertEqual(r['input_degenerate_indices'],[0,1,2]);self.assertEqual(r['collapsed_indices'],[3])
+
+    def test_simplify_open_retrace_protected_endpoints(self):
+        c=self.simplify_case();c.update(paths=[[[0,0],[10,0],[5,0],[10,0],[0,0]]],mode='Open',epsilon=1)
+        r=decode(self.call(c).stdout);self.assertEqual(r['paths'],[[[0,0],[0,0]]]);self.assertEqual(r['removed_vertices'],3)
+
+    def test_simplify_decimal_existing_degeneracy_allowed(self):
+        c=self.simplify_case(True);c.update(paths=[[],[[0,0]],[[0,0],[1,0],[2,0]]],mode='Closed')
+        r=decode(self.call(c).stdout);self.assertEqual(r['input_degenerate_indices'],[0,1,2]);self.assertEqual(r['collapsed_indices'],[])
+
+    def test_simplify_decimal_merge_and_range_rejected(self):
+        for paths in ([[[0,0],[.0001,0]]],[[[1000000.001,0]]]):
+            c=self.simplify_case(True);c.update(precision=3,paths=paths);self.rejected(c)
+
+    def test_simplify_decimal_bad_precision_grid_scale(self):
+        for k,v in [('precision',7),('precision',True),('grid','Binary'),('epsilon',1e150)]:
+            c=self.simplify_case(True);c.update(precision=6);c[k]=v;self.rejected(c)
+
+    def test_simplify_boundary_distance_equality(self):
+        c=self.simplify_case();c.update(paths=[[[0,0],[2,1],[4,0],[6,0]]],mode='Open',epsilon=1)
+        self.assertEqual(decode(self.call(c).stdout)['paths'],[[[0,0],[6,0]]])
+        c['epsilon']=.9;self.assertEqual(decode(self.call(c).stdout)['paths'],[[[0,0],[2,1],[6,0]]])
+
+    def test_simplify_preserves_zero_area_bowtie(self):
+        c=self.simplify_case();c.update(paths=[[[0,0],[10,10],[0,10],[10,0]]],mode='Closed',epsilon=.25)
+        r=decode(self.call(c).stdout);self.assertEqual(r['paths'],c['paths']);self.assertEqual(r['degenerate_indices'],[])
+
     def case_commit(self):
         return load(ROOT/'tools/oracle/upstream-lock.json',True)['commit']
 

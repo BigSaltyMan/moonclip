@@ -52,6 +52,7 @@ fn main {
     "stroke_results": run_stroke_cases().to_json(),
     "composition_results": run_composition_cases().to_json(),
     "decimal_results": run_decimal_cases().to_json(),
+    "simplify_results": run_simplify_cases().to_json(),
   })
   exit_code(report(@utf8.encode(envelope.stringify())))
 }
@@ -232,4 +233,79 @@ fn actual_decimal_case(
       })
     }
   }
+}
+
+///|
+fn simplify_json(value : @moonclip.SimplifyResult) -> Map[String, Json] {
+  let paths = value.paths()
+  {
+    "paths": composition_paths(paths),
+    "removed_vertices": value.removed_vertices().to_json(),
+    "removed_per_path": value.removed_per_path().to_json(),
+    "input_degenerate_indices": value.input_degenerate_indices().to_json(),
+    "degenerate_indices": value.degenerate_indices().to_json(),
+    "collapsed_indices": value.collapsed_indices().to_json(),
+  }
+}
+
+///|
+fn simplify_json_d(
+  value : @moonclip.SimplifyResultD,
+  scale : Double,
+) -> Map[String, Json] {
+  let paths = value.paths()
+  {
+    "paths": paths
+    .map(fn(path) {
+      path.map(fn(p) {
+        [decimal_json_integer(p.x * scale), decimal_json_integer(p.y * scale)]
+      })
+    })
+    .to_json(),
+    "paths_d": paths.map(fn(path) { path.map(fn(p) { [p.x, p.y] }) }).to_json(),
+    "removed_vertices": value.removed_vertices().to_json(),
+    "removed_per_path": value.removed_per_path().to_json(),
+    "input_degenerate_indices": value.input_degenerate_indices().to_json(),
+    "degenerate_indices": value.degenerate_indices().to_json(),
+    "collapsed_indices": value.collapsed_indices().to_json(),
+  }
+}
+
+///|
+fn actual_simplify_case(
+  id : String,
+  digest : String,
+  operation : String,
+  mode : String,
+  precision : Int,
+  result : Result[Map[String, Json], @moonclip.ClipError],
+) -> Json {
+  let fields : Map[String, Json] = {
+    "case_id": id.to_json(),
+    "input_sha256": digest.to_json(),
+  }
+  match result {
+    Err(error) => {
+      fields["status"] = "error".to_json()
+      fields["error"] = error.message().to_json()
+    }
+    Ok(payload) => {
+      for k, v in payload {
+        fields[k] = v
+      }
+      fields["status"] = "success".to_json()
+      fields["format_version"] = (6).to_json()
+      fields["operation"] = operation.to_json()
+      fields["mode"] = mode.to_json()
+      fields["reference_route"] = (if operation == "SimplifyD" {
+        "DecimalGrid"
+      } else {
+        "Integer"
+      }).to_json()
+      if operation == "SimplifyD" {
+        fields["precision"] = precision.to_json()
+      }
+    }
+  }
+  Json::object(fields)
 }

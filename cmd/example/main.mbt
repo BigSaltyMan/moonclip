@@ -89,8 +89,9 @@ fn main raise {
   run_stroke_example()
   run_composition_example()
   run_decimal_example()
+  run_simplify_example()
   println(
-    "MoonClip geometry, Boolean, PolyTree, offset, stroke, composition and decimal OK",
+    "MoonClip geometry, Boolean, PolyTree, offset, stroke, composition, decimal and simplify OK",
   )
 }
 
@@ -644,5 +645,61 @@ fn run_decimal_example() -> Unit raise {
         _
       )
     ),
+  )
+}
+
+///|
+fn run_simplify_example() -> Unit raise {
+  let outer = [
+    @moonclip.Point64::new(0L, 0L),
+    @moonclip.Point64::new(20L, 0L),
+    @moonclip.Point64::new(40L, 0L),
+    @moonclip.Point64::new(40L, 40L),
+    @moonclip.Point64::new(0L, 40L),
+  ]
+  let hole = example_reverse(example_rect(10L, 10L, 20L, 20L))
+  let input = [outer, hole, []]
+  let saved = @moonclip.copy_paths(input)
+  guard @moonclip.simplify_paths(
+      input,
+      options=@moonclip.SimplifyOptions::new(epsilon=0.25),
+    )
+    is Ok(value) else {
+    fail("Simplification failed")
+  }
+  assert_eq(value.removed_vertices(), 1)
+  assert_eq(value.removed_per_path(), [1, 0, 0])
+  assert_eq(value.input_degenerate_indices(), [2])
+  assert_eq(value.degenerate_indices(), [2])
+  assert_eq(value.collapsed_indices(), [])
+  assert_eq(input, saved)
+  let paths = value.paths()
+  assert_eq(paths[0], example_rect(0L, 0L, 40L, 40L))
+  let selected : @moonclip.Paths64 = []
+  let excluded = value.degenerate_indices()
+  for i = 0; i < paths.length(); i = i + 1 {
+    if !excluded.contains(i) {
+      selected.push(paths[i])
+    }
+  }
+  guard @moonclip.offset_polygons(selected, 2.0) is Ok(expanded) else {
+    fail("Post-simplification offset failed")
+  }
+  let expected_hole = example_reverse(example_rect(12L, 12L, 16L, 16L))
+  example_result(expanded, [example_rect(-2L, -2L, 44L, 44L), expected_hole])
+  guard @moonclip.boolean_tree(
+      expanded,
+      [],
+      @moonclip.Union,
+      fill_rule=@moonclip.NonZero,
+    )
+    is Ok(tree) else {
+    fail("Post-simplification tree failed")
+  }
+  assert_eq(tree.roots().length(), 1)
+  assert_eq(tree.roots()[0].children().length(), 1)
+  assert_eq(tree.roots()[0].children()[0].is_hole(), true)
+  println(
+    "Simplify vertices: 9 -> 8; input_degenerate=[2]; degenerate=[2]; collapsed=[]; offset/tree OK",
   )
 }

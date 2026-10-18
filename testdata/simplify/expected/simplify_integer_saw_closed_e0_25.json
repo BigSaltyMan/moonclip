@@ -1,0 +1,54 @@
+{
+  "adapter_protocol_version": 6,
+  "case_id": "simplify_integer_saw_closed_e0_25",
+  "collapsed_indices": [],
+  "degenerate_indices": [],
+  "format_version": 6,
+  "input_degenerate_indices": [],
+  "input_sha256": "24f49d3684c004a600a8733bef4e0fd7d0e746b5111eca2384acd5a9a1c6fcfb",
+  "metrics": {
+    "path_count": 1,
+    "vertex_count": 7
+  },
+  "mode": "Closed",
+  "operation": "Simplify64",
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        0,
+        0
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        8,
+        0
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        0,
+        8
+      ]
+    ]
+  ],
+  "reference_route": "Integer",
+  "removed_per_path": [
+    0
+  ],
+  "removed_vertices": 0,
+  "status": "success"
+}

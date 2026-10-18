@@ -192,3 +192,18 @@ C# 源码作为主要阅读与后续移植参考；固定版本的 C++ 实现作
 | MoonClip自有参考工具 | decimal_compare/generate/construct、adapter、report | v5双表示、196十进制参考、24真正ClipperD参考、完整网格与精确解码比较及独立目录。 |
 
 本笔新增运行代码均为MoonBit自有实现，版权BigSaltyMan2026、BSL-1.0，无新增运行库依赖；已有移植的整数引擎仍保留Angus Johnson版权。C++只用于独立生成和重建参考。未提前实现简化、删点统计或其他后续引擎。
+
+
+## Commit 14 实际简化移植（2026-10-19）
+
+固定 Clipper2_2.0.1 / 21ebba05db8894f0c7217ad35ea518080f324946 / BSL-1.0 不变。实际读取并核对 clipper.h 的 SimplifyPath、SimplifyPaths、details::GetNext/GetPrior，以及 clipper.core.h 的 PerpendicDistFromLineSqrd。虽然主要引擎参考 C#，本次泛型简化直接对应固定 C++ 模板，保留不足四点分支、候选扫描、严格比较、邻距更新和原索引收集。
+
+| 上游/来源 | MoonBit/工具文件 | 修改说明 |
+| --- | --- | --- |
+| CPP/Clipper2Lib/include/clipper2/clipper.h SimplifyPath/GetNext/GetPrior | simplify.mbt | 直接改写局部选择顺序；增加累计预算、有限性与 Result 错误，保留上游版权。 |
+| CPP/Clipper2Lib/include/clipper2/clipper.core.h PerpendicDistFromLineSqrd | simplify.mbt | 直接改写浮点直线距离公式，重合邻点零距离，不改成整数判符号。 |
+| 同一固定 SimplifyPaths 模板 | tools/oracle/adapter.cpp | 真实调用整数模板；小数先独立十进制量化。适配器自行整理和统计，不宣称上游提供 MoonClip 报告。 |
+| MoonClip 自有 | simplify.mbt、decimal.mbt | 零阈值仅整理、结构退化三类索引、全部删点统计、独立访问器、原始额度、同账本包装及最终 Closed 清理。 |
+| MoonClip 自有 | simplify_compare/construct/generate、test_simplify、report | 协议v6、有序逐点与精确解码比较、224条锁定输入，不复用面域有效性校验。 |
+
+移植块保留 Angus Johnson 2010–2025 / BSL-1.0，自有辅助为 BigSaltyMan 2026 / BSL-1.0。运行库仍纯 MoonBit，没有新增依赖；C++仅用于独立测试参考。锁只增加 simplify_protocol_version=6，上游归档、依赖及编译输入保持原样。

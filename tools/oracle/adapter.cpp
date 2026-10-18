@@ -2,6 +2,7 @@
 // Adapter only: all clipping is performed by the locked C++ Clipper2 engine.
 #include "clipper2/clipper.engine.h"
 #include "clipper2/clipper.offset.h"
+#include "clipper2/clipper.h"
 #include <cmath>
 #include <map>
 #include "json.hpp"
@@ -209,7 +210,9 @@ struct CompositionFailure : std::runtime_error {
 };
 json execute_composition(const json& request);
 json execute_decimal(const json& request);
+json execute_simplify(const json& request);
 json execute(const json& request) {
+  if (request.is_object() && (request.value("operation",json())=="Simplify64" || request.value("operation",json())=="SimplifyD")) return execute_simplify(request);
   if (request.is_object() && (request.value("operation",json())=="BooleanD" || request.value("operation",json())=="OffsetD" || request.value("operation",json())=="StrokeD")) return execute_decimal(request);
   if (request.is_object() && request.value("operation",json())=="Composition") return execute_composition(request);
   if (request.is_object() && request.value("operation",json())=="StrokePolyline") return execute_stroke(request);
@@ -442,4 +445,66 @@ int main() {
     std::cout << json({{"format_version", 1}, {"status", "error"}, {"message", error.what()}}).dump() << '\n';
     return 2;
   }
+}
+
+// v6 uses the real locked template. Reporting and normalization belong to this adapter.
+Path64 simplify_normalize(const Path64& input, bool closed) {
+  Path64 result;
+  for (const auto& p:input) if (result.empty() || result.back()!=p) result.push_back(p);
+  if (closed && result.size()>1 && result.front()==result.back()) result.pop_back();
+  return result;
+}
+bool simplify_degenerate(const Path64& path,bool closed) {
+  if (path.empty()) return true;
+  auto a=path.front();auto b=a;
+  for (auto p:path) if(p!=a) { b=p;break; }
+  if(b==a) return true;
+  if(!closed) return false;
+  for(auto c:path) if((b.x-a.x)*(c.y-a.y)-(b.y-a.y)*(c.x-a.x)!=0) return false;
+  return true;
+}
+json execute_simplify(const json& request) {
+  bool decimal=request["operation"]=="SimplifyD";
+  if(decimal) keys(request,{"format_version","operation","case_id","source","options","mode","epsilon","reference_route","normalization","paths","precision","grid"},"simplify decimal");
+  else keys(request,{"format_version","operation","case_id","source","options","mode","epsilon","reference_route","normalization","paths"},"simplify integer");
+  integer(request["format_version"],"simplify version",6,6);auto id=request_metadata(request);
+  require(request["mode"]=="Closed" || request["mode"]=="Open","unknown simplify mode");
+  bool closed=request["mode"]=="Closed";
+  require(request["normalization"]=="ConsecutiveDuplicatesAndClosedSeam","unknown normalization");
+  require(request["reference_route"]==(decimal?"DecimalGrid":"Integer"),"unknown simplify route");
+  int precision=0;double scale=1;
+  if(decimal) {precision=static_cast<int>(integer(request["precision"],"precision",0,6));const double scales[]={1,10,100,1000,10000,100000,1000000};scale=scales[precision];require(request["grid"]=="DecimalHalfAwayFromZero","unknown grid");}
+  double epsilon=finite_number(request["epsilon"],"epsilon");require(epsilon>0,"reference epsilon must be positive");epsilon*=scale;
+  require(std::isfinite(epsilon) && std::isfinite(epsilon*epsilon),"epsilon scaling/square overflow");
+  Paths64 input;size_t pc=0,vc=0;
+  if(!decimal) input=paths(request["paths"],"simplify paths",pc,vc);
+  else {
+    const auto& raw=request["paths"];require(raw.is_array() && raw.size()<=kMaxPaths,"path limit/type");
+    std::map<std::pair<int64_t,int64_t>,std::pair<double,double>> seen;
+    for(const auto& path:raw) {
+      require(path.is_array() && path.size()<=kMaxVertices-vc,"raw vertex limit");vc+=path.size();Path64 out;
+      for(const auto& point:path) {
+        require(point.is_array() && point.size()==2,"expected pair");
+        double x=finite_number(point[0],"x"),y=finite_number(point[1],"y"),bound=1000000000.0/scale;
+        require(x>=-bound && x<=bound && y>=-bound && y<=bound,"original coordinate range");
+        double sx=x*scale,sy=y*scale;require(std::isfinite(sx) && std::isfinite(sy) && sx>=-1e9 && sx<=1e9 && sy>=-1e9 && sy<=1e9,"scaled coordinate range");
+        auto key=std::make_pair(static_cast<int64_t>(std::round(sx)),static_cast<int64_t>(std::round(sy)));auto rawp=std::make_pair(x,y);
+        require(seen.find(key)==seen.end() || seen[key]==rawp,"distinct input positions merge");seen.emplace(key,rawp);out.emplace_back(key.first,key.second);
+      }
+      input.push_back(std::move(out));
+    }
+  }
+  Paths64 normalized;json before=json::array(),after=json::array(),collapsed=json::array(),counts=json::array(),output=json::array(),decoded=json::array();
+  for(size_t i=0;i<input.size();++i) {normalized.push_back(simplify_normalize(input[i],closed));if(simplify_degenerate(normalized.back(),closed)) before.push_back(i);}
+  // Keep the actual template candidate order and floating distance formula.
+  auto result=SimplifyPaths<int64_t>(normalized,epsilon,closed);size_t removed=0;
+  for(size_t i=0;i<result.size();++i) {
+    auto path=closed?simplify_normalize(result[i],true):result[i];output.push_back(output_path(path));
+    size_t n=input[i].size()-path.size();counts.push_back(n);removed+=n;
+    if(simplify_degenerate(path,closed)) {after.push_back(i);if(!simplify_degenerate(normalized[i],closed)) collapsed.push_back(i);}
+    if(decimal) {json dp=json::array();for(auto p:path) dp.push_back(json::array({p.x==0?0.0:p.x/scale,p.y==0?0.0:p.y/scale}));decoded.push_back(dp);}
+  }
+  json response={{"format_version",6},{"adapter_protocol_version",6},{"case_id",id},{"oracle_commit",kCommit},{"status","success"},{"operation",request["operation"]},{"mode",request["mode"]},{"reference_route",request["reference_route"]},{"paths",output},{"removed_vertices",removed},{"removed_per_path",counts},{"input_degenerate_indices",before},{"degenerate_indices",after},{"collapsed_indices",collapsed}};
+  if(decimal) {response["precision"]=precision;response["paths_d"]=decoded;}
+  return response;
 }

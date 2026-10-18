@@ -86,3 +86,17 @@ def decimal_evidence(directory):
         require(summaries==[('220','220','0')],str(path),'expected exactly 220 successful decimal cases')
         result[target]={'status':'passed','executed':220,'passed':220,'failed':0}
     return result
+
+
+def simplify_evidence(directory):
+    result={}
+    for target in ('native','js'):
+        path=directory/('simplify-'+target+'.log')
+        if not path.exists():
+            result[target]={'status':'not_recorded'};continue
+        text=path.read_text(encoding='utf-8')
+        require(text.splitlines().count('Selection: reference simplify paths: *')==1,str(path),'missing simplify selection marker')
+        summaries=re.findall(r'Total tests: (\d+), passed: (\d+), failed: (\d+)\.',text)
+        require(summaries==[('224','224','0')],str(path),'expected exactly 224 successful simplify cases')
+        result[target]={'status':'passed','executed':224,'passed':224,'failed':0}
+    return result

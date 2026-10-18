@@ -1,0 +1,34 @@
+{
+  "adapter_protocol_version": 6,
+  "case_id": "simplify_integer_retrace_open_e1",
+  "collapsed_indices": [],
+  "degenerate_indices": [],
+  "format_version": 6,
+  "input_degenerate_indices": [],
+  "input_sha256": "64160f05147e3cb5733418e6b39d059c42491be01332feae4fe6bcc37feead38",
+  "metrics": {
+    "path_count": 1,
+    "vertex_count": 2
+  },
+  "mode": "Open",
+  "operation": "Simplify64",
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        10
+      ]
+    ]
+  ],
+  "reference_route": "Integer",
+  "removed_per_path": [
+    4
+  ],
+  "removed_vertices": 4,
+  "status": "success"
+}

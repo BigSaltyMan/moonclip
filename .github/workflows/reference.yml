@@ -45,3 +45,7 @@ jobs:
         run: bash scripts/generate_reference.sh --manifest testdata/decimal-manifest.json --check
       - name: Check offline decimal catalog and route counts
         run: python scripts/check_reference.py --manifest testdata/decimal-manifest.json --strict
+      - name: Rebuild ordered integer and decimal-grid simplification references
+        run: bash scripts/generate_reference.sh --manifest testdata/simplify-manifest.json --check
+      - name: Check offline simplification catalog and reports
+        run: python scripts/check_reference.py --manifest testdata/simplify-manifest.json --strict

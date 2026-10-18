@@ -212,6 +212,47 @@ def evaluate_decimal(manifest,results):
     return report
 
 
+def evaluate_simplify(manifest,results):
+    from simplify_compare import (simplify_selection,validate_simplify_geometry,statistics,COUNTS,INDICES)
+    from compare import read_manifest,keys
+    _,records=read_manifest(ROOT,manifest,strict=True);_,selected=simplify_selection(ROOT)
+    require(records==selected,'simplify','manifest differs from locked selection')
+    require(type(results) is list,'simplify actual','expected results array');actual={}
+    for r in results:
+        require(type(r) is dict and type(r.get('case_id')) is str,'simplify actual','missing ID')
+        require(r['case_id'] not in actual,r['case_id'],'duplicate simplify result');actual[r['case_id']]=r
+    require(set(actual)=={e['case_id'] for e,_,_,_ in records},'simplify actual','missing/extra results')
+    details=[]
+    for e,c,d,v in records:
+        cid=c['case_id'];r=actual[cid];require(r.get('input_sha256')==d,cid,'compiled input hash mismatch')
+        detail=dict(case_id=cid,operation=c['operation'],reference_route=c['reference_route'])
+        if r.get('status')=='error':
+            keys(r,{'case_id','input_sha256','status','error'},cid);require(type(r['error']) is str,cid,'invalid execution error')
+            detail.update(status='execution_error',ordered_paths='execution_error',removed_counts='execution_error',degeneracy='execution_error',message=r['error'])
+        else:
+            keys(r,{'case_id','input_sha256','status','format_version','operation','mode','reference_route','paths',*COUNTS,*INDICES}|({'precision','paths_d'} if c['operation']=='SimplifyD' else set()),cid)
+            require(r['status']=='success' and type(r['format_version']) is int and r['format_version']==6,cid,'invalid success envelope')
+            require(all(r[k]==c[k] for k in ('operation','mode','reference_route')),cid,'metadata mismatch')
+            if c['operation']=='SimplifyD':require(type(r['precision']) is int and r['precision']==c['precision'],cid,'precision mismatch')
+            validate_paths(r['paths'],cid+'.paths',False)
+            own=statistics(c,r['paths'])
+            detail['ordered_paths']='passed' if r['paths']==v['paths'] else 'difference'
+            for capability,fields in [('removed_counts',COUNTS),('degeneracy',INDICES)]:
+                detail[capability]='passed' if all(canonical_bytes(r[k])==canonical_bytes(v[k])==canonical_bytes(own[k]) for k in fields) else 'difference'
+            # Independently validate decoding and normalized geometry without allowing
+            # inconsistent report values to contaminate the ordered-geometry count.
+            try:validate_simplify_geometry({**r,**own},cid)
+            except Invalid as error:detail.update(ordered_paths='difference',geometry_message=str(error))
+            try:validate_simplify_geometry(r,cid)
+            except Invalid as error:detail['contract_message']=str(error)
+            detail['status']='passed' if all(detail[k]=='passed' for k in ('ordered_paths','removed_counts','degeneracy')) and 'contract_message' not in detail else 'difference'
+        details.append(detail)
+    report={**summary(details),'required':224,'reference_cases':224,'cases':details}
+    report['routes']={route:{**summary([d for d in details if d['reference_route']==route]),'required':n} for route,n in [('Integer',80),('DecimalGrid',144)]}
+    for field in ('ordered_paths','removed_counts','degeneracy'):report[field]={**summary(details,field),'required':224}
+    return report
+
+
 def markdown(report):
     lines=['# Boolean compatibility','','Pinned Clipper2 2.0.1, commit `21ebba05db8894f0c7217ad35ea518080f324946`; ordinary precision, preserve_collinear=false, reverse_solution=false.','',
       f"Public cases: {report['required']}; both passed={report['passed']}, differences={report['differences']}, execution_errors={report['execution_errors']}. Reference catalog: {report['reference_cases']}.",'',
@@ -280,6 +321,19 @@ def markdown(report):
             lines.append('| '+target+' | '+value+' |')
         lines+=['','| Decimal case | Route | Precision | Grid contours | Decoded coordinates | Status |','| --- | --- | ---: | --- | --- | --- |']
         lines += [f"| {c['case_id']} | {c['reference_route']} | {c['precision']} | {c['grid_paths']} | {c['decoded']} | {c['status']} |" for c in r['cases']]
+    if 'simplify' in report:
+        r=report['simplify']
+        lines+=['','# Simplification compatibility','',f"Ordered simplification: {r['passed']}/{r['executed']}; required=224; differences={r['differences']}; execution_errors={r['execution_errors']}. Independent total: 992 +224 =1216.",'',
+          'Pinned C++ SimplifyPaths after agreed normalization; the adapter independently computes reports. DecimalGrid quantizes first and calls the integer template, not SimplifyPaths<PointD>. Zero threshold is a separate MoonClip contract. Empty and degenerate paths are successful results. No ring rotation or path sorting is permitted.','',
+          '| Route / capability | Required | Executed | Passed | Differences | Execution errors |','| --- | ---: | ---: | ---: | ---: | ---: |']
+        for name,v in [*r['routes'].items(),*((k,r[k]) for k in ('ordered_paths','removed_counts','degeneracy'))]:lines.append(f"| {name} | {v['required']} | {v['executed']} | {v['passed']} | {v['differences']} | {v['execution_errors']} |")
+        lines+=['','| Target | Simplify filtered cases |','| --- | --- |']
+        for target in ('native','js'):
+            e=report.get('simplify_evidence',{}).get(target,{})
+            value=str(e['passed'])+'/'+str(e['executed']) if e.get('status')=='passed' else 'not recorded'
+            lines.append('| '+target+' | '+value+' |')
+        lines+=['','| Case | Ordered paths and decoding | Removed counts | Degeneracy | Status |','| --- | --- | --- | --- | --- |']
+        lines += [f"| {c['case_id']} | {c['ordered_paths']} | {c['removed_counts']} | {c['degeneracy']} | {c['status']} |" for c in r['cases']]
     return '\n'.join(lines)+'\n'
 
 def main():
@@ -288,6 +342,7 @@ def main():
     parser.add_argument('--offset-manifest',type=Path,help='Include independently executed offset protocol v2 cases')
     parser.add_argument('--stroke-manifest',type=Path,help='Include independent open stroke protocol v3 cases')
     parser.add_argument('--composition-manifest',type=Path,help='Include fixed two-step protocol v4 recipes')
+    parser.add_argument('--simplify-manifest',type=Path,help='Include 80 integer and 144 decimal-grid ordered simplify inputs')
     parser.add_argument('--decimal-manifest',type=Path,help='Include 196 decimal-grid and 24 actual ClipperD common-grid inputs')
     parser.add_argument('--report-json',type=Path,default=ROOT/'_build/conformance/report.json')
     parser.add_argument('--report-md',type=Path,default=ROOT/'docs/compatibility.md')
@@ -305,6 +360,10 @@ def main():
         if args.composition_manifest:
             report['composition']=evaluate_composition(args.composition_manifest.resolve(),envelope.get('composition_results'))
             report['composition_evidence']=composition_evidence(ROOT/'_build/conformance')
+        if args.simplify_manifest:
+            from evidence import simplify_evidence
+            report['simplify']=evaluate_simplify(args.simplify_manifest.resolve(),envelope.get('simplify_results'))
+            report['simplify_evidence']=simplify_evidence(ROOT/'_build/conformance')
         if args.decimal_manifest:
             report['decimal']=evaluate_decimal(args.decimal_manifest.resolve(),envelope.get('decimal_results'))
             report['decimal_evidence']=decimal_evidence(ROOT/'_build/conformance')
@@ -325,7 +384,10 @@ def main():
         decimal=report.get('decimal',{})
         if decimal:
             print(f"Native decimal conformance: cases=220, DecimalGrid={decimal['routes']['DecimalGrid']['passed']}/196, ClipperDCommonGrid={decimal['routes']['ClipperDCommonGrid']['passed']}/24, grid={decimal['grid_paths']['passed']}/220, decoded={decimal['decoded']['passed']}/220, differences={decimal['differences']}, execution_errors={decimal['execution_errors']}")
-        return 2 if any(r.get('execution_errors') for r in (report,offset,stroke,composition,decimal)) else 1 if any(r.get('differences') for r in (report,offset,stroke,composition,decimal)) else 0
+        simplify=report.get('simplify',{})
+        if simplify:
+            print(f"Native simplify conformance: cases=224, Integer={simplify['routes']['Integer']['passed']}/80, DecimalGrid={simplify['routes']['DecimalGrid']['passed']}/144, ordered_paths={simplify['ordered_paths']['passed']}/224, removed_counts={simplify['removed_counts']['passed']}/224, degeneracy={simplify['degeneracy']['passed']}/224, differences={simplify['differences']}, execution_errors={simplify['execution_errors']}")
+        return 2 if any(r.get('execution_errors') for r in (report,offset,stroke,composition,decimal,simplify)) else 1 if any(r.get('differences') for r in (report,offset,stroke,composition,decimal,simplify)) else 0
     except (Invalid,OSError,ValueError,KeyError,TypeError) as error:
         print(f'Conformance error: {error}',file=sys.stderr);return 2
 if __name__=='__main__':sys.exit(main())

@@ -1,0 +1,131 @@
+{
+  "adapter_protocol_version": 6,
+  "case_id": "simplify_decimal_mixed_closed_p3_e0_5",
+  "collapsed_indices": [],
+  "degenerate_indices": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "format_version": 6,
+  "input_degenerate_indices": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "input_sha256": "e260e102e586fe477dc5f0f34a4a5c03da30f0aff72cdb0b111cc5421becacf3",
+  "metrics": {
+    "path_count": 5,
+    "vertex_count": 9
+  },
+  "mode": "Closed",
+  "operation": "SimplifyD",
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [],
+    [
+      [
+        750,
+        750
+      ]
+    ],
+    [
+      [
+        -250,
+        -250
+      ],
+      [
+        9750,
+        -250
+      ]
+    ],
+    [
+      [
+        1750,
+        -250
+      ],
+      [
+        2750,
+        -250
+      ]
+    ],
+    [
+      [
+        -250,
+        -250
+      ],
+      [
+        9750,
+        -250
+      ],
+      [
+        9750,
+        9750
+      ],
+      [
+        -250,
+        9750
+      ]
+    ]
+  ],
+  "paths_d": [
+    [],
+    [
+      [
+        0.75,
+        0.75
+      ]
+    ],
+    [
+      [
+        -0.25,
+        -0.25
+      ],
+      [
+        9.75,
+        -0.25
+      ]
+    ],
+    [
+      [
+        1.75,
+        -0.25
+      ],
+      [
+        2.75,
+        -0.25
+      ]
+    ],
+    [
+      [
+        -0.25,
+        -0.25
+      ],
+      [
+        9.75,
+        -0.25
+      ],
+      [
+        9.75,
+        9.75
+      ],
+      [
+        -0.25,
+        9.75
+      ]
+    ]
+  ],
+  "precision": 3,
+  "reference_route": "DecimalGrid",
+  "removed_per_path": [
+    0,
+    0,
+    0,
+    2,
+    0
+  ],
+  "removed_vertices": 2,
+  "status": "success"
+}

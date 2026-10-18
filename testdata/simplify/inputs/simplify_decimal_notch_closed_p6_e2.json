@@ -1,0 +1,56 @@
+{
+  "case_id": "simplify_decimal_notch_closed_p6_e2",
+  "epsilon": 2,
+  "format_version": 6,
+  "grid": "DecimalHalfAwayFromZero",
+  "mode": "Closed",
+  "normalization": "ConsecutiveDuplicatesAndClosedSeam",
+  "operation": "SimplifyD",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [
+      [
+        -0.25,
+        -0.25
+      ],
+      [
+        11.75,
+        -0.25
+      ],
+      [
+        11.75,
+        11.75
+      ],
+      [
+        6.75,
+        11.75
+      ],
+      [
+        6.75,
+        1.75
+      ],
+      [
+        4.75,
+        1.75
+      ],
+      [
+        4.75,
+        11.75
+      ],
+      [
+        -0.25,
+        11.75
+      ]
+    ]
+  ],
+  "precision": 6,
+  "reference_route": "DecimalGrid",
+  "source": {
+    "group": "notch",
+    "intent": "Ordered local distance deletion; simplify_decimal_notch_closed_p6_e2",
+    "kind": "moonclip_constructed"
+  }
+}

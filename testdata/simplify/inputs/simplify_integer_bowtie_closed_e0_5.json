@@ -1,0 +1,38 @@
+{
+  "case_id": "simplify_integer_bowtie_closed_e0_5",
+  "epsilon": 0.5,
+  "format_version": 6,
+  "mode": "Closed",
+  "normalization": "ConsecutiveDuplicatesAndClosedSeam",
+  "operation": "Simplify64",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [
+      [
+        0,
+        0
+      ],
+      [
+        10,
+        10
+      ],
+      [
+        0,
+        10
+      ],
+      [
+        10,
+        0
+      ]
+    ]
+  ],
+  "reference_route": "Integer",
+  "source": {
+    "group": "bowtie",
+    "intent": "Ordered local distance deletion; simplify_integer_bowtie_closed_e0_5",
+    "kind": "moonclip_constructed"
+  }
+}

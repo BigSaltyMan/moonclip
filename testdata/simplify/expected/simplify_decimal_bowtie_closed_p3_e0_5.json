@@ -1,0 +1,63 @@
+{
+  "adapter_protocol_version": 6,
+  "case_id": "simplify_decimal_bowtie_closed_p3_e0_5",
+  "collapsed_indices": [],
+  "degenerate_indices": [],
+  "format_version": 6,
+  "input_degenerate_indices": [],
+  "input_sha256": "e7ae9b54d11cd854d8c167c37674aa771ecef982c5e0ae299652537be121cbb2",
+  "metrics": {
+    "path_count": 1,
+    "vertex_count": 4
+  },
+  "mode": "Closed",
+  "operation": "SimplifyD",
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        -250,
+        -250
+      ],
+      [
+        9750,
+        9750
+      ],
+      [
+        -250,
+        9750
+      ],
+      [
+        9750,
+        -250
+      ]
+    ]
+  ],
+  "paths_d": [
+    [
+      [
+        -0.25,
+        -0.25
+      ],
+      [
+        9.75,
+        9.75
+      ],
+      [
+        -0.25,
+        9.75
+      ],
+      [
+        9.75,
+        -0.25
+      ]
+    ]
+  ],
+  "precision": 3,
+  "reference_route": "DecimalGrid",
+  "removed_per_path": [
+    0
+  ],
+  "removed_vertices": 0,
+  "status": "success"
+}

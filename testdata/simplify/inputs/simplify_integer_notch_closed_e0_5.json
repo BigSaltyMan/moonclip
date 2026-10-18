@@ -1,0 +1,54 @@
+{
+  "case_id": "simplify_integer_notch_closed_e0_5",
+  "epsilon": 0.5,
+  "format_version": 6,
+  "mode": "Closed",
+  "normalization": "ConsecutiveDuplicatesAndClosedSeam",
+  "operation": "Simplify64",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [
+      [
+        0,
+        0
+      ],
+      [
+        12,
+        0
+      ],
+      [
+        12,
+        12
+      ],
+      [
+        7,
+        12
+      ],
+      [
+        7,
+        2
+      ],
+      [
+        5,
+        2
+      ],
+      [
+        5,
+        12
+      ],
+      [
+        0,
+        12
+      ]
+    ]
+  ],
+  "reference_route": "Integer",
+  "source": {
+    "group": "notch",
+    "intent": "Ordered local distance deletion; simplify_integer_notch_closed_e0_5",
+    "kind": "moonclip_constructed"
+  }
+}

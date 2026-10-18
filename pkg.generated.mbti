@@ -43,6 +43,10 @@ pub fn point_in_polygon(Point64, Array[Point64], limits? : Limits) -> Result[Poi
 
 pub fn point_on_segment(Point64, Point64, Point64, limits? : Limits) -> Result[Bool, ClipError]
 
+pub fn simplify_paths(Array[Array[Point64]], options? : SimplifyOptions, limits? : Limits) -> Result[SimplifyResult, ClipError]
+
+pub fn simplify_paths_d(Array[Array[PointD]], precision? : Precision, options? : SimplifyOptions, limits? : Limits) -> Result[SimplifyResultD, ClipError]
+
 pub fn stroke_polyline(Array[Point64], Double, cap? : CapType, options? : OffsetOptions, limits? : Limits) -> Result[Array[Array[Point64]], ClipError]
 
 pub fn stroke_polyline_d(Array[PointD], Double, precision? : Precision, cap? : CapType, options? : OffsetOptions, limits? : Limits) -> Result[Array[Array[PointD]], ClipError]
@@ -177,6 +181,33 @@ pub(all) enum ResourceKind {
   ScanWork
 } derive(Eq, @debug.Debug)
 
+pub(all) struct SimplifyOptions {
+  epsilon : Double
+  mode : PathMode
+} derive(Eq, @debug.Debug)
+pub fn SimplifyOptions::new(epsilon? : Double, mode? : PathMode) -> Self
+pub impl Default for SimplifyOptions
+
+pub struct SimplifyResult {
+  // private fields
+} derive(@debug.Debug)
+pub fn SimplifyResult::collapsed_indices(Self) -> Array[Int]
+pub fn SimplifyResult::degenerate_indices(Self) -> Array[Int]
+pub fn SimplifyResult::input_degenerate_indices(Self) -> Array[Int]
+pub fn SimplifyResult::paths(Self) -> Array[Array[Point64]]
+pub fn SimplifyResult::removed_per_path(Self) -> Array[Int]
+pub fn SimplifyResult::removed_vertices(Self) -> Int
+
+pub struct SimplifyResultD {
+  // private fields
+} derive(@debug.Debug)
+pub fn SimplifyResultD::collapsed_indices(Self) -> Array[Int]
+pub fn SimplifyResultD::degenerate_indices(Self) -> Array[Int]
+pub fn SimplifyResultD::input_degenerate_indices(Self) -> Array[Int]
+pub fn SimplifyResultD::paths(Self) -> Array[Array[PointD]]
+pub fn SimplifyResultD::removed_per_path(Self) -> Array[Int]
+pub fn SimplifyResultD::removed_vertices(Self) -> Int
+
 pub(all) enum Stage {
   ValidateInputs
   Cross
@@ -206,6 +237,10 @@ pub(all) enum Stage {
   DecimalParameters
   DecimalQuantize
   DecimalOutput
+  SimplifyParameters
+  SimplifyEvaluate
+  SimplifyReport
+  SimplifyOutput
 } derive(Eq, @debug.Debug)
 
 // Type aliases

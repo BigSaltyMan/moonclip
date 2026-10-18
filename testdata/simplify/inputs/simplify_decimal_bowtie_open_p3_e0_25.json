@@ -1,0 +1,40 @@
+{
+  "case_id": "simplify_decimal_bowtie_open_p3_e0_25",
+  "epsilon": 0.25,
+  "format_version": 6,
+  "grid": "DecimalHalfAwayFromZero",
+  "mode": "Open",
+  "normalization": "ConsecutiveDuplicatesAndClosedSeam",
+  "operation": "SimplifyD",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [
+      [
+        -0.25,
+        -0.25
+      ],
+      [
+        9.75,
+        9.75
+      ],
+      [
+        -0.25,
+        9.75
+      ],
+      [
+        9.75,
+        -0.25
+      ]
+    ]
+  ],
+  "precision": 3,
+  "reference_route": "DecimalGrid",
+  "source": {
+    "group": "bowtie",
+    "intent": "Ordered local distance deletion; simplify_decimal_bowtie_open_p3_e0_25",
+    "kind": "moonclip_constructed"
+  }
+}

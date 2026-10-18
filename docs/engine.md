@@ -248,3 +248,10 @@ PointD保留原始Double，Precision只保存已验证的0—6位数。decimal_e
 输入量化采用固定十进制倍率与整数/尾数比较，参数delta/完整width/正容差同步缩放而不转整数，MiterLimit和自动容差哨兵不变。整数越界映射原单位并保留生成/扫描阶段，其余错误原样传播。结果转换仍需累计存储与工作额度，成功的整数结果不承诺小数输出一定有余额。收费、错误和所有权见[decimal.md](decimal.md)。
 
 80功能与220参考新增后各目标1714；209工具、65真实适配器另计。v5分别记录196 DecimalGrid和24真正ClipperDCommonGrid，不把ClipperD二进制倍率偷换成十进制兼容结论。旧772参考、整数函数签名/默认值/行为和原规划保持不变。
+
+
+## Commit 14 显式简化
+
+独立 simplify.mbt 改写固定 SimplifyPath / GetNext / GetPrior 与距离辅助，不接入任何旧 Boolean/Offset/Stroke 默认流程。私有 simplify_validated 在同一账本下整理、分类、固定候选遍历、按原索引收集、Closed 接缝清理、再次分类、汇总报告；标记和距离数组预收费，每次跳过删除标记、候选判断及重算均扣工作量。未使用的索引工作数组不创建。结果快照和报告最后一笔收费可失败，Err 无部分结果。
+
+decimal_simplify_execute 复用原十进制预检和全局位置索引，只跳过闭合面域有效性拒绝，再调用私有简化及原单位输出，始终传同一 CallBudget。分类不是拓扑证明；公开结果私有存储，所有数组访问器复制。完整实现边界与收费见 [simplify.md](simplify.md)。原有默认内部预算、工具链、整数签名和旧小数入口未变。
