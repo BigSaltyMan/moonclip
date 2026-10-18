@@ -45,7 +45,11 @@ priv struct OutRec {
   mut back_edge : EdgeId?
   mut status : OutputStatus
   split_from : OutRecId?
-  // Merge aliases are deliberately separate from future geometric ownership.
+  // Hints, final geometric parent, alias and split provenance are distinct.
+  mut owner_hint : OutRecId?
+  mut hint_inside : Bool
+  mut geometric_parent : OutRecId?
+  mut bounds_cache : (Int, Bounds64)?
   mut revision : Int
 }
 
@@ -157,6 +161,10 @@ fn output_new_record(
   state : ScanState,
   split_from : OutRecId?,
 ) -> OutRecId raise ScanAbort {
+  if split_from is Some(source) &&
+    (source < 0 || source >= state.output.records.length()) {
+    output_error(state, "Invalid split source record")
+  }
   output_spend(state, 1, 1)
   let id = state.output.records.length()
   state.stats.output_records += 1
@@ -166,6 +174,13 @@ fn output_new_record(
     back_edge: None,
     status: Building,
     split_from,
+    owner_hint: match split_from {
+      Some(source) => state.output.records[source].owner_hint
+      None => None
+    },
+    hint_inside: false,
+    geometric_parent: None,
+    bounds_cache: None,
     revision: 0,
   })
   id
@@ -589,6 +604,17 @@ fn output_extract(
   state : ScanState,
   preserve_collinear? : Bool = false,
 ) -> Paths64 raise ScanAbort {
+  let ids = output_finalize(state, preserve_collinear)
+  output_snapshot(state, ids)
+}
+
+///|
+// Dynamic queue: repair may append records. No path or bounds is frozen until
+// every original and newly split record has been cleaned and repaired.
+fn output_finalize(
+  state : ScanState,
+  preserve_collinear : Bool,
+) -> Array[OutRecId] raise ScanAbort {
   for join in state.output.joins {
     output_spend(state, 0, 1)
     if !join.consumed {
@@ -597,10 +623,11 @@ fn output_extract(
       )
     }
   }
-  let result = []
   for id = 0; id < state.output.records.length(); id = id + 1 {
     output_spend(state, 0, 1)
     let rec = state.output.records[id]
+    rec.geometric_parent = None
+    rec.bounds_cache = None
     if rec.status == Building {
       output_error(state, "Cannot export an unfinished contour")
     }
@@ -612,13 +639,30 @@ fn output_extract(
       if rec.status == Closed {
         output_clean(state, id, preserve_collinear)
       }
-      if rec.anchor is Some(anchor) {
-        let nodes = output_ring(state, anchor)
-        output_spend(state, 1, nodes.length())
-        let path = nodes.map(fn(n) { state.output.points[n].point })
-        result.push(path)
-      }
     }
+  }
+  output_spend(state, 1, state.output.records.length())
+  let ids = []
+  for id = 0; id < state.output.records.length(); id = id + 1 {
+    if state.output.records[id].status == Closed &&
+      state.output.records[id].anchor is Some(_) {
+      ids.push(id)
+    }
+  }
+  ids
+}
+
+///|
+fn output_snapshot(
+  state : ScanState,
+  ids : Array[OutRecId],
+) -> Paths64 raise ScanAbort {
+  output_spend(state, 1, 0)
+  let result = []
+  for id in ids {
+    let nodes = output_ring(state, state.output.records[id].anchor.unwrap())
+    output_spend(state, 1, nodes.length())
+    result.push(nodes.map(fn(n) { state.output.points[n].point }))
   }
   result
 }

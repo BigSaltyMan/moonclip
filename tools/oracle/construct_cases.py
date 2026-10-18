@@ -40,7 +40,8 @@ def main():
         input_name=f"testdata/upstream/inputs/{cid}.json"
         (ROOT/input_name).write_bytes(canonical_bytes(case))
         entry=dict(old.get(cid, {"case_id":cid,"input":input_name,"expected":f"testdata/upstream/expected/{cid}.json","status":"reference_only"}))
-        entry["validation"]={"paths":"validate" if fill in ("EvenOdd","NonZero") else "validate_internal","tree":"reference_only"}
+        entry["validation"]={"paths":"validate" if fill in ("EvenOdd","NonZero") else "validate_internal","tree":"validate" if fill in ("EvenOdd","NonZero") else "validate_internal"}
+        entry["status"]=entry["validation"]["paths"]
         entries.append(entry)
     for group,subject,clip,intent in definitions():
         for op in OPERATIONS:

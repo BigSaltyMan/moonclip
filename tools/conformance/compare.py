@@ -247,12 +247,13 @@ def read_manifest(root, manifest, require_expected=True, strict=True):
         if "validation" in entry:
             fields.add("validation")
             keys(entry["validation"], {"paths", "tree"}, "manifest.validation")
-            require(entry["validation"]["tree"] == "reference_only" and entry["validation"]["paths"] in ("validate", "validate_internal", "reference_only"), "manifest.validation", "unsupported capability status")
+            require(entry["validation"]["tree"] in ("validate", "validate_internal", "reference_only") and entry["validation"]["paths"] in ("validate", "validate_internal", "reference_only"), "manifest.validation", "unsupported capability status")
         keys(entry, fields, "manifest.case")
         cid = entry["case_id"]
         require(type(cid) is str and cid not in seen, "manifest", "duplicate or invalid case ID")
         seen.add(cid)
-        require(entry["status"] == "reference_only", cid, "unknown or unimplemented capability status")
+        require(entry["status"] in ("validate", "validate_internal", "reference_only"), cid, "unknown or unimplemented capability status")
+        require(entry["status"] == "reference_only" or "validation" in entry, "manifest.case", "validated case needs capability metadata")
         require(entry["input"] == f"testdata/upstream/inputs/{cid}.json" and entry["expected"] == f"testdata/upstream/expected/{cid}.json", cid, "noncanonical case file mapping")
         ip, ep = confined(root, entry["input"]), confined(root, entry["expected"])
         inputs.add(ip); outputs.add(ep)
@@ -261,7 +262,7 @@ def read_manifest(root, manifest, require_expected=True, strict=True):
         require(case["case_id"] == cid, cid, "input case ID mismatch")
         if "validation" in entry:
             required="validate" if case["fill_rule"] in ("EvenOdd","NonZero") else "validate_internal"
-            require(entry["validation"]["paths"]==required,cid,"capability selection disagrees with fill rule")
+            require(entry["validation"]=={"paths":required,"tree":required} and entry["status"]==required,cid,"capability selection disagrees with fill rule")
         digest = sha256(ip.read_bytes())
         expected = None
         if require_expected:
@@ -294,3 +295,9 @@ def compare_paths(expected, actual, where="paths"):
     validate_paths(expected, where+".expected", output=True)
     validate_paths(actual, where+".actual", output=True)
     require(normalize_paths(expected)==normalize_paths(actual),where,"contours differ (coordinates, vertices, winding or multiplicity)")
+
+
+def compare_tree(expected,actual,where="tree"):
+    walk_tree(expected,where+'.expected')
+    walk_tree(actual,where+'.actual')
+    require(normalize_tree(expected)==normalize_tree(actual),where,'parentage, depth, winding, multiplicity or node contours differ')

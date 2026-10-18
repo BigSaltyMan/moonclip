@@ -14,7 +14,7 @@ class SelectionTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.records,cls.public,cls.internal=selections(ROOT/'testdata/manifest.json')
-        cls.good=[{'case_id':e['case_id'],'input_sha256':digest,'status':'success','paths':expected['paths']} for e,c,digest,expected in cls.public]
+        cls.good=[{'case_id':e['case_id'],'input_sha256':digest,'status':'success','paths':expected['paths'],'tree_result':{'status':'success','tree':expected['tree']}} for e,c,digest,expected in cls.public]
     def changed_selection(self,change):
         data=load(ROOT/'testdata/boolean-selection.json',True);change(data)
         real=selection.load
@@ -44,7 +44,7 @@ class SelectionTests(unittest.TestCase):
         self.changed_selection(lambda d:d.update(total=201))
     def test_internal_case_in_public_actual_results_rejected(self):
         e,c,digest,expected=self.internal[0]
-        extra={'case_id':e['case_id'],'input_sha256':digest,'status':'success','paths':expected['paths']}
+        extra={'case_id':e['case_id'],'input_sha256':digest,'status':'success','paths':expected['paths'],'tree_result':{'status':'success','tree':expected['tree']}}
         with self.assertRaises(Invalid):evaluate(ROOT/'testdata/manifest.json',self.good+[extra])
     def test_evenodd_substitution_is_detected_for_nonzero(self):
         values=copy.deepcopy(self.good)

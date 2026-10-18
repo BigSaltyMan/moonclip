@@ -83,7 +83,8 @@ fn main raise {
   )
   run_boolean_example()
   run_winding_example()
-  println("MoonClip geometry and EvenOdd/NonZero Boolean OK")
+  run_tree_example()
+  println("MoonClip geometry, Boolean and PolyTree OK")
 }
 
 ///|
@@ -218,4 +219,45 @@ fn run_winding_example() -> Unit raise {
       assert_eq(total, expected_area2)
     }
   }
+}
+
+///|
+fn run_tree_example() -> Unit raise {
+  let outer = example_rect(-30L, -30L, 60L, 60L)
+  let hole = example_reverse(example_rect(-20L, -20L, 40L, 40L))
+  let island = example_rect(-10L, -10L, 20L, 20L)
+  let subject = [outer, hole, island]
+  guard @moonclip.boolean_tree(subject, [], Union, fill_rule=NonZero)
+    is Ok(tree) else {
+    fail("Expected PolyTree")
+  }
+  let roots = tree.roots()
+  assert_eq(roots.length(), 1)
+  let root = roots[0]
+  assert_eq(root.depth(), 1)
+  assert_true(!root.is_hole())
+  example_result([root.contour()], [outer])
+  let children = root.children()
+  assert_eq(children.length(), 1)
+  let h = children[0]
+  assert_eq(h.depth(), 2)
+  assert_true(h.is_hole())
+  example_result([h.contour()], [hole])
+  let islands = h.children()
+  assert_eq(islands.length(), 1)
+  assert_eq(islands[0].depth(), 3)
+  assert_true(!islands[0].is_hole())
+  assert_eq(islands[0].children().length(), 0)
+  example_result([islands[0].contour()], [island])
+  guard @moonclip.boolean_op(subject, [], Union, fill_rule=NonZero) is Ok(flat) else {
+    fail("Expected independent flat result")
+  }
+  example_result(tree.to_paths(), flat)
+  roots.clear()
+  children.clear()
+  let exposed = h.contour()
+  exposed[0] = @moonclip.Point64::new(999L, 999L)
+  assert_eq(tree.roots().length(), 1)
+  assert_eq(tree.roots()[0].children().length(), 1)
+  example_result([tree.roots()[0].children()[0].contour()], [hole])
 }

@@ -18,7 +18,7 @@ class CliTests(unittest.TestCase):
         self.assertEqual(self.native('--manifest','.tmp/missing-manifest.json').returncode,2)
     def report(self,error):
         _,chosen=selected_records(ROOT/'testdata/manifest.json')
-        actual=[{'case_id':e['case_id'],'input_sha256':digest,'status':'success','paths':copy.deepcopy(expected['paths'])} for e,c,digest,expected in chosen]
+        actual=[{'case_id':e['case_id'],'input_sha256':digest,'status':'success','paths':copy.deepcopy(expected['paths']),'tree_result':{'status':'success','tree':copy.deepcopy(expected['tree'])}} for e,c,digest,expected in chosen]
         if error:
             actual[0].pop('paths');actual[0].update(status='error',error='failure')
         else:

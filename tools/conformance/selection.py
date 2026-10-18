@@ -18,5 +18,5 @@ def selections(manifest):
     require(baseline['fill_rule']=='EvenOdd' and baseline['expected_count']==len(baseline['case_ids'])==60 and len(set(baseline['case_ids']))==60 and set(baseline['case_ids'])<=set(eo),'selection','original EvenOdd baseline missing')
     for entry,case,_,_ in records:
         status='validate' if case['fill_rule'] in ('EvenOdd','NonZero') else 'validate_internal'
-        require(entry.get('validation')=={'paths':status,'tree':'reference_only'},entry['case_id'],'wrong capability status')
+        require(entry.get('validation')=={'paths':status,'tree':status},entry['case_id'],'wrong capability status')
     return records,[r for r in records if r[1]['fill_rule'] in ('EvenOdd','NonZero')],[r for r in records if r[1]['fill_rule'] in ('Positive','Negative')]

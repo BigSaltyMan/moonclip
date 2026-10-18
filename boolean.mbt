@@ -61,6 +61,7 @@ fn start_connection(
   }
   let mut previous = edge_get(state, a).prev_ael
   let mut ascending : Bool? = None
+  let mut hint : OutRecId? = None
   while previous is Some(id) {
     scan_spend(
       state,
@@ -71,6 +72,7 @@ fn start_connection(
     let edge = edge_get(state, id)
     if edge.output_end is Some(end) {
       ascending = Some(end.side == Back)
+      hint = Some(output_resolve(state, end.record))
       break
     }
     previous = edge.prev_ael
@@ -84,6 +86,9 @@ fn start_connection(
   } else {
     output_start(state, b, a, point, split_from~)
   }
+  let record = edge_get(state, a).output_end.unwrap().record
+  state.output.records[record].owner_hint = hint
+  state.output.records[record].hint_inside = ascending == Some(true)
 }
 
 ///|
@@ -413,13 +418,14 @@ fn boolean_decision(
 }
 
 ///|
-fn boolean_execute(
+fn[T] boolean_compute(
   subject : Paths64,
   clip : Paths64,
   operation : ClipType,
   limits : ScanLimits,
-  rule? : WindingRule = Parity,
-) -> Result[Paths64, ClipError] {
+  rule : WindingRule,
+  extract : (ScanState) -> T raise ScanAbort,
+) -> Result[T, ClipError] {
   let state = match prepare_scan(subject, clip, limits~, source_extrema=true) {
     Ok(s) => s
     Err(e) => return Err(e)
@@ -445,7 +451,7 @@ fn boolean_execute(
         )
     }
     boolean_join_seams(state)
-    let result = output_extract(state, preserve_collinear=false)
+    let result = extract(state)
     scan_cleanup(state)
     Ok(result)
   } catch {
@@ -460,6 +466,21 @@ fn boolean_execute(
       )
     }
   }
+}
+
+///|
+fn boolean_execute(
+  subject : Paths64,
+  clip : Paths64,
+  operation : ClipType,
+  limits : ScanLimits,
+  rule? : WindingRule = Parity,
+) -> Result[Paths64, ClipError] {
+  boolean_compute(subject, clip, operation, limits, rule, fn(
+    state,
+  ) raise ScanAbort {
+    output_extract(state, preserve_collinear=false)
+  })
 }
 
 ///|

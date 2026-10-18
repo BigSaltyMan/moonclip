@@ -32,6 +32,15 @@ mkdir -p _build/conformance
 for target in native js; do
   moon test --target "$target" --filter "reference internal paths: *" | tee "_build/conformance/internal-$target.log"
   grep -Fxq 'Total tests: 48, passed: 48, failed: 0.' "_build/conformance/internal-$target.log"
+  for kind in public internal; do
+    if [[ "$kind" == public ]]; then
+      selection='reference tree: *'; count=152; stem=tree
+    else
+      selection='reference internal tree: *'; count=48; stem=internal-tree
+    fi
+    { printf 'Selection: %s\n' "$selection"; moon test --target "$target" --filter "$selection"; } | tee "_build/conformance/$stem-$target.log"
+    grep -Fxq "Total tests: $count, passed: $count, failed: 0." "_build/conformance/$stem-$target.log"
+  done
 done
 printf 'Checking offline reference tools\n'
 python --version

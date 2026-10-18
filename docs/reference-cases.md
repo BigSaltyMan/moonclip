@@ -4,7 +4,7 @@
 
 200 个输入均由 BigSaltyMan 于 2026 年为 MoonClip 自行构造，BSL-1.0。每份输入的 `source.kind` 为 `moonclip_constructed`，`source.group` 定位到下表，`source.intent` 记录构造目的。没有复制上游测试数据。定义脚本为 `tools/oracle/construct_cases.py`；稳定 ID 为 `组名_操作_规则`，不依赖数组下标。
 
-每个预期由固定 Clipper2 C++ 提交 `21ebba05db8894f0c7217ad35ea518080f324946` 真实执行生成，并关联同名输入的完整文件 SHA256。案例级状态保留 reference_only，能力级 validation 另行区分：公开 EO/NZ 各 76 条 paths=validate，内部正负各 24 条 paths=validate_internal，全部树 reference_only。
+每个预期由固定 Clipper2 C++ 提交 `21ebba05db8894f0c7217ad35ea518080f324946` 真实执行生成，并关联同名输入的完整文件 SHA256。案例级及 validation.paths/tree 状态一致：公开 EO/NZ 各 76 条为 validate；内部正负各 24 条为 validate_internal。两项能力分别执行和记录。
 
 ## 覆盖矩阵
 
@@ -78,3 +78,14 @@ bash scripts/generate_reference.sh --manifest testdata/manifest.json --check
 本地 2026-10-18 固定普通精度参考重新构建，适配器 10 项测试通过，完整 --write 后 --check 重建 200/200；原有 136 条输入与预期字节不变。工具原 68 项加 17 项，85 项通过，新增覆盖集合完整性、内部混入公开、NonZero 误用 EvenOdd、原生命令不读取预期几何、实际过滤不能零执行。
 
 native、JS 各执行同一批 427 项（205 旧库 +22 新功能 +152 公开 +48 私有对照）。两目标各独立过滤 48/48（Positive/Negative 各 24）。公开 native 严格报告 required/executed/passed=152，差异/错误为零；私有记录与 200 条树未验证状态分别列于 compatibility.md。远端 Linux 和独立参考 CI 链接在本笔交付记录单独提供，本地结果不代替远端证据。
+
+
+## Commit 8 树能力消费
+
+本笔没有增加、改写参考输入或预期：200 对文件及 evenodd-selection.json、boolean-selection.json 保持字节不变。公开 152 案例各有旧平铺和新树测试，私有 48 案例各有旧平铺和新树测试。树比较保留父子、深度、轮廓全部坐标/顶点/方向和重数，只允许环起点和同父孩子次序变化，不能平铺后比较。
+
+运行器独立调用两个入口，输入/哈希生成文件不链接预期几何；严格报告分别列 paths、tree、both，152 案例不写成 304 案例。native/JS 专属过滤分别执行公开树 152 和内部树 48，并保留原私有平铺 48；树日志必须有独立选择标记，缺失或旧平铺日志不能产生树通过记录。JSON 工具协议最大深度 64 不是库限制，32 项新功能回归包含 72 层及显式五层断言。
+
+每目标实际全量目标为 659（427 旧回归+200 树对照+32 功能）；最终本地和 Linux 运行证据分别在交付报告中核对。参考构建/适配器协议未变，继续完整性检查；不把旧参考重建数量当作本笔树执行数量。
+
+工具回归保留原 85 项，新增 19 项，合计 104 项；覆盖父子改变、节点提升、反转、重数、遗漏、兄弟重排、树错误及缺失结果、旧路径日志拒绝与双入口独立运行。固定参考适配器 10 项与 200 条本地重建另行核对通过，未修改参考构建和协议。

@@ -8,11 +8,11 @@ class ReportTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         _,cls.chosen=selected_records(ROOT/'testdata/manifest.json')
-        cls.good=[{'case_id':e['case_id'],'input_sha256':digest,'status':'success','paths':expected['paths']} for e,c,digest,expected in cls.chosen]
-    def test_selection_is_exactly_152_public_paths_not_trees(self):
+        cls.good=[{'case_id':e['case_id'],'input_sha256':digest,'status':'success','paths':expected['paths'],'tree_result':{'status':'success','tree':expected['tree']}} for e,c,digest,expected in cls.chosen]
+    def test_selection_is_152_cases_with_separate_paths_and_trees(self):
         r=evaluate(ROOT/'testdata/manifest.json',self.good)
         self.assertEqual((r['required'],r['executed'],r['passed']),(152,152,152))
-        self.assertEqual(r['tree'],'reference_only')
+        self.assertEqual(r['tree']['passed'],152)
     def test_missing_result_rejected(self):
         with self.assertRaises(Invalid):evaluate(ROOT/'testdata/manifest.json',self.good[:-1])
     def test_extra_result_rejected(self):

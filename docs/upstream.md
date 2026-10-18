@@ -45,7 +45,7 @@ C# 源码作为主要阅读与后续移植参考；固定版本的 C++ 实现作
 | `CPP/Clipper2Lib/src/clipper.engine.cpp` 及 `include/clipper2/` 头文件 | `tools/oracle/CMakeLists.txt`、`adapter.cpp` | 固定 C++ 源码仅下载到忽略目录，保持原样编译为参考程序；不进入 MoonBit 运行库。设置两项输出选项后分别 Execute 到 Paths64 和 PolyTree64，没有复制或自行编写裁剪逻辑。 |
 | nlohmann/json 3.12.0 `json.hpp` | `tools/oracle/adapter.cpp` | 工具专用 JSON 整数解析依赖，MIT，版本、文件及许可 SHA256 固定在 upstream-lock.json；完整 MIT 声明保留在 THIRD_PARTY_NOTICES.md。 |
 | BigSaltyMan 自行构造的 17 组输入 | `tools/oracle/construct_cases.py`、`testdata/upstream/inputs/` | 136 个稳定 ID 的案例，source 记录目的和分组；没有复制上游测试文件。 |
-| 上述固定 C++ 参考程序的实际输出 | `testdata/upstream/expected/` | 保存分别执行的平铺轮廓与孔洞树，关联输入哈希，并由 Python 整数计算诊断指标；全部 reference_only。 |
+| 上述固定 C++ 参考程序的实际输出 | `testdata/upstream/expected/` | 保存分别执行的平铺轮廓与孔洞树，关联输入哈希，并由 Python 整数计算诊断指标；生成时全部 reference_only；当前能力状态见兼容性报告。 |
 | MoonClip 自行实现 | `tools/conformance/compare.py`、工具测试与比较器反例 | 只规范循环起点与同级排列，保留所有顶点、绕向、重复数量和父子层级；不使用 MoonClip 待实现算法作证。 |
 
 上游 C++ 文件保留 Angus Johnson 2010-2025 的版权与 BSL-1.0 许可头。上游源码与编译产物不提交；工具及自行构造数据为 BigSaltyMan 2026，BSL-1.0。构建源身份、依赖和许可核验见 [参考工具说明](../tools/oracle/README.md)。C# 继续是主要阅读与后续移植参考，C++ 是独立预期结果的生成实现。
@@ -68,7 +68,7 @@ C# 源码作为主要阅读与后续移植参考；固定版本的 C++ 实现作
 
 | 上游参考文件 | 计划用途与目标 |
 | --- | --- |
-| `CSharp/Clipper2Lib/Clipper.Engine.cs` / C++ 引擎的其余部分 | 后续孔洞树与开放路径；EvenOdd 已在 Commit 6、NonZero 和私有正负规则已在 Commit 7 接入。 |
+| `CSharp/Clipper2Lib/Clipper.Engine.cs` / C++ 引擎的其余部分 | 后续开放路径；孔洞树已在 Commit 8 接入；EvenOdd 已在 Commit 6、NonZero 和私有正负规则已在 Commit 7 接入。 |
 | `CSharp/Clipper2Lib/Clipper.Offset.cs` | 后续偏移与描边；尚未建立 MoonBit 对应文件。 |
 
 已提供 C++ 参考适配器；Commit 3 时 MoonClip 算法兼容性尚未运行。后续引擎、偏移等按实际实现继续补充逐文件来源记录。
@@ -116,3 +116,19 @@ C# 源码作为主要阅读与后续移植参考；固定版本的 C++ 实现作
 | MoonClip 自行实现 | selection.py、generate_boolean.py、evidence.py | 输入字段选择、公开/私有分流、实际过滤记录校验，不是上游几何移植。 |
 
 运行几何仍完全由 MoonBit 实现。新增 64 条自行构造参考，原有 136 条输入及预期字节不变。公开 EO/NZ 各 76 和私有正负各 24 分开记录；全部树仍 reference_only。
+
+
+## Commit 8 几何归属与 PolyTree（2026-10-18）
+
+继续固定同一完整 SHA。实际读取 C# Clipper.Engine.cs 的 SetOwner、AddLocalMinPoly、CheckBounds、CheckSplitOwner、RecursiveCheckOwners、BuildTree、GetCleanPath、Path1InsidePath2，以及 Clipper.Core.cs 的 Path2ContainsPath1；公开容器语义同时核对 [PolyTree64 官方说明](https://www.angusj.com/clipper2/Docs/Units/Clipper.Engine/Classes/PolyTree64/_Body.htm)。
+
+| 实际参考 | MoonBit 文件 | 改写与自主实现 |
+| --- | --- | --- |
+| 输出创建及拆分归属线索 | boolean.mbt、output.mbt | 合并别名、拆分来源、邻近边线索和最终几何父节点分开保存；不将别名/来源当作父节点。 |
+| BuildTree 动态记录队列、CheckBounds | output.mbt、polytree.mbt | 先对所有旧/新增拆分记录完成清理和修复，再冻结有效记录；revision 标记边界框缓存。平铺与树共享同一计算核心和整理。 |
+| CheckSplitOwner、RecursiveCheckOwners 的归属目标 | polytree.mbt | 保留身份并解析线索，以包围盒筛选和精确包含确认全部候选；直接父节点由容器关系确认，显式迭代取代递归。 |
+| Path1InsidePath2、GetCleanPath、Core.Path2ContainsPath1 | polytree.mbt | 实际核对连续两次分类、On 忽略、清理及整数包围盒中点回退；自主改为全边接触分段和分母二中点、BigInt 精确谓词，未沿用宽松量化猜测。数值范围和差异见 engine.md。 |
+| PolyTree 根/孔洞/岛层级 | polytree.mbt | 自行实现不可变索引视图、复制访问器、共享预算和诊断，不移植上游可变对象树。 |
+| MoonClip 自行实现 | conformance 生成器/运行器/报告 | 两个公开入口独立执行，分别传输路径/树协议；公开/私有分流及专属过滤日志。 |
+
+所有运行几何与树归属由 MoonBit 实现，没有新增依赖。参考适配器、固定构建、参考协议、200 份输入/预期和选择文件未改；本笔只迁移清单能力状态和消费已有树预期。公开规则仍为两种，内部正负规则不公开。版权及 BSL-1.0 声明沿用。

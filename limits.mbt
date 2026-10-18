@@ -24,6 +24,7 @@ pub(all) enum Stage {
   HorizontalEvents
   OutputTopology
   BooleanOp
+  PolyTree
 } derive(Eq, Debug)
 
 ///|
