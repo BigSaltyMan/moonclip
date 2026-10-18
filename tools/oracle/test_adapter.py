@@ -314,6 +314,69 @@ class AdapterTests(unittest.TestCase):
         c=self.stroke_case();c.update(path=[[999999990,0],[1000000000,0]],cap_type='Square')
         self.rejected(c)
 
+    def composition_case(self,cid='composition_boolean_overlap_out'):
+        return load(ROOT/f'testdata/composition/inputs/{cid}.json',True)
+
+    def test_composition_24_real_intermediate_and_final_outputs(self):
+        from composition_compare import composition_selection,stage_request
+        _,records=composition_selection(ROOT)
+        for _,case,_,expected in records:
+            result=self.call(case);self.assertEqual(result.returncode,0,result.stderr)
+            actual=decode(result.stdout);compare(expected,actual,case['case_id'])
+            first=decode(self.call(stage_request(case,0)).stdout)
+            second=decode(self.call(stage_request(case,1,first['paths'])).stdout)
+            self.assertEqual(actual['intermediate']['paths'],first['paths'])
+            self.assertEqual(actual['final']['paths'],second['paths'])
+            if case['recipe']=='InsetThenTree':self.assertEqual(actual['final']['tree'],second['tree'])
+
+    def test_composition_has_independent_manual_rectangle_expectation(self):
+        result=decode(self.call(self.composition_case()).stdout)
+        self.assertEqual(normalize_paths(result['intermediate']['paths']),normalize_paths([[[0,0],[15,0],[15,10],[0,10]]]))
+        self.assertEqual(normalize_paths(result['final']['paths']),normalize_paths([[[-2,-2],[17,-2],[17,12],[-2,12]]]))
+
+    def test_composition_second_step_consumes_new_first_result(self):
+        case=self.composition_case();case['steps'][0]['clip']=[[[5,0],[25,0],[25,10],[5,10]]]
+        result=decode(self.call(case).stdout)
+        self.assertEqual(metrics(result)['final']['paths'][0]['bounds'],[-2,-2,27,12])
+
+    def test_composition_first_failure_records_step_one(self):
+        case=self.composition_case();case['steps'][0]['subject'][0][0][0]=1000000001
+        result=self.call(case);self.assertEqual(result.returncode,2)
+        self.assertEqual(decode(result.stdout)['failure_step'],1)
+
+    def test_composition_second_failure_records_step_two(self):
+        case=self.composition_case();case['steps'][1]['delta']=2000000001.0
+        result=self.call(case);self.assertEqual(result.returncode,2)
+        self.assertEqual(decode(result.stdout)['failure_step'],2)
+
+    def test_composition_unknown_fields_and_recipe_rejected(self):
+        for field,value in (('format_version',True),('recipe','Pipeline'),('unexpected',1)):
+            case=self.composition_case();case[field]=value;self.rejected(case)
+        for i in (0,1):
+            case=self.composition_case();case['steps'][i]['ref']='previous';self.rejected(case)
+
+    def test_composition_fixed_two_steps_and_no_raw_second_input(self):
+        for count in (0,1,3):
+            case=self.composition_case();case['steps']=(case['steps']*2)[:count];self.rejected(case)
+        case=self.composition_case();case['steps'][1]['paths']=[];self.rejected(case)
+
+    def test_composition_empty_first_result_still_checks_second(self):
+        case=self.composition_case();case['steps'][0]['operation']='Difference';case['steps'][0]['clip']=case['steps'][0]['subject']
+        result=decode(self.call(case).stdout)
+        self.assertEqual(result['intermediate']['paths'],[]);self.assertEqual(result['final']['paths'],[])
+        case['steps'][1]['miter_limit']=1.0
+        result=self.call(case);self.assertEqual(result.returncode,2);self.assertEqual(decode(result.stdout)['failure_step'],2)
+
+    def test_composition_stage_sampling_guard(self):
+        case=self.composition_case();case['steps'][1].update(join_type='Round',delta=1000000000.0,arc_tolerance=1e-11)
+        result=self.call(case);self.assertEqual(result.returncode,2);self.assertEqual(decode(result.stdout)['failure_step'],2)
+        self.assertIn(b'adapter resource limit',result.stderr)
+
+    def test_composition_private_rule_and_wrong_operation_rejected(self):
+        for i in (0,1):
+            case=self.composition_case();case['steps'][i]['fill_rule']='Positive';self.rejected(case)
+        case=self.composition_case('composition_inset_hole_d2');case['steps'][1]['operation']='Xor';self.rejected(case)
+
     def case_commit(self):
         return load(ROOT/'tools/oracle/upstream-lock.json',True)['commit']
 

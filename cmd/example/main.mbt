@@ -87,7 +87,10 @@ fn main raise {
   run_offset_example()
   run_join_example()
   run_stroke_example()
-  println("MoonClip geometry, Boolean, PolyTree, offset and stroke OK")
+  run_composition_example()
+  println(
+    "MoonClip geometry, Boolean, PolyTree, offset, stroke and composition OK",
+  )
 }
 
 ///|
@@ -462,4 +465,69 @@ fn run_stroke_example() -> Unit raise {
   ])
   assert_eq(@moonclip.stroke_polyline(line, 0.99), Ok([]))
   assert_true(@moonclip.stroke_polyline(line, -1.0) is Err(InvalidInput(_, _)))
+}
+
+///|
+fn run_composition_example() -> Unit raise {
+  guard @moonclip.boolean_op(
+      [example_rect(0L, 0L, 10L, 10L)],
+      [example_rect(5L, 0L, 10L, 10L)],
+      @moonclip.Union,
+      fill_rule=@moonclip.NonZero,
+    )
+    is Ok(united) else {
+    fail("Composition Union failed")
+  }
+  example_result(united, [example_rect(0L, 0L, 15L, 10L)])
+  guard @moonclip.offset_polygons(united, 2.0, fill_rule=@moonclip.NonZero)
+    is Ok(expanded) else {
+    fail("Composition expansion failed")
+  }
+  example_result(expanded, [example_rect(-2L, -2L, 19L, 14L)])
+
+  let region = [
+    example_rect(0L, 0L, 40L, 40L),
+    example_reverse(example_rect(10L, 10L, 20L, 20L)),
+  ]
+  guard @moonclip.offset_polygons(region, -2.0, fill_rule=@moonclip.NonZero)
+    is Ok(inset) else {
+    fail("Composition inset failed")
+  }
+  guard @moonclip.boolean_tree(
+      inset,
+      [],
+      @moonclip.Union,
+      fill_rule=@moonclip.NonZero,
+    )
+    is Ok(tree) else {
+    fail("Composition hierarchy failed")
+  }
+  assert_eq(tree.roots().length(), 1)
+  let root = tree.roots()[0]
+  assert_eq(root.depth(), 1)
+  assert_eq(root.children().length(), 1)
+  assert_true(root.children()[0].is_hole())
+  example_result([root.contour()], [example_rect(2L, 2L, 36L, 36L)])
+  example_result([root.children()[0].contour()], [
+    example_reverse(example_rect(8L, 8L, 24L, 24L)),
+  ])
+
+  let route = [
+    @moonclip.Point64::new(-10L, 10L),
+    @moonclip.Point64::new(30L, 10L),
+  ]
+  guard @moonclip.stroke_polyline(route, 4.0, cap=@moonclip.CapType::Butt)
+    is Ok(coverage) else {
+    fail("Composition stroke failed")
+  }
+  guard @moonclip.boolean_op(
+      coverage,
+      [example_rect(0L, 0L, 20L, 20L)],
+      @moonclip.Intersection,
+      fill_rule=@moonclip.NonZero,
+    )
+    is Ok(clipped) else {
+    fail("Composition intersection failed")
+  }
+  example_result(clipped, [example_rect(0L, 8L, 20L, 4L)])
 }

@@ -191,12 +191,13 @@ test "tree uses exact remaining node and work budgets including snapshots" {
       error
       is Some(
         ResourceLimitExceeded(
-          { stage: PolyTree, path_index: None, vertex_index: None, },
+          { stage, path_index: None, vertex_index: None, },
           resource,
           _
         )
       ) &&
-      resource == kind,
+      resource == kind &&
+      stage == (if kind == InternalNodes { OutputTopology } else { PolyTree }),
     )
     scan_cleanup(state)
   }

@@ -1,0 +1,247 @@
+{
+  "cases": [
+    {
+      "case_id": "composition_boolean_disjoint_in",
+      "expected": "testdata/composition/expected/composition_boolean_disjoint_in.json",
+      "input": "testdata/composition/inputs/composition_boolean_disjoint_in.json",
+      "status": "validate",
+      "validation": {
+        "final": "validate",
+        "intermediate": "validate"
+      }
+    },
+    {
+      "case_id": "composition_boolean_disjoint_out",
+      "expected": "testdata/composition/expected/composition_boolean_disjoint_out.json",
+      "input": "testdata/composition/inputs/composition_boolean_disjoint_out.json",
+      "status": "validate",
+      "validation": {
+        "final": "validate",
+        "intermediate": "validate"
+      }
+    },
+    {
+      "case_id": "composition_boolean_hole_in",
+      "expected": "testdata/composition/expected/composition_boolean_hole_in.json",
+      "input": "testdata/composition/inputs/composition_boolean_hole_in.json",
+      "status": "validate",
+      "validation": {
+        "final": "validate",
+        "intermediate": "validate"
+      }
+    },
+    {
+      "case_id": "composition_boolean_hole_out",
+      "expected": "testdata/composition/expected/composition_boolean_hole_out.json",
+      "input": "testdata/composition/inputs/composition_boolean_hole_out.json",
+      "status": "validate",
+      "validation": {
+        "final": "validate",
+        "intermediate": "validate"
+      }
+    },
+    {
+      "case_id": "composition_boolean_notch_in",
+      "expected": "testdata/composition/expected/composition_boolean_notch_in.json",
+      "input": "testdata/composition/inputs/composition_boolean_notch_in.json",
+      "status": "validate",
+      "validation": {
+        "final": "validate",
+        "intermediate": "validate"
+      }
+    },
+    {
+      "case_id": "composition_boolean_notch_out",
+      "expected": "testdata/composition/expected/composition_boolean_notch_out.json",
+      "input": "testdata/composition/inputs/composition_boolean_notch_out.json",
+      "status": "validate",
+      "validation": {
+        "final": "validate",
+        "intermediate": "validate"
+      }
+    },
+    {
+      "case_id": "composition_boolean_overlap_in",
+      "expected": "testdata/composition/expected/composition_boolean_overlap_in.json",
+      "input": "testdata/composition/inputs/composition_boolean_overlap_in.json",
+      "status": "validate",
+      "validation": {
+        "final": "validate",
+        "intermediate": "validate"
+      }
+    },
+    {
+      "case_id": "composition_boolean_overlap_out",
+      "expected": "testdata/composition/expected/composition_boolean_overlap_out.json",
+      "input": "testdata/composition/inputs/composition_boolean_overlap_out.json",
+      "status": "validate",
+      "validation": {
+        "final": "validate",
+        "intermediate": "validate"
+      }
+    },
+    {
+      "case_id": "composition_inset_channel_d2",
+      "expected": "testdata/composition/expected/composition_inset_channel_d2.json",
+      "input": "testdata/composition/inputs/composition_inset_channel_d2.json",
+      "status": "validate",
+      "validation": {
+        "final": "validate",
+        "intermediate": "validate"
+      }
+    },
+    {
+      "case_id": "composition_inset_channel_d4",
+      "expected": "testdata/composition/expected/composition_inset_channel_d4.json",
+      "input": "testdata/composition/inputs/composition_inset_channel_d4.json",
+      "status": "validate",
+      "validation": {
+        "final": "validate",
+        "intermediate": "validate"
+      }
+    },
+    {
+      "case_id": "composition_inset_hole_d2",
+      "expected": "testdata/composition/expected/composition_inset_hole_d2.json",
+      "input": "testdata/composition/inputs/composition_inset_hole_d2.json",
+      "status": "validate",
+      "validation": {
+        "final": "validate",
+        "intermediate": "validate"
+      }
+    },
+    {
+      "case_id": "composition_inset_hole_d4",
+      "expected": "testdata/composition/expected/composition_inset_hole_d4.json",
+      "input": "testdata/composition/inputs/composition_inset_hole_d4.json",
+      "status": "validate",
+      "validation": {
+        "final": "validate",
+        "intermediate": "validate"
+      }
+    },
+    {
+      "case_id": "composition_inset_island_d2",
+      "expected": "testdata/composition/expected/composition_inset_island_d2.json",
+      "input": "testdata/composition/inputs/composition_inset_island_d2.json",
+      "status": "validate",
+      "validation": {
+        "final": "validate",
+        "intermediate": "validate"
+      }
+    },
+    {
+      "case_id": "composition_inset_island_d4",
+      "expected": "testdata/composition/expected/composition_inset_island_d4.json",
+      "input": "testdata/composition/inputs/composition_inset_island_d4.json",
+      "status": "validate",
+      "validation": {
+        "final": "validate",
+        "intermediate": "validate"
+      }
+    },
+    {
+      "case_id": "composition_inset_touch_d2",
+      "expected": "testdata/composition/expected/composition_inset_touch_d2.json",
+      "input": "testdata/composition/inputs/composition_inset_touch_d2.json",
+      "status": "validate",
+      "validation": {
+        "final": "validate",
+        "intermediate": "validate"
+      }
+    },
+    {
+      "case_id": "composition_inset_touch_d4",
+      "expected": "testdata/composition/expected/composition_inset_touch_d4.json",
+      "input": "testdata/composition/inputs/composition_inset_touch_d4.json",
+      "status": "validate",
+      "validation": {
+        "final": "validate",
+        "intermediate": "validate"
+      }
+    },
+    {
+      "case_id": "composition_stroke_cap_butt",
+      "expected": "testdata/composition/expected/composition_stroke_cap_butt.json",
+      "input": "testdata/composition/inputs/composition_stroke_cap_butt.json",
+      "status": "validate",
+      "validation": {
+        "final": "validate",
+        "intermediate": "validate"
+      }
+    },
+    {
+      "case_id": "composition_stroke_cap_round",
+      "expected": "testdata/composition/expected/composition_stroke_cap_round.json",
+      "input": "testdata/composition/inputs/composition_stroke_cap_round.json",
+      "status": "validate",
+      "validation": {
+        "final": "validate",
+        "intermediate": "validate"
+      }
+    },
+    {
+      "case_id": "composition_stroke_corner_butt",
+      "expected": "testdata/composition/expected/composition_stroke_corner_butt.json",
+      "input": "testdata/composition/inputs/composition_stroke_corner_butt.json",
+      "status": "validate",
+      "validation": {
+        "final": "validate",
+        "intermediate": "validate"
+      }
+    },
+    {
+      "case_id": "composition_stroke_corner_round",
+      "expected": "testdata/composition/expected/composition_stroke_corner_round.json",
+      "input": "testdata/composition/inputs/composition_stroke_corner_round.json",
+      "status": "validate",
+      "validation": {
+        "final": "validate",
+        "intermediate": "validate"
+      }
+    },
+    {
+      "case_id": "composition_stroke_hole_butt",
+      "expected": "testdata/composition/expected/composition_stroke_hole_butt.json",
+      "input": "testdata/composition/inputs/composition_stroke_hole_butt.json",
+      "status": "validate",
+      "validation": {
+        "final": "validate",
+        "intermediate": "validate"
+      }
+    },
+    {
+      "case_id": "composition_stroke_hole_round",
+      "expected": "testdata/composition/expected/composition_stroke_hole_round.json",
+      "input": "testdata/composition/inputs/composition_stroke_hole_round.json",
+      "status": "validate",
+      "validation": {
+        "final": "validate",
+        "intermediate": "validate"
+      }
+    },
+    {
+      "case_id": "composition_stroke_straight_butt",
+      "expected": "testdata/composition/expected/composition_stroke_straight_butt.json",
+      "input": "testdata/composition/inputs/composition_stroke_straight_butt.json",
+      "status": "validate",
+      "validation": {
+        "final": "validate",
+        "intermediate": "validate"
+      }
+    },
+    {
+      "case_id": "composition_stroke_straight_round",
+      "expected": "testdata/composition/expected/composition_stroke_straight_round.json",
+      "input": "testdata/composition/inputs/composition_stroke_straight_round.json",
+      "status": "validate",
+      "validation": {
+        "final": "validate",
+        "intermediate": "validate"
+      }
+    }
+  ],
+  "format_version": 4,
+  "kind": "composition",
+  "oracle_lock": "tools/oracle/upstream-lock.json"
+}

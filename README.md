@@ -40,10 +40,10 @@ bash scripts/check.sh
 moon run --target native cmd/example
 ```
 
-示例代码位于 [`cmd/example/main.mbt`](cmd/example/main.mbt)，通过公开接口验证复制隔离、负坐标边界框、方向、精确面积和点包含，整理重复点后检查源数据未变，并捕获坐标及预算错误。当前完整示例还检查四种布尔操作、孔洞树和闭合偏移；成功输出：
+示例代码位于 [`cmd/example/main.mbt`](cmd/example/main.mbt)，通过公开接口验证复制隔离、负坐标边界框、方向、精确面积和点包含，整理重复点后检查源数据未变，并捕获坐标及预算错误。当前完整示例还检查四种布尔操作、孔洞树、闭合偏移，以及下面三类组合；成功输出：
 
 ```text
-MoonClip geometry, Boolean, PolyTree, offset and stroke OK
+MoonClip geometry, Boolean, PolyTree, offset, stroke and composition OK
 ```
 
 对应示例包导入根库后，可直接调用公开接口：
@@ -265,7 +265,7 @@ Commit 10 同一批 **1006 项=810 原回归＋156 新对照＋40 功能测试**
 
 从 Open 整理、法线、两侧连接、两个端点、圆弧采样到 Boolean 清理及提取共享同一个预算。生成点仍在清理前检查坐标，超限不改容差、不截断、不返回部分结果；失败不修改原数组，下次调用重新建立状态。StrokeParameters / StrokeGenerate / StrokeCleanup 区分描边阶段，原始错误保留顶点下标，生成点下标为 None；闭合偏移继续报告原 Offset 阶段。
 
-[受检示例](cmd/example/main.mbt) 实际运行直线的三种端点及 width=4、Round转角＋Round端点、ArcTolerance=.25 的直角路线，断言完整轮廓后输出成功标记。完整检查现为 native、JS 各 **1330/1330=旧1006＋276描边对照＋48功能测试**；工具155项、真实适配器41项另计。独立参考总计 Boolean200＋Offset272＋Stroke276＝748。描边协议v3不含填充规则；旧v1/v2参考、清单、选择文件均保持字节不变。
+[受检示例](cmd/example/main.mbt) 实际运行直线的三种端点及 width=4、Round转角＋Round端点、ArcTolerance=.25 的直角路线，断言完整轮廓后输出成功标记。Commit 11 的完整检查为 native、JS 各 **1330/1330=旧1006＋276描边对照＋48功能测试**；工具155项、真实适配器41项另计。该阶段独立参考总计 Boolean200＋Offset272＋Stroke276＝748。描边协议v3不含填充规则；旧v1/v2参考、清单、选择文件均保持字节不变。
 
 ```bash
 python tools/conformance/generate_stroke.py --check
@@ -274,4 +274,15 @@ moon test --target js --filter "reference stroke paths: *"
 moon run --target native cmd/conformance -- --manifest testdata/manifest.json --offset-manifest testdata/offset-manifest.json --stroke-manifest testdata/stroke-manifest.json --report-json _build/conformance/report.json --report-md docs/compatibility.md --strict
 ```
 
-当前保持整数坐标接口。跨公开操作的组合验收由 Commit 12 继续，小数坐标及缩放由 Commit 13 接入。
+当前保持整数坐标接口。三类组合验收已接入；小数坐标及缩放留给 Commit 13。
+
+
+## 组合流程与资源保护
+
+直接把上一公开调用的真实返回数组传给下一调用：Union → 闭合 Offset、带孔收缩 → boolean_tree、Stroke → Intersection。三类均在[可运行示例](cmd/example/main.mbt)和[组合说明](docs/composition.md)中给出完整断言；每步检查 Result，失败立即停止，合法空结果则继续传给下一步。
+
+每次公开调用拥有独立预算；同一次调用内的准备、生成、扫描、清理和输出提取累计使用同一账本。中间结果进入下一公开调用时重新检查坐标与原始数量，错误索引对应新的输入。返回结果独立拥有数组，树的轮廓和 to_paths() 也返回副本。扩张后再收缩通常不能恢复原形。
+
+Commit 12 补计输入整理存储、法向量及结果容器、环索引、输出复制、树验证和生产诊断费用；负收费被拒绝，两项预算原子更新，清理不退款。内部默认仍为 500,000 节点、5,000,000 工作量；公开 Limits、接口、完整描边宽度、ArcTolerance 与整数舍入语义不变。
+
+当前验收为 native、JS 同一批各 **1414 项**（1330 回归＋24 组合对照＋60 功能），工具 **179 项**、真实适配器 **51 项**分别计数。独立参考为 **772 条**（200 Boolean＋272 Offset＋276 Stroke＋24 组合），两步不拆成独立案例。报告分别列中间和最终差异；预算测试不代表与 Clipper2 资源限制兼容。普通 Linux 检查和固定 C++ 参考重建分别验证，执行证据见[兼容报告](docs/compatibility.md)。

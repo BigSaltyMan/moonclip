@@ -436,9 +436,19 @@ test "output self-cross small-area disposal does not filter the original input" 
 
 ///|
 test "split allocation failure leaves a valid merged ring and fresh call succeeds" {
+  let measured = new_scan_state(Default::default())
+  let ma = out_fixture(measured, wb_rectangle())
+  let mb = out_fixture(measured, wb_rectangle(x=20L))
+  let mf = measured.output.records[ma].anchor.unwrap()
+  let ms = measured.output.records[mb].anchor.unwrap()
+  ignore(output_splice(measured, mf, ms))
+  let used = measured.stats.nodes
+  let ring = output_ring(measured, mf)
+  // Allow the entire ring scratch, but not the new split record itself.
+  let limit = used + ring.length() + 1
   let state = new_scan_state({
     input: Default::default(),
-    max_nodes: 10,
+    max_nodes: limit,
     max_work: 10000,
   })
   let a = out_fixture(state, wb_rectangle())
@@ -446,10 +456,20 @@ test "split allocation failure leaves a valid merged ring and fresh call succeed
   let first = state.output.records[a].anchor.unwrap()
   let second = state.output.records[b].anchor.unwrap()
   ignore(output_splice(state, first, second))
+  let error = wb_error(fn() raise ScanAbort {
+    output_splice(state, first, second)
+  })
   assert_true(
-    wb_error(fn() raise ScanAbort { output_splice(state, first, second) })
-    is ResourceLimitExceeded(_, InternalNodes, 10),
+    error
+    is ResourceLimitExceeded(
+      { stage: OutputTopology, .. },
+      InternalNodes,
+      actual
+    ) &&
+    actual == limit,
   )
+  assert_eq(state.stats.nodes, limit)
+  assert_eq(state.output.records.length(), 2)
   ix_ok(state)
   let fresh = new_scan_state(Default::default())
   ignore(out_fixture(fresh, wb_rectangle()))

@@ -202,7 +202,13 @@ json execute_offset(const json& request) {
   return {{"format_version", 2}, {"adapter_protocol_version", 2}, {"case_id", request["case_id"]},
           {"oracle_commit", kCommit}, {"status", "success"}, {"paths", output}};
 }
+struct CompositionFailure : std::runtime_error {
+  int step;
+  CompositionFailure(int index, const std::string& message) : std::runtime_error(message), step(index) {}
+};
+json execute_composition(const json& request);
 json execute(const json& request) {
+  if (request.is_object() && request.value("operation",json())=="Composition") return execute_composition(request);
   if (request.is_object() && request.value("operation",json())=="StrokePolyline") return execute_stroke(request);
   if (request.is_object() && request.value("operation", json()) == "OffsetPolygons") return execute_offset(request);
   keys(request, {"format_version", "case_id", "source", "operation", "fill_rule", "options", "subject", "clip"}, "request");
@@ -241,6 +247,53 @@ json execute(const json& request) {
           {"oracle_commit", kCommit}, {"status", "success"}, {"paths", flat_json},
           {"tree", {{"children", children(tree, 1, nodes)}}}};
 }
+// The second request is built exclusively from the just-computed first result.
+json execute_composition(const json& request) {
+  keys(request,{"format_version","operation","recipe","case_id","source","options","steps"},"composition");
+  integer(request["format_version"],"composition version",4,4);
+  request_metadata(request);
+  require(request["recipe"].is_string(),"recipe: expected string");
+  const auto recipe=request["recipe"].get<std::string>();
+  require(recipe=="BooleanThenOffset" || recipe=="InsetThenTree" || recipe=="StrokeThenIntersection","unknown composition recipe");
+  require(request["steps"].is_array() && request["steps"].size()==2,"composition: expected two steps");
+  json intermediate, final;
+  for (int i=0;i<2;++i) {
+    try {
+      json step=request["steps"][i];
+      if (i==0) {
+        if (recipe=="BooleanThenOffset") keys(step,{"format_version","operation","subject","clip","fill_rule"},"first Boolean");
+        else if (recipe=="InsetThenTree") {
+          keys(step,{"format_version","operation","paths","delta","fill_rule","join_type","miter_limit","arc_tolerance"},"first inset");
+          require(step["operation"]=="OffsetPolygons" && step["delta"].is_number() && step["delta"].get<double>()<0,"expected negative inset");
+        } else {
+          keys(step,{"format_version","operation","path","width","cap_type","join_type","miter_limit","arc_tolerance"},"first stroke");
+          require(step["operation"]=="StrokePolyline","expected first stroke");
+        }
+      } else if (recipe=="BooleanThenOffset") {
+        keys(step,{"format_version","operation","delta","fill_rule","join_type","miter_limit","arc_tolerance"},"second offset");
+        require(step["operation"]=="OffsetPolygons","expected second offset");
+        step["paths"]=intermediate["paths"];
+      } else {
+        keys(step,{"format_version","operation","clip","fill_rule"},"second Boolean");
+        require(step["operation"]==(recipe=="InsetThenTree" ? "Union" : "Intersection"),"wrong second Boolean operation");
+        if (recipe=="InsetThenTree") require(step["clip"]==json::array(),"tree Union clip must be empty");
+        step["subject"]=intermediate["paths"];
+      }
+      if (step.contains("fill_rule")) require(step["fill_rule"]=="NonZero" || step["fill_rule"]=="EvenOdd","public fill rule required");
+      for (auto field : {"case_id","source","options"}) step[field]=request[field];
+      auto result=execute(step);
+      size_t pc=0,vc=0;
+      paths(result["paths"],"composition stage output",pc,vc);
+      if (i==0) intermediate={{"paths",result["paths"]}};
+      else {
+        final={{"paths",result["paths"]}};
+        if (recipe=="InsetThenTree") final["tree"]=result["tree"];
+      }
+    } catch (const std::exception& error) { throw CompositionFailure(i+1,error.what()); }
+  }
+  return {{"format_version",4},{"adapter_protocol_version",4},{"case_id",request["case_id"]},
+    {"oracle_commit",kCommit},{"status","success"},{"recipe",recipe},{"intermediate",intermediate},{"final",final}};
+}
 int main() {
   try {
     std::string data;
@@ -261,6 +314,10 @@ int main() {
     auto response = execute(json::parse(data, callback));
     std::cout << response.dump() << '\n';
     return 0;
+  } catch (const CompositionFailure& error) {
+    std::cerr << "oracle: composition step " << error.step << ": " << error.what() << '\n';
+    std::cout << json({{"format_version",4},{"status","error"},{"failure_step",error.step},{"message",error.what()}}).dump() << '\n';
+    return 2;
   } catch (const std::exception& error) {
     std::cerr << "oracle: " << error.what() << '\n';
     std::cout << json({{"format_version", 1}, {"status", "error"}, {"message", error.what()}}).dump() << '\n';

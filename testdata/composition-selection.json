@@ -1,0 +1,31 @@
+{
+  "case_ids": [
+    "composition_boolean_disjoint_in",
+    "composition_boolean_disjoint_out",
+    "composition_boolean_hole_in",
+    "composition_boolean_hole_out",
+    "composition_boolean_notch_in",
+    "composition_boolean_notch_out",
+    "composition_boolean_overlap_in",
+    "composition_boolean_overlap_out",
+    "composition_inset_channel_d2",
+    "composition_inset_channel_d4",
+    "composition_inset_hole_d2",
+    "composition_inset_hole_d4",
+    "composition_inset_island_d2",
+    "composition_inset_island_d4",
+    "composition_inset_touch_d2",
+    "composition_inset_touch_d4",
+    "composition_stroke_cap_butt",
+    "composition_stroke_cap_round",
+    "composition_stroke_corner_butt",
+    "composition_stroke_corner_round",
+    "composition_stroke_hole_butt",
+    "composition_stroke_hole_round",
+    "composition_stroke_straight_butt",
+    "composition_stroke_straight_round"
+  ],
+  "expected_count": 24,
+  "format_version": 4,
+  "kind": "composition"
+}

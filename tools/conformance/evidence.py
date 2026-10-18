@@ -58,3 +58,17 @@ def stroke_evidence(directory):
         require(summaries==[('276','276','0')],str(path),'expected exactly 276 successful stroke cases')
         result[target]={'status':'passed','executed':276,'passed':276,'failed':0}
     return result
+
+
+def composition_evidence(directory):
+    result={}
+    for target in ('native','js'):
+        path=directory/('composition-'+target+'.log')
+        if not path.exists():
+            result[target]={'status':'not_recorded'};continue
+        text=path.read_text(encoding='utf-8')
+        require(text.splitlines().count('Selection: reference composition: *')==1,str(path),'missing composition selection marker')
+        summaries=re.findall(r'Total tests: (\d+), passed: (\d+), failed: (\d+)\.',text)
+        require(summaries==[('24','24','0')],str(path),'expected exactly 24 successful composition recipes')
+        result[target]={'status':'passed','executed':24,'passed':24,'failed':0}
+    return result

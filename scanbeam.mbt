@@ -272,11 +272,14 @@ fn prepare_path(
       previous = Some(point)
     }
   }
+  // normalize_validated temporarily stores a repeated closing point before pop.
+  let stored = count
   if count > 1 && previous == Some(raw[0]) {
     count -= 1
   }
+  // Independent normalized point slots and vertex-index slots, plus containers.
   scan_reserve(state, count, raw.length(), loc)
-  scan_spend(state, 0, raw.length(), loc)
+  scan_spend(state, 2 + stored, raw.length(), loc)
   let clean = normalize_validated(raw, Closed)
   let ids : Array[VertexId] = []
   let mut original = 0
@@ -292,7 +295,7 @@ fn prepare_path(
       global_path: global_index,
       vertex: original,
     }
-    scan_spend(state, 1, 1, source_location(source, EnginePrepare))
+    scan_spend(state, 2, 1, source_location(source, EnginePrepare))
     ids.push(state.vertices.length())
     state.vertices.push({
       point,

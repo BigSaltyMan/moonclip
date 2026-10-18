@@ -1,0 +1,32 @@
+{
+  "adapter_protocol_version": 4,
+  "case_id": "composition_inset_hole_d4",
+  "final": {
+    "paths": [],
+    "tree": {
+      "children": []
+    }
+  },
+  "format_version": 4,
+  "input_sha256": "0a1bc65d82254cfd3bd8a882eb45b6e776a1208a5c1bc47d90c41b051206a680",
+  "intermediate": {
+    "paths": []
+  },
+  "metrics": {
+    "final": {
+      "hole_count": 0,
+      "path_count": 0,
+      "paths": [],
+      "tree_depth": 0,
+      "vertex_count": 0
+    },
+    "intermediate": {
+      "path_count": 0,
+      "paths": [],
+      "vertex_count": 0
+    }
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "recipe": "InsetThenTree",
+  "status": "success"
+}

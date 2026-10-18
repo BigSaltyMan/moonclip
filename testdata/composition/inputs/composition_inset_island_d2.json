@@ -1,0 +1,106 @@
+{
+  "case_id": "composition_inset_island_d2",
+  "format_version": 4,
+  "operation": "Composition",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "recipe": "InsetThenTree",
+  "source": {
+    "group": "inset_island",
+    "intent": "InsetThenTree; real intermediate; d2",
+    "kind": "moonclip_constructed"
+  },
+  "steps": [
+    {
+      "arc_tolerance": 0.0,
+      "delta": -2.0,
+      "fill_rule": "NonZero",
+      "format_version": 2,
+      "join_type": "Miter",
+      "miter_limit": 2.0,
+      "operation": "OffsetPolygons",
+      "paths": [
+        [
+          [
+            0,
+            0
+          ],
+          [
+            80,
+            0
+          ],
+          [
+            80,
+            80
+          ],
+          [
+            0,
+            80
+          ]
+        ],
+        [
+          [
+            10,
+            70
+          ],
+          [
+            70,
+            70
+          ],
+          [
+            70,
+            10
+          ],
+          [
+            10,
+            10
+          ]
+        ],
+        [
+          [
+            24,
+            24
+          ],
+          [
+            56,
+            24
+          ],
+          [
+            56,
+            56
+          ],
+          [
+            24,
+            56
+          ]
+        ],
+        [
+          [
+            32,
+            48
+          ],
+          [
+            48,
+            48
+          ],
+          [
+            48,
+            32
+          ],
+          [
+            32,
+            32
+          ]
+        ]
+      ]
+    },
+    {
+      "clip": [],
+      "fill_rule": "NonZero",
+      "format_version": 1,
+      "operation": "Union"
+    }
+  ]
+}

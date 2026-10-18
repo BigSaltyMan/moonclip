@@ -104,20 +104,8 @@ fn output_spend(
   if state.cleaned {
     output_error(state, "Output state has been cleaned")
   }
-  if nodes < 0 || work < 0 {
-    output_error(state, "Negative output budget charge")
-  }
-  if nodes > state.budget.limits.max_nodes - state.budget.stats.nodes {
-    scan_abort(
-      state,
-      ResourceLimitExceeded(loc, InternalNodes, state.limits.max_nodes),
-    )
-  }
-  if work > state.budget.limits.max_work - state.budget.stats.work {
-    scan_abort(
-      state,
-      ResourceLimitExceeded(loc, ScanWork, state.limits.max_work),
-    )
+  if budget_error(state.budget, nodes, work, loc) is Some(error) {
+    scan_abort(state, error)
   }
   state.stats.nodes += nodes
   state.stats.work += work
@@ -339,11 +327,12 @@ fn output_ring(
   state : ScanState,
   anchor : OutPtId,
 ) -> Array[OutPtId] raise ScanAbort {
+  output_spend(state, 1, 0)
   let result = []
   let mut cursor = anchor
   for steps = 0; steps <= state.output.points.length(); steps = steps + 1 {
     let node = output_point(state, cursor)
-    output_spend(state, 0, 1)
+    output_spend(state, 1, 1)
     result.push(cursor)
     cursor = node.next
     if cursor == anchor {
@@ -646,6 +635,7 @@ fn output_finalize(
   for id = 0; id < state.output.records.length(); id = id + 1 {
     if state.output.records[id].status == Closed &&
       state.output.records[id].anchor is Some(_) {
+      output_spend(state, 1, 0)
       ids.push(id)
     }
   }
@@ -661,7 +651,7 @@ fn output_snapshot(
   let result = []
   for id in ids {
     let nodes = output_ring(state, state.output.records[id].anchor.unwrap())
-    output_spend(state, 1, nodes.length())
+    output_spend(state, nodes.length() + 2, nodes.length())
     result.push(nodes.map(fn(n) { state.output.points[n].point }))
   }
   result
@@ -670,10 +660,21 @@ fn output_snapshot(
 ///|
 /// Bounded read-only diagnostics, including after resource failure.
 #warnings("-unused_value")
-fn output_invariants(state : ScanState) -> Result[Unit, String] {
+fn output_invariants(
+  state : ScanState,
+  metered? : Bool = false,
+) -> Result[Unit, String] {
   let out = state.output
+  match validation_charge(state, metered, out.points.length() + 1, 0) {
+    Ok(_) => ()
+    Err(e) => return Err(e)
+  }
   let seen = Array::make(out.points.length(), false)
   for id = 0; id < out.records.length(); id = id + 1 {
+    match validation_charge(state, metered, 0, 1) {
+      Ok(_) => ()
+      Err(e) => return Err(e)
+    }
     let rec = out.records[id]
     if rec.revision < 0 {
       return Err("Invalid topology revision")
@@ -681,6 +682,10 @@ fn output_invariants(state : ScanState) -> Result[Unit, String] {
     let mut root = id
     let mut steps = 0
     while out.records[root].status is Redirect(next) {
+      match validation_charge(state, metered, 0, 1) {
+        Ok(_) => ()
+        Err(e) => return Err(e)
+      }
       if next < 0 ||
         next >= out.records.length() ||
         steps >= out.records.length() {
@@ -702,6 +707,10 @@ fn output_invariants(state : ScanState) -> Result[Unit, String] {
     }
     let mut cursor = anchor
     for count = 0; count <= out.points.length(); count = count + 1 {
+      match validation_charge(state, metered, 0, 1) {
+        Ok(_) => ()
+        Err(e) => return Err(e)
+      }
       if cursor < 0 || cursor >= out.points.length() {
         return Err("Invalid output node")
       }
@@ -731,7 +740,15 @@ fn output_invariants(state : ScanState) -> Result[Unit, String] {
       (rec.front_edge is Some(_) || rec.back_edge is Some(_)) {
       return Err("Closed record retains active ends")
     }
+    match validation_charge(state, metered, 3, 0) {
+      Ok(_) => ()
+      Err(e) => return Err(e)
+    }
     for (handle, side) in [(rec.front_edge, Front), (rec.back_edge, Back)] {
+      match validation_charge(state, metered, 0, 1) {
+        Ok(_) => ()
+        Err(e) => return Err(e)
+      }
       if handle is Some(e) {
         guard edge_peek(state, e) is Some(edge) else {
           return Err("Stale output edge")
@@ -749,11 +766,19 @@ fn output_invariants(state : ScanState) -> Result[Unit, String] {
     }
   }
   for i = 0; i < out.points.length(); i = i + 1 {
+    match validation_charge(state, metered, 0, 1) {
+      Ok(_) => ()
+      Err(e) => return Err(e)
+    }
     if out.points[i].alive != seen[i] {
       return Err("Orphan output point")
     }
   }
   for slot in state.slots {
+    match validation_charge(state, metered, 0, 1) {
+      Ok(_) => ()
+      Err(e) => return Err(e)
+    }
     if slot.edge is Some(edge) && edge.output_end is Some(end) {
       if end.record < 0 || end.record >= out.records.length() {
         return Err("Invalid active output record")

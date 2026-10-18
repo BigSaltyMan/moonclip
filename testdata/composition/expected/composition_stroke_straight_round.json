@@ -1,0 +1,103 @@
+{
+  "adapter_protocol_version": 4,
+  "case_id": "composition_stroke_straight_round",
+  "final": {
+    "paths": [
+      [
+        [
+          20,
+          12
+        ],
+        [
+          0,
+          12
+        ],
+        [
+          0,
+          8
+        ],
+        [
+          20,
+          8
+        ]
+      ]
+    ]
+  },
+  "format_version": 4,
+  "input_sha256": "c6f0268561cedd40aea81c353511675d424e4327890dd5c8ece401499de0849c",
+  "intermediate": {
+    "paths": [
+      [
+        [
+          32,
+          9
+        ],
+        [
+          32,
+          11
+        ],
+        [
+          30,
+          12
+        ],
+        [
+          -10,
+          12
+        ],
+        [
+          -12,
+          11
+        ],
+        [
+          -12,
+          9
+        ],
+        [
+          -10,
+          8
+        ],
+        [
+          30,
+          8
+        ]
+      ]
+    ]
+  },
+  "metrics": {
+    "final": {
+      "path_count": 1,
+      "paths": [
+        {
+          "area2": "160",
+          "bounds": [
+            0,
+            8,
+            20,
+            12
+          ],
+          "vertices": 4
+        }
+      ],
+      "vertex_count": 4
+    },
+    "intermediate": {
+      "path_count": 1,
+      "paths": [
+        {
+          "area2": "344",
+          "bounds": [
+            -12,
+            8,
+            32,
+            12
+          ],
+          "vertices": 8
+        }
+      ],
+      "vertex_count": 8
+    }
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "recipe": "StrokeThenIntersection",
+  "status": "success"
+}

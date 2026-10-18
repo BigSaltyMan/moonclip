@@ -452,13 +452,17 @@ fn[T] boolean_compute(
     for i = 0; i < state.output.joins.length(); i = i + 1 {
       execute_horizontal_join(state, i, state.output.joins[i].opposed)
     }
-    match engine_invariants(state) {
+    match engine_invariants(state, metered=true) {
       Ok(_) => ()
-      Err(message) =>
+      Err(message) => {
+        if state.failure is Some(error) {
+          raise ScanAbort(error)
+        }
         scan_abort(
           state,
           ExecutionFailure(location(BooleanOp, None, None), message),
         )
+      }
     }
     boolean_join_seams(state)
     let result = extract(state)
@@ -661,6 +665,7 @@ fn boolean_join_seams(state : ScanState) -> Unit raise ScanAbort {
   let mut changed = true
   while changed {
     changed = false
+    output_spend(state, 1, 0)
     let arcs : Array[OutPtId] = []
     for i = 0; i < state.output.records.length(); i = i + 1 {
       output_spend(state, 0, 1)
@@ -669,7 +674,7 @@ fn boolean_join_seams(state : ScanState) -> Unit raise ScanAbort {
         output_clean(state, i, false)
         if rec.anchor is Some(anchor) {
           let nodes = output_ring(state, anchor)
-          output_spend(state, 0, nodes.length())
+          output_spend(state, nodes.length(), nodes.length())
           for n in nodes {
             arcs.push(n)
           }

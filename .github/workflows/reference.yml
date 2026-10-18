@@ -37,3 +37,7 @@ jobs:
         run: bash scripts/generate_reference.sh --manifest testdata/stroke-manifest.json --check
       - name: Check offline stroke catalog
         run: python scripts/check_reference.py --manifest testdata/stroke-manifest.json --strict
+      - name: Rebuild and compare all two-step composition reference results
+        run: bash scripts/generate_reference.sh --manifest testdata/composition-manifest.json --check
+      - name: Check offline composition catalog
+        run: python scripts/check_reference.py --manifest testdata/composition-manifest.json --strict

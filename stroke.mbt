@@ -114,7 +114,7 @@ fn stroke_generate(
   } else {
     None
   }
-  offset_spend(budget, n, n)
+  offset_spend(budget, n + 1, n)
   let normals : Array[OffsetVector] = Array::makei(n, fn(i) raise ScanAbort {
     if i == n - 1 {
       { x: 0.0, y: 0.0, }
@@ -122,7 +122,7 @@ fn stroke_generate(
       offset_unit(path[i], path[i + 1], stage=budget.generate_stage)
     }
   })
-  offset_spend(budget, 2, 1)
+  offset_spend(budget, 3, 1)
   let output : Path64 = []
   stroke_cap(output, path[0], normals[0], radius, cap, arc, budget)
   for j = 1; j < n - 1; j = j + 1 {

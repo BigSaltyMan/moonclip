@@ -17,7 +17,9 @@ def main():
         _, records = read_manifest(ROOT, args.manifest.resolve(), strict=args.strict)
         print(f"Reference cases: {len(records)}; integrity only; geometry execution is checked separately by cmd/conformance")
         print("Operations: " + str(dict(sorted(Counter(c['operation'] for _, c, _, _ in records).items()))))
-        if all(c['operation']=='StrokePolyline' for _,c,_,_ in records):
+        if all(c['operation']=='Composition' for _,c,_,_ in records):
+            print('Recipes: '+str(dict(sorted(Counter(c['recipe'] for _,c,_,_ in records).items()))))
+        elif all(c['operation']=='StrokePolyline' for _,c,_,_ in records):
             for field in ('join_type','cap_type','width','miter_limit','arc_tolerance'):
                 print(field+': '+str(dict(sorted(Counter(c[field] for _,c,_,_ in records).items()))))
         else:

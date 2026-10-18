@@ -1,0 +1,70 @@
+{
+  "case_id": "composition_inset_hole_d2",
+  "format_version": 4,
+  "operation": "Composition",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "recipe": "InsetThenTree",
+  "source": {
+    "group": "inset_hole",
+    "intent": "InsetThenTree; real intermediate; d2",
+    "kind": "moonclip_constructed"
+  },
+  "steps": [
+    {
+      "arc_tolerance": 0.0,
+      "delta": -2.0,
+      "fill_rule": "NonZero",
+      "format_version": 2,
+      "join_type": "Miter",
+      "miter_limit": 2.0,
+      "operation": "OffsetPolygons",
+      "paths": [
+        [
+          [
+            0,
+            0
+          ],
+          [
+            40,
+            0
+          ],
+          [
+            40,
+            40
+          ],
+          [
+            0,
+            40
+          ]
+        ],
+        [
+          [
+            8,
+            32
+          ],
+          [
+            32,
+            32
+          ],
+          [
+            32,
+            8
+          ],
+          [
+            8,
+            8
+          ]
+        ]
+      ]
+    },
+    {
+      "clip": [],
+      "fill_rule": "NonZero",
+      "format_version": 1,
+      "operation": "Union"
+    }
+  ]
+}

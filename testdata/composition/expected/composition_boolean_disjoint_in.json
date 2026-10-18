@@ -1,0 +1,115 @@
+{
+  "adapter_protocol_version": 4,
+  "case_id": "composition_boolean_disjoint_in",
+  "final": {
+    "paths": [
+      [
+        [
+          28,
+          2
+        ],
+        [
+          28,
+          8
+        ],
+        [
+          22,
+          8
+        ],
+        [
+          22,
+          2
+        ]
+      ]
+    ]
+  },
+  "format_version": 4,
+  "input_sha256": "b8a83b7ae451bc790800343ede2c3b17002898f912d61d70c7690bd1d48f1b06",
+  "intermediate": {
+    "paths": [
+      [
+        [
+          30,
+          10
+        ],
+        [
+          20,
+          10
+        ],
+        [
+          20,
+          0
+        ],
+        [
+          30,
+          0
+        ]
+      ],
+      [
+        [
+          3,
+          3
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          3,
+          0
+        ]
+      ]
+    ]
+  },
+  "metrics": {
+    "final": {
+      "path_count": 1,
+      "paths": [
+        {
+          "area2": "72",
+          "bounds": [
+            22,
+            2,
+            28,
+            8
+          ],
+          "vertices": 4
+        }
+      ],
+      "vertex_count": 4
+    },
+    "intermediate": {
+      "path_count": 2,
+      "paths": [
+        {
+          "area2": "200",
+          "bounds": [
+            20,
+            0,
+            30,
+            10
+          ],
+          "vertices": 4
+        },
+        {
+          "area2": "18",
+          "bounds": [
+            0,
+            0,
+            3,
+            3
+          ],
+          "vertices": 4
+        }
+      ],
+      "vertex_count": 8
+    }
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "recipe": "BooleanThenOffset",
+  "status": "success"
+}

@@ -1,0 +1,71 @@
+{
+  "case_id": "composition_boolean_overlap_out",
+  "format_version": 4,
+  "operation": "Composition",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "recipe": "BooleanThenOffset",
+  "source": {
+    "group": "boolean_overlap",
+    "intent": "BooleanThenOffset; real intermediate; out",
+    "kind": "moonclip_constructed"
+  },
+  "steps": [
+    {
+      "clip": [
+        [
+          [
+            5,
+            0
+          ],
+          [
+            15,
+            0
+          ],
+          [
+            15,
+            10
+          ],
+          [
+            5,
+            10
+          ]
+        ]
+      ],
+      "fill_rule": "NonZero",
+      "format_version": 1,
+      "operation": "Union",
+      "subject": [
+        [
+          [
+            0,
+            0
+          ],
+          [
+            10,
+            0
+          ],
+          [
+            10,
+            10
+          ],
+          [
+            0,
+            10
+          ]
+        ]
+      ]
+    },
+    {
+      "arc_tolerance": 0.0,
+      "delta": 2.0,
+      "fill_rule": "NonZero",
+      "format_version": 2,
+      "join_type": "Miter",
+      "miter_limit": 2.0,
+      "operation": "OffsetPolygons"
+    }
+  ]
+}

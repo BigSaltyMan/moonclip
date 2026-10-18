@@ -1,0 +1,61 @@
+{
+  "case_id": "composition_stroke_cap_round",
+  "format_version": 4,
+  "operation": "Composition",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "recipe": "StrokeThenIntersection",
+  "source": {
+    "group": "stroke_cap",
+    "intent": "StrokeThenIntersection; real intermediate; round",
+    "kind": "moonclip_constructed"
+  },
+  "steps": [
+    {
+      "arc_tolerance": 0.0,
+      "cap_type": "Round",
+      "format_version": 3,
+      "join_type": "Miter",
+      "miter_limit": 2.0,
+      "operation": "StrokePolyline",
+      "path": [
+        [
+          0,
+          10
+        ],
+        [
+          18,
+          10
+        ]
+      ],
+      "width": 4.0
+    },
+    {
+      "clip": [
+        [
+          [
+            0,
+            0
+          ],
+          [
+            20,
+            0
+          ],
+          [
+            20,
+            20
+          ],
+          [
+            0,
+            20
+          ]
+        ]
+      ],
+      "fill_rule": "NonZero",
+      "format_version": 1,
+      "operation": "Intersection"
+    }
+  ]
+}

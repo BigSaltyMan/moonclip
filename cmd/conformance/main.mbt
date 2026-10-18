@@ -50,6 +50,7 @@ fn main {
     "results": run_cases().to_json(),
     "offset_results": run_offset_cases().to_json(),
     "stroke_results": run_stroke_cases().to_json(),
+    "composition_results": run_composition_cases().to_json(),
   })
   exit_code(report(@utf8.encode(envelope.stringify())))
 }
@@ -117,4 +118,56 @@ fn actual_offset_case(
         "error": error.message().to_json(),
       })
   }
+}
+
+///|
+fn composition_failure(
+  id : String,
+  digest : String,
+  step : Int,
+  error : @moonclip.ClipError,
+  intermediate? : @moonclip.Paths64,
+) -> Json {
+  let fields : Map[String, Json] = {
+    "case_id": id.to_json(),
+    "input_sha256": digest.to_json(),
+    "status": "error".to_json(),
+    "failure_step": step.to_json(),
+    "error": error.message().to_json(),
+  }
+  if intermediate is Some(value) {
+    fields["intermediate"] = Json::object({ "paths": composition_paths(value) })
+  }
+  Json::object(fields)
+}
+
+///|
+fn composition_paths(value : @moonclip.Paths64) -> Json {
+  value
+  .map(fn(path) { path.map(fn(p) { [p.x.to_int(), p.y.to_int()] }) })
+  .to_json()
+}
+
+///|
+fn composition_success(
+  id : String,
+  digest : String,
+  recipe : String,
+  intermediate : @moonclip.Paths64,
+  outcome : @moonclip.Paths64,
+  tree? : Json,
+) -> Json {
+  let result : Map[String, Json] = { "paths": composition_paths(outcome) }
+  if tree is Some(value) {
+    result["tree"] = value
+  }
+  Json::object({
+    "case_id": id.to_json(),
+    "input_sha256": digest.to_json(),
+    "status": "success".to_json(),
+    "format_version": (4).to_json(),
+    "recipe": recipe.to_json(),
+    "intermediate": Json::object({ "paths": composition_paths(intermediate) }),
+    "final": Json::object(result),
+  })
 }

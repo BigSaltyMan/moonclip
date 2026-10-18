@@ -121,6 +121,54 @@ def evaluate_stroke(manifest, results):
     return {**summary(details),'required':276,'reference_cases':276,'capability':'public paths','cases':details,'coverage':coverage}
 
 
+def evaluate_composition(manifest,results):
+    from composition_compare import composition_selection,validate_composition_geometry
+    from compare import read_manifest,keys
+    from collections import Counter
+    _,records=read_manifest(ROOT,manifest,strict=True)
+    _,selected=composition_selection(ROOT)
+    require(records==selected,'composition','manifest differs from locked selection')
+    require(type(results) is list,'composition actual','expected results array')
+    actual={}
+    for r in results:
+        require(type(r) is dict and type(r.get('case_id')) is str,'composition actual','missing ID')
+        require(r['case_id'] not in actual,r['case_id'],'duplicate composition result');actual[r['case_id']]=r
+    require(set(actual)=={e['case_id'] for e,_,_,_ in records},'composition actual','missing or extra recipes')
+    details=[]
+    def compare_stage(detail,label,want,got,tree=False):
+        try:
+            compare_paths(want['paths'],got['paths'],detail['case_id']+'.'+label)
+            if tree:compare_tree(want['tree'],got['tree'],detail['case_id']+'.'+label+'.tree')
+        except Invalid as error:detail.update({label:'difference',label+'_message':str(error)})
+        else:detail[label]='passed'
+    for e,c,d,expected in records:
+        r=actual[c['case_id']];cid=c['case_id']
+        require(r.get('input_sha256')==d,cid,'compiled recipe hash mismatch')
+        detail={'case_id':cid,'recipe':c['recipe']}
+        if r.get('status')=='error':
+            step=r.get('failure_step');require(type(step) is int and step in (1,2),cid,'missing/invalid failure step')
+            fields={'case_id','input_sha256','status','error','failure_step'}
+            if step==2:fields.add('intermediate')
+            keys(r,fields,cid);require(type(r['error']) is str,cid,'invalid error')
+            if step==2:
+                keys(r['intermediate'],{'paths'},cid+'.intermediate');validate_paths(r['intermediate']['paths'],cid,True)
+                compare_stage(detail,'intermediate',expected['intermediate'],r['intermediate'])
+            else:detail['intermediate']='execution_error'
+            detail.update(status='execution_error',final='execution_error' if step==2 else 'not_executed',failure_step=step,message=r['error'])
+        else:
+            keys(r,{'case_id','input_sha256','status','format_version','recipe','intermediate','final'},cid)
+            require(r['recipe']==c['recipe'],cid,'actual recipe mismatch');validate_composition_geometry(r,cid)
+            compare_stage(detail,'intermediate',expected['intermediate'],r['intermediate'])
+            compare_stage(detail,'final',expected['final'],r['final'],c['recipe']=='InsetThenTree')
+            detail['status']='passed' if detail['intermediate']==detail['final']=='passed' else 'difference'
+        details.append(detail)
+    report={**summary(details),'required':24,'reference_cases':24,'cases':details,'recipes':dict(Counter(c['recipe'] for _,c,_,_ in records))}
+    for stage in ('intermediate','final'):
+        skipped=sum(r[stage]=='not_executed' for r in details)
+        report[stage]={**summary(details,stage),'required':24,'executed':len(details)-skipped,'not_executed':skipped}
+    return report
+
+
 def markdown(report):
     lines=['# Boolean compatibility','','Pinned Clipper2 2.0.1, commit `21ebba05db8894f0c7217ad35ea518080f324946`; ordinary precision, preserve_collinear=false, reverse_solution=false.','',
       f"Public cases: {report['required']}; both passed={report['passed']}, differences={report['differences']}, execution_errors={report['execution_errors']}. Reference catalog: {report['reference_cases']}.",'',
@@ -158,6 +206,19 @@ def markdown(report):
             lines.append('| '+target+' | '+value+' |')
         lines+=['','| Stroke case | Native paths |','| --- | --- |']
         lines += [f"| {c['case_id']} | {c['status']} |" for c in r['cases']]
+    if 'composition' in report:
+        r=report['composition']
+        lines+=['','# Composition compatibility','',f"Independent recipes: {r['passed']}/{r['executed']}; required=24; differences={r['differences']}; execution_errors={r['execution_errors']}. Boolean200 + Offset272 + Stroke276 + Composition24 =772 independent inputs.",'',
+          'Each recipe counts once. Both real intermediate and final outputs are compared. InsetThenTree includes strict parentage and winding. Public calls each own a fresh budget; resource rejection tests are MoonClip functional evidence, not Clipper2 resource compatibility.','',
+          '| Recipe | Cases |','| --- | ---: |']
+        lines += [f"| {name} | {count} |" for name,count in sorted(r['recipes'].items())]
+        lines+=['','| Target | Composition filtered recipes |','| --- | --- |']
+        for target in ('native','js'):
+            e=report.get('composition_evidence',{}).get(target,{})
+            value=str(e['passed'])+'/'+str(e['executed']) if e.get('status')=='passed' else 'not recorded'
+            lines.append('| '+target+' | '+value+' |')
+        lines+=['','| Recipe ID | Intermediate | Final | Status | Failure step |','| --- | --- | --- | --- | --- |']
+        lines += [f"| {c['case_id']} | {c['intermediate']} | {c['final']} | {c['status']} | {c.get('failure_step','')} |" for c in r['cases']]
     return '\n'.join(lines)+'\n'
 
 def main():
@@ -165,19 +226,23 @@ def main():
     parser.add_argument('--manifest',type=Path,default=ROOT/'testdata/manifest.json')
     parser.add_argument('--offset-manifest',type=Path,help='Include independently executed offset protocol v2 cases')
     parser.add_argument('--stroke-manifest',type=Path,help='Include independent open stroke protocol v3 cases')
+    parser.add_argument('--composition-manifest',type=Path,help='Include fixed two-step protocol v4 recipes')
     parser.add_argument('--report-json',type=Path,default=ROOT/'_build/conformance/report.json')
     parser.add_argument('--report-md',type=Path,default=ROOT/'docs/compatibility.md')
     parser.add_argument('--strict',action='store_true',help='Require exactly 152 public cases with independent paths and tree results (also enforced by default)')
     try:
         envelope=json.load(sys.stdin);args=parser.parse_args(envelope['args'][1:])
         report=evaluate(args.manifest.resolve(),envelope['results'])
-        from evidence import internal_evidence,tree_evidence,offset_evidence,stroke_evidence
+        from evidence import internal_evidence,tree_evidence,offset_evidence,stroke_evidence,composition_evidence
         if args.offset_manifest:
             report['offset']=evaluate_offset(args.offset_manifest.resolve(),envelope.get('offset_results'))
             report['offset_evidence']=offset_evidence(ROOT/'_build/conformance')
         if args.stroke_manifest:
             report['stroke']=evaluate_stroke(args.stroke_manifest.resolve(),envelope.get('stroke_results'))
             report['stroke_evidence']=stroke_evidence(ROOT/'_build/conformance')
+        if args.composition_manifest:
+            report['composition']=evaluate_composition(args.composition_manifest.resolve(),envelope.get('composition_results'))
+            report['composition_evidence']=composition_evidence(ROOT/'_build/conformance')
         report['internal']=internal_evidence(ROOT/'_build/conformance')
         report['tree_evidence']=tree_evidence(ROOT/'_build/conformance')
         args.report_json.parent.mkdir(parents=True,exist_ok=True);args.report_md.parent.mkdir(parents=True,exist_ok=True)
@@ -189,7 +254,10 @@ def main():
         stroke=report.get('stroke',{})
         if stroke:
             print(f"Native stroke conformance: cases=276, paths={stroke['passed']}/{stroke['executed']}, differences={stroke['differences']}, execution_errors={stroke['execution_errors']}")
-        return 2 if any(r.get('execution_errors') for r in (report,offset,stroke)) else 1 if any(r.get('differences') for r in (report,offset,stroke)) else 0
+        composition=report.get('composition',{})
+        if composition:
+            print(f"Native composition conformance: recipes=24, intermediate={composition['intermediate']['passed']}/24, final={composition['final']['passed']}/24, both={composition['passed']}, differences={composition['differences']}, execution_errors={composition['execution_errors']}")
+        return 2 if any(r.get('execution_errors') for r in (report,offset,stroke,composition)) else 1 if any(r.get('differences') for r in (report,offset,stroke,composition)) else 0
     except (Invalid,OSError,ValueError,KeyError,TypeError) as error:
         print(f'Conformance error: {error}',file=sys.stderr);return 2
 if __name__=='__main__':sys.exit(main())

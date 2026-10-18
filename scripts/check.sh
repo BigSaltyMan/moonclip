@@ -20,16 +20,23 @@ if [[ -n "$untracked_interfaces" ]]; then
 fi
 printf 'Checking native target\n'
 moon check --target native --deny-warn
-moon test --target native
+mkdir -p _build/conformance
+moon test --target native | tee _build/conformance/all-native.log
+grep -Fxq "Total tests: 1414, passed: 1414, failed: 0." _build/conformance/all-native.log
 moon build --target native
 moon run --target native cmd/example
 printf 'Checking JS target\n'
 node --version
 moon check --target js --deny-warn
-moon test --target js
+moon test --target js | tee _build/conformance/all-js.log
+grep -Fxq "Total tests: 1414, passed: 1414, failed: 0." _build/conformance/all-js.log
 moon fmt --check
 mkdir -p _build/conformance
 for target in native js; do
+  { printf 'Selection: reference composition: *\n'; moon test --target "$target" --filter "reference composition: *"; } | tee "_build/conformance/composition-$target.log"
+  grep -Fxq 'Total tests: 24, passed: 24, failed: 0.' "_build/conformance/composition-$target.log"
+  { printf 'Selection: reference paths: *\n'; moon test --target "$target" --filter "reference paths: *"; } | tee "_build/conformance/paths-$target.log"
+  grep -Fxq 'Total tests: 152, passed: 152, failed: 0.' "_build/conformance/paths-$target.log"
   { printf 'Selection: reference stroke paths: *\n'; moon test --target "$target" --filter "reference stroke paths: *"; } | tee "_build/conformance/stroke-$target.log"
   grep -Fxq 'Total tests: 276, passed: 276, failed: 0.' "_build/conformance/stroke-$target.log"
   { printf 'Selection: reference offset paths: *\n'; moon test --target "$target" --filter "reference offset paths: *"; } | tee "_build/conformance/offset-$target.log"
@@ -55,6 +62,8 @@ python scripts/check_reference.py --manifest testdata/offset-manifest.json --str
 python tools/conformance/generate_offset.py --check
 python scripts/check_reference.py --manifest testdata/stroke-manifest.json --strict
 python tools/conformance/generate_stroke.py --check
-moon run --target native cmd/conformance -- --manifest testdata/manifest.json --offset-manifest testdata/offset-manifest.json --stroke-manifest testdata/stroke-manifest.json --report-json _build/conformance/report.json --report-md docs/compatibility.md --strict
+python scripts/check_reference.py --manifest testdata/composition-manifest.json --strict
+python tools/conformance/generate_composition.py --check
+moon run --target native cmd/conformance -- --manifest testdata/manifest.json --offset-manifest testdata/offset-manifest.json --stroke-manifest testdata/stroke-manifest.json --composition-manifest testdata/composition-manifest.json --report-json _build/conformance/report.json --report-md docs/compatibility.md --strict
 git diff --exit-code -- docs/compatibility.md
 git diff --check

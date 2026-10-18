@@ -45,6 +45,8 @@ def expected_directory(records):
         return 'testdata/upstream/expected'
     if operations == {'OffsetPolygons'}:
         return 'testdata/offset/expected'
+    if operations == {'Composition'}:
+        return 'testdata/composition/expected'
     if operations == {'StrokePolyline'}:
         return 'testdata/stroke/expected'
     raise Invalid('generation: unknown or mixed reference category')

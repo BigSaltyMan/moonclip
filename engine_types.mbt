@@ -327,20 +327,8 @@ fn scan_reserve(
   loc : ErrorLocation,
 ) -> Unit raise ScanAbort {
   scan_live(state)
-  if nodes < 0 || work < 0 {
-    scan_abort(state, InvalidInput(loc, "Budget charges must be non-negative"))
-  }
-  if nodes > state.limits.max_nodes - state.stats.nodes {
-    scan_abort(
-      state,
-      ResourceLimitExceeded(loc, InternalNodes, state.limits.max_nodes),
-    )
-  }
-  if work > state.limits.max_work - state.stats.work {
-    scan_abort(
-      state,
-      ResourceLimitExceeded(loc, ScanWork, state.limits.max_work),
-    )
+  if budget_error(state.budget, nodes, work, loc) is Some(error) {
+    scan_abort(state, error)
   }
 }
 
@@ -641,6 +629,7 @@ fn scan_cleanup(state : ScanState) -> Unit {
 fn scan_invariants(
   state : ScanState,
   stable? : Bool = false,
+  metered? : Bool = false,
 ) -> Result[Unit, String] {
   if state.stats.nodes < 0 ||
     state.stats.nodes > state.limits.max_nodes ||
@@ -652,13 +641,29 @@ fn scan_invariants(
     state.stats.horizontal_steps > state.stats.work {
     return Err("Invalid execution statistics")
   }
+  match validation_charge(state, metered, 1, 0) {
+    Ok(_) => ()
+    Err(e) => return Err(e)
+  }
   let owned : Set[Int] = Default::default()
   for p = 0; p < state.paths.length(); p = p + 1 {
+    match validation_charge(state, metered, 0, 1) {
+      Ok(_) => ()
+      Err(e) => return Err(e)
+    }
     let path = state.paths[p]
     for i = 0; i < path.vertices.length(); i = i + 1 {
+      match validation_charge(state, metered, 0, 1) {
+        Ok(_) => ()
+        Err(e) => return Err(e)
+      }
       let id = path.vertices[i]
       if id < 0 || id >= state.vertices.length() || owned.contains(id) {
         return Err("Invalid or multiply owned vertex index")
+      }
+      match validation_charge(state, metered, 1, 0) {
+        Ok(_) => ()
+        Err(e) => return Err(e)
       }
       owned.add(id)
       let vertex = state.vertices[id]
@@ -681,6 +686,10 @@ fn scan_invariants(
     return Err("Unowned internal vertices")
   }
   for minimum in state.minima {
+    match validation_charge(state, metered, 0, 1) {
+      Ok(_) => ()
+      Err(e) => return Err(e)
+    }
     if minimum.vertex < 0 ||
       minimum.vertex >= state.vertices.length() ||
       !state.vertices[minimum.vertex].enter {
@@ -688,6 +697,10 @@ fn scan_invariants(
     }
   }
   for chain in state.chains {
+    match validation_charge(state, metered, 0, 1) {
+      Ok(_) => ()
+      Err(e) => return Err(e)
+    }
     if chain.minima < 0 ||
       chain.minima >= state.minima.length() ||
       chain.vertices.length() < 2 ||
@@ -698,6 +711,10 @@ fn scan_invariants(
       return Err("Boundary origin mismatch")
     }
     for i = 0; i < chain.vertices.length(); i = i + 1 {
+      match validation_charge(state, metered, 0, 1) {
+        Ok(_) => ()
+        Err(e) => return Err(e)
+      }
       let id = chain.vertices[i]
       if id < 0 || id >= state.vertices.length() {
         return Err("Invalid boundary vertex reference")
@@ -717,6 +734,10 @@ fn scan_invariants(
   }
   // Validate slot payloads before following chain identifiers in linked lists.
   for slot in state.slots {
+    match validation_charge(state, metered, 0, 1) {
+      Ok(_) => ()
+      Err(e) => return Err(e)
+    }
     if slot.edge is Some(edge) {
       if edge.chain < 0 || edge.chain >= state.chains.length() {
         return Err("Invalid active boundary chain")
@@ -732,6 +753,10 @@ fn scan_invariants(
   }
   let mut alive = 0
   for slot in state.slots {
+    match validation_charge(state, metered, 0, 1) {
+      Ok(_) => ()
+      Err(e) => return Err(e)
+    }
     if slot.edge is Some(_) {
       alive += 1
     }
@@ -739,31 +764,71 @@ fn scan_invariants(
   if alive != state.live_edges {
     return Err("Live edge count mismatch")
   }
+  match validation_charge(state, metered, 1, 0) {
+    Ok(_) => ()
+    Err(e) => return Err(e)
+  }
   let free : Set[Int] = Default::default()
   for index in state.free_slots {
+    match validation_charge(state, metered, 0, 1) {
+      Ok(_) => ()
+      Err(e) => return Err(e)
+    }
     if index < 0 ||
       index >= state.slots.length() ||
       state.slots[index].edge is Some(_) ||
       free.contains(index) {
       return Err("Invalid free slot list")
     }
+    match validation_charge(state, metered, 1, 0) {
+      Ok(_) => ()
+      Err(e) => return Err(e)
+    }
     free.add(index)
   }
+  match validation_charge(state, metered, 1, 0) {
+    Ok(_) => ()
+    Err(e) => return Err(e)
+  }
   let ael : Set[Int] = Default::default()
+  match validation_charge(state, metered, 1, 0) {
+    Ok(_) => ()
+    Err(e) => return Err(e)
+  }
   let sel : Set[Int] = Default::default()
+  match validation_charge(state, metered, 1, 0) {
+    Ok(_) => ()
+    Err(e) => return Err(e)
+  }
   let queued : Set[Int] = Default::default()
+  match validation_charge(state, metered, 3, 0) {
+    Ok(_) => ()
+    Err(e) => return Err(e)
+  }
   for auxiliary in [false, true] {
+    match validation_charge(state, metered, 0, 1) {
+      Ok(_) => ()
+      Err(e) => return Err(e)
+    }
     let seen = if auxiliary { sel } else { ael }
     let mut previous : EdgeId? = None
     let mut cursor = if auxiliary { state.sel_head } else { state.ael_head }
     let mut previous_x : Int64? = None
     let mut wind = 0
     while cursor is Some(id) {
+      match validation_charge(state, metered, 0, 1) {
+        Ok(_) => ()
+        Err(e) => return Err(e)
+      }
       if seen.contains(id.slot) {
         return Err("Cycle or duplicate edge in linked chain")
       }
       guard edge_peek(state, id) is Some(edge) else {
         return Err("Linked chain contains stale handle")
+      }
+      match validation_charge(state, metered, 1, 0) {
+        Ok(_) => ()
+        Err(e) => return Err(e)
       }
       seen.add(id.slot)
       if auxiliary {
@@ -797,6 +862,10 @@ fn scan_invariants(
     }
   }
   for id in state.horizontal_queue {
+    match validation_charge(state, metered, 0, 1) {
+      Ok(_) => ()
+      Err(e) => return Err(e)
+    }
     guard edge_peek(state, id) is Some(edge) else {
       return Err("Stale queued horizontal")
     }
@@ -805,6 +874,10 @@ fn scan_invariants(
       !edge.queued_horizontal ||
       edge.horizontal == NonHorizontal {
       return Err("Invalid horizontal queue membership")
+    }
+    match validation_charge(state, metered, 1, 0) {
+      Ok(_) => ()
+      Err(e) => return Err(e)
     }
     queued.add(id.slot)
   }
@@ -819,6 +892,10 @@ fn scan_invariants(
     }
   }
   for i = 0; i < state.slots.length(); i = i + 1 {
+    match validation_charge(state, metered, 0, 1) {
+      Ok(_) => ()
+      Err(e) => return Err(e)
+    }
     match state.slots[i].edge {
       None =>
         if !state.cleaned && !free.contains(i) {
@@ -852,6 +929,10 @@ fn scan_invariants(
     }
   }
   for event in state.exits {
+    match validation_charge(state, metered, 0, 1) {
+      Ok(_) => ()
+      Err(e) => return Err(e)
+    }
     if event.vertex < 0 ||
       event.vertex >= state.vertices.length() ||
       event.first_chain < 0 ||
@@ -899,5 +980,81 @@ fn scan_invariants(
     }
     _ => ()
   }
+  Ok(())
+}
+
+///|
+// Pure preflight: both checks precede the paired update.
+fn budget_error(
+  budget : CallBudget,
+  nodes : Int,
+  work : Int,
+  loc : ErrorLocation,
+) -> ClipError? {
+  if nodes < 0 || work < 0 {
+    return Some(InvalidInput(loc, "Budget charges must be non-negative"))
+  }
+  if nodes > budget.limits.max_nodes - budget.stats.nodes {
+    return Some(
+      ResourceLimitExceeded(loc, InternalNodes, budget.limits.max_nodes),
+    )
+  }
+  if work > budget.limits.max_work - budget.stats.work {
+    return Some(ResourceLimitExceeded(loc, ScanWork, budget.limits.max_work))
+  }
+  None
+}
+
+///|
+fn budget_spend(
+  budget : CallBudget,
+  nodes : Int,
+  work : Int,
+  loc : ErrorLocation,
+) -> Unit raise ScanAbort {
+  if budget_error(budget, nodes, work, loc) is Some(error) {
+    raise ScanAbort(error)
+  }
+  budget.stats.nodes += nodes
+  budget.stats.work += work
+}
+
+///|
+// Diagnostic entry points remain usable after failure; production opts into metering.
+fn validation_charge(
+  state : ScanState,
+  metered : Bool,
+  nodes : Int,
+  work : Int,
+) -> Result[Unit, String] {
+  if !metered {
+    return Ok(())
+  }
+  if state.failure is Some(_) {
+    return Err("Validation already failed")
+  }
+  if state.cleaned {
+    state.failure = Some(
+      InvalidInput(
+        location(OutputTopology, None, None),
+        "Validation state has been cleaned",
+      ),
+    )
+    state.phase = Failed
+    return Err("Validation state has been cleaned")
+  }
+  if budget_error(
+      state.budget,
+      nodes,
+      work,
+      location(OutputTopology, None, None),
+    )
+    is Some(error) {
+    state.failure = Some(error)
+    state.phase = Failed
+    return Err("Validation budget exhausted")
+  }
+  state.stats.nodes += nodes
+  state.stats.work += work
   Ok(())
 }

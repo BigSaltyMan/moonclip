@@ -1,0 +1,192 @@
+{
+  "adapter_protocol_version": 4,
+  "case_id": "composition_inset_island_d4",
+  "final": {
+    "paths": [
+      [
+        [
+          76,
+          76
+        ],
+        [
+          4,
+          76
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          76,
+          4
+        ]
+      ],
+      [
+        [
+          6,
+          74
+        ],
+        [
+          74,
+          74
+        ],
+        [
+          74,
+          6
+        ],
+        [
+          6,
+          6
+        ]
+      ]
+    ],
+    "tree": {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [],
+              "path": [
+                [
+                  6,
+                  74
+                ],
+                [
+                  74,
+                  74
+                ],
+                [
+                  74,
+                  6
+                ],
+                [
+                  6,
+                  6
+                ]
+              ]
+            }
+          ],
+          "path": [
+            [
+              76,
+              76
+            ],
+            [
+              4,
+              76
+            ],
+            [
+              4,
+              4
+            ],
+            [
+              76,
+              4
+            ]
+          ]
+        }
+      ]
+    }
+  },
+  "format_version": 4,
+  "input_sha256": "1fb684651641b018fa6d6e89963719740623e42e4397636651873420a128c1c2",
+  "intermediate": {
+    "paths": [
+      [
+        [
+          76,
+          4
+        ],
+        [
+          76,
+          76
+        ],
+        [
+          4,
+          76
+        ],
+        [
+          4,
+          4
+        ]
+      ],
+      [
+        [
+          6,
+          74
+        ],
+        [
+          74,
+          74
+        ],
+        [
+          74,
+          6
+        ],
+        [
+          6,
+          6
+        ]
+      ]
+    ]
+  },
+  "metrics": {
+    "final": {
+      "hole_count": 1,
+      "path_count": 2,
+      "paths": [
+        {
+          "area2": "10368",
+          "bounds": [
+            4,
+            4,
+            76,
+            76
+          ],
+          "vertices": 4
+        },
+        {
+          "area2": "-9248",
+          "bounds": [
+            6,
+            6,
+            74,
+            74
+          ],
+          "vertices": 4
+        }
+      ],
+      "tree_depth": 2,
+      "vertex_count": 8
+    },
+    "intermediate": {
+      "path_count": 2,
+      "paths": [
+        {
+          "area2": "10368",
+          "bounds": [
+            4,
+            4,
+            76,
+            76
+          ],
+          "vertices": 4
+        },
+        {
+          "area2": "-9248",
+          "bounds": [
+            6,
+            6,
+            74,
+            74
+          ],
+          "vertices": 4
+        }
+      ],
+      "vertex_count": 8
+    }
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "recipe": "InsetThenTree",
+  "status": "success"
+}

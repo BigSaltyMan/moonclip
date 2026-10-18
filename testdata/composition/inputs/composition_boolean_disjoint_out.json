@@ -1,0 +1,71 @@
+{
+  "case_id": "composition_boolean_disjoint_out",
+  "format_version": 4,
+  "operation": "Composition",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "recipe": "BooleanThenOffset",
+  "source": {
+    "group": "boolean_disjoint",
+    "intent": "BooleanThenOffset; real intermediate; out",
+    "kind": "moonclip_constructed"
+  },
+  "steps": [
+    {
+      "clip": [
+        [
+          [
+            20,
+            0
+          ],
+          [
+            30,
+            0
+          ],
+          [
+            30,
+            10
+          ],
+          [
+            20,
+            10
+          ]
+        ]
+      ],
+      "fill_rule": "NonZero",
+      "format_version": 1,
+      "operation": "Union",
+      "subject": [
+        [
+          [
+            0,
+            0
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            0,
+            3
+          ]
+        ]
+      ]
+    },
+    {
+      "arc_tolerance": 0.0,
+      "delta": 2.0,
+      "fill_rule": "NonZero",
+      "format_version": 2,
+      "join_type": "Miter",
+      "miter_limit": 2.0,
+      "operation": "OffsetPolygons"
+    }
+  ]
+}

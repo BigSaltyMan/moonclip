@@ -760,3 +760,47 @@ Independent inputs: Boolean200 + Offset272 + Stroke276 =748. Strokes have no inp
 | stroke_vertical_w4_square_butt | passed |
 | stroke_vertical_w4_square_round | passed |
 | stroke_vertical_w4_square_square | passed |
+
+# Composition compatibility
+
+Independent recipes: 24/24; required=24; differences=0; execution_errors=0. Boolean200 + Offset272 + Stroke276 + Composition24 =772 independent inputs.
+
+Each recipe counts once. Both real intermediate and final outputs are compared. InsetThenTree includes strict parentage and winding. Public calls each own a fresh budget; resource rejection tests are MoonClip functional evidence, not Clipper2 resource compatibility.
+
+| Recipe | Cases |
+| --- | ---: |
+| BooleanThenOffset | 8 |
+| InsetThenTree | 8 |
+| StrokeThenIntersection | 8 |
+
+| Target | Composition filtered recipes |
+| --- | --- |
+| native | 24/24 |
+| js | 24/24 |
+
+| Recipe ID | Intermediate | Final | Status | Failure step |
+| --- | --- | --- | --- | --- |
+| composition_boolean_disjoint_in | passed | passed | passed |  |
+| composition_boolean_disjoint_out | passed | passed | passed |  |
+| composition_boolean_hole_in | passed | passed | passed |  |
+| composition_boolean_hole_out | passed | passed | passed |  |
+| composition_boolean_notch_in | passed | passed | passed |  |
+| composition_boolean_notch_out | passed | passed | passed |  |
+| composition_boolean_overlap_in | passed | passed | passed |  |
+| composition_boolean_overlap_out | passed | passed | passed |  |
+| composition_inset_channel_d2 | passed | passed | passed |  |
+| composition_inset_channel_d4 | passed | passed | passed |  |
+| composition_inset_hole_d2 | passed | passed | passed |  |
+| composition_inset_hole_d4 | passed | passed | passed |  |
+| composition_inset_island_d2 | passed | passed | passed |  |
+| composition_inset_island_d4 | passed | passed | passed |  |
+| composition_inset_touch_d2 | passed | passed | passed |  |
+| composition_inset_touch_d4 | passed | passed | passed |  |
+| composition_stroke_cap_butt | passed | passed | passed |  |
+| composition_stroke_cap_round | passed | passed | passed |  |
+| composition_stroke_corner_butt | passed | passed | passed |  |
+| composition_stroke_corner_round | passed | passed | passed |  |
+| composition_stroke_hole_butt | passed | passed | passed |  |
+| composition_stroke_hole_round | passed | passed | passed |  |
+| composition_stroke_straight_butt | passed | passed | passed |  |
+| composition_stroke_straight_round | passed | passed | passed |  |

@@ -1,0 +1,84 @@
+{
+  "case_id": "composition_inset_channel_d4",
+  "format_version": 4,
+  "operation": "Composition",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "recipe": "InsetThenTree",
+  "source": {
+    "group": "inset_channel",
+    "intent": "InsetThenTree; real intermediate; d4",
+    "kind": "moonclip_constructed"
+  },
+  "steps": [
+    {
+      "arc_tolerance": 0.0,
+      "delta": -4.0,
+      "fill_rule": "NonZero",
+      "format_version": 2,
+      "join_type": "Miter",
+      "miter_limit": 2.0,
+      "operation": "OffsetPolygons",
+      "paths": [
+        [
+          [
+            0,
+            0
+          ],
+          [
+            12,
+            0
+          ],
+          [
+            12,
+            5
+          ],
+          [
+            24,
+            5
+          ],
+          [
+            24,
+            0
+          ],
+          [
+            36,
+            0
+          ],
+          [
+            36,
+            16
+          ],
+          [
+            24,
+            16
+          ],
+          [
+            24,
+            11
+          ],
+          [
+            12,
+            11
+          ],
+          [
+            12,
+            16
+          ],
+          [
+            0,
+            16
+          ]
+        ]
+      ]
+    },
+    {
+      "clip": [],
+      "fill_rule": "NonZero",
+      "format_version": 1,
+      "operation": "Union"
+    }
+  ]
+}

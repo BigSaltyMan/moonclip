@@ -1,0 +1,135 @@
+{
+  "adapter_protocol_version": 4,
+  "case_id": "composition_stroke_corner_round",
+  "final": {
+    "paths": [
+      [
+        [
+          22,
+          20
+        ],
+        [
+          21,
+          22
+        ],
+        [
+          19,
+          22
+        ],
+        [
+          18,
+          20
+        ],
+        [
+          18,
+          2
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          -2,
+          1
+        ],
+        [
+          -2,
+          -1
+        ],
+        [
+          0,
+          -2
+        ],
+        [
+          22,
+          -2
+        ]
+      ]
+    ]
+  },
+  "format_version": 4,
+  "input_sha256": "127826ff2d39fad0bcdda05092ff9259654bef0934d0f1d7ee6670d4e2501a4b",
+  "intermediate": {
+    "paths": [
+      [
+        [
+          22,
+          20
+        ],
+        [
+          21,
+          22
+        ],
+        [
+          19,
+          22
+        ],
+        [
+          18,
+          20
+        ],
+        [
+          18,
+          2
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          -2,
+          1
+        ],
+        [
+          -2,
+          -1
+        ],
+        [
+          0,
+          -2
+        ],
+        [
+          22,
+          -2
+        ]
+      ]
+    ]
+  },
+  "metrics": {
+    "final": {
+      "path_count": 1,
+      "paths": [
+        {
+          "area2": "344",
+          "bounds": [
+            -2,
+            -2,
+            22,
+            22
+          ],
+          "vertices": 10
+        }
+      ],
+      "vertex_count": 10
+    },
+    "intermediate": {
+      "path_count": 1,
+      "paths": [
+        {
+          "area2": "344",
+          "bounds": [
+            -2,
+            -2,
+            22,
+            22
+          ],
+          "vertices": 10
+        }
+      ],
+      "vertex_count": 10
+    }
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "recipe": "StrokeThenIntersection",
+  "status": "success"
+}

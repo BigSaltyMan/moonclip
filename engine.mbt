@@ -222,12 +222,15 @@ fn engine_step(
 
 ///|
 #warnings("-unused_value")
-fn engine_invariants(state : ScanState) -> Result[Unit, String] {
-  match scan_invariants(state) {
+fn engine_invariants(
+  state : ScanState,
+  metered? : Bool = false,
+) -> Result[Unit, String] {
+  match scan_invariants(state, metered~) {
     Err(m) => return Err(m)
     Ok(_) => ()
   }
-  match output_invariants(state) {
+  match output_invariants(state, metered~) {
     Err(m) => return Err(m)
     Ok(_) => ()
   }
@@ -238,6 +241,10 @@ fn engine_invariants(state : ScanState) -> Result[Unit, String] {
     return Err("Invalid event cursor")
   }
   for i = state.intersection_cursor; i < state.intersections.length(); i = i + 1 {
+    match validation_charge(state, metered, 0, 1) {
+      Ok(_) => ()
+      Err(e) => return Err(e)
+    }
     let event = state.intersections[i]
     guard edge_peek(state, event.first) is Some(a) else {
       return Err("Stale first intersection edge")
@@ -262,6 +269,10 @@ fn engine_invariants(state : ScanState) -> Result[Unit, String] {
   for i = state.connection_cursor
       i < state.pending_connections.length()
       i = i + 1 {
+    match validation_charge(state, metered, 0, 1) {
+      Ok(_) => ()
+      Err(e) => return Err(e)
+    }
     let event = state.pending_connections[i]
     if edge_peek(state, event.first) is None ||
       edge_peek(state, event.second) is None {
@@ -269,6 +280,10 @@ fn engine_invariants(state : ScanState) -> Result[Unit, String] {
     }
   }
   for index = 0; index < state.slots.length(); index = index + 1 {
+    match validation_charge(state, metered, 0, 1) {
+      Ok(_) => ()
+      Err(e) => return Err(e)
+    }
     let slot = state.slots[index]
     if slot.edge is Some(edge) {
       let bound = state.vertices.length()
@@ -304,6 +319,10 @@ fn engine_invariants(state : ScanState) -> Result[Unit, String] {
     return Err("Invalid cumulative topology counters")
   }
   for join in state.output.joins {
+    match validation_charge(state, metered, 0, 1) {
+      Ok(_) => ()
+      Err(e) => return Err(e)
+    }
     if join.consumed {
       continue
     }

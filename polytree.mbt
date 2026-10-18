@@ -327,6 +327,7 @@ fn tree_build(state : ScanState) -> PolyTree64 raise ScanAbort {
     state.output.records[ids[i]].geometric_parent = parents[i].map(fn(index) {
       ids[index]
     })
+    tree_spend(state, 2, 1)
     nodes.push({
       contour: paths[i],
       parent: parents[i],
@@ -403,10 +404,14 @@ fn tree_verify_output(
   if ids.length() != tree.data.nodes.length() {
     return Err("Tree output count mismatch")
   }
-  tree_spend(state, 1, state.output.records.length())
+  tree_spend(
+    state,
+    1 + state.output.records.length(),
+    state.output.records.length(),
+  )
   let seen = Array::make(state.output.records.length(), false)
   for i = 0; i < ids.length(); i = i + 1 {
-    tree_spend(state, 1, 1)
+    tree_spend(state, 0, 1)
     let id = ids[i]
     if id < 0 || id >= seen.length() || seen[id] {
       return Err("Invalid repeated output identity")
@@ -444,6 +449,7 @@ fn tree_verify_output(
     }
   }
   for i = 0; i < seen.length(); i = i + 1 {
+    tree_spend(state, 0, 1)
     if (
         state.output.records[i].status == Closed &&
         state.output.records[i].anchor is Some(_)

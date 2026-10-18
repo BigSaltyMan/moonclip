@@ -43,19 +43,7 @@ fn offset_spend(
   nodes : Int,
   work : Int,
 ) -> Unit raise ScanAbort {
-  let loc = location(budget.generate_stage, None, None)
-  if nodes > budget.limits.max_nodes - budget.stats.nodes {
-    raise ScanAbort(
-      ResourceLimitExceeded(loc, InternalNodes, budget.limits.max_nodes),
-    )
-  }
-  if work > budget.limits.max_work - budget.stats.work {
-    raise ScanAbort(
-      ResourceLimitExceeded(loc, ScanWork, budget.limits.max_work),
-    )
-  }
-  budget.stats.nodes += nodes
-  budget.stats.work += work
+  budget_spend(budget, nodes, work, location(budget.generate_stage, None, None))
 }
 
 ///|
@@ -487,7 +475,7 @@ fn offset_generate(
   offset_spend(budget, paths.length(), paths.length())
   let result : Paths64 = []
   for path in paths {
-    offset_spend(budget, path.length(), path.length())
+    offset_spend(budget, path.length() + 2, path.length())
     let normals = Array::makei(path.length(), fn(i) raise ScanAbort {
       offset_unit(
         path[i],
