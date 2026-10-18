@@ -1,0 +1,29 @@
+{
+  "arc_tolerance": 0.0,
+  "cap_type": "Square",
+  "case_id": "stroke_threshold_w101_square_square",
+  "format_version": 3,
+  "join_type": "Square",
+  "miter_limit": 2.0,
+  "operation": "StrokePolyline",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "path": [
+    [
+      0,
+      0
+    ],
+    [
+      20,
+      0
+    ]
+  ],
+  "source": {
+    "group": "threshold",
+    "intent": "Open route; full width divided by two; w101",
+    "kind": "moonclip_constructed"
+  },
+  "width": 1.01
+}

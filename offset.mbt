@@ -43,7 +43,7 @@ fn offset_spend(
   nodes : Int,
   work : Int,
 ) -> Unit raise ScanAbort {
-  let loc = location(OffsetGenerate, None, None)
+  let loc = location(budget.generate_stage, None, None)
   if nodes > budget.limits.max_nodes - budget.stats.nodes {
     raise ScanAbort(
       ResourceLimitExceeded(loc, InternalNodes, budget.limits.max_nodes),
@@ -59,11 +59,14 @@ fn offset_spend(
 }
 
 ///|
-fn offset_finite(value : Double) -> Double raise ScanAbort {
+fn offset_finite(
+  value : Double,
+  stage? : Stage = OffsetGenerate,
+) -> Double raise ScanAbort {
   if value.is_nan() || value.is_inf() {
     raise ScanAbort(
       NumericFailure(
-        location(OffsetGenerate, None, None),
+        location(stage, None, None),
         "Non-finite offset intermediate",
       ),
     )
@@ -73,9 +76,13 @@ fn offset_finite(value : Double) -> Double raise ScanAbort {
 
 ///|
 // std::round semantics, deliberately separate from scan ties-to-even projection.
-fn offset_coordinate(value : Double, axis : Axis) -> Int64 raise ScanAbort {
-  let value = offset_finite(value)
-  let loc = location(OffsetGenerate, None, None)
+fn offset_coordinate(
+  value : Double,
+  axis : Axis,
+  stage? : Stage = OffsetGenerate,
+) -> Int64 raise ScanAbort {
+  let value = offset_finite(value, stage~)
+  let loc = location(stage, None, None)
   // Check before conversion; this strict interior of Int64 also handles huge finite delta.
   if value < -9.0e18 || value > 9.0e18 {
     raise ScanAbort(
@@ -101,20 +108,24 @@ fn offset_push(
   y : Double,
   budget : CallBudget,
 ) -> Unit raise ScanAbort {
-  let x = offset_coordinate(x, X)
-  let y = offset_coordinate(y, Y)
+  let x = offset_coordinate(x, X, stage=budget.generate_stage)
+  let y = offset_coordinate(y, Y, stage=budget.generate_stage)
   offset_spend(budget, 1, 1)
   path.push(Point64::new(x, y))
 }
 
 ///|
-fn offset_unit(a : Point64, b : Point64) -> OffsetVector raise ScanAbort {
+fn offset_unit(
+  a : Point64,
+  b : Point64,
+  stage? : Stage = OffsetGenerate,
+) -> OffsetVector raise ScanAbort {
   let dx = (b.x - a.x).to_double()
   let dy = (b.y - a.y).to_double()
   if dx == 0.0 && dy == 0.0 {
     return { x: 0.0, y: 0.0, }
   }
-  let inverse = offset_finite(1.0 / (dx * dx + dy * dy).sqrt())
+  let inverse = offset_finite(1.0 / (dx * dx + dy * dy).sqrt(), stage~)
   { x: dy * inverse, y: -(dx * inverse), }
 }
 
@@ -128,7 +139,7 @@ fn offset_miter(
   cosine : Double,
   budget : CallBudget,
 ) -> Unit raise ScanAbort {
-  let q = offset_finite(delta / (cosine + 1.0))
+  let q = offset_finite(delta / (cosine + 1.0), stage=budget.generate_stage)
   offset_push(
     path,
     p.x.to_double() + (a.x + b.x) * q,
@@ -145,16 +156,20 @@ fn offset_intersect(
   c : OffsetVector,
   d : OffsetVector,
   fallback : OffsetVector,
+  stage? : Stage = OffsetGenerate,
 ) -> OffsetVector raise ScanAbort {
   let dx1 = b.x - a.x
   let dy1 = b.y - a.y
   let dx2 = d.x - c.x
   let dy2 = d.y - c.y
-  let determinant = offset_finite(dy1 * dx2 - dy2 * dx1)
+  let determinant = offset_finite(dy1 * dx2 - dy2 * dx1, stage~)
   if determinant == 0.0 {
     return fallback
   }
-  let t = offset_finite(((a.x - c.x) * dy2 - (a.y - c.y) * dx2) / determinant)
+  let t = offset_finite(
+    ((a.x - c.x) * dy2 - (a.y - c.y) * dx2) / determinant,
+    stage~,
+  )
   if t <= 0.0 {
     a
   } else if t >= 1.0 {
@@ -173,11 +188,14 @@ fn offset_square(
   b : OffsetVector,
   delta : Double,
   budget : CallBudget,
+  is_cap? : Bool = false,
 ) -> Unit raise ScanAbort {
   let vx = -a.y + b.y
   let vy = a.x - b.x
   let h = (vx * vx + vy * vy).sqrt()
-  let v : OffsetVector = if h.abs() < 0.001 {
+  let v : OffsetVector = if is_cap {
+    { x: b.y, y: -b.x, }
+  } else if h.abs() < 0.001 {
     { x: 0.0, y: 0.0, }
   } else {
     let inverse = 1.0 / h
@@ -193,13 +211,26 @@ fn offset_square(
     x: previous.x.to_double() + a.x * delta,
     y: previous.y.to_double() + a.y * delta,
   }
-  let fourth : OffsetVector = {
-    x: p.x.to_double() + a.x * delta,
-    y: p.y.to_double() + a.y * delta,
+  let fourth : OffsetVector = if is_cap {
+    { x: third.x + v.x * delta, y: third.y + v.y * delta, }
+  } else {
+    { x: p.x.to_double() + a.x * delta, y: p.y.to_double() + a.y * delta, }
   }
-  let ip = offset_intersect(first, second, third, fourth, q)
-  offset_push(path, ip.x, ip.y, budget)
-  offset_push(path, q.x + (q.x - ip.x), q.y + (q.y - ip.y), budget)
+  let ip = offset_intersect(
+    first,
+    second,
+    third,
+    fourth,
+    q,
+    stage=budget.generate_stage,
+  )
+  if is_cap {
+    offset_push(path, q.x + (q.x - ip.x), q.y + (q.y - ip.y), budget)
+    offset_push(path, ip.x, ip.y, budget)
+  } else {
+    offset_push(path, ip.x, ip.y, budget)
+    offset_push(path, q.x + (q.x - ip.x), q.y + (q.y - ip.y), budget)
+  }
 }
 
 ///|
@@ -214,12 +245,13 @@ priv struct OffsetArc {
 fn offset_arc_parameters(
   delta : Double,
   tolerance : Double,
+  stage? : Stage = OffsetGenerate,
 ) -> OffsetArc raise ScanAbort {
-  let radius = offset_finite(delta.abs())
+  let radius = offset_finite(delta.abs(), stage~)
   if radius < 0.5 {
     raise ScanAbort(
       NumericFailure(
-        location(OffsetGenerate, None, None),
+        location(stage, None, None),
         "Arc parameters require radius at least 0.5",
       ),
     )
@@ -233,29 +265,29 @@ fn offset_arc_parameters(
   } else {
     radius * 0.002
   }
-  let cap = offset_finite(radius * @math.PI)
+  let cap = offset_finite(radius * @math.PI, stage~)
   let argument = 1.0 - effective / radius
   // With sub-ULP tolerance acos(1)==0: source min(+Infinity, cap) selects cap.
   // Express that branch explicitly, without creating a non-finite intermediate.
   let steps = if argument == 1.0 {
     cap
   } else {
-    let requested = offset_finite(@math.PI / @math.acos(argument))
+    let requested = offset_finite(@math.PI / @math.acos(argument), stage~)
     if requested < cap {
       requested
     } else {
       cap
     }
   }
-  let step = offset_finite(2.0 * @math.PI / steps)
-  let sine = offset_finite(@math.sin(step))
+  let step = offset_finite(2.0 * @math.PI / steps, stage~)
+  let sine = offset_finite(@math.sin(step), stage~)
   {
     step_sin: if delta < 0.0 {
       -sine
     } else {
       sine
     },
-    step_cos: offset_finite(@math.cos(step)),
+    step_cos: offset_finite(@math.cos(step), stage~),
     steps_per_rad: steps / (2.0 * @math.PI),
   }
 }
@@ -269,18 +301,22 @@ fn offset_arc_steps(
   budget : CallBudget,
 ) -> Int raise ScanAbort {
   let steps = offset_finite(
-    @double.ceil(arc.steps_per_rad * offset_finite(angle).abs()),
+    @double.ceil(
+      arc.steps_per_rad *
+      offset_finite(angle, stage=budget.generate_stage).abs(),
+    ),
+    stage=budget.generate_stage,
   )
   if steps < 0.0 {
     raise ScanAbort(
       NumericFailure(
-        location(OffsetGenerate, None, None),
+        location(budget.generate_stage, None, None),
         "Negative arc step count",
       ),
     )
   }
   let points = if steps < 1.0 { 2.0 } else { steps + 1.0 }
-  let loc = location(OffsetGenerate, None, None)
+  let loc = location(budget.generate_stage, None, None)
   if points > (budget.limits.max_nodes - budget.stats.nodes).to_double() {
     raise ScanAbort(
       ResourceLimitExceeded(loc, InternalNodes, budget.limits.max_nodes),
@@ -344,7 +380,10 @@ fn offset_corner(
   arc? : OffsetArc,
 ) -> Unit raise ScanAbort {
   offset_spend(budget, 0, 1)
-  let raw_sine = offset_finite(b.y * a.x - a.y * b.x)
+  let raw_sine = offset_finite(
+    b.y * a.x - a.y * b.x,
+    stage=budget.generate_stage,
+  )
   let sine = if raw_sine < -1.0 {
     -1.0
   } else if raw_sine > 1.0 {
@@ -352,7 +391,7 @@ fn offset_corner(
   } else {
     raw_sine
   }
-  let cosine = offset_finite(b.x * a.x + b.y * a.y)
+  let cosine = offset_finite(b.x * a.x + b.y * a.y, stage=budget.generate_stage)
   if cosine > -0.999 && sine * delta < 0.0 {
     offset_push(
       path,
@@ -375,7 +414,12 @@ fn offset_corner(
       Round => {
         let arc = match arc {
           Some(value) => value
-          None => offset_arc_parameters(delta, options.arc_tolerance)
+          None =>
+            offset_arc_parameters(
+              delta,
+              options.arc_tolerance,
+              stage=budget.generate_stage,
+            )
         }
         offset_round(
           path,
@@ -383,7 +427,7 @@ fn offset_corner(
           a,
           b,
           delta,
-          offset_finite(@math.atan2(sine, cosine)),
+          offset_finite(@math.atan2(sine, cosine), stage=budget.generate_stage),
           arc,
           budget,
         )
@@ -420,11 +464,22 @@ fn offset_generate(
   budget : CallBudget,
 ) -> Paths64 raise ScanAbort {
   let threshold = match options.join {
-    Miter => 2.0 / offset_finite(options.miter_limit * options.miter_limit)
+    Miter =>
+      2.0 /
+      offset_finite(
+        options.miter_limit * options.miter_limit,
+        stage=budget.generate_stage,
+      )
     Bevel | Square | Round => 0.0
   }
   let arc = if options.join == Round {
-    Some(offset_arc_parameters(delta, options.arc_tolerance))
+    Some(
+      offset_arc_parameters(
+        delta,
+        options.arc_tolerance,
+        stage=budget.generate_stage,
+      ),
+    )
   } else {
     None
   }
@@ -434,7 +489,11 @@ fn offset_generate(
   for path in paths {
     offset_spend(budget, path.length(), path.length())
     let normals = Array::makei(path.length(), fn(i) raise ScanAbort {
-      offset_unit(path[i], path[(i + 1) % path.length()])
+      offset_unit(
+        path[i],
+        path[(i + 1) % path.length()],
+        stage=budget.generate_stage,
+      )
     })
     let output : Path64 = []
     for j = 0; j < path.length(); j = j + 1 {
@@ -458,6 +517,24 @@ fn offset_generate(
 }
 
 ///|
+fn offset_options_error(options : OffsetOptions, stage : Stage) -> ClipError? {
+  let loc = location(stage, None, None)
+  if options.miter_limit.is_nan() ||
+    options.miter_limit.is_inf() ||
+    options.miter_limit < 2.0 {
+    return Some(InvalidInput(loc, "Miter limit must be finite and at least 2"))
+  }
+  if options.arc_tolerance.is_nan() ||
+    options.arc_tolerance.is_inf() ||
+    options.arc_tolerance < 0.0 {
+    return Some(
+      InvalidInput(loc, "Arc tolerance must be finite and non-negative"),
+    )
+  }
+  None
+}
+
+///|
 fn offset_execute(
   paths : Paths64,
   delta : Double,
@@ -470,17 +547,8 @@ fn offset_execute(
   if delta.is_nan() || delta.is_inf() {
     return Err(InvalidInput(loc, "Offset delta must be finite"))
   }
-  if options.miter_limit.is_nan() ||
-    options.miter_limit.is_inf() ||
-    options.miter_limit < 2.0 {
-    return Err(InvalidInput(loc, "Miter limit must be finite and at least 2"))
-  }
-  if options.arc_tolerance.is_nan() ||
-    options.arc_tolerance.is_inf() ||
-    options.arc_tolerance < 0.0 {
-    return Err(
-      InvalidInput(loc, "Arc tolerance must be finite and non-negative"),
-    )
+  if offset_options_error(options, OffsetParameters) is Some(error) {
+    return Err(error)
   }
   let budget = match budget {
     Some(value) => value

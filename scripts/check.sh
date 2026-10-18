@@ -30,6 +30,8 @@ moon test --target js
 moon fmt --check
 mkdir -p _build/conformance
 for target in native js; do
+  { printf 'Selection: reference stroke paths: *\n'; moon test --target "$target" --filter "reference stroke paths: *"; } | tee "_build/conformance/stroke-$target.log"
+  grep -Fxq 'Total tests: 276, passed: 276, failed: 0.' "_build/conformance/stroke-$target.log"
   { printf 'Selection: reference offset paths: *\n'; moon test --target "$target" --filter "reference offset paths: *"; } | tee "_build/conformance/offset-$target.log"
   grep -Fxq 'Total tests: 272, passed: 272, failed: 0.' "_build/conformance/offset-$target.log"
   moon test --target "$target" --filter "reference internal paths: *" | tee "_build/conformance/internal-$target.log"
@@ -51,6 +53,8 @@ python scripts/check_reference.py --manifest testdata/manifest.json --strict
 python tools/conformance/generate_boolean.py --check
 python scripts/check_reference.py --manifest testdata/offset-manifest.json --strict
 python tools/conformance/generate_offset.py --check
-moon run --target native cmd/conformance -- --manifest testdata/manifest.json --offset-manifest testdata/offset-manifest.json --report-json _build/conformance/report.json --report-md docs/compatibility.md --strict
+python scripts/check_reference.py --manifest testdata/stroke-manifest.json --strict
+python tools/conformance/generate_stroke.py --check
+moon run --target native cmd/conformance -- --manifest testdata/manifest.json --offset-manifest testdata/offset-manifest.json --stroke-manifest testdata/stroke-manifest.json --report-json _build/conformance/report.json --report-md docs/compatibility.md --strict
 git diff --exit-code -- docs/compatibility.md
 git diff --check

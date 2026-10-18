@@ -139,6 +139,9 @@ def normalize_tree(tree):
     return tuple(sorted(visit(child) for child in tree["children"]))
 
 def validate_geometry(value, where="result"):
+    if type(value) is dict and value.get("format_version") == 3:
+        from stroke_compare import validate_stroke_geometry
+        return validate_stroke_geometry(value, where)
     if type(value) is dict and value.get("format_version") == 2:
         from offset_compare import validate_offset_geometry
         return validate_offset_geometry(value, where)
@@ -153,7 +156,7 @@ def area2(path):
     return sum(a[0]*b[1] - a[1]*b[0] for a, b in zip(path, path[1:] + path[:1]))
 
 def metrics(value):
-    if value.get("format_version") == 2:
+    if value.get("format_version") in (2,3):
         from offset_compare import offset_metrics
         return offset_metrics(value)
     _, depth, holes = walk_tree(value["tree"])
@@ -172,12 +175,15 @@ def compare(left, right, case_id="comparison"):
     validate_geometry(left, case_id + ".expected")
     validate_geometry(right, case_id + ".actual")
     require(normalize_paths(left["paths"]) == normalize_paths(right["paths"]), case_id + ".paths", "contours differ (coordinates, vertices, winding or multiplicity)")
-    if left.get("format_version") == 2 or right.get("format_version") == 2:
+    if left.get("format_version") in (2,3) or right.get("format_version") in (2,3):
         require(left.get("format_version") == right.get("format_version"), case_id, "protocol mismatch")
         return
     require(normalize_tree(left["tree"]) == normalize_tree(right["tree"]), case_id + ".tree", "parentage, depth or node contours differ")
 
 def validate_input(value, where):
+    if type(value) is dict and value.get("operation") == "StrokePolyline":
+        from stroke_compare import validate_stroke_input
+        return validate_stroke_input(value, where)
     if type(value) is dict and value.get("operation") == "OffsetPolygons":
         from offset_compare import validate_offset_input
         return validate_offset_input(value, where)
@@ -208,6 +214,9 @@ def validate_input(value, where):
     require(count <= MAX_VERTICES and len(value["subject"]) + len(value["clip"]) <= MAX_PATHS, where, "combined input budget exceeded")
 
 def validate_result(value, case, digest, lock, where):
+    if case.get("operation") == "StrokePolyline":
+        from stroke_compare import validate_stroke_result
+        return validate_stroke_result(value, case, digest, lock, where)
     if case.get("operation") == "OffsetPolygons":
         from offset_compare import validate_offset_result
         return validate_offset_result(value, case, digest, lock, where)
@@ -231,10 +240,11 @@ def confined(root, name):
     return result
 
 def validate_lock(lock):
-    keys(lock, {"repository", "tag", "commit", "license", "adapter_protocol_version", "offset_protocol_version", "archive", "compile_inputs", "dependencies"}, "lock")
+    keys(lock, {"repository", "tag", "commit", "license", "adapter_protocol_version", "offset_protocol_version", "stroke_protocol_version", "archive", "compile_inputs", "dependencies"}, "lock")
     require(lock["repository"] == "https://github.com/AngusJohnson/Clipper2" and lock["tag"] == "Clipper2_2.0.1" and lock["commit"] == "21ebba05db8894f0c7217ad35ea518080f324946", "lock", "unexpected fixed upstream identity")
     require(lock["license"] == "BSL-1.0" and type(lock["adapter_protocol_version"]) is int and lock["adapter_protocol_version"] == 1, "lock", "unknown license/protocol")
     require(type(lock["offset_protocol_version"]) is int and lock["offset_protocol_version"] == 2, "lock", "unknown offset protocol")
+    require(type(lock["stroke_protocol_version"]) is int and lock["stroke_protocol_version"] == 3, "lock", "unknown stroke protocol")
     keys(lock["archive"], {"url", "sha256"}, "lock.archive")
     require(lock["archive"]["url"] == "https://codeload.github.com/AngusJohnson/Clipper2/tar.gz/" + lock["commit"], "lock", "archive URL must use full commit")
     require(lock["archive"]["sha256"] == "897b7ed793b6a0565f7b1d34367f2301e08d541d82aa238b5f4042b701c811dc", "lock", "unexpected upstream archive checksum")
@@ -249,6 +259,9 @@ def validate_lock(lock):
 
 def read_manifest(root, manifest, require_expected=True, strict=True):
     value = load(manifest, strict)
+    if type(value) is dict and value.get("kind") == "stroke":
+        from stroke_compare import read_stroke_manifest
+        return read_stroke_manifest(root, manifest, require_expected, strict)
     if type(value) is dict and value.get("kind") == "offset":
         from offset_compare import read_offset_manifest
         return read_offset_manifest(root, manifest, require_expected, strict)

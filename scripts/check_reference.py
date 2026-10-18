@@ -15,9 +15,13 @@ def main():
     args = parser.parse_args()
     try:
         _, records = read_manifest(ROOT, args.manifest.resolve(), strict=args.strict)
-        print(f"Reference cases: {len(records)}; integrity only; paths/tree execution is checked separately by cmd/conformance")
+        print(f"Reference cases: {len(records)}; integrity only; geometry execution is checked separately by cmd/conformance")
         print("Operations: " + str(dict(sorted(Counter(c['operation'] for _, c, _, _ in records).items()))))
-        print("Fill rules: " + str(dict(sorted(Counter(c['fill_rule'] for _, c, _, _ in records).items()))))
+        if all(c['operation']=='StrokePolyline' for _,c,_,_ in records):
+            for field in ('join_type','cap_type','width','miter_limit','arc_tolerance'):
+                print(field+': '+str(dict(sorted(Counter(c[field] for _,c,_,_ in records).items()))))
+        else:
+            print("Fill rules: " + str(dict(sorted(Counter(c['fill_rule'] for _, c, _, _ in records).items()))))
     except (Invalid, OSError) as error:
         print(error, file=sys.stderr)
         return 1

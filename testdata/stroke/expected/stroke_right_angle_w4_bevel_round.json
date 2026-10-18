@@ -1,0 +1,72 @@
+{
+  "adapter_protocol_version": 3,
+  "case_id": "stroke_right_angle_w4_bevel_round",
+  "format_version": 3,
+  "input_sha256": "e7ecc301a27f3cec732937f5e469ec30dfa78ffb9e9154bb9673cc49eb7aed90",
+  "metrics": {
+    "path_count": 1,
+    "paths": [
+      {
+        "area2": "340",
+        "bounds": [
+          -2,
+          -2,
+          22,
+          22
+        ],
+        "vertices": 11
+      }
+    ],
+    "vertex_count": 11
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        22,
+        0
+      ],
+      [
+        22,
+        20
+      ],
+      [
+        21,
+        22
+      ],
+      [
+        19,
+        22
+      ],
+      [
+        18,
+        20
+      ],
+      [
+        18,
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        -2,
+        1
+      ],
+      [
+        -2,
+        -1
+      ],
+      [
+        0,
+        -2
+      ],
+      [
+        20,
+        -2
+      ]
+    ]
+  ],
+  "status": "success"
+}

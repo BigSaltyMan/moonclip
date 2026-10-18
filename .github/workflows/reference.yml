@@ -33,3 +33,7 @@ jobs:
         run: bash scripts/generate_reference.sh --manifest testdata/offset-manifest.json --check
       - name: Check offline offset catalog
         run: python scripts/check_reference.py --manifest testdata/offset-manifest.json --strict
+      - name: Rebuild and compare all stroke reference results
+        run: bash scripts/generate_reference.sh --manifest testdata/stroke-manifest.json --check
+      - name: Check offline stroke catalog
+        run: python scripts/check_reference.py --manifest testdata/stroke-manifest.json --strict

@@ -237,6 +237,83 @@ class AdapterTests(unittest.TestCase):
         self.assertEqual(result.returncode,2)
         self.assertIn(b'adapter resource limit',result.stderr)
 
+    def stroke_case(self, cid='stroke_horizontal_w4_miter_butt'):
+        return load(ROOT/f'testdata/stroke/inputs/{cid}.json',True)
+
+    def test_stroke_complete_horizontal_caps(self):
+        for cap in ('butt','square','round'):
+            c=self.stroke_case('stroke_horizontal_w4_miter_'+cap)
+            actual=self.call(c);self.assertEqual(actual.returncode,0)
+            expected=load(ROOT/f"testdata/stroke/expected/{c['case_id']}.json",True)
+            value=decode(actual.stdout)
+            self.assertEqual(value['format_version'],3);self.assertNotIn('tree',value)
+            self.assertEqual(normalize_paths(value['paths']),normalize_paths(expected['paths']))
+
+    def test_stroke_width_is_full_width(self):
+        c=self.stroke_case()
+        value=decode(self.call(c).stdout)
+        self.assertEqual(metrics(value)['paths'][0]['bounds'],[0,-2,20,2])
+
+    def test_stroke_round_cap_with_nonround_join(self):
+        for join in ('miter','bevel','square'):
+            c=self.stroke_case('stroke_horizontal_w4_'+join+'_round')
+            self.assertEqual(len(decode(self.call(c).stdout)['paths'][0]),8)
+
+    def test_stroke_round_join_and_butt_square_caps(self):
+        for cap in ('butt','square'):
+            c=self.stroke_case('stroke_right_angle_w4_round_'+cap)
+            expected=load(ROOT/f"testdata/stroke/expected/{c['case_id']}.json",True)
+            self.assertEqual(normalize_paths(decode(self.call(c).stdout)['paths']),normalize_paths(expected['paths']))
+
+    def test_stroke_invalid_numeric_tokens(self):
+        for field in ('width','miter_limit','arc_tolerance'):
+            for value in (True,False,'4',None,[],{}):
+                c=self.stroke_case();c[field]=value;self.rejected(c)
+        for field,value in (('width',-1),('width',0.99),('miter_limit',1),('arc_tolerance',-1)):
+            c=self.stroke_case();c[field]=value;self.rejected(c)
+        for token in ('NaN','Infinity','-Infinity','1e400'):
+            raw=canonical_bytes(self.stroke_case()).decode().replace('"width": 4.0','"width": '+token)
+            r=subprocess.run([str(self.binary)],input=raw.encode(),capture_output=True,timeout=5)
+            self.assertEqual(r.returncode,2)
+
+    def test_stroke_unknown_fields_styles_and_versions(self):
+        for field,value in (('format_version',2),('format_version',True),('cap_type','Joined'),('join_type','Unknown'),('fill_rule','NonZero')):
+            c=self.stroke_case();c[field]=value;self.rejected(c)
+        c=self.stroke_case();c['unexpected']=1;self.rejected(c)
+
+    def test_stroke_missing_fields_and_empty_route_rejected(self):
+        original=self.stroke_case()
+        for field in original:
+            c=copy.deepcopy(original);del c[field];self.rejected(c)
+        for path in ([],[[0,0]],[[0,0],[0,0]]):
+            c=copy.deepcopy(original);c['path']=path;self.rejected(c)
+
+    def test_stroke_keeps_open_coincident_endpoint_and_hole(self):
+        c=self.stroke_case('stroke_coincident_ends_w4_miter_butt')
+        result=decode(self.call(c).stdout)
+        self.assertEqual(len(result['paths']),2)
+        expected=load(ROOT/f"testdata/stroke/expected/{c['case_id']}.json",True)
+        self.assertEqual(normalize_paths(result['paths']),normalize_paths(expected['paths']))
+
+    def test_stroke_reversal_is_not_filtered_by_area(self):
+        c=self.stroke_case('stroke_reversal_w4_miter_butt')
+        self.assertEqual(metrics(decode(self.call(c).stdout))['paths'][0]['bounds'],[0,-2,22,2])
+
+    def test_stroke_fractional_threshold_widths(self):
+        for width in (1.0,1.01,1.99,2.0):
+            c=self.stroke_case();c['width']=width
+            self.assertEqual(metrics(decode(self.call(c).stdout))['paths'][0]['bounds'],[0,-1,20,1])
+
+    def test_stroke_protects_both_round_caps_before_large_sampling(self):
+        for join,cap in (('Miter','Round'),('Round','Butt')):
+            c=self.stroke_case('stroke_right_angle_w4_miter_butt');c.update(join_type=join,cap_type=cap,width=2000000000.0,arc_tolerance=1e-11)
+            result=self.call(c);self.assertEqual(result.returncode,2)
+            self.assertIn(b'adapter resource limit',result.stderr)
+
+    def test_stroke_generated_coordinate_range(self):
+        c=self.stroke_case();c.update(path=[[999999990,0],[1000000000,0]],cap_type='Square')
+        self.rejected(c)
+
     def case_commit(self):
         return load(ROOT/'tools/oracle/upstream-lock.json',True)['commit']
 

@@ -1,0 +1,33 @@
+{
+  "arc_tolerance": 1.0,
+  "cap_type": "Round",
+  "case_id": "stroke_arc_acute_t100_miter_round",
+  "format_version": 3,
+  "join_type": "Miter",
+  "miter_limit": 2.0,
+  "operation": "StrokePolyline",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "path": [
+    [
+      0,
+      0
+    ],
+    [
+      300,
+      0
+    ],
+    [
+      10,
+      50
+    ]
+  ],
+  "source": {
+    "group": "arc_acute",
+    "intent": "Open route; full width divided by two; t100",
+    "kind": "moonclip_constructed"
+  },
+  "width": 20.0
+}

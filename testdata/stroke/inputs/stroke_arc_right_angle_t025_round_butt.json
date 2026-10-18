@@ -1,0 +1,33 @@
+{
+  "arc_tolerance": 0.25,
+  "cap_type": "Butt",
+  "case_id": "stroke_arc_right_angle_t025_round_butt",
+  "format_version": 3,
+  "join_type": "Round",
+  "miter_limit": 2.0,
+  "operation": "StrokePolyline",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "path": [
+    [
+      0,
+      0
+    ],
+    [
+      100,
+      0
+    ],
+    [
+      100,
+      100
+    ]
+  ],
+  "source": {
+    "group": "arc_right_angle",
+    "intent": "Open route; full width divided by two; t025",
+    "kind": "moonclip_constructed"
+  },
+  "width": 20.0
+}

@@ -1,0 +1,60 @@
+{
+  "adapter_protocol_version": 3,
+  "case_id": "stroke_vertical_w4_square_round",
+  "format_version": 3,
+  "input_sha256": "a77d6a52f7d9f6ec4288d2ecd26818bd39f5ee2a4f020f7c45b7a28de19c6261",
+  "metrics": {
+    "path_count": 1,
+    "paths": [
+      {
+        "area2": "184",
+        "bounds": [
+          -2,
+          -2,
+          2,
+          22
+        ],
+        "vertices": 8
+      }
+    ],
+    "vertex_count": 8
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        2,
+        0
+      ],
+      [
+        2,
+        20
+      ],
+      [
+        1,
+        22
+      ],
+      [
+        -1,
+        22
+      ],
+      [
+        -2,
+        20
+      ],
+      [
+        -2,
+        0
+      ],
+      [
+        -1,
+        -2
+      ],
+      [
+        1,
+        -2
+      ]
+    ]
+  ],
+  "status": "success"
+}

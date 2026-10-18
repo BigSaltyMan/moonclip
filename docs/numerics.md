@@ -151,3 +151,16 @@ offset_arc_steps 在 Double→Int 之前检查有限性、非负性、剩余节�
 解析测试预先固定 r=100、tolerance=0.25、sagitta 绝对数值误差 1e-11、40 次旋转半径误差 1e-10；该例 steps360<r*π，采样上限不生效。解析误差在浮点圆弧上验证，整数半径检查允许固定 0.71 的二维舍入影响；这两项不放宽参考轮廓比较。272 条参考仍逐坐标、绕向、顶点数、重数严格比较。
 
 使用固定工具链自带 moonbitlang/core/math 的 sin/cos/acos/atan2：native、JS 同一接口，无新增 Mooncakes 依赖。core 的 MIT 来源与已有 core 依赖相同。原有整数谓词不使用浮点 epsilon；圆弧参数 1e-12 分支来自固定偏移算法，仅作用于采样。
+
+
+## Commit 11 开放描边数值契约
+
+完整宽度width有限且非负；radius=width/2.0在Double中执行，禁止先取整。width<1返回空是MoonClip自身契约，width=1进入radius=.5的真实生成。[(0,0),(20,0)]、width=1/1.01/1.99/2的Butt网格范围均为y=[-1,1]，width=3为[-2,2]，显示舍入后不必保留完整宽度。原始坐标和点数在空结果处理之前预检，连续重复点消耗原始输入额度。
+
+开放法线只使用真实相邻线段；为反向遍历保留一个已计费的尾槽，原尾→首法线不参与生成。起点法线n的Butt依次输出p-radius*n、p+radius*n；终点使用反向末段法线，因此方向相反。Square复用offset_square的固定DoSquare(j==k)分支：沿(n.y,-n.x)向外移动radius，求截线交点后先反射点、再原交点。Round从-radius*n旋转半圆π，终点直接使用+radius*n；半圆和内部圆角共用固定全局步长，不按当前角均分。
+
+正向内部角使用前/后边法线；反向时norms[i]=-old_norms[i-1]，倒序访问原顶点，连接方向和法线一起调整。凹角、折返和近共线继续用固定分类，生成后Positive Union。两点没有内部角，合法但无关的MiterLimit不参加平方运算；Round端点即使连接不是Round也初始化圆弧。没有圆弧时不计算无关采样参数。
+
+CallBudget新增私有generate_stage/cleanup_stage上下文，默认仍为OffsetGenerate/OffsetCleanup，描边创建StrokeGenerate/StrokeCleanup。共用有限性、坐标、法线、交点、圆弧和计费辅助接收该上下文，原偏移行为不变。清理预检使用StrokeCleanup，后续更具体扫描/拓扑错误保持其原阶段；内部生成数据没有原输入下标。
+
+所有预检、Open副本、法线槽、两侧连接、端点和样本累计扣费，清理不重新消耗原始输入额度也不重置执行额度。圆弧预检查仍使用steps<=1发出2点、其余steps+1，只预检不重复收费。全折返、有向面积0和首尾相同不作为退化过滤条件。极大宽度在转换前产生NumericFailure或生成网格CoordinateOutOfRange，不做无检查整数转换。新增48项按8参数、12端点/连接、10拓扑、10数值预算、8隔离计数，native/JS同预期。

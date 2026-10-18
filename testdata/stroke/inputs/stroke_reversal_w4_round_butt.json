@@ -1,0 +1,33 @@
+{
+  "arc_tolerance": 0.0,
+  "cap_type": "Butt",
+  "case_id": "stroke_reversal_w4_round_butt",
+  "format_version": 3,
+  "join_type": "Round",
+  "miter_limit": 2.0,
+  "operation": "StrokePolyline",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "path": [
+    [
+      0,
+      0
+    ],
+    [
+      20,
+      0
+    ],
+    [
+      0,
+      0
+    ]
+  ],
+  "source": {
+    "group": "reversal",
+    "intent": "Open route; full width divided by two; w4",
+    "kind": "moonclip_constructed"
+  },
+  "width": 4.0
+}

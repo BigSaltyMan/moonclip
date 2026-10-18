@@ -1,0 +1,52 @@
+{
+  "adapter_protocol_version": 3,
+  "case_id": "stroke_reversal_w10_bevel_round",
+  "format_version": 3,
+  "input_sha256": "7f8057cff0d672dbfc35c1b2ad3baebad8e63c4801a09c9973d5d874d3838600",
+  "metrics": {
+    "path_count": 1,
+    "paths": [
+      {
+        "area2": "482",
+        "bounds": [
+          -5,
+          -5,
+          20,
+          5
+        ],
+        "vertices": 6
+      }
+    ],
+    "vertex_count": 6
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        20,
+        -5
+      ],
+      [
+        20,
+        5
+      ],
+      [
+        -2,
+        5
+      ],
+      [
+        -5,
+        2
+      ],
+      [
+        -5,
+        -2
+      ],
+      [
+        -2,
+        -5
+      ]
+    ]
+  ],
+  "status": "success"
+}

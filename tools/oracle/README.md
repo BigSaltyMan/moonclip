@@ -97,3 +97,22 @@ Offset v2 now accepts Miter/Bevel/Square/Round and optional arc_tolerance (defau
 The old116 selection is immutable; offset-join-selection locks156 new cases, with disjoint complete union272. The constructor reuses verified old records and refuses changed definitions. Explicit tolerance cases use four geometries scaled5, signed radius10, tolerances.05/.25/1.0, both fill rules (48 cases). Reference output still comes entirely from fixed C++ Union then Offset.
 
 Before calling upstream Round, the adapter bounds a conservative sample estimate (normalized vertices times maximum half-circle samples) by100000, preventing unsafe upstream int casts or unbounded loops for adversarial tiny tolerance/large radius. This adapter execution guard only rejects oversized requests; it never changes tolerance or geometry. MoonClip uses its own actual per-corner cumulative budgets. Integration tests total29; offline tools134. Independent rebuild now checks200 Boolean+272 Offset=472 files; ordinary CI does not build/invoke C++.
+
+
+## Stroke protocol v3
+
+StrokePolyline is a separate v3 operation with exactly one open path, full width, cap_type=Butt/Square/Round, four joins and both numeric options. No fill_rule is permitted. Reference requests require width>=1 and an effective segment; MoonClip-only zero/subgrid/singleton contracts are excluded. The adapter passes the original open route directly to ClipperOffset (no closed Union), mapped EndType and width/2. Source checksums, compile inputs and HI_PRECISION=0 remain unchanged; only stroke_protocol_version=3 is added to the lock.
+
+Before calling upstream, a conservative resource estimate includes both sides of every internal corner and both caps. Either Round join or Round cap activates circular sampling protection. Numeric booleans/strings, nonfinite/negative parameters, unknown fields/styles/protocols and unsafe requests are rejected before upstream int conversion/allocation/loops. Successful v3 output contains paths and exact metrics, no tree.
+
+The generator now explicitly selects Boolean, Offset or Stroke directories and rejects unknown/mixed categories before executing or publishing. Stroke publication replaces only testdata/stroke/expected after a complete successful batch; rollback preserves the old directory on rename failure. Unit tests use an isolated test double to verify publication cannot modify old Boolean/Offset directories. Existing472 input/expected pairs and selections are unchanged; the real rebuilt catalog is748=200+272+276. Actual adapter tests41; offline tools155, independently counted.
+
+```bash
+python tools/oracle/construct_stroke.py
+bash scripts/build_oracle.sh
+python tools/oracle/test_adapter.py
+bash scripts/generate_reference.sh --manifest testdata/stroke-manifest.json --write
+bash scripts/generate_reference.sh --manifest testdata/manifest.json --check
+bash scripts/generate_reference.sh --manifest testdata/offset-manifest.json --check
+bash scripts/generate_reference.sh --manifest testdata/stroke-manifest.json --check
+```

@@ -1,0 +1,44 @@
+{
+  "adapter_protocol_version": 3,
+  "case_id": "stroke_diagonal_w10_bevel_square",
+  "format_version": 3,
+  "input_sha256": "382e75611340b720148ca2ee4fcd0d533e54da6a8d6bcfe94c4068a60b8c9bd6",
+  "metrics": {
+    "path_count": 1,
+    "paths": [
+      {
+        "area2": "1200",
+        "bounds": [
+          -7,
+          -7,
+          37,
+          47
+        ],
+        "vertices": 4
+      }
+    ],
+    "vertex_count": 4
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        37,
+        41
+      ],
+      [
+        29,
+        47
+      ],
+      [
+        -7,
+        -1
+      ],
+      [
+        1,
+        -7
+      ]
+    ]
+  ],
+  "status": "success"
+}

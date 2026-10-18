@@ -1,0 +1,80 @@
+{
+  "adapter_protocol_version": 3,
+  "case_id": "stroke_coincident_ends_w10_bevel_butt",
+  "format_version": 3,
+  "input_sha256": "889aa127cc1839ede0fe9b3078fe0fff36e3e04fd2630ae5c4bc3d217fb59177",
+  "metrics": {
+    "path_count": 2,
+    "paths": [
+      {
+        "area2": "2025",
+        "bounds": [
+          -4,
+          -5,
+          35,
+          34
+        ],
+        "vertices": 7
+      },
+      {
+        "area2": "-144",
+        "bounds": [
+          13,
+          5,
+          25,
+          17
+        ],
+        "vertices": 3
+      }
+    ],
+    "vertex_count": 10
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        35,
+        0
+      ],
+      [
+        35,
+        30
+      ],
+      [
+        26,
+        34
+      ],
+      [
+        -4,
+        4
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        -5
+      ],
+      [
+        30,
+        -5
+      ]
+    ],
+    [
+      [
+        13,
+        5
+      ],
+      [
+        25,
+        17
+      ],
+      [
+        25,
+        5
+      ]
+    ]
+  ],
+  "status": "success"
+}

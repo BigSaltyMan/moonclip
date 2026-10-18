@@ -44,3 +44,17 @@ def offset_evidence(directory):
         require(summaries==[('272','272','0')],str(path),'expected exactly 272 successful offset cases')
         result[target]={'status':'passed','executed':272,'passed':272,'failed':0}
     return result
+
+
+def stroke_evidence(directory):
+    result={}
+    for target in ('native','js'):
+        path=directory/('stroke-'+target+'.log')
+        if not path.exists():
+            result[target]={'status':'not_recorded'};continue
+        text=path.read_text(encoding='utf-8')
+        require(text.splitlines().count('Selection: reference stroke paths: *')==1,str(path),'missing stroke selection marker')
+        summaries=re.findall(r'Total tests: (\d+), passed: (\d+), failed: (\d+)\.',text)
+        require(summaries==[('276','276','0')],str(path),'expected exactly 276 successful stroke cases')
+        result[target]={'status':'passed','executed':276,'passed':276,'failed':0}
+    return result

@@ -28,6 +28,9 @@ pub(all) enum Stage {
   OffsetParameters
   OffsetGenerate
   OffsetCleanup
+  StrokeParameters
+  StrokeGenerate
+  StrokeCleanup
 } derive(Eq, Debug)
 
 ///|

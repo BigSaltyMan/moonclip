@@ -1,0 +1,29 @@
+{
+  "arc_tolerance": 0.0,
+  "cap_type": "Round",
+  "case_id": "stroke_diagonal_w4_square_round",
+  "format_version": 3,
+  "join_type": "Square",
+  "miter_limit": 2.0,
+  "operation": "StrokePolyline",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "path": [
+    [
+      0,
+      0
+    ],
+    [
+      30,
+      40
+    ]
+  ],
+  "source": {
+    "group": "diagonal",
+    "intent": "Open route; full width divided by two; w4",
+    "kind": "moonclip_constructed"
+  },
+  "width": 4.0
+}

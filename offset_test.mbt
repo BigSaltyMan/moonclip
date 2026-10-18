@@ -734,7 +734,7 @@ test "offset joins isolation 1 both new joins preserve input and winding" {
   let p = bb_rect(0L, 0L, 100L, 100L)
   let input = [p, bb_reverse(bb_rect(30L, 30L, 40L, 40L))]
   let saved = @moonclip.copy_paths(input)
-  for join in [@moonclip.Square, @moonclip.Round] {
+  for join in [@moonclip.JoinType::Square, @moonclip.JoinType::Round] {
     assert_true(
       @moonclip.offset_polygons(
         input,
@@ -797,7 +797,7 @@ test "offset joins isolation 4 failed generation leaves next call fresh" {
 test "offset joins isolation 5 tiny distances still normalize shared raw inputs" {
   let p = bb_rect(0L, 0L, 10L, 10L)
   for delta in [0.0, -0.0, 0.49, -0.49] {
-    for join in [@moonclip.Square, @moonclip.Round] {
+    for join in [@moonclip.JoinType::Square, @moonclip.JoinType::Round] {
       assert_eq(
         @moonclip.offset_polygons(
           [p, p],

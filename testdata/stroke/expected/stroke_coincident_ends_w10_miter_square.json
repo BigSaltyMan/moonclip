@@ -1,0 +1,100 @@
+{
+  "adapter_protocol_version": 3,
+  "case_id": "stroke_coincident_ends_w10_miter_square",
+  "format_version": 3,
+  "input_sha256": "7577b5c658ce5b33a4067632a4bbd93af06f86cdacd49a0c354be35ad1a28c4a",
+  "metrics": {
+    "path_count": 2,
+    "paths": [
+      {
+        "area2": "2131",
+        "bounds": [
+          -7,
+          -7,
+          35,
+          36
+        ],
+        "vertices": 12
+      },
+      {
+        "area2": "-156",
+        "bounds": [
+          12,
+          5,
+          25,
+          17
+        ],
+        "vertices": 3
+      }
+    ],
+    "vertex_count": 15
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        2,
+        -5
+      ],
+      [
+        35,
+        -5
+      ],
+      [
+        35,
+        33
+      ],
+      [
+        29,
+        36
+      ],
+      [
+        -2,
+        5
+      ],
+      [
+        -5,
+        5
+      ],
+      [
+        -5,
+        2
+      ],
+      [
+        -7,
+        0
+      ],
+      [
+        -5,
+        -2
+      ],
+      [
+        -5,
+        -5
+      ],
+      [
+        -2,
+        -5
+      ],
+      [
+        0,
+        -7
+      ]
+    ],
+    [
+      [
+        12,
+        5
+      ],
+      [
+        25,
+        17
+      ],
+      [
+        25,
+        5
+      ]
+    ]
+  ],
+  "status": "success"
+}

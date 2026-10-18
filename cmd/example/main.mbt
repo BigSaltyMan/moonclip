@@ -86,7 +86,8 @@ fn main raise {
   run_tree_example()
   run_offset_example()
   run_join_example()
-  println("MoonClip geometry, Boolean, PolyTree and four offset joins OK")
+  run_stroke_example()
+  println("MoonClip geometry, Boolean, PolyTree, offset and stroke OK")
 }
 
 ///|
@@ -400,4 +401,65 @@ fn run_join_example() -> Unit raise {
     ],
   ])
   assert_true(square != round)
+}
+
+///|
+fn run_stroke_example() -> Unit raise {
+  let line = [@moonclip.Point64::new(0L, 0L), @moonclip.Point64::new(20L, 0L)]
+  for
+    (cap, expected) in [
+      (@moonclip.CapType::Butt, [example_rect(0L, -2L, 20L, 4L)]),
+      (@moonclip.CapType::Square, [example_rect(-2L, -2L, 24L, 4L)]),
+    ] {
+    guard @moonclip.stroke_polyline(line, 4.0, cap~) is Ok(result) else {
+      fail("Expected line stroke")
+    }
+    example_result(result, expected)
+  }
+  guard @moonclip.stroke_polyline(line, 4.0, cap=Round) is Ok(round) else {
+    fail("Expected round caps")
+  }
+  example_result(round, [
+    [
+      @moonclip.Point64::new(0L, 2L),
+      @moonclip.Point64::new(-2L, 1L),
+      @moonclip.Point64::new(-2L, -1L),
+      @moonclip.Point64::new(0L, -2L),
+      @moonclip.Point64::new(20L, -2L),
+      @moonclip.Point64::new(22L, -1L),
+      @moonclip.Point64::new(22L, 1L),
+      @moonclip.Point64::new(20L, 2L),
+    ],
+  ])
+  let route = [
+    @moonclip.Point64::new(0L, 0L),
+    @moonclip.Point64::new(20L, 0L),
+    @moonclip.Point64::new(20L, 20L),
+  ]
+  guard @moonclip.stroke_polyline(
+      route,
+      4.0,
+      cap=Round,
+      options=@moonclip.OffsetOptions::new(join=Round, arc_tolerance=0.25),
+    )
+    is Ok(region) else {
+    fail("Expected route stroke")
+  }
+  example_result(region, [
+    [
+      @moonclip.Point64::new(0L, 2L),
+      @moonclip.Point64::new(-2L, 1L),
+      @moonclip.Point64::new(-2L, -1L),
+      @moonclip.Point64::new(0L, -2L),
+      @moonclip.Point64::new(20L, -2L),
+      @moonclip.Point64::new(22L, -1L),
+      @moonclip.Point64::new(22L, 20L),
+      @moonclip.Point64::new(21L, 22L),
+      @moonclip.Point64::new(19L, 22L),
+      @moonclip.Point64::new(18L, 20L),
+      @moonclip.Point64::new(18L, 2L),
+    ],
+  ])
+  assert_eq(@moonclip.stroke_polyline(line, 0.99), Ok([]))
+  assert_true(@moonclip.stroke_polyline(line, -1.0) is Err(InvalidInput(_, _)))
 }

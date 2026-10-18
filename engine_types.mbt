@@ -155,6 +155,8 @@ priv struct ScanStats {
 // One cumulative ledger; ScanState aliases these immutable limits and mutable stats.
 // Releasing a phase never refunds prior work or allocation charges.
 priv struct CallBudget {
+  generate_stage : Stage
+  cleanup_stage : Stage
   limits : ScanLimits
   stats : ScanStats
 }
@@ -204,8 +206,14 @@ priv suberror ScanAbort {
 }
 
 ///|
-fn new_call_budget(limits : ScanLimits) -> CallBudget {
+fn new_call_budget(
+  limits : ScanLimits,
+  generate_stage? : Stage = OffsetGenerate,
+  cleanup_stage? : Stage = OffsetCleanup,
+) -> CallBudget {
   {
+    generate_stage,
+    cleanup_stage,
     limits,
     stats: {
       nodes: 0,

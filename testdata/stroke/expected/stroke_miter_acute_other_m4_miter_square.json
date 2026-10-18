@@ -1,0 +1,56 @@
+{
+  "adapter_protocol_version": 3,
+  "case_id": "stroke_miter_acute_other_m4_miter_square",
+  "format_version": 3,
+  "input_sha256": "6c29bbc0a09fafcad1c14d89e62a1f17ee2891b6381c6f112d844be2dff56895",
+  "metrics": {
+    "path_count": 1,
+    "paths": [
+      {
+        "area2": "1928",
+        "bounds": [
+          -5,
+          -22,
+          56,
+          5
+        ],
+        "vertices": 7
+      }
+    ],
+    "vertex_count": 7
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        56,
+        -3
+      ],
+      [
+        54,
+        5
+      ],
+      [
+        -5,
+        5
+      ],
+      [
+        -5,
+        -5
+      ],
+      [
+        20,
+        -5
+      ],
+      [
+        -2,
+        -13
+      ],
+      [
+        1,
+        -22
+      ]
+    ]
+  ],
+  "status": "success"
+}

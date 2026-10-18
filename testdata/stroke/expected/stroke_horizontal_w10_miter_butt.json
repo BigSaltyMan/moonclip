@@ -1,0 +1,44 @@
+{
+  "adapter_protocol_version": 3,
+  "case_id": "stroke_horizontal_w10_miter_butt",
+  "format_version": 3,
+  "input_sha256": "d84872c234426de42e32c5887011d8de23961e24211036ea61da618f66e0fe6b",
+  "metrics": {
+    "path_count": 1,
+    "paths": [
+      {
+        "area2": "400",
+        "bounds": [
+          0,
+          -5,
+          20,
+          5
+        ],
+        "vertices": 4
+      }
+    ],
+    "vertex_count": 4
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        20,
+        5
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        0,
+        -5
+      ],
+      [
+        20,
+        -5
+      ]
+    ]
+  ],
+  "status": "success"
+}

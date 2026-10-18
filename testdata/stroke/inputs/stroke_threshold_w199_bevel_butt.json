@@ -1,0 +1,29 @@
+{
+  "arc_tolerance": 0.0,
+  "cap_type": "Butt",
+  "case_id": "stroke_threshold_w199_bevel_butt",
+  "format_version": 3,
+  "join_type": "Bevel",
+  "miter_limit": 2.0,
+  "operation": "StrokePolyline",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "path": [
+    [
+      0,
+      0
+    ],
+    [
+      20,
+      0
+    ]
+  ],
+  "source": {
+    "group": "threshold",
+    "intent": "Open route; full width divided by two; w199",
+    "kind": "moonclip_constructed"
+  },
+  "width": 1.99
+}

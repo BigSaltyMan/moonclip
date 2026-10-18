@@ -1,0 +1,80 @@
+{
+  "adapter_protocol_version": 3,
+  "case_id": "stroke_arc_acute_t025_round_butt",
+  "format_version": 3,
+  "input_sha256": "9955d1cdf39f014359b7b542c5f10d0b64613053931152eafba9dbde90c9102c",
+  "metrics": {
+    "path_count": 1,
+    "paths": [
+      {
+        "area2": "21906",
+        "bounds": [
+          0,
+          -10,
+          310,
+          60
+        ],
+        "vertices": 13
+      }
+    ],
+    "vertex_count": 13
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        304,
+        -9
+      ],
+      [
+        308,
+        -6
+      ],
+      [
+        310,
+        -2
+      ],
+      [
+        310,
+        2
+      ],
+      [
+        308,
+        6
+      ],
+      [
+        304,
+        9
+      ],
+      [
+        302,
+        10
+      ],
+      [
+        12,
+        60
+      ],
+      [
+        8,
+        40
+      ],
+      [
+        182,
+        10
+      ],
+      [
+        0,
+        10
+      ],
+      [
+        0,
+        -10
+      ],
+      [
+        300,
+        -10
+      ]
+    ]
+  ],
+  "status": "success"
+}

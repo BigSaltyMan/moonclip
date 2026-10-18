@@ -1,0 +1,44 @@
+{
+  "adapter_protocol_version": 3,
+  "case_id": "stroke_diagonal_w4_bevel_square",
+  "format_version": 3,
+  "input_sha256": "611ef6923fc20cee7c10c190fdaf8f554d12b7eb89b52c200bca1871356c88fb",
+  "metrics": {
+    "path_count": 1,
+    "paths": [
+      {
+        "area2": "456",
+        "bounds": [
+          -3,
+          -3,
+          33,
+          43
+        ],
+        "vertices": 4
+      }
+    ],
+    "vertex_count": 4
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        33,
+        40
+      ],
+      [
+        30,
+        43
+      ],
+      [
+        -3,
+        0
+      ],
+      [
+        0,
+        -3
+      ]
+    ]
+  ],
+  "status": "success"
+}

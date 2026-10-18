@@ -49,6 +49,7 @@ fn main {
     "args": @env.args().to_json(),
     "results": run_cases().to_json(),
     "offset_results": run_offset_cases().to_json(),
+    "stroke_results": run_stroke_cases().to_json(),
   })
   exit_code(report(@utf8.encode(envelope.stringify())))
 }

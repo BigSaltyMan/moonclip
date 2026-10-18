@@ -162,3 +162,19 @@ C# 源码作为主要阅读与后续移植参考；固定版本的 C++ 实现作
 | MoonClip 自行实现 | offset.mbt、参考工具与测试 | 可选参数校验、实际点数预算预检、共享账本、v2兼容字段、两批选择和独立参考；参考适配器仅增加保守采样安全检查，不生成替代几何。 |
 
 运行库仍为纯 MoonBit；新增使用固定工具链 core/math，未新增第三方包。40项功能和156条独立参考分别验证，旧316对参考保持字节不变。开放折线、端点样式仍计划由Commit 11接入。
+
+
+## Commit 11 开放描边（2026-10-18）
+
+固定版本继续为Clipper2_2.0.1 / 21ebba05db8894f0c7217ad35ea518080f324946。本笔实际读取CPP/Clipper2Lib/src/clipper.offset.cpp的Group::Group/StripDuplicates、BuildNormals、OffsetOpenPath、DoBevel(j==k)、DoSquare(j==k)、DoRound(j==k)及DoGroupOffset。端点语义另核对[官方EndType说明](https://www.angusj.com/clipper2/Docs/Units/Clipper/Types/EndType.htm)。
+
+| 实际来源 | MoonBit文件 | 改写与自有契约 |
+| --- | --- | --- |
+| Group的开放重复点整理、OffsetOpenPath | stroke.mbt | 不删重复末端，不先Union；正向/反向边界和法线次序对应固定实现。预检和Open独立副本由MoonClip实现。 |
+| DoBevel端点分支 | stroke.mbt | Butt端点横向截平，生成前检查坐标与计费。 |
+| DoSquare端点分支 | offset.mbt、stroke.mbt | 复用已有截线/反射公式，端点取外向切线，先反射点再交点；闭合方角顺序不变。 |
+| DoRound端点分支 | stroke.mbt、offset.mbt | 半圆π，起点负法线、终点正法线，共用圆弧参数/预算/直接终点。 |
+| MoonClip自有 | stroke.mbt、engine_types.mbt、scanbeam.mbt | 完整宽度、width<1/单点空区域契约、私有阶段上下文、累计预算及Result；不移植上游单点特殊面域。 |
+| 自有参考工具 | stroke_compare/generate/adapter/report | 独立v3、276输入、严格目录分派及报告；Cpp仍只用于数据生成。 |
+
+实际移植文件保留Angus Johnson2010–2025及BSL-1.0声明，自有实现版权BigSaltyMan2026。运行几何全部MoonBit，无新增运行库依赖；原上游/归档/许可/编译选项保持固定，锁仅新增描边协议标识。小数接口和缩放尚在Commit13范围。

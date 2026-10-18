@@ -38,8 +38,21 @@ def verified_binary(root):
     return binary
 
 
+def expected_directory(records):
+    require(bool(records), 'generation', 'empty reference batch')
+    operations={case['operation'] for _,case,_,_ in records}
+    if operations <= {'Intersection','Union','Difference','Xor'}:
+        return 'testdata/upstream/expected'
+    if operations == {'OffsetPolygons'}:
+        return 'testdata/offset/expected'
+    if operations == {'StrokePolyline'}:
+        return 'testdata/stroke/expected'
+    raise Invalid('generation: unknown or mixed reference category')
+
+
 def generate(root, manifest, mode, command, timeout=20):
     lock, records = read_manifest(root, manifest, require_expected=(mode == "check"), strict=True)
+    destination = root / expected_directory(records)
     started = time.monotonic()
     work = root / ".tmp/oracle"
     work.mkdir(parents=True, exist_ok=True)
@@ -62,7 +75,6 @@ def generate(root, manifest, mode, command, timeout=20):
         (work / "generation-report.json").write_bytes(canonical_bytes(report))
         if mode == "write":
             # Publish only after the entire batch succeeds. Roll back a failed rename.
-            destination = root / ("testdata/offset/expected" if records[0][1]["operation"] == "OffsetPolygons" else "testdata/upstream/expected")
             backup = Path(temp) / "previous"
             existed = destination.exists()
             if existed:

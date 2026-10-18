@@ -136,3 +136,22 @@ MiterLimit 为默认 2；额外两组仅 Miter 分别 4、10。参考请求值�
 独立固定 C++ 生成新预期；原200 Boolean和116 Offset的输入/预期逐字节保留。偏移v2新增可选arc_tolerance（省略为0）并扩展四Join，不改Boolean v1、锁定SHA、构建定义、依赖。参考程序在调用上游前还检查保守采样上界（每顶点按半圈估算，总计不超过100000），防止不受控的上游整数转换/循环；它只拒绝超出适配器资源范围的请求，不改变几何或调低精度，库本身使用实际逐角累计预算。
 
 全量每目标1006=旧810+156对照+40功能；偏移过滤272=旧116+156。工具134=124+10、真实适配器29=20+9分别统计。独立参考472=Boolean200+Offset272；多目标和多能力不计为独立输入数。普通Linux CI与独立参考CI须分别查看最终提交的执行日志。
+
+
+## Commit 11 独立描边协议与276条输入
+
+新增stroke-manifest/selection及独立inputs/expected目录，协议v3为StrokePolyline，一条原始开放path、完整width、JoinType、CapType、MiterLimit、ArcTolerance和固定输出选项。没有输入填充规则，也不输出树。构造脚本在首次MoonClip执行前锁定全部276个ID及参数，重复运行拒绝改写不同定义。来源均为2026年MoonClip自行构造，BSL-1.0。
+
+| 类别 | 固定输入与参数 | 数量 |
+| --- | --- | ---: |
+| 基础路线 | horizontal/vertical/diagonal/right_angle/acute/reversal/self_crossing/coincident_ends，4 Join ×3 Cap ×width4/10 | 192 |
+| 阈值 | 水平路线，width1/1.01/1.99/2/3 ×4 Join ×3 Cap | 60 |
+| 显式容差 | 直角与锐角路线坐标乘5，width20，tol.05/.25/1.0，RoundJoin+Butt与MiterJoin+Round | 12 |
+| 额外MiterLimit | 原锐角及[(0,0),(50,0),(4,-16)]，width10，MiterLimit4/10 ×3 Cap | 12 |
+| 合计 | | 276 |
+
+所有参考至少有一个有效线段且width>=1。零宽度、极小宽度、单点和全重复点属于MoonClip契约测试，不计为固定Cpp退化分支通过。Cpp适配器直接AddPath开放路线，Execute(width/2)，不先执行闭合Union。Round连接或端点任一启用时，以两侧内部角及两个端点的保守样本总数进行资源保护，上游转换/分配/循环之前拒绝超量；不改精度、不制造替代结果。
+
+独立总数为Boolean200＋Offset272＋Stroke276＝748，原472对数据、旧清单和选择保持字节不变。v1/v2不变，锁只增加stroke_protocol_version=3，固定上游SHA、归档、依赖和编译选项未变。参考生成器显式选择upstream/offset/stroke预期目录，未知/混合类别拒绝，整批成功后才发布。
+
+同一批库测试1330=旧1006＋276描边对照＋48功能；两端分别执行，描边过滤严格276并要求专属选择标记。旧Offset272、公开Boolean平铺/树各152、私有各48分别保留。工具155（134＋21）、真实适配器41（29＋12）另计；报告分开列完整坐标差异、执行错误及全部样式/参数覆盖。boolean_tree的描边组合测试只辅助证明真实孔洞，不代表新增描边树API。

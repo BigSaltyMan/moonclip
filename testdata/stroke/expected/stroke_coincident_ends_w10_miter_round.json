@@ -1,0 +1,80 @@
+{
+  "adapter_protocol_version": 3,
+  "case_id": "stroke_coincident_ends_w10_miter_round",
+  "format_version": 3,
+  "input_sha256": "585b4bdb1f56e241711c38f7f1a83975883a58d91097d75ff8619554f04a6a33",
+  "metrics": {
+    "path_count": 2,
+    "paths": [
+      {
+        "area2": "2131",
+        "bounds": [
+          -5,
+          -5,
+          35,
+          36
+        ],
+        "vertices": 7
+      },
+      {
+        "area2": "-144",
+        "bounds": [
+          13,
+          5,
+          25,
+          17
+        ],
+        "vertices": 3
+      }
+    ],
+    "vertex_count": 10
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        35,
+        -5
+      ],
+      [
+        35,
+        33
+      ],
+      [
+        29,
+        36
+      ],
+      [
+        -4,
+        4
+      ],
+      [
+        -5,
+        2
+      ],
+      [
+        -5,
+        -2
+      ],
+      [
+        -2,
+        -5
+      ]
+    ],
+    [
+      [
+        13,
+        5
+      ],
+      [
+        25,
+        17
+      ],
+      [
+        25,
+        5
+      ]
+    ]
+  ],
+  "status": "success"
+}

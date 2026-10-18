@@ -1,0 +1,96 @@
+{
+  "adapter_protocol_version": 3,
+  "case_id": "stroke_self_crossing_w10_bevel_butt",
+  "format_version": 3,
+  "input_sha256": "f7a6bec7c252e2bc14210bc4bbf07a4d32a6d131dba5345a03465c5df7d0352e",
+  "metrics": {
+    "path_count": 2,
+    "paths": [
+      {
+        "area2": "2968",
+        "bounds": [
+          -24,
+          -24,
+          24,
+          25
+        ],
+        "vertices": 11
+      },
+      {
+        "area2": "-98",
+        "bounds": [
+          -7,
+          8,
+          7,
+          15
+        ],
+        "vertices": 3
+      }
+    ],
+    "vertex_count": 14
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        24,
+        -16
+      ],
+      [
+        8,
+        0
+      ],
+      [
+        24,
+        16
+      ],
+      [
+        20,
+        25
+      ],
+      [
+        -20,
+        25
+      ],
+      [
+        -24,
+        16
+      ],
+      [
+        -8,
+        0
+      ],
+      [
+        -24,
+        -16
+      ],
+      [
+        -16,
+        -24
+      ],
+      [
+        0,
+        -8
+      ],
+      [
+        16,
+        -24
+      ]
+    ],
+    [
+      [
+        -7,
+        15
+      ],
+      [
+        7,
+        15
+      ],
+      [
+        0,
+        8
+      ]
+    ]
+  ],
+  "status": "success"
+}

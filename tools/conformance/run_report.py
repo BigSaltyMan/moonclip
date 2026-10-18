@@ -88,6 +88,39 @@ def evaluate_offset(manifest, results):
     return {**summary(details),'required':272,'reference_cases':272,'capability':'public paths','cases':details}
 
 
+def evaluate_stroke(manifest, results):
+    from compare import read_manifest
+    from stroke_compare import stroke_selection
+    _, records=read_manifest(ROOT,manifest,strict=True)
+    _,selected=stroke_selection(ROOT)
+    require([r[0]["case_id"] for r in records]==[r[0]["case_id"] for r in selected],"stroke","manifest selection differs")
+    require(len(records)==276 and all(c['operation']=='StrokePolyline' for _,c,_,_ in records),'stroke','expected 276 stroke cases')
+    require(type(results) is list,'stroke actual','expected results array')
+    actual={}
+    for result in results:
+        require(type(result) is dict and type(result.get('case_id')) is str,'stroke actual','missing case ID')
+        cid=result['case_id'];require(cid not in actual,cid,'duplicate stroke result');actual[cid]=result
+    require(set(actual)=={e['case_id'] for e,_,_,_ in records},'stroke actual','missing or extra stroke results')
+    details=[]
+    for entry,case,digest,expected in records:
+        cid=case['case_id'];r=actual[cid]
+        require(r.get('input_sha256')==digest,cid,'compiled stroke hash mismatch')
+        detail={'case_id':cid}
+        if r.get('status')=='error':
+            require(set(r)=={'case_id','input_sha256','status','error'} and type(r['error']) is str,cid,'invalid stroke error')
+            detail.update(status='execution_error',message=r['error'])
+        else:
+            require(set(r)=={'case_id','input_sha256','status','paths'} and r['status']=='success',cid,'invalid stroke success')
+            validate_paths(r['paths'],cid+'.stroke',output=True)
+            try:compare_paths(expected['paths'],r['paths'],cid+'.stroke')
+            except Invalid as error:detail.update(status='difference',message=str(error))
+            else:detail['status']='passed'
+        details.append(detail)
+    from collections import Counter
+    coverage={field:dict(sorted(Counter(str(c[field]) for _,c,_,_ in records).items())) for field in ('join_type','cap_type','width','miter_limit','arc_tolerance')}
+    return {**summary(details),'required':276,'reference_cases':276,'capability':'public paths','cases':details,'coverage':coverage}
+
+
 def markdown(report):
     lines=['# Boolean compatibility','','Pinned Clipper2 2.0.1, commit `21ebba05db8894f0c7217ad35ea518080f324946`; ordinary precision, preserve_collinear=false, reverse_solution=false.','',
       f"Public cases: {report['required']}; both passed={report['passed']}, differences={report['differences']}, execution_errors={report['execution_errors']}. Reference catalog: {report['reference_cases']}.",'',
@@ -104,7 +137,7 @@ def markdown(report):
     if 'offset' in report:
         r=report['offset']
         lines+=['','# Offset compatibility','',f"Offset public paths: {r['passed']}/{r['executed']}; required={r['required']}, differences={r['differences']}, execution_errors={r['execution_errors']}.",'',
-          'Boolean reference cases: 200. Offset reference cases: 272. Total independent reference inputs: 472. Offset has no public tree interface; hole/island composition is covered separately by functional tests.','',
+          'Boolean reference cases: 200. Offset reference cases: 272. Boolean/Offset subtotal: 472. Offset has no public tree interface; hole/island composition is covered separately by functional tests.','',
           '| Target | Offset filtered paths |','| --- | --- |']
         for target in ('native','js'):
             e=report.get('offset_evidence',{}).get(target,{})
@@ -112,22 +145,39 @@ def markdown(report):
             lines.append('| '+target+' | '+value+' |')
         lines+=['','| Offset case | Native paths |','| --- | --- |']
         lines += [f"| {c['case_id']} | {c['status']} |" for c in r['cases']]
+    if 'stroke' in report:
+        r=report['stroke']
+        lines+=['','# Stroke compatibility','',f"Stroke public paths: {r['passed']}/{r['executed']}; required={r['required']}, differences={r['differences']}, execution_errors={r['execution_errors']}.",'',
+          'Independent inputs: Boolean200 + Offset272 + Stroke276 =748. Strokes have no input fill rule or public tree interface; boolean_tree composition tests are separate evidence.','',
+          '| Parameter | Actual case coverage |','| --- | --- |']
+        lines += ['| '+field+' | '+', '.join(k+': '+str(v) for k,v in values.items())+' |' for field,values in r['coverage'].items()]
+        lines+=['','| Target | Stroke filtered paths |','| --- | --- |']
+        for target in ('native','js'):
+            e=report.get('stroke_evidence',{}).get(target,{})
+            value=str(e['passed'])+'/'+str(e['executed']) if e.get('status')=='passed' else 'not recorded'
+            lines.append('| '+target+' | '+value+' |')
+        lines+=['','| Stroke case | Native paths |','| --- | --- |']
+        lines += [f"| {c['case_id']} | {c['status']} |" for c in r['cases']]
     return '\n'.join(lines)+'\n'
 
 def main():
     parser=argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,description='Execute independent MoonClip paths and tree comparisons. Exit codes: 0 success/help; 1 differences; 2 arguments, integrity or execution errors.')
     parser.add_argument('--manifest',type=Path,default=ROOT/'testdata/manifest.json')
     parser.add_argument('--offset-manifest',type=Path,help='Include independently executed offset protocol v2 cases')
+    parser.add_argument('--stroke-manifest',type=Path,help='Include independent open stroke protocol v3 cases')
     parser.add_argument('--report-json',type=Path,default=ROOT/'_build/conformance/report.json')
     parser.add_argument('--report-md',type=Path,default=ROOT/'docs/compatibility.md')
     parser.add_argument('--strict',action='store_true',help='Require exactly 152 public cases with independent paths and tree results (also enforced by default)')
     try:
         envelope=json.load(sys.stdin);args=parser.parse_args(envelope['args'][1:])
         report=evaluate(args.manifest.resolve(),envelope['results'])
-        from evidence import internal_evidence,tree_evidence,offset_evidence
+        from evidence import internal_evidence,tree_evidence,offset_evidence,stroke_evidence
         if args.offset_manifest:
             report['offset']=evaluate_offset(args.offset_manifest.resolve(),envelope.get('offset_results'))
             report['offset_evidence']=offset_evidence(ROOT/'_build/conformance')
+        if args.stroke_manifest:
+            report['stroke']=evaluate_stroke(args.stroke_manifest.resolve(),envelope.get('stroke_results'))
+            report['stroke_evidence']=stroke_evidence(ROOT/'_build/conformance')
         report['internal']=internal_evidence(ROOT/'_build/conformance')
         report['tree_evidence']=tree_evidence(ROOT/'_build/conformance')
         args.report_json.parent.mkdir(parents=True,exist_ok=True);args.report_md.parent.mkdir(parents=True,exist_ok=True)
@@ -136,7 +186,10 @@ def main():
         offset=report.get('offset',{})
         if offset:
             print(f"Native offset conformance: cases=272, paths={offset['passed']}/{offset['executed']}, differences={offset['differences']}, execution_errors={offset['execution_errors']}")
-        return 2 if report['execution_errors'] or offset.get('execution_errors') else 1 if report['differences'] or offset.get('differences') else 0
+        stroke=report.get('stroke',{})
+        if stroke:
+            print(f"Native stroke conformance: cases=276, paths={stroke['passed']}/{stroke['executed']}, differences={stroke['differences']}, execution_errors={stroke['execution_errors']}")
+        return 2 if any(r.get('execution_errors') for r in (report,offset,stroke)) else 1 if any(r.get('differences') for r in (report,offset,stroke)) else 0
     except (Invalid,OSError,ValueError,KeyError,TypeError) as error:
         print(f'Conformance error: {error}',file=sys.stderr);return 2
 if __name__=='__main__':sys.exit(main())

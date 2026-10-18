@@ -1,0 +1,88 @@
+{
+  "adapter_protocol_version": 3,
+  "case_id": "stroke_coincident_ends_w4_round_butt",
+  "format_version": 3,
+  "input_sha256": "5d3948e863b7f4585180cbf9d26bb05a92d41fd77e9351752e4f06c948d2c5a5",
+  "metrics": {
+    "path_count": 2,
+    "paths": [
+      {
+        "area2": "1275",
+        "bounds": [
+          -1,
+          -2,
+          32,
+          32
+        ],
+        "vertices": 9
+      },
+      {
+        "area2": "-576",
+        "bounds": [
+          4,
+          2,
+          28,
+          26
+        ],
+        "vertices": 3
+      }
+    ],
+    "vertex_count": 12
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        32,
+        -1
+      ],
+      [
+        32,
+        30
+      ],
+      [
+        31,
+        32
+      ],
+      [
+        29,
+        32
+      ],
+      [
+        29,
+        31
+      ],
+      [
+        -1,
+        1
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        -2
+      ],
+      [
+        30,
+        -2
+      ]
+    ],
+    [
+      [
+        4,
+        2
+      ],
+      [
+        28,
+        26
+      ],
+      [
+        28,
+        2
+      ]
+    ]
+  ],
+  "status": "success"
+}

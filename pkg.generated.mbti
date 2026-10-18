@@ -35,6 +35,8 @@ pub fn point_in_polygon(Point64, Array[Point64], limits? : Limits) -> Result[Poi
 
 pub fn point_on_segment(Point64, Point64, Point64, limits? : Limits) -> Result[Bool, ClipError]
 
+pub fn stroke_polyline(Array[Point64], Double, cap? : CapType, options? : OffsetOptions, limits? : Limits) -> Result[Array[Array[Point64]], ClipError]
+
 pub fn validate_paths(Array[Array[Point64]], limits? : Limits) -> Result[Unit, ClipError]
 
 // Errors
@@ -50,6 +52,12 @@ pub(all) struct Bounds64 {
   min_y : Int64
   max_x : Int64
   max_y : Int64
+} derive(Eq, @debug.Debug)
+
+pub(all) enum CapType {
+  Butt
+  Square
+  Round
 } derive(Eq, @debug.Debug)
 
 pub(all) enum ClipError {
@@ -167,6 +175,9 @@ pub(all) enum Stage {
   OffsetParameters
   OffsetGenerate
   OffsetCleanup
+  StrokeParameters
+  StrokeGenerate
+  StrokeCleanup
 } derive(Eq, @debug.Debug)
 
 // Type aliases

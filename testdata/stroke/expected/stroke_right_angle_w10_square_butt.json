@@ -1,0 +1,56 @@
+{
+  "adapter_protocol_version": 3,
+  "case_id": "stroke_right_angle_w10_square_butt",
+  "format_version": 3,
+  "input_sha256": "5dc8570190b70da1947ac3d8cea472a54d08b58b7607416a84799e9054e09164",
+  "metrics": {
+    "path_count": 1,
+    "paths": [
+      {
+        "area2": "791",
+        "bounds": [
+          0,
+          -5,
+          25,
+          20
+        ],
+        "vertices": 7
+      }
+    ],
+    "vertex_count": 7
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        25,
+        -2
+      ],
+      [
+        25,
+        20
+      ],
+      [
+        15,
+        20
+      ],
+      [
+        15,
+        5
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        0,
+        -5
+      ],
+      [
+        22,
+        -5
+      ]
+    ]
+  ],
+  "status": "success"
+}

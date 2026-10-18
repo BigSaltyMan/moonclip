@@ -1,0 +1,2491 @@
+{
+  "cases": [
+    {
+      "case_id": "stroke_acute_w10_bevel_butt",
+      "expected": "testdata/stroke/expected/stroke_acute_w10_bevel_butt.json",
+      "input": "testdata/stroke/inputs/stroke_acute_w10_bevel_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_acute_w10_bevel_round",
+      "expected": "testdata/stroke/expected/stroke_acute_w10_bevel_round.json",
+      "input": "testdata/stroke/inputs/stroke_acute_w10_bevel_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_acute_w10_bevel_square",
+      "expected": "testdata/stroke/expected/stroke_acute_w10_bevel_square.json",
+      "input": "testdata/stroke/inputs/stroke_acute_w10_bevel_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_acute_w10_miter_butt",
+      "expected": "testdata/stroke/expected/stroke_acute_w10_miter_butt.json",
+      "input": "testdata/stroke/inputs/stroke_acute_w10_miter_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_acute_w10_miter_round",
+      "expected": "testdata/stroke/expected/stroke_acute_w10_miter_round.json",
+      "input": "testdata/stroke/inputs/stroke_acute_w10_miter_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_acute_w10_miter_square",
+      "expected": "testdata/stroke/expected/stroke_acute_w10_miter_square.json",
+      "input": "testdata/stroke/inputs/stroke_acute_w10_miter_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_acute_w10_round_butt",
+      "expected": "testdata/stroke/expected/stroke_acute_w10_round_butt.json",
+      "input": "testdata/stroke/inputs/stroke_acute_w10_round_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_acute_w10_round_round",
+      "expected": "testdata/stroke/expected/stroke_acute_w10_round_round.json",
+      "input": "testdata/stroke/inputs/stroke_acute_w10_round_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_acute_w10_round_square",
+      "expected": "testdata/stroke/expected/stroke_acute_w10_round_square.json",
+      "input": "testdata/stroke/inputs/stroke_acute_w10_round_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_acute_w10_square_butt",
+      "expected": "testdata/stroke/expected/stroke_acute_w10_square_butt.json",
+      "input": "testdata/stroke/inputs/stroke_acute_w10_square_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_acute_w10_square_round",
+      "expected": "testdata/stroke/expected/stroke_acute_w10_square_round.json",
+      "input": "testdata/stroke/inputs/stroke_acute_w10_square_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_acute_w10_square_square",
+      "expected": "testdata/stroke/expected/stroke_acute_w10_square_square.json",
+      "input": "testdata/stroke/inputs/stroke_acute_w10_square_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_acute_w4_bevel_butt",
+      "expected": "testdata/stroke/expected/stroke_acute_w4_bevel_butt.json",
+      "input": "testdata/stroke/inputs/stroke_acute_w4_bevel_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_acute_w4_bevel_round",
+      "expected": "testdata/stroke/expected/stroke_acute_w4_bevel_round.json",
+      "input": "testdata/stroke/inputs/stroke_acute_w4_bevel_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_acute_w4_bevel_square",
+      "expected": "testdata/stroke/expected/stroke_acute_w4_bevel_square.json",
+      "input": "testdata/stroke/inputs/stroke_acute_w4_bevel_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_acute_w4_miter_butt",
+      "expected": "testdata/stroke/expected/stroke_acute_w4_miter_butt.json",
+      "input": "testdata/stroke/inputs/stroke_acute_w4_miter_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_acute_w4_miter_round",
+      "expected": "testdata/stroke/expected/stroke_acute_w4_miter_round.json",
+      "input": "testdata/stroke/inputs/stroke_acute_w4_miter_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_acute_w4_miter_square",
+      "expected": "testdata/stroke/expected/stroke_acute_w4_miter_square.json",
+      "input": "testdata/stroke/inputs/stroke_acute_w4_miter_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_acute_w4_round_butt",
+      "expected": "testdata/stroke/expected/stroke_acute_w4_round_butt.json",
+      "input": "testdata/stroke/inputs/stroke_acute_w4_round_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_acute_w4_round_round",
+      "expected": "testdata/stroke/expected/stroke_acute_w4_round_round.json",
+      "input": "testdata/stroke/inputs/stroke_acute_w4_round_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_acute_w4_round_square",
+      "expected": "testdata/stroke/expected/stroke_acute_w4_round_square.json",
+      "input": "testdata/stroke/inputs/stroke_acute_w4_round_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_acute_w4_square_butt",
+      "expected": "testdata/stroke/expected/stroke_acute_w4_square_butt.json",
+      "input": "testdata/stroke/inputs/stroke_acute_w4_square_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_acute_w4_square_round",
+      "expected": "testdata/stroke/expected/stroke_acute_w4_square_round.json",
+      "input": "testdata/stroke/inputs/stroke_acute_w4_square_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_acute_w4_square_square",
+      "expected": "testdata/stroke/expected/stroke_acute_w4_square_square.json",
+      "input": "testdata/stroke/inputs/stroke_acute_w4_square_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_arc_acute_t005_miter_round",
+      "expected": "testdata/stroke/expected/stroke_arc_acute_t005_miter_round.json",
+      "input": "testdata/stroke/inputs/stroke_arc_acute_t005_miter_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_arc_acute_t005_round_butt",
+      "expected": "testdata/stroke/expected/stroke_arc_acute_t005_round_butt.json",
+      "input": "testdata/stroke/inputs/stroke_arc_acute_t005_round_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_arc_acute_t025_miter_round",
+      "expected": "testdata/stroke/expected/stroke_arc_acute_t025_miter_round.json",
+      "input": "testdata/stroke/inputs/stroke_arc_acute_t025_miter_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_arc_acute_t025_round_butt",
+      "expected": "testdata/stroke/expected/stroke_arc_acute_t025_round_butt.json",
+      "input": "testdata/stroke/inputs/stroke_arc_acute_t025_round_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_arc_acute_t100_miter_round",
+      "expected": "testdata/stroke/expected/stroke_arc_acute_t100_miter_round.json",
+      "input": "testdata/stroke/inputs/stroke_arc_acute_t100_miter_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_arc_acute_t100_round_butt",
+      "expected": "testdata/stroke/expected/stroke_arc_acute_t100_round_butt.json",
+      "input": "testdata/stroke/inputs/stroke_arc_acute_t100_round_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_arc_right_angle_t005_miter_round",
+      "expected": "testdata/stroke/expected/stroke_arc_right_angle_t005_miter_round.json",
+      "input": "testdata/stroke/inputs/stroke_arc_right_angle_t005_miter_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_arc_right_angle_t005_round_butt",
+      "expected": "testdata/stroke/expected/stroke_arc_right_angle_t005_round_butt.json",
+      "input": "testdata/stroke/inputs/stroke_arc_right_angle_t005_round_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_arc_right_angle_t025_miter_round",
+      "expected": "testdata/stroke/expected/stroke_arc_right_angle_t025_miter_round.json",
+      "input": "testdata/stroke/inputs/stroke_arc_right_angle_t025_miter_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_arc_right_angle_t025_round_butt",
+      "expected": "testdata/stroke/expected/stroke_arc_right_angle_t025_round_butt.json",
+      "input": "testdata/stroke/inputs/stroke_arc_right_angle_t025_round_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_arc_right_angle_t100_miter_round",
+      "expected": "testdata/stroke/expected/stroke_arc_right_angle_t100_miter_round.json",
+      "input": "testdata/stroke/inputs/stroke_arc_right_angle_t100_miter_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_arc_right_angle_t100_round_butt",
+      "expected": "testdata/stroke/expected/stroke_arc_right_angle_t100_round_butt.json",
+      "input": "testdata/stroke/inputs/stroke_arc_right_angle_t100_round_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_coincident_ends_w10_bevel_butt",
+      "expected": "testdata/stroke/expected/stroke_coincident_ends_w10_bevel_butt.json",
+      "input": "testdata/stroke/inputs/stroke_coincident_ends_w10_bevel_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_coincident_ends_w10_bevel_round",
+      "expected": "testdata/stroke/expected/stroke_coincident_ends_w10_bevel_round.json",
+      "input": "testdata/stroke/inputs/stroke_coincident_ends_w10_bevel_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_coincident_ends_w10_bevel_square",
+      "expected": "testdata/stroke/expected/stroke_coincident_ends_w10_bevel_square.json",
+      "input": "testdata/stroke/inputs/stroke_coincident_ends_w10_bevel_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_coincident_ends_w10_miter_butt",
+      "expected": "testdata/stroke/expected/stroke_coincident_ends_w10_miter_butt.json",
+      "input": "testdata/stroke/inputs/stroke_coincident_ends_w10_miter_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_coincident_ends_w10_miter_round",
+      "expected": "testdata/stroke/expected/stroke_coincident_ends_w10_miter_round.json",
+      "input": "testdata/stroke/inputs/stroke_coincident_ends_w10_miter_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_coincident_ends_w10_miter_square",
+      "expected": "testdata/stroke/expected/stroke_coincident_ends_w10_miter_square.json",
+      "input": "testdata/stroke/inputs/stroke_coincident_ends_w10_miter_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_coincident_ends_w10_round_butt",
+      "expected": "testdata/stroke/expected/stroke_coincident_ends_w10_round_butt.json",
+      "input": "testdata/stroke/inputs/stroke_coincident_ends_w10_round_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_coincident_ends_w10_round_round",
+      "expected": "testdata/stroke/expected/stroke_coincident_ends_w10_round_round.json",
+      "input": "testdata/stroke/inputs/stroke_coincident_ends_w10_round_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_coincident_ends_w10_round_square",
+      "expected": "testdata/stroke/expected/stroke_coincident_ends_w10_round_square.json",
+      "input": "testdata/stroke/inputs/stroke_coincident_ends_w10_round_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_coincident_ends_w10_square_butt",
+      "expected": "testdata/stroke/expected/stroke_coincident_ends_w10_square_butt.json",
+      "input": "testdata/stroke/inputs/stroke_coincident_ends_w10_square_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_coincident_ends_w10_square_round",
+      "expected": "testdata/stroke/expected/stroke_coincident_ends_w10_square_round.json",
+      "input": "testdata/stroke/inputs/stroke_coincident_ends_w10_square_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_coincident_ends_w10_square_square",
+      "expected": "testdata/stroke/expected/stroke_coincident_ends_w10_square_square.json",
+      "input": "testdata/stroke/inputs/stroke_coincident_ends_w10_square_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_coincident_ends_w4_bevel_butt",
+      "expected": "testdata/stroke/expected/stroke_coincident_ends_w4_bevel_butt.json",
+      "input": "testdata/stroke/inputs/stroke_coincident_ends_w4_bevel_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_coincident_ends_w4_bevel_round",
+      "expected": "testdata/stroke/expected/stroke_coincident_ends_w4_bevel_round.json",
+      "input": "testdata/stroke/inputs/stroke_coincident_ends_w4_bevel_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_coincident_ends_w4_bevel_square",
+      "expected": "testdata/stroke/expected/stroke_coincident_ends_w4_bevel_square.json",
+      "input": "testdata/stroke/inputs/stroke_coincident_ends_w4_bevel_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_coincident_ends_w4_miter_butt",
+      "expected": "testdata/stroke/expected/stroke_coincident_ends_w4_miter_butt.json",
+      "input": "testdata/stroke/inputs/stroke_coincident_ends_w4_miter_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_coincident_ends_w4_miter_round",
+      "expected": "testdata/stroke/expected/stroke_coincident_ends_w4_miter_round.json",
+      "input": "testdata/stroke/inputs/stroke_coincident_ends_w4_miter_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_coincident_ends_w4_miter_square",
+      "expected": "testdata/stroke/expected/stroke_coincident_ends_w4_miter_square.json",
+      "input": "testdata/stroke/inputs/stroke_coincident_ends_w4_miter_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_coincident_ends_w4_round_butt",
+      "expected": "testdata/stroke/expected/stroke_coincident_ends_w4_round_butt.json",
+      "input": "testdata/stroke/inputs/stroke_coincident_ends_w4_round_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_coincident_ends_w4_round_round",
+      "expected": "testdata/stroke/expected/stroke_coincident_ends_w4_round_round.json",
+      "input": "testdata/stroke/inputs/stroke_coincident_ends_w4_round_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_coincident_ends_w4_round_square",
+      "expected": "testdata/stroke/expected/stroke_coincident_ends_w4_round_square.json",
+      "input": "testdata/stroke/inputs/stroke_coincident_ends_w4_round_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_coincident_ends_w4_square_butt",
+      "expected": "testdata/stroke/expected/stroke_coincident_ends_w4_square_butt.json",
+      "input": "testdata/stroke/inputs/stroke_coincident_ends_w4_square_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_coincident_ends_w4_square_round",
+      "expected": "testdata/stroke/expected/stroke_coincident_ends_w4_square_round.json",
+      "input": "testdata/stroke/inputs/stroke_coincident_ends_w4_square_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_coincident_ends_w4_square_square",
+      "expected": "testdata/stroke/expected/stroke_coincident_ends_w4_square_square.json",
+      "input": "testdata/stroke/inputs/stroke_coincident_ends_w4_square_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_diagonal_w10_bevel_butt",
+      "expected": "testdata/stroke/expected/stroke_diagonal_w10_bevel_butt.json",
+      "input": "testdata/stroke/inputs/stroke_diagonal_w10_bevel_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_diagonal_w10_bevel_round",
+      "expected": "testdata/stroke/expected/stroke_diagonal_w10_bevel_round.json",
+      "input": "testdata/stroke/inputs/stroke_diagonal_w10_bevel_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_diagonal_w10_bevel_square",
+      "expected": "testdata/stroke/expected/stroke_diagonal_w10_bevel_square.json",
+      "input": "testdata/stroke/inputs/stroke_diagonal_w10_bevel_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_diagonal_w10_miter_butt",
+      "expected": "testdata/stroke/expected/stroke_diagonal_w10_miter_butt.json",
+      "input": "testdata/stroke/inputs/stroke_diagonal_w10_miter_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_diagonal_w10_miter_round",
+      "expected": "testdata/stroke/expected/stroke_diagonal_w10_miter_round.json",
+      "input": "testdata/stroke/inputs/stroke_diagonal_w10_miter_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_diagonal_w10_miter_square",
+      "expected": "testdata/stroke/expected/stroke_diagonal_w10_miter_square.json",
+      "input": "testdata/stroke/inputs/stroke_diagonal_w10_miter_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_diagonal_w10_round_butt",
+      "expected": "testdata/stroke/expected/stroke_diagonal_w10_round_butt.json",
+      "input": "testdata/stroke/inputs/stroke_diagonal_w10_round_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_diagonal_w10_round_round",
+      "expected": "testdata/stroke/expected/stroke_diagonal_w10_round_round.json",
+      "input": "testdata/stroke/inputs/stroke_diagonal_w10_round_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_diagonal_w10_round_square",
+      "expected": "testdata/stroke/expected/stroke_diagonal_w10_round_square.json",
+      "input": "testdata/stroke/inputs/stroke_diagonal_w10_round_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_diagonal_w10_square_butt",
+      "expected": "testdata/stroke/expected/stroke_diagonal_w10_square_butt.json",
+      "input": "testdata/stroke/inputs/stroke_diagonal_w10_square_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_diagonal_w10_square_round",
+      "expected": "testdata/stroke/expected/stroke_diagonal_w10_square_round.json",
+      "input": "testdata/stroke/inputs/stroke_diagonal_w10_square_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_diagonal_w10_square_square",
+      "expected": "testdata/stroke/expected/stroke_diagonal_w10_square_square.json",
+      "input": "testdata/stroke/inputs/stroke_diagonal_w10_square_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_diagonal_w4_bevel_butt",
+      "expected": "testdata/stroke/expected/stroke_diagonal_w4_bevel_butt.json",
+      "input": "testdata/stroke/inputs/stroke_diagonal_w4_bevel_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_diagonal_w4_bevel_round",
+      "expected": "testdata/stroke/expected/stroke_diagonal_w4_bevel_round.json",
+      "input": "testdata/stroke/inputs/stroke_diagonal_w4_bevel_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_diagonal_w4_bevel_square",
+      "expected": "testdata/stroke/expected/stroke_diagonal_w4_bevel_square.json",
+      "input": "testdata/stroke/inputs/stroke_diagonal_w4_bevel_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_diagonal_w4_miter_butt",
+      "expected": "testdata/stroke/expected/stroke_diagonal_w4_miter_butt.json",
+      "input": "testdata/stroke/inputs/stroke_diagonal_w4_miter_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_diagonal_w4_miter_round",
+      "expected": "testdata/stroke/expected/stroke_diagonal_w4_miter_round.json",
+      "input": "testdata/stroke/inputs/stroke_diagonal_w4_miter_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_diagonal_w4_miter_square",
+      "expected": "testdata/stroke/expected/stroke_diagonal_w4_miter_square.json",
+      "input": "testdata/stroke/inputs/stroke_diagonal_w4_miter_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_diagonal_w4_round_butt",
+      "expected": "testdata/stroke/expected/stroke_diagonal_w4_round_butt.json",
+      "input": "testdata/stroke/inputs/stroke_diagonal_w4_round_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_diagonal_w4_round_round",
+      "expected": "testdata/stroke/expected/stroke_diagonal_w4_round_round.json",
+      "input": "testdata/stroke/inputs/stroke_diagonal_w4_round_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_diagonal_w4_round_square",
+      "expected": "testdata/stroke/expected/stroke_diagonal_w4_round_square.json",
+      "input": "testdata/stroke/inputs/stroke_diagonal_w4_round_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_diagonal_w4_square_butt",
+      "expected": "testdata/stroke/expected/stroke_diagonal_w4_square_butt.json",
+      "input": "testdata/stroke/inputs/stroke_diagonal_w4_square_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_diagonal_w4_square_round",
+      "expected": "testdata/stroke/expected/stroke_diagonal_w4_square_round.json",
+      "input": "testdata/stroke/inputs/stroke_diagonal_w4_square_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_diagonal_w4_square_square",
+      "expected": "testdata/stroke/expected/stroke_diagonal_w4_square_square.json",
+      "input": "testdata/stroke/inputs/stroke_diagonal_w4_square_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_horizontal_w10_bevel_butt",
+      "expected": "testdata/stroke/expected/stroke_horizontal_w10_bevel_butt.json",
+      "input": "testdata/stroke/inputs/stroke_horizontal_w10_bevel_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_horizontal_w10_bevel_round",
+      "expected": "testdata/stroke/expected/stroke_horizontal_w10_bevel_round.json",
+      "input": "testdata/stroke/inputs/stroke_horizontal_w10_bevel_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_horizontal_w10_bevel_square",
+      "expected": "testdata/stroke/expected/stroke_horizontal_w10_bevel_square.json",
+      "input": "testdata/stroke/inputs/stroke_horizontal_w10_bevel_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_horizontal_w10_miter_butt",
+      "expected": "testdata/stroke/expected/stroke_horizontal_w10_miter_butt.json",
+      "input": "testdata/stroke/inputs/stroke_horizontal_w10_miter_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_horizontal_w10_miter_round",
+      "expected": "testdata/stroke/expected/stroke_horizontal_w10_miter_round.json",
+      "input": "testdata/stroke/inputs/stroke_horizontal_w10_miter_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_horizontal_w10_miter_square",
+      "expected": "testdata/stroke/expected/stroke_horizontal_w10_miter_square.json",
+      "input": "testdata/stroke/inputs/stroke_horizontal_w10_miter_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_horizontal_w10_round_butt",
+      "expected": "testdata/stroke/expected/stroke_horizontal_w10_round_butt.json",
+      "input": "testdata/stroke/inputs/stroke_horizontal_w10_round_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_horizontal_w10_round_round",
+      "expected": "testdata/stroke/expected/stroke_horizontal_w10_round_round.json",
+      "input": "testdata/stroke/inputs/stroke_horizontal_w10_round_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_horizontal_w10_round_square",
+      "expected": "testdata/stroke/expected/stroke_horizontal_w10_round_square.json",
+      "input": "testdata/stroke/inputs/stroke_horizontal_w10_round_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_horizontal_w10_square_butt",
+      "expected": "testdata/stroke/expected/stroke_horizontal_w10_square_butt.json",
+      "input": "testdata/stroke/inputs/stroke_horizontal_w10_square_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_horizontal_w10_square_round",
+      "expected": "testdata/stroke/expected/stroke_horizontal_w10_square_round.json",
+      "input": "testdata/stroke/inputs/stroke_horizontal_w10_square_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_horizontal_w10_square_square",
+      "expected": "testdata/stroke/expected/stroke_horizontal_w10_square_square.json",
+      "input": "testdata/stroke/inputs/stroke_horizontal_w10_square_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_horizontal_w4_bevel_butt",
+      "expected": "testdata/stroke/expected/stroke_horizontal_w4_bevel_butt.json",
+      "input": "testdata/stroke/inputs/stroke_horizontal_w4_bevel_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_horizontal_w4_bevel_round",
+      "expected": "testdata/stroke/expected/stroke_horizontal_w4_bevel_round.json",
+      "input": "testdata/stroke/inputs/stroke_horizontal_w4_bevel_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_horizontal_w4_bevel_square",
+      "expected": "testdata/stroke/expected/stroke_horizontal_w4_bevel_square.json",
+      "input": "testdata/stroke/inputs/stroke_horizontal_w4_bevel_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_horizontal_w4_miter_butt",
+      "expected": "testdata/stroke/expected/stroke_horizontal_w4_miter_butt.json",
+      "input": "testdata/stroke/inputs/stroke_horizontal_w4_miter_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_horizontal_w4_miter_round",
+      "expected": "testdata/stroke/expected/stroke_horizontal_w4_miter_round.json",
+      "input": "testdata/stroke/inputs/stroke_horizontal_w4_miter_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_horizontal_w4_miter_square",
+      "expected": "testdata/stroke/expected/stroke_horizontal_w4_miter_square.json",
+      "input": "testdata/stroke/inputs/stroke_horizontal_w4_miter_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_horizontal_w4_round_butt",
+      "expected": "testdata/stroke/expected/stroke_horizontal_w4_round_butt.json",
+      "input": "testdata/stroke/inputs/stroke_horizontal_w4_round_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_horizontal_w4_round_round",
+      "expected": "testdata/stroke/expected/stroke_horizontal_w4_round_round.json",
+      "input": "testdata/stroke/inputs/stroke_horizontal_w4_round_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_horizontal_w4_round_square",
+      "expected": "testdata/stroke/expected/stroke_horizontal_w4_round_square.json",
+      "input": "testdata/stroke/inputs/stroke_horizontal_w4_round_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_horizontal_w4_square_butt",
+      "expected": "testdata/stroke/expected/stroke_horizontal_w4_square_butt.json",
+      "input": "testdata/stroke/inputs/stroke_horizontal_w4_square_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_horizontal_w4_square_round",
+      "expected": "testdata/stroke/expected/stroke_horizontal_w4_square_round.json",
+      "input": "testdata/stroke/inputs/stroke_horizontal_w4_square_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_horizontal_w4_square_square",
+      "expected": "testdata/stroke/expected/stroke_horizontal_w4_square_square.json",
+      "input": "testdata/stroke/inputs/stroke_horizontal_w4_square_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_miter_acute_m10_miter_butt",
+      "expected": "testdata/stroke/expected/stroke_miter_acute_m10_miter_butt.json",
+      "input": "testdata/stroke/inputs/stroke_miter_acute_m10_miter_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_miter_acute_m10_miter_round",
+      "expected": "testdata/stroke/expected/stroke_miter_acute_m10_miter_round.json",
+      "input": "testdata/stroke/inputs/stroke_miter_acute_m10_miter_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_miter_acute_m10_miter_square",
+      "expected": "testdata/stroke/expected/stroke_miter_acute_m10_miter_square.json",
+      "input": "testdata/stroke/inputs/stroke_miter_acute_m10_miter_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_miter_acute_m4_miter_butt",
+      "expected": "testdata/stroke/expected/stroke_miter_acute_m4_miter_butt.json",
+      "input": "testdata/stroke/inputs/stroke_miter_acute_m4_miter_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_miter_acute_m4_miter_round",
+      "expected": "testdata/stroke/expected/stroke_miter_acute_m4_miter_round.json",
+      "input": "testdata/stroke/inputs/stroke_miter_acute_m4_miter_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_miter_acute_m4_miter_square",
+      "expected": "testdata/stroke/expected/stroke_miter_acute_m4_miter_square.json",
+      "input": "testdata/stroke/inputs/stroke_miter_acute_m4_miter_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_miter_acute_other_m10_miter_butt",
+      "expected": "testdata/stroke/expected/stroke_miter_acute_other_m10_miter_butt.json",
+      "input": "testdata/stroke/inputs/stroke_miter_acute_other_m10_miter_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_miter_acute_other_m10_miter_round",
+      "expected": "testdata/stroke/expected/stroke_miter_acute_other_m10_miter_round.json",
+      "input": "testdata/stroke/inputs/stroke_miter_acute_other_m10_miter_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_miter_acute_other_m10_miter_square",
+      "expected": "testdata/stroke/expected/stroke_miter_acute_other_m10_miter_square.json",
+      "input": "testdata/stroke/inputs/stroke_miter_acute_other_m10_miter_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_miter_acute_other_m4_miter_butt",
+      "expected": "testdata/stroke/expected/stroke_miter_acute_other_m4_miter_butt.json",
+      "input": "testdata/stroke/inputs/stroke_miter_acute_other_m4_miter_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_miter_acute_other_m4_miter_round",
+      "expected": "testdata/stroke/expected/stroke_miter_acute_other_m4_miter_round.json",
+      "input": "testdata/stroke/inputs/stroke_miter_acute_other_m4_miter_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_miter_acute_other_m4_miter_square",
+      "expected": "testdata/stroke/expected/stroke_miter_acute_other_m4_miter_square.json",
+      "input": "testdata/stroke/inputs/stroke_miter_acute_other_m4_miter_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_reversal_w10_bevel_butt",
+      "expected": "testdata/stroke/expected/stroke_reversal_w10_bevel_butt.json",
+      "input": "testdata/stroke/inputs/stroke_reversal_w10_bevel_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_reversal_w10_bevel_round",
+      "expected": "testdata/stroke/expected/stroke_reversal_w10_bevel_round.json",
+      "input": "testdata/stroke/inputs/stroke_reversal_w10_bevel_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_reversal_w10_bevel_square",
+      "expected": "testdata/stroke/expected/stroke_reversal_w10_bevel_square.json",
+      "input": "testdata/stroke/inputs/stroke_reversal_w10_bevel_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_reversal_w10_miter_butt",
+      "expected": "testdata/stroke/expected/stroke_reversal_w10_miter_butt.json",
+      "input": "testdata/stroke/inputs/stroke_reversal_w10_miter_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_reversal_w10_miter_round",
+      "expected": "testdata/stroke/expected/stroke_reversal_w10_miter_round.json",
+      "input": "testdata/stroke/inputs/stroke_reversal_w10_miter_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_reversal_w10_miter_square",
+      "expected": "testdata/stroke/expected/stroke_reversal_w10_miter_square.json",
+      "input": "testdata/stroke/inputs/stroke_reversal_w10_miter_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_reversal_w10_round_butt",
+      "expected": "testdata/stroke/expected/stroke_reversal_w10_round_butt.json",
+      "input": "testdata/stroke/inputs/stroke_reversal_w10_round_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_reversal_w10_round_round",
+      "expected": "testdata/stroke/expected/stroke_reversal_w10_round_round.json",
+      "input": "testdata/stroke/inputs/stroke_reversal_w10_round_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_reversal_w10_round_square",
+      "expected": "testdata/stroke/expected/stroke_reversal_w10_round_square.json",
+      "input": "testdata/stroke/inputs/stroke_reversal_w10_round_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_reversal_w10_square_butt",
+      "expected": "testdata/stroke/expected/stroke_reversal_w10_square_butt.json",
+      "input": "testdata/stroke/inputs/stroke_reversal_w10_square_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_reversal_w10_square_round",
+      "expected": "testdata/stroke/expected/stroke_reversal_w10_square_round.json",
+      "input": "testdata/stroke/inputs/stroke_reversal_w10_square_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_reversal_w10_square_square",
+      "expected": "testdata/stroke/expected/stroke_reversal_w10_square_square.json",
+      "input": "testdata/stroke/inputs/stroke_reversal_w10_square_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_reversal_w4_bevel_butt",
+      "expected": "testdata/stroke/expected/stroke_reversal_w4_bevel_butt.json",
+      "input": "testdata/stroke/inputs/stroke_reversal_w4_bevel_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_reversal_w4_bevel_round",
+      "expected": "testdata/stroke/expected/stroke_reversal_w4_bevel_round.json",
+      "input": "testdata/stroke/inputs/stroke_reversal_w4_bevel_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_reversal_w4_bevel_square",
+      "expected": "testdata/stroke/expected/stroke_reversal_w4_bevel_square.json",
+      "input": "testdata/stroke/inputs/stroke_reversal_w4_bevel_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_reversal_w4_miter_butt",
+      "expected": "testdata/stroke/expected/stroke_reversal_w4_miter_butt.json",
+      "input": "testdata/stroke/inputs/stroke_reversal_w4_miter_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_reversal_w4_miter_round",
+      "expected": "testdata/stroke/expected/stroke_reversal_w4_miter_round.json",
+      "input": "testdata/stroke/inputs/stroke_reversal_w4_miter_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_reversal_w4_miter_square",
+      "expected": "testdata/stroke/expected/stroke_reversal_w4_miter_square.json",
+      "input": "testdata/stroke/inputs/stroke_reversal_w4_miter_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_reversal_w4_round_butt",
+      "expected": "testdata/stroke/expected/stroke_reversal_w4_round_butt.json",
+      "input": "testdata/stroke/inputs/stroke_reversal_w4_round_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_reversal_w4_round_round",
+      "expected": "testdata/stroke/expected/stroke_reversal_w4_round_round.json",
+      "input": "testdata/stroke/inputs/stroke_reversal_w4_round_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_reversal_w4_round_square",
+      "expected": "testdata/stroke/expected/stroke_reversal_w4_round_square.json",
+      "input": "testdata/stroke/inputs/stroke_reversal_w4_round_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_reversal_w4_square_butt",
+      "expected": "testdata/stroke/expected/stroke_reversal_w4_square_butt.json",
+      "input": "testdata/stroke/inputs/stroke_reversal_w4_square_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_reversal_w4_square_round",
+      "expected": "testdata/stroke/expected/stroke_reversal_w4_square_round.json",
+      "input": "testdata/stroke/inputs/stroke_reversal_w4_square_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_reversal_w4_square_square",
+      "expected": "testdata/stroke/expected/stroke_reversal_w4_square_square.json",
+      "input": "testdata/stroke/inputs/stroke_reversal_w4_square_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_right_angle_w10_bevel_butt",
+      "expected": "testdata/stroke/expected/stroke_right_angle_w10_bevel_butt.json",
+      "input": "testdata/stroke/inputs/stroke_right_angle_w10_bevel_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_right_angle_w10_bevel_round",
+      "expected": "testdata/stroke/expected/stroke_right_angle_w10_bevel_round.json",
+      "input": "testdata/stroke/inputs/stroke_right_angle_w10_bevel_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_right_angle_w10_bevel_square",
+      "expected": "testdata/stroke/expected/stroke_right_angle_w10_bevel_square.json",
+      "input": "testdata/stroke/inputs/stroke_right_angle_w10_bevel_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_right_angle_w10_miter_butt",
+      "expected": "testdata/stroke/expected/stroke_right_angle_w10_miter_butt.json",
+      "input": "testdata/stroke/inputs/stroke_right_angle_w10_miter_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_right_angle_w10_miter_round",
+      "expected": "testdata/stroke/expected/stroke_right_angle_w10_miter_round.json",
+      "input": "testdata/stroke/inputs/stroke_right_angle_w10_miter_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_right_angle_w10_miter_square",
+      "expected": "testdata/stroke/expected/stroke_right_angle_w10_miter_square.json",
+      "input": "testdata/stroke/inputs/stroke_right_angle_w10_miter_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_right_angle_w10_round_butt",
+      "expected": "testdata/stroke/expected/stroke_right_angle_w10_round_butt.json",
+      "input": "testdata/stroke/inputs/stroke_right_angle_w10_round_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_right_angle_w10_round_round",
+      "expected": "testdata/stroke/expected/stroke_right_angle_w10_round_round.json",
+      "input": "testdata/stroke/inputs/stroke_right_angle_w10_round_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_right_angle_w10_round_square",
+      "expected": "testdata/stroke/expected/stroke_right_angle_w10_round_square.json",
+      "input": "testdata/stroke/inputs/stroke_right_angle_w10_round_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_right_angle_w10_square_butt",
+      "expected": "testdata/stroke/expected/stroke_right_angle_w10_square_butt.json",
+      "input": "testdata/stroke/inputs/stroke_right_angle_w10_square_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_right_angle_w10_square_round",
+      "expected": "testdata/stroke/expected/stroke_right_angle_w10_square_round.json",
+      "input": "testdata/stroke/inputs/stroke_right_angle_w10_square_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_right_angle_w10_square_square",
+      "expected": "testdata/stroke/expected/stroke_right_angle_w10_square_square.json",
+      "input": "testdata/stroke/inputs/stroke_right_angle_w10_square_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_right_angle_w4_bevel_butt",
+      "expected": "testdata/stroke/expected/stroke_right_angle_w4_bevel_butt.json",
+      "input": "testdata/stroke/inputs/stroke_right_angle_w4_bevel_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_right_angle_w4_bevel_round",
+      "expected": "testdata/stroke/expected/stroke_right_angle_w4_bevel_round.json",
+      "input": "testdata/stroke/inputs/stroke_right_angle_w4_bevel_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_right_angle_w4_bevel_square",
+      "expected": "testdata/stroke/expected/stroke_right_angle_w4_bevel_square.json",
+      "input": "testdata/stroke/inputs/stroke_right_angle_w4_bevel_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_right_angle_w4_miter_butt",
+      "expected": "testdata/stroke/expected/stroke_right_angle_w4_miter_butt.json",
+      "input": "testdata/stroke/inputs/stroke_right_angle_w4_miter_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_right_angle_w4_miter_round",
+      "expected": "testdata/stroke/expected/stroke_right_angle_w4_miter_round.json",
+      "input": "testdata/stroke/inputs/stroke_right_angle_w4_miter_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_right_angle_w4_miter_square",
+      "expected": "testdata/stroke/expected/stroke_right_angle_w4_miter_square.json",
+      "input": "testdata/stroke/inputs/stroke_right_angle_w4_miter_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_right_angle_w4_round_butt",
+      "expected": "testdata/stroke/expected/stroke_right_angle_w4_round_butt.json",
+      "input": "testdata/stroke/inputs/stroke_right_angle_w4_round_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_right_angle_w4_round_round",
+      "expected": "testdata/stroke/expected/stroke_right_angle_w4_round_round.json",
+      "input": "testdata/stroke/inputs/stroke_right_angle_w4_round_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_right_angle_w4_round_square",
+      "expected": "testdata/stroke/expected/stroke_right_angle_w4_round_square.json",
+      "input": "testdata/stroke/inputs/stroke_right_angle_w4_round_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_right_angle_w4_square_butt",
+      "expected": "testdata/stroke/expected/stroke_right_angle_w4_square_butt.json",
+      "input": "testdata/stroke/inputs/stroke_right_angle_w4_square_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_right_angle_w4_square_round",
+      "expected": "testdata/stroke/expected/stroke_right_angle_w4_square_round.json",
+      "input": "testdata/stroke/inputs/stroke_right_angle_w4_square_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_right_angle_w4_square_square",
+      "expected": "testdata/stroke/expected/stroke_right_angle_w4_square_square.json",
+      "input": "testdata/stroke/inputs/stroke_right_angle_w4_square_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_self_crossing_w10_bevel_butt",
+      "expected": "testdata/stroke/expected/stroke_self_crossing_w10_bevel_butt.json",
+      "input": "testdata/stroke/inputs/stroke_self_crossing_w10_bevel_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_self_crossing_w10_bevel_round",
+      "expected": "testdata/stroke/expected/stroke_self_crossing_w10_bevel_round.json",
+      "input": "testdata/stroke/inputs/stroke_self_crossing_w10_bevel_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_self_crossing_w10_bevel_square",
+      "expected": "testdata/stroke/expected/stroke_self_crossing_w10_bevel_square.json",
+      "input": "testdata/stroke/inputs/stroke_self_crossing_w10_bevel_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_self_crossing_w10_miter_butt",
+      "expected": "testdata/stroke/expected/stroke_self_crossing_w10_miter_butt.json",
+      "input": "testdata/stroke/inputs/stroke_self_crossing_w10_miter_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_self_crossing_w10_miter_round",
+      "expected": "testdata/stroke/expected/stroke_self_crossing_w10_miter_round.json",
+      "input": "testdata/stroke/inputs/stroke_self_crossing_w10_miter_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_self_crossing_w10_miter_square",
+      "expected": "testdata/stroke/expected/stroke_self_crossing_w10_miter_square.json",
+      "input": "testdata/stroke/inputs/stroke_self_crossing_w10_miter_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_self_crossing_w10_round_butt",
+      "expected": "testdata/stroke/expected/stroke_self_crossing_w10_round_butt.json",
+      "input": "testdata/stroke/inputs/stroke_self_crossing_w10_round_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_self_crossing_w10_round_round",
+      "expected": "testdata/stroke/expected/stroke_self_crossing_w10_round_round.json",
+      "input": "testdata/stroke/inputs/stroke_self_crossing_w10_round_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_self_crossing_w10_round_square",
+      "expected": "testdata/stroke/expected/stroke_self_crossing_w10_round_square.json",
+      "input": "testdata/stroke/inputs/stroke_self_crossing_w10_round_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_self_crossing_w10_square_butt",
+      "expected": "testdata/stroke/expected/stroke_self_crossing_w10_square_butt.json",
+      "input": "testdata/stroke/inputs/stroke_self_crossing_w10_square_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_self_crossing_w10_square_round",
+      "expected": "testdata/stroke/expected/stroke_self_crossing_w10_square_round.json",
+      "input": "testdata/stroke/inputs/stroke_self_crossing_w10_square_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_self_crossing_w10_square_square",
+      "expected": "testdata/stroke/expected/stroke_self_crossing_w10_square_square.json",
+      "input": "testdata/stroke/inputs/stroke_self_crossing_w10_square_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_self_crossing_w4_bevel_butt",
+      "expected": "testdata/stroke/expected/stroke_self_crossing_w4_bevel_butt.json",
+      "input": "testdata/stroke/inputs/stroke_self_crossing_w4_bevel_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_self_crossing_w4_bevel_round",
+      "expected": "testdata/stroke/expected/stroke_self_crossing_w4_bevel_round.json",
+      "input": "testdata/stroke/inputs/stroke_self_crossing_w4_bevel_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_self_crossing_w4_bevel_square",
+      "expected": "testdata/stroke/expected/stroke_self_crossing_w4_bevel_square.json",
+      "input": "testdata/stroke/inputs/stroke_self_crossing_w4_bevel_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_self_crossing_w4_miter_butt",
+      "expected": "testdata/stroke/expected/stroke_self_crossing_w4_miter_butt.json",
+      "input": "testdata/stroke/inputs/stroke_self_crossing_w4_miter_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_self_crossing_w4_miter_round",
+      "expected": "testdata/stroke/expected/stroke_self_crossing_w4_miter_round.json",
+      "input": "testdata/stroke/inputs/stroke_self_crossing_w4_miter_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_self_crossing_w4_miter_square",
+      "expected": "testdata/stroke/expected/stroke_self_crossing_w4_miter_square.json",
+      "input": "testdata/stroke/inputs/stroke_self_crossing_w4_miter_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_self_crossing_w4_round_butt",
+      "expected": "testdata/stroke/expected/stroke_self_crossing_w4_round_butt.json",
+      "input": "testdata/stroke/inputs/stroke_self_crossing_w4_round_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_self_crossing_w4_round_round",
+      "expected": "testdata/stroke/expected/stroke_self_crossing_w4_round_round.json",
+      "input": "testdata/stroke/inputs/stroke_self_crossing_w4_round_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_self_crossing_w4_round_square",
+      "expected": "testdata/stroke/expected/stroke_self_crossing_w4_round_square.json",
+      "input": "testdata/stroke/inputs/stroke_self_crossing_w4_round_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_self_crossing_w4_square_butt",
+      "expected": "testdata/stroke/expected/stroke_self_crossing_w4_square_butt.json",
+      "input": "testdata/stroke/inputs/stroke_self_crossing_w4_square_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_self_crossing_w4_square_round",
+      "expected": "testdata/stroke/expected/stroke_self_crossing_w4_square_round.json",
+      "input": "testdata/stroke/inputs/stroke_self_crossing_w4_square_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_self_crossing_w4_square_square",
+      "expected": "testdata/stroke/expected/stroke_self_crossing_w4_square_square.json",
+      "input": "testdata/stroke/inputs/stroke_self_crossing_w4_square_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w101_bevel_butt",
+      "expected": "testdata/stroke/expected/stroke_threshold_w101_bevel_butt.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w101_bevel_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w101_bevel_round",
+      "expected": "testdata/stroke/expected/stroke_threshold_w101_bevel_round.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w101_bevel_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w101_bevel_square",
+      "expected": "testdata/stroke/expected/stroke_threshold_w101_bevel_square.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w101_bevel_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w101_miter_butt",
+      "expected": "testdata/stroke/expected/stroke_threshold_w101_miter_butt.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w101_miter_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w101_miter_round",
+      "expected": "testdata/stroke/expected/stroke_threshold_w101_miter_round.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w101_miter_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w101_miter_square",
+      "expected": "testdata/stroke/expected/stroke_threshold_w101_miter_square.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w101_miter_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w101_round_butt",
+      "expected": "testdata/stroke/expected/stroke_threshold_w101_round_butt.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w101_round_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w101_round_round",
+      "expected": "testdata/stroke/expected/stroke_threshold_w101_round_round.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w101_round_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w101_round_square",
+      "expected": "testdata/stroke/expected/stroke_threshold_w101_round_square.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w101_round_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w101_square_butt",
+      "expected": "testdata/stroke/expected/stroke_threshold_w101_square_butt.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w101_square_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w101_square_round",
+      "expected": "testdata/stroke/expected/stroke_threshold_w101_square_round.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w101_square_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w101_square_square",
+      "expected": "testdata/stroke/expected/stroke_threshold_w101_square_square.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w101_square_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w199_bevel_butt",
+      "expected": "testdata/stroke/expected/stroke_threshold_w199_bevel_butt.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w199_bevel_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w199_bevel_round",
+      "expected": "testdata/stroke/expected/stroke_threshold_w199_bevel_round.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w199_bevel_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w199_bevel_square",
+      "expected": "testdata/stroke/expected/stroke_threshold_w199_bevel_square.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w199_bevel_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w199_miter_butt",
+      "expected": "testdata/stroke/expected/stroke_threshold_w199_miter_butt.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w199_miter_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w199_miter_round",
+      "expected": "testdata/stroke/expected/stroke_threshold_w199_miter_round.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w199_miter_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w199_miter_square",
+      "expected": "testdata/stroke/expected/stroke_threshold_w199_miter_square.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w199_miter_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w199_round_butt",
+      "expected": "testdata/stroke/expected/stroke_threshold_w199_round_butt.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w199_round_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w199_round_round",
+      "expected": "testdata/stroke/expected/stroke_threshold_w199_round_round.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w199_round_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w199_round_square",
+      "expected": "testdata/stroke/expected/stroke_threshold_w199_round_square.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w199_round_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w199_square_butt",
+      "expected": "testdata/stroke/expected/stroke_threshold_w199_square_butt.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w199_square_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w199_square_round",
+      "expected": "testdata/stroke/expected/stroke_threshold_w199_square_round.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w199_square_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w199_square_square",
+      "expected": "testdata/stroke/expected/stroke_threshold_w199_square_square.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w199_square_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w1_bevel_butt",
+      "expected": "testdata/stroke/expected/stroke_threshold_w1_bevel_butt.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w1_bevel_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w1_bevel_round",
+      "expected": "testdata/stroke/expected/stroke_threshold_w1_bevel_round.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w1_bevel_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w1_bevel_square",
+      "expected": "testdata/stroke/expected/stroke_threshold_w1_bevel_square.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w1_bevel_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w1_miter_butt",
+      "expected": "testdata/stroke/expected/stroke_threshold_w1_miter_butt.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w1_miter_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w1_miter_round",
+      "expected": "testdata/stroke/expected/stroke_threshold_w1_miter_round.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w1_miter_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w1_miter_square",
+      "expected": "testdata/stroke/expected/stroke_threshold_w1_miter_square.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w1_miter_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w1_round_butt",
+      "expected": "testdata/stroke/expected/stroke_threshold_w1_round_butt.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w1_round_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w1_round_round",
+      "expected": "testdata/stroke/expected/stroke_threshold_w1_round_round.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w1_round_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w1_round_square",
+      "expected": "testdata/stroke/expected/stroke_threshold_w1_round_square.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w1_round_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w1_square_butt",
+      "expected": "testdata/stroke/expected/stroke_threshold_w1_square_butt.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w1_square_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w1_square_round",
+      "expected": "testdata/stroke/expected/stroke_threshold_w1_square_round.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w1_square_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w1_square_square",
+      "expected": "testdata/stroke/expected/stroke_threshold_w1_square_square.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w1_square_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w2_bevel_butt",
+      "expected": "testdata/stroke/expected/stroke_threshold_w2_bevel_butt.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w2_bevel_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w2_bevel_round",
+      "expected": "testdata/stroke/expected/stroke_threshold_w2_bevel_round.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w2_bevel_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w2_bevel_square",
+      "expected": "testdata/stroke/expected/stroke_threshold_w2_bevel_square.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w2_bevel_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w2_miter_butt",
+      "expected": "testdata/stroke/expected/stroke_threshold_w2_miter_butt.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w2_miter_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w2_miter_round",
+      "expected": "testdata/stroke/expected/stroke_threshold_w2_miter_round.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w2_miter_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w2_miter_square",
+      "expected": "testdata/stroke/expected/stroke_threshold_w2_miter_square.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w2_miter_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w2_round_butt",
+      "expected": "testdata/stroke/expected/stroke_threshold_w2_round_butt.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w2_round_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w2_round_round",
+      "expected": "testdata/stroke/expected/stroke_threshold_w2_round_round.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w2_round_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w2_round_square",
+      "expected": "testdata/stroke/expected/stroke_threshold_w2_round_square.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w2_round_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w2_square_butt",
+      "expected": "testdata/stroke/expected/stroke_threshold_w2_square_butt.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w2_square_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w2_square_round",
+      "expected": "testdata/stroke/expected/stroke_threshold_w2_square_round.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w2_square_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w2_square_square",
+      "expected": "testdata/stroke/expected/stroke_threshold_w2_square_square.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w2_square_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w3_bevel_butt",
+      "expected": "testdata/stroke/expected/stroke_threshold_w3_bevel_butt.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w3_bevel_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w3_bevel_round",
+      "expected": "testdata/stroke/expected/stroke_threshold_w3_bevel_round.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w3_bevel_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w3_bevel_square",
+      "expected": "testdata/stroke/expected/stroke_threshold_w3_bevel_square.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w3_bevel_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w3_miter_butt",
+      "expected": "testdata/stroke/expected/stroke_threshold_w3_miter_butt.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w3_miter_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w3_miter_round",
+      "expected": "testdata/stroke/expected/stroke_threshold_w3_miter_round.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w3_miter_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w3_miter_square",
+      "expected": "testdata/stroke/expected/stroke_threshold_w3_miter_square.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w3_miter_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w3_round_butt",
+      "expected": "testdata/stroke/expected/stroke_threshold_w3_round_butt.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w3_round_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w3_round_round",
+      "expected": "testdata/stroke/expected/stroke_threshold_w3_round_round.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w3_round_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w3_round_square",
+      "expected": "testdata/stroke/expected/stroke_threshold_w3_round_square.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w3_round_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w3_square_butt",
+      "expected": "testdata/stroke/expected/stroke_threshold_w3_square_butt.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w3_square_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w3_square_round",
+      "expected": "testdata/stroke/expected/stroke_threshold_w3_square_round.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w3_square_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_threshold_w3_square_square",
+      "expected": "testdata/stroke/expected/stroke_threshold_w3_square_square.json",
+      "input": "testdata/stroke/inputs/stroke_threshold_w3_square_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_vertical_w10_bevel_butt",
+      "expected": "testdata/stroke/expected/stroke_vertical_w10_bevel_butt.json",
+      "input": "testdata/stroke/inputs/stroke_vertical_w10_bevel_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_vertical_w10_bevel_round",
+      "expected": "testdata/stroke/expected/stroke_vertical_w10_bevel_round.json",
+      "input": "testdata/stroke/inputs/stroke_vertical_w10_bevel_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_vertical_w10_bevel_square",
+      "expected": "testdata/stroke/expected/stroke_vertical_w10_bevel_square.json",
+      "input": "testdata/stroke/inputs/stroke_vertical_w10_bevel_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_vertical_w10_miter_butt",
+      "expected": "testdata/stroke/expected/stroke_vertical_w10_miter_butt.json",
+      "input": "testdata/stroke/inputs/stroke_vertical_w10_miter_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_vertical_w10_miter_round",
+      "expected": "testdata/stroke/expected/stroke_vertical_w10_miter_round.json",
+      "input": "testdata/stroke/inputs/stroke_vertical_w10_miter_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_vertical_w10_miter_square",
+      "expected": "testdata/stroke/expected/stroke_vertical_w10_miter_square.json",
+      "input": "testdata/stroke/inputs/stroke_vertical_w10_miter_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_vertical_w10_round_butt",
+      "expected": "testdata/stroke/expected/stroke_vertical_w10_round_butt.json",
+      "input": "testdata/stroke/inputs/stroke_vertical_w10_round_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_vertical_w10_round_round",
+      "expected": "testdata/stroke/expected/stroke_vertical_w10_round_round.json",
+      "input": "testdata/stroke/inputs/stroke_vertical_w10_round_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_vertical_w10_round_square",
+      "expected": "testdata/stroke/expected/stroke_vertical_w10_round_square.json",
+      "input": "testdata/stroke/inputs/stroke_vertical_w10_round_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_vertical_w10_square_butt",
+      "expected": "testdata/stroke/expected/stroke_vertical_w10_square_butt.json",
+      "input": "testdata/stroke/inputs/stroke_vertical_w10_square_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_vertical_w10_square_round",
+      "expected": "testdata/stroke/expected/stroke_vertical_w10_square_round.json",
+      "input": "testdata/stroke/inputs/stroke_vertical_w10_square_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_vertical_w10_square_square",
+      "expected": "testdata/stroke/expected/stroke_vertical_w10_square_square.json",
+      "input": "testdata/stroke/inputs/stroke_vertical_w10_square_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_vertical_w4_bevel_butt",
+      "expected": "testdata/stroke/expected/stroke_vertical_w4_bevel_butt.json",
+      "input": "testdata/stroke/inputs/stroke_vertical_w4_bevel_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_vertical_w4_bevel_round",
+      "expected": "testdata/stroke/expected/stroke_vertical_w4_bevel_round.json",
+      "input": "testdata/stroke/inputs/stroke_vertical_w4_bevel_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_vertical_w4_bevel_square",
+      "expected": "testdata/stroke/expected/stroke_vertical_w4_bevel_square.json",
+      "input": "testdata/stroke/inputs/stroke_vertical_w4_bevel_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_vertical_w4_miter_butt",
+      "expected": "testdata/stroke/expected/stroke_vertical_w4_miter_butt.json",
+      "input": "testdata/stroke/inputs/stroke_vertical_w4_miter_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_vertical_w4_miter_round",
+      "expected": "testdata/stroke/expected/stroke_vertical_w4_miter_round.json",
+      "input": "testdata/stroke/inputs/stroke_vertical_w4_miter_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_vertical_w4_miter_square",
+      "expected": "testdata/stroke/expected/stroke_vertical_w4_miter_square.json",
+      "input": "testdata/stroke/inputs/stroke_vertical_w4_miter_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_vertical_w4_round_butt",
+      "expected": "testdata/stroke/expected/stroke_vertical_w4_round_butt.json",
+      "input": "testdata/stroke/inputs/stroke_vertical_w4_round_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_vertical_w4_round_round",
+      "expected": "testdata/stroke/expected/stroke_vertical_w4_round_round.json",
+      "input": "testdata/stroke/inputs/stroke_vertical_w4_round_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_vertical_w4_round_square",
+      "expected": "testdata/stroke/expected/stroke_vertical_w4_round_square.json",
+      "input": "testdata/stroke/inputs/stroke_vertical_w4_round_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_vertical_w4_square_butt",
+      "expected": "testdata/stroke/expected/stroke_vertical_w4_square_butt.json",
+      "input": "testdata/stroke/inputs/stroke_vertical_w4_square_butt.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_vertical_w4_square_round",
+      "expected": "testdata/stroke/expected/stroke_vertical_w4_square_round.json",
+      "input": "testdata/stroke/inputs/stroke_vertical_w4_square_round.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "stroke_vertical_w4_square_square",
+      "expected": "testdata/stroke/expected/stroke_vertical_w4_square_square.json",
+      "input": "testdata/stroke/inputs/stroke_vertical_w4_square_square.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    }
+  ],
+  "format_version": 3,
+  "kind": "stroke",
+  "oracle_lock": "tools/oracle/upstream-lock.json"
+}

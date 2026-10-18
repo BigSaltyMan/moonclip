@@ -1,0 +1,68 @@
+{
+  "adapter_protocol_version": 3,
+  "case_id": "stroke_diagonal_w4_miter_round",
+  "format_version": 3,
+  "input_sha256": "880e538234da83408b500a675018538e881b03be928693600ddeb4750f59fad1",
+  "metrics": {
+    "path_count": 1,
+    "paths": [
+      {
+        "area2": "462",
+        "bounds": [
+          -2,
+          -2,
+          32,
+          42
+        ],
+        "vertices": 10
+      }
+    ],
+    "vertex_count": 10
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        1,
+        -1
+      ],
+      [
+        2,
+        -1
+      ],
+      [
+        32,
+        39
+      ],
+      [
+        32,
+        41
+      ],
+      [
+        30,
+        42
+      ],
+      [
+        29,
+        41
+      ],
+      [
+        28,
+        41
+      ],
+      [
+        -2,
+        1
+      ],
+      [
+        -2,
+        -1
+      ],
+      [
+        0,
+        -2
+      ]
+    ]
+  ],
+  "status": "success"
+}

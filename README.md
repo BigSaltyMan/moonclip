@@ -2,7 +2,7 @@
 
 MoonClip 是用 MoonBit 实现的整数多边形几何库，目前处于开发初期。目标版本为 `0.1.0`，尚未发布到 Mooncakes，模块名称的可用性将在发布前确认。
 
-目前已实现：不可变 `Int64` 点、有序路径与轮廓集合、结构比较、独立复制，以及精确叉积与方向、边界框、精确两倍有向面积、EvenOdd 点包含判断和开放/闭合模式的重复点整理。另已建立内部扫描线、活动边、交点事件、水平交互及输出环连接原语，采用节点复用和共享工作量预算；公开支持 EvenOdd 与 NonZero 下的 Intersection、Union、Difference、Xor。孔洞树由 boolean_tree 提供；闭合区域偏移已公开 Miter、Bevel、Square、Round，以及 MiterLimit / ArcTolerance。开放描边、小数接口和简化仍在后续计划中。
+目前已实现：不可变 `Int64` 点、有序路径与轮廓集合、结构比较、独立复制，以及精确叉积与方向、边界框、精确两倍有向面积、EvenOdd 点包含判断和开放/闭合模式的重复点整理。另已建立内部扫描线、活动边、交点事件、水平交互及输出环连接原语，采用节点复用和共享工作量预算；公开支持 EvenOdd 与 NonZero 下的 Intersection、Union、Difference、Xor。孔洞树由 boolean_tree 提供；闭合区域偏移已公开 Miter、Bevel、Square、Round，以及 MiterLimit / ArcTolerance。开放描边已由 stroke_polyline 提供；小数接口和简化仍在后续计划中。
 
 ## 数据契约
 
@@ -43,7 +43,7 @@ moon run --target native cmd/example
 示例代码位于 [`cmd/example/main.mbt`](cmd/example/main.mbt)，通过公开接口验证复制隔离、负坐标边界框、方向、精确面积和点包含，整理重复点后检查源数据未变，并捕获坐标及预算错误。当前完整示例还检查四种布尔操作、孔洞树和闭合偏移；成功输出：
 
 ```text
-MoonClip geometry, Boolean, PolyTree and four offset joins OK
+MoonClip geometry, Boolean, PolyTree, offset and stroke OK
 ```
 
 对应示例包导入根库后，可直接调用公开接口：
@@ -250,4 +250,28 @@ ArcTolerance 单位与坐标相同，0 为自动值；固定版本将 `0 < arc_t
 
 新增 156 条对照由 `offset-join-selection.json` 单独锁定，与旧 116 条选择互斥且共同完整覆盖 272 条偏移。旧请求不补写 arc_tolerance，输入哈希和预期保持字节不变。协议 v2 允许省略容差并默认 0，仍严格拒绝未知字段。实际命令继续只链接输入/哈希，272 条预期只由测试和报告读取。
 
-Commit 10 同一批 **1006 项=810 原回归＋156 新对照＋40 功能测试**，native、JS 分别执行。工具 134 项、实际适配器 29 项独立记录；参考重建为 Boolean 200＋Offset 272＝472。公开偏移仍为闭合平铺，开放折线和 Butt、Square、Round 端点留待 Commit 11。
+Commit 10 同一批 **1006 项=810 原回归＋156 新对照＋40 功能测试**，native、JS 分别执行。工具 134 项、实际适配器 29 项独立记录；参考重建为 Boolean 200＋Offset 272＝472。该段为 Commit 10 历史记录；偏移仍为闭合平铺，开放折线端点现见下节。
+
+
+## 开放折线描边
+
+`stroke_polyline(path, width, cap=Butt, options=OffsetOptions::new(), limits=...)` 返回可继续参与 Boolean 运算的 `Result[Paths64, ClipError]` 多边形区域。width 是**完整宽度**，先以 Double 除以2，两侧各 width/2；例如 [(0,0),(20,0)]、width=4 的 Butt 边界框为 [0,-2,20,2]，Square 为 [-2,-2,22,2]。整数网格舍入可能改变实际宽度、顶点和拓扑，不能承诺最终包围盒宽度精确等于输入。
+
+`CapType::Butt` 在端点截平而不额外延伸；`CapType::Square` 向外延伸半宽；`CapType::Round` 以半宽生成半圆。`options.join` 的 Miter / Bevel / Square / Round 只控制内部转角，端点独立选择；命名有重合时使用 `JoinType::Square` / `CapType::Square` 等限定名称。默认连接、MiterLimit=2、ArcTolerance=0 均不变。只要连接或端点使用 Round 就复用原圆弧精度和累计预算；没有圆弧的合法容差不改变几何。
+
+输入始终按**开放路线**解释，首尾相同也保留最后一段及两个端点，不切换 Polygon/Joined，不先做闭合 Union。只删除连续重复点，非连续重复点、折返、自交及零总有向面积路线保留意义。两侧轮廓和端点生成后用 Positive Union 清理，真实孔洞及多个区域由实际几何形成。需要层级时可将结果交给现有 boolean_tree，该组合不是公开描边树接口。
+
+负宽度、NaN、Infinity 及非法选项返回错误。零宽度（含 -0.0）、0<=width<1、空路径、单点或全重复点返回空区域；**这是 MoonClip 整数描边契约**，不是固定上游单点/极小偏移分支的兼容性承诺。width=1 真正生成，半整数仍远离零舍入。所有原始坐标、原始点数、Limits 和选项均在空结果处理前验证，一条空路径也消耗一个输入路径槽。
+
+从 Open 整理、法线、两侧连接、两个端点、圆弧采样到 Boolean 清理及提取共享同一个预算。生成点仍在清理前检查坐标，超限不改容差、不截断、不返回部分结果；失败不修改原数组，下次调用重新建立状态。StrokeParameters / StrokeGenerate / StrokeCleanup 区分描边阶段，原始错误保留顶点下标，生成点下标为 None；闭合偏移继续报告原 Offset 阶段。
+
+[受检示例](cmd/example/main.mbt) 实际运行直线的三种端点及 width=4、Round转角＋Round端点、ArcTolerance=.25 的直角路线，断言完整轮廓后输出成功标记。完整检查现为 native、JS 各 **1330/1330=旧1006＋276描边对照＋48功能测试**；工具155项、真实适配器41项另计。独立参考总计 Boolean200＋Offset272＋Stroke276＝748。描边协议v3不含填充规则；旧v1/v2参考、清单、选择文件均保持字节不变。
+
+```bash
+python tools/conformance/generate_stroke.py --check
+moon test --target native --filter "reference stroke paths: *"
+moon test --target js --filter "reference stroke paths: *"
+moon run --target native cmd/conformance -- --manifest testdata/manifest.json --offset-manifest testdata/offset-manifest.json --stroke-manifest testdata/stroke-manifest.json --report-json _build/conformance/report.json --report-md docs/compatibility.md --strict
+```
+
+当前保持整数坐标接口。跨公开操作的组合验收由 Commit 12 继续，小数坐标及缩放由 Commit 13 接入。

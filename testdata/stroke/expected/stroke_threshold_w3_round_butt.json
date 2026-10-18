@@ -1,0 +1,44 @@
+{
+  "adapter_protocol_version": 3,
+  "case_id": "stroke_threshold_w3_round_butt",
+  "format_version": 3,
+  "input_sha256": "d0f533bffc1955b9665100bb47ffbf7f05b0ef757a22e92c109ba220c7535203",
+  "metrics": {
+    "path_count": 1,
+    "paths": [
+      {
+        "area2": "160",
+        "bounds": [
+          0,
+          -2,
+          20,
+          2
+        ],
+        "vertices": 4
+      }
+    ],
+    "vertex_count": 4
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        20,
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        -2
+      ],
+      [
+        20,
+        -2
+      ]
+    ]
+  ],
+  "status": "success"
+}

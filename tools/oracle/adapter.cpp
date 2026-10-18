@@ -75,12 +75,80 @@ void configure(Clipper64& engine, const Paths64& subject, const Paths64& clip, c
   engine.AddSubject(subject);
   engine.AddClip(clip);
 }
+std::string request_metadata(const json& request) {
+  require(request["case_id"].is_string(), "case_id: expected string");
+  auto id = request["case_id"].get<std::string>();
+  require(!id.empty() && std::string("abcdefghijklmnopqrstuvwxyz0123456789").find(id[0]) != std::string::npos && id.size() <= 101 && id.find_first_not_of("abcdefghijklmnopqrstuvwxyz0123456789_-") == std::string::npos, "case_id: invalid ID");
+  const auto& source = request["source"];
+  require(source.is_object() && source.contains("kind") && source["kind"].is_string(), "source: missing kind");
+  auto kind = source["kind"].get<std::string>();
+  if (kind == "moonclip_constructed") keys(source, {"kind", "intent", "group"}, "source");
+  else if (kind == "upstream") keys(source, {"kind", "file", "case_id", "sha256"}, "source");
+  else if (kind == "regression") keys(source, {"kind", "discovery", "issue"}, "source");
+  else throw std::runtime_error("source: unknown kind");
+  for (const auto& field : source.items())
+    require(field.value().is_string() && !field.value().get<std::string>().empty(), "source: expected nonempty strings");
+  if (kind == "upstream") {
+    auto hash = source["sha256"].get<std::string>();
+    require(hash.size() == 64 && hash.find_first_not_of("0123456789abcdef") == std::string::npos, "source: invalid file hash");
+  }
+  keys(request["options"], {"preserve_collinear", "reverse_solution"}, "options");
+  for (const auto& option : request["options"].items())
+    require(option.value().is_boolean() && !option.value().get<bool>(), "options: protocol 1 requires explicit false booleans");
+  return id;
+}
 json execute(const json& request);
 double finite_number(const json& value, const std::string& where) {
   require(value.is_number(), where + ": expected finite numeric token");
   double number = value.get<double>();
   require(std::isfinite(number), where + ": expected finite number");
   return number;
+}
+json execute_stroke(const json& request) {
+  keys(request, {"format_version","operation","case_id","source","options","path","width","join_type","cap_type","miter_limit","arc_tolerance"}, "stroke request");
+  integer(request["format_version"],"stroke format_version",3,3);
+  const auto id=request_metadata(request);
+  const double width=finite_number(request["width"],"width");
+  const double miter=finite_number(request["miter_limit"],"miter_limit");
+  const double tolerance=finite_number(request["arc_tolerance"],"arc_tolerance");
+  require(width>=1.0,"reference stroke width must be at least 1");
+  require(miter>=2.0 && tolerance>=0.0,"invalid stroke options");
+  require(request["join_type"].is_string() && request["cap_type"].is_string(),"stroke style: expected strings");
+  const auto join=request["join_type"].get<std::string>(), cap=request["cap_type"].get<std::string>();
+  require(join=="Miter" || join=="Bevel" || join=="Square" || join=="Round","unknown stroke join");
+  require(cap=="Butt" || cap=="Square" || cap=="Round","unknown stroke cap");
+  size_t count=0,vertices=0;
+  auto source=paths(json::array({request["path"]}),"stroke path",count,vertices);
+  StripDuplicates(source[0],false);
+  require(source[0].size()>=2,"reference stroke needs an effective open segment");
+  const double radius=width/2.0;
+  require(radius<=2000000000.0,"stroke radius: unsafe distance");
+  require(join!="Miter" || source[0].size()==2 || std::isfinite(miter*miter),"stroke miter: numeric overflow");
+  if (join=="Round" || cap=="Round") {
+    const double pi=std::acos(-1.0);
+    const double effective=tolerance>1e-12 ? std::min(radius,tolerance) : radius*0.002;
+    const double argument=1.0-effective/radius;
+    const double circle=argument==1.0 ? radius*pi : std::min(pi/std::acos(argument),radius*pi);
+    const double arc_points=std::ceil(circle/2.0)+1.0;
+    // Two sides per internal vertex plus both caps, before upstream int casts/loops.
+    const double corner_points=join=="Round" ? std::max(3.0,arc_points) : 3.0;
+    const double cap_points=cap=="Round" ? arc_points : 2.0;
+    const double samples=2.0*static_cast<double>(source[0].size()-2)*corner_points+2.0*cap_points;
+    require(std::isfinite(samples) && samples<=static_cast<double>(kMaxVertices),"stroke sampling exceeds adapter resource limit");
+  } else require(source[0].size()<=kMaxVertices/6,"stroke generation exceeds adapter resource limit");
+  const JoinType jt=join=="Miter" ? JoinType::Miter : join=="Bevel" ? JoinType::Bevel : join=="Square" ? JoinType::Square : JoinType::Round;
+  const EndType et=cap=="Butt" ? EndType::Butt : cap=="Square" ? EndType::Square : EndType::Round;
+  // The original open route is passed directly; no preliminary closed Union.
+  ClipperOffset offset(miter,tolerance,false,false);
+  offset.AddPath(source[0],jt,et);
+  Paths64 result;offset.Execute(radius,result);
+  require(offset.ErrorCode()==0,"Clipper2 stroke execution failed");
+  json output=json::array();
+  for (const auto& path:result) {
+    for (const auto& p:path) require(p.x>=-1000000000 && p.x<=1000000000 && p.y>=-1000000000 && p.y<=1000000000,"stroke generated coordinate out of range");
+    output.push_back(output_path(path));
+  }
+  return {{"format_version",3},{"adapter_protocol_version",3},{"case_id",id},{"oracle_commit",kCommit},{"status","success"},{"paths",output}};
 }
 json execute_offset(const json& request) {
   json base_request=request;
@@ -135,28 +203,11 @@ json execute_offset(const json& request) {
           {"oracle_commit", kCommit}, {"status", "success"}, {"paths", output}};
 }
 json execute(const json& request) {
+  if (request.is_object() && request.value("operation",json())=="StrokePolyline") return execute_stroke(request);
   if (request.is_object() && request.value("operation", json()) == "OffsetPolygons") return execute_offset(request);
   keys(request, {"format_version", "case_id", "source", "operation", "fill_rule", "options", "subject", "clip"}, "request");
   require(integer(request["format_version"], "format_version", 1, 1) == 1, "unknown protocol");
-  require(request["case_id"].is_string(), "case_id: expected string");
-  auto id = request["case_id"].get<std::string>();
-  require(!id.empty() && std::string("abcdefghijklmnopqrstuvwxyz0123456789").find(id[0]) != std::string::npos && id.size() <= 101 && id.find_first_not_of("abcdefghijklmnopqrstuvwxyz0123456789_-") == std::string::npos, "case_id: invalid ID");
-  const auto& source = request["source"];
-  require(source.is_object() && source.contains("kind") && source["kind"].is_string(), "source: missing kind");
-  auto kind = source["kind"].get<std::string>();
-  if (kind == "moonclip_constructed") keys(source, {"kind", "intent", "group"}, "source");
-  else if (kind == "upstream") keys(source, {"kind", "file", "case_id", "sha256"}, "source");
-  else if (kind == "regression") keys(source, {"kind", "discovery", "issue"}, "source");
-  else throw std::runtime_error("source: unknown kind");
-  for (const auto& field : source.items())
-    require(field.value().is_string() && !field.value().get<std::string>().empty(), "source: expected nonempty strings");
-  if (kind == "upstream") {
-    auto hash = source["sha256"].get<std::string>();
-    require(hash.size() == 64 && hash.find_first_not_of("0123456789abcdef") == std::string::npos, "source: invalid file hash");
-  }
-  keys(request["options"], {"preserve_collinear", "reverse_solution"}, "options");
-  for (const auto& option : request["options"].items())
-    require(option.value().is_boolean() && !option.value().get<bool>(), "options: protocol 1 requires explicit false booleans");
+  const auto id = request_metadata(request);
   require(request["operation"].is_string() && request["fill_rule"].is_string(), "operation/fill_rule: expected strings");
   ClipType operation;
   const auto op = request["operation"].get<std::string>();

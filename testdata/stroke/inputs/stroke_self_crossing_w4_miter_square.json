@@ -1,0 +1,37 @@
+{
+  "arc_tolerance": 0.0,
+  "cap_type": "Square",
+  "case_id": "stroke_self_crossing_w4_miter_square",
+  "format_version": 3,
+  "join_type": "Miter",
+  "miter_limit": 2.0,
+  "operation": "StrokePolyline",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "path": [
+    [
+      -20,
+      -20
+    ],
+    [
+      20,
+      20
+    ],
+    [
+      -20,
+      20
+    ],
+    [
+      20,
+      -20
+    ]
+  ],
+  "source": {
+    "group": "self_crossing",
+    "intent": "Open route; full width divided by two; w4",
+    "kind": "moonclip_constructed"
+  },
+  "width": 4.0
+}

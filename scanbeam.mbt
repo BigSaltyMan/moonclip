@@ -97,30 +97,32 @@ fn scan_check_inputs(
   limits : ScanLimits,
   spent_work? : Int = 0,
   internal_input? : Bool = false,
+  internal_stage? : Stage = OffsetCleanup,
+  raw_stage? : Stage = EnginePrepare,
 ) -> Result[Int, ClipError] {
   if limits.max_nodes < 0 || limits.max_work < 0 {
     return Err(
       InvalidInput(
-        location(EnginePrepare, None, None),
+        location(raw_stage, None, None),
         "Internal limits must be non-negative",
       ),
     )
   }
   if !internal_input &&
-    check_limits(limits.input, EnginePrepare, subject.length()) is Some(error) {
+    check_limits(limits.input, raw_stage, subject.length()) is Some(error) {
     return Err(error)
   }
   if !internal_input &&
     clip.length() > limits.input.max_input_paths - subject.length() {
     return Err(
       ResourceLimitExceeded(
-        location(EnginePrepare, Some(limits.input.max_input_paths), None),
+        location(raw_stage, Some(limits.input.max_input_paths), None),
         InputPaths,
         limits.input.max_input_paths,
       ),
     )
   }
-  let stage = if internal_input { OffsetCleanup } else { EnginePrepare }
+  let stage = if internal_input { internal_stage } else { raw_stage }
   if clip.length() > 2147483647 - subject.length() {
     return Err(
       ResourceLimitExceeded(
@@ -478,6 +480,7 @@ fn prepare_scan(
       limits,
       spent_work=budget.stats.work,
       internal_input~,
+      internal_stage=budget.cleanup_stage,
     ) {
     Err(error) => return Err(error)
     Ok(work) => work

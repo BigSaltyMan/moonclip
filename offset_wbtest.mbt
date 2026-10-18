@@ -675,7 +675,7 @@ test "offset joins numeric 8 nonfinite and excessive step counts cannot convert 
 
 ///|
 test "offset joins numeric 9 both new joins reject generated grid overflow" {
-  for join in [Square, Round] {
+  for join in [JoinType::Square, JoinType::Round] {
     assert_true(
       offset_polygons(
         [pt_rect(x=999999990L)],
