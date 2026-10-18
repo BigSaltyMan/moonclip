@@ -257,6 +257,7 @@ fn prepare_path(
 fn prepare_extrema(
   state : ScanState,
   path : PreparedPath,
+  source_extrema : Bool,
 ) -> Unit raise ScanAbort {
   if !path.scannable {
     return
@@ -298,9 +299,14 @@ fn prepare_extrema(
     let after = state.vertices[ids[(start + offset + count) % n]].point.y
     if y > before && y > after {
       scan_spend(state, 2, 1, scan_location(state, Some(first), EnginePrepare))
-      state.vertices[first].enter = true
+      let anchor = if source_extrema {
+        ids[(start + offset + count - 1) % n]
+      } else {
+        first
+      }
+      state.vertices[anchor].enter = true
       let index = state.minima.length()
-      state.minima.push({ vertex: first, backward: None, forward: None, })
+      state.minima.push({ vertex: anchor, backward: None, forward: None, })
       match state.entries.get(y) {
         Some(events) => events.push(index)
         None => state.entries[y] = [index]
@@ -315,7 +321,13 @@ fn prepare_extrema(
           1,
           scan_location(state, Some(first), EnginePrepare),
         )
-        state.vertices[ids[(start + offset + k) % n]].exit_anchor = Some(first)
+        state.vertices[ids[(start + offset + k) % n]].exit_anchor = Some(
+          if source_extrema {
+            ids[(start + offset + count - 1) % n]
+          } else {
+            first
+          },
+        )
       }
     }
     offset += count
@@ -323,8 +335,8 @@ fn prepare_extrema(
 }
 
 ///|
-/// Forward stops at the first exit-plateau vertex. Backward owns the exit
-/// horizontal chain, so both bounds end at the same canonical exit anchor.
+/// Both bounds stop at the selected exit-plateau anchor. Its convention is
+/// explicit in prepare_scan; the original input direction is never reversed.
 fn prepare_chain(
   state : ScanState,
   minima_id : Int,
@@ -379,6 +391,7 @@ fn prepare_scan(
   subject : Paths64,
   clip : Paths64,
   limits? : ScanLimits = Default::default(),
+  source_extrema? : Bool = false,
 ) -> Result[ScanState, ClipError] {
   let preflight_work = match scan_check_inputs(subject, clip, limits) {
     Err(error) => return Err(error)
@@ -394,7 +407,7 @@ fn prepare_scan(
       prepare_path(state, clip[i], Clip, i, subject.length() + i)
     }
     for path in state.paths {
-      prepare_extrema(state, path)
+      prepare_extrema(state, path, source_extrema)
     }
     for i = 0; i < state.minima.length(); i = i + 1 {
       let min = state.minima[i]

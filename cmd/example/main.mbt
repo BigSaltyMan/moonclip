@@ -82,7 +82,8 @@ fn main raise {
     is Err(ResourceLimitExceeded(_, InputPaths, 1)),
   )
   run_boolean_example()
-  println("MoonClip geometry and EvenOdd Boolean OK")
+  run_winding_example()
+  println("MoonClip geometry and EvenOdd/NonZero Boolean OK")
 }
 
 ///|
@@ -175,4 +176,46 @@ fn run_boolean_example() -> Unit raise {
     fail("Concave union failed")
   }
   example_result(actual, [concave])
+}
+
+///|
+fn example_reverse(path : @moonclip.Path64) -> @moonclip.Path64 {
+  Array::makei(path.length(), fn(i) { path[path.length() - 1 - i] })
+}
+
+///|
+fn run_winding_example() -> Unit raise {
+  let a = example_rect(0L, 0L, 10L, 10L)
+  let b = example_rect(5L, 0L, 10L, 10L)
+  let strips = [example_rect(0L, 0L, 5L, 10L), example_rect(10L, 0L, 5L, 10L)]
+  for
+    (subject, nz_expected, nz_area2) in [
+      ([a, b], [example_rect(0L, 0L, 15L, 10L)], 300N),
+      ([a, example_reverse(b)], strips, 200N),
+      (
+        [example_reverse(a), example_reverse(b)],
+        [example_rect(0L, 0L, 15L, 10L)],
+        300N,
+      ),
+    ] {
+    for
+      (rule, expected, expected_area2) in [
+        (@moonclip.EvenOdd, strips, 200N),
+        (@moonclip.NonZero, nz_expected, nz_area2),
+      ] {
+      guard @moonclip.boolean_op(subject, [], Union, fill_rule=rule)
+        is Ok(actual) else {
+        fail("Expected winding result")
+      }
+      example_result(actual, expected)
+      let mut total = 0N
+      for path in actual {
+        guard @moonclip.area2(path) is Ok(value) else {
+          fail("Expected exact area")
+        }
+        total += value
+      }
+      assert_eq(total, expected_area2)
+    }
+  }
 }

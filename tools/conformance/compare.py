@@ -247,7 +247,7 @@ def read_manifest(root, manifest, require_expected=True, strict=True):
         if "validation" in entry:
             fields.add("validation")
             keys(entry["validation"], {"paths", "tree"}, "manifest.validation")
-            require(entry["validation"]["tree"] == "reference_only" and entry["validation"]["paths"] in ("validate", "reference_only"), "manifest.validation", "unsupported capability status")
+            require(entry["validation"]["tree"] == "reference_only" and entry["validation"]["paths"] in ("validate", "validate_internal", "reference_only"), "manifest.validation", "unsupported capability status")
         keys(entry, fields, "manifest.case")
         cid = entry["case_id"]
         require(type(cid) is str and cid not in seen, "manifest", "duplicate or invalid case ID")
@@ -260,7 +260,7 @@ def read_manifest(root, manifest, require_expected=True, strict=True):
         validate_input(case, cid)
         require(case["case_id"] == cid, cid, "input case ID mismatch")
         if "validation" in entry:
-            required="validate" if case["fill_rule"]=="EvenOdd" else "reference_only"
+            required="validate" if case["fill_rule"] in ("EvenOdd","NonZero") else "validate_internal"
             require(entry["validation"]["paths"]==required,cid,"capability selection disagrees with fill rule")
         digest = sha256(ip.read_bytes())
         expected = None

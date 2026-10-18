@@ -264,6 +264,7 @@ fn process_horizontal(
   ignore(output_add_edge(state, id, end))
   horizontal_output_span(state, before, id)
   commit_horizontal(state, id)
+  boolean_check_neighbors(state, id, end)
   true
 }
 

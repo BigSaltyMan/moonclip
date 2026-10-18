@@ -1,10 +1,10 @@
-# Commit 3 参考案例与工具验证
+# 固定参考案例与工具验证
 
 ## 来源与状态
 
-136 个输入均由 BigSaltyMan 于 2026 年为 MoonClip 自行构造，BSL-1.0。每份输入的 `source.kind` 为 `moonclip_constructed`，`source.group` 定位到下表，`source.intent` 记录构造目的。没有复制上游测试数据。定义脚本为 `tools/oracle/construct_cases.py`；稳定 ID 为 `组名_操作_规则`，不依赖数组下标。
+200 个输入均由 BigSaltyMan 于 2026 年为 MoonClip 自行构造，BSL-1.0。每份输入的 `source.kind` 为 `moonclip_constructed`，`source.group` 定位到下表，`source.intent` 记录构造目的。没有复制上游测试数据。定义脚本为 `tools/oracle/construct_cases.py`；稳定 ID 为 `组名_操作_规则`，不依赖数组下标。
 
-每个预期由固定 Clipper2 C++ 提交 `21ebba05db8894f0c7217ad35ea518080f324946` 真实执行生成，并关联同名输入的完整文件 SHA256。案例级状态保留 reference_only，能力级 validation 另行区分：Commit 6 的 60 条 EvenOdd 平铺轮廓已实际比较通过；全部树输出和其余规则仍为参考数据。
+每个预期由固定 Clipper2 C++ 提交 `21ebba05db8894f0c7217ad35ea518080f324946` 真实执行生成，并关联同名输入的完整文件 SHA256。案例级状态保留 reference_only，能力级 validation 另行区分：公开 EO/NZ 各 76 条 paths=validate，内部正负各 24 条 paths=validate_internal，全部树 reference_only。
 
 ## 覆盖矩阵
 
@@ -29,7 +29,11 @@
 | empty_both | 两端皆空，合法的成功空结果 | 8 |
 | direction_ccw | 逆时针矩形，四操作 × Positive/Negative | 8 |
 | direction_cw | 顺时针矩形，四操作 × Positive/Negative | 8 |
-| 合计 | 四种操作各 34；EvenOdd/NonZero 各 60；Positive/Negative 各 8 | 136 |
+| winding_overlap | 同向 Subject +2，Clip 穿过单/双覆盖区；四操作×四规则 | 16 |
+| winding_reversed | overlap 两个操作数全部反向，验证负绕数对偶 | 16 |
+| winding_nested | 外轮廓、反向孔、岛及第四条交叠轮廓，对含孔 Clip | 16 |
+| winding_cancel_touch | 正反抵消、共边与共顶点、多轮廓 Clip 覆盖 | 16 |
+| 合计 | 四种操作各 50；EO/NZ 各 76；正负各 24 | 200 |
 
 全部采用 `PreserveCollinear=false`、`ReverseSolution=false`，坐标处于 Commit 2 接受范围内。对同一请求分别保存平铺和 PolyTree 原始输出。
 
@@ -57,7 +61,7 @@ python scripts/check_reference.py --manifest testdata/manifest.json --strict
 bash scripts/generate_reference.sh --manifest testdata/manifest.json --check
 ```
 
-前两条离线运行；第三条需要预先构建参考程序。普通 CI 执行前两条，手动参考 CI 另执行真实构建、10 项适配器集成测试和全部重建。成功空结果、参考生成数、工具测试数、MoonBit 的 71 项基础回归不相互替代。MoonClip 布尔兼容性尚未运行，没有布尔运算兼容性通过数。
+前两条离线运行；第三条需要预先构建参考程序。普通 CI 执行前两条，手动参考 CI 另执行真实构建、10 项适配器集成测试和全部重建。成功空结果、参考生成数、工具测试数、MoonBit 的 71 项基础回归不相互替代。该段记录 Commit 3 时尚未运行 MoonClip 布尔对照的状态。
 
 工具限制：UTF-8 JSON 最多 8 MiB，输入/输出最多 10,000 条路径及 100,000 个顶点，树深最多 64；根容器不计为真实轮廓。输出必须保留顶点与绕向且不重复存储首点。当前没有偏移、描边、小数、开放路径或完整几何兼容性矩阵。后续分段不同的几何结果需另立独立证据，不能直接删点或放宽容差。
 
@@ -65,3 +69,12 @@ bash scripts/generate_reference.sh --manifest testdata/manifest.json --check
 ## Commit 6 能力级验证
 
 清单保留案例级 reference_only，并增加 validation.paths / validation.tree。预先锁定的全部 60 条 EvenOdd 的 paths=validate，其余 76 条 paths=reference_only；全部 136 条 tree=reference_only。固定集合见 testdata/evenodd-selection.json，实际逐例平铺结果见 compatibility.md。生成测试在 native 与 JS 分别执行，不修改参考坐标、绕向、顶点或预期哈希。
+
+
+## Commit 7 扩展与验证
+
+先固定四组输入、稳定 ID、构造意图及各规则数量，再运行 MoonClip。construct_cases.py 保留已有元数据并设置规则对应状态。原 evenodd-selection.json 的 60 条基线字节不变，boolean-selection.json 锁定全 200 条；选择依据 fill_rule，不是名称 negative。
+
+本地 2026-10-18 固定普通精度参考重新构建，适配器 10 项测试通过，完整 --write 后 --check 重建 200/200；原有 136 条输入与预期字节不变。工具原 68 项加 17 项，85 项通过，新增覆盖集合完整性、内部混入公开、NonZero 误用 EvenOdd、原生命令不读取预期几何、实际过滤不能零执行。
+
+native、JS 各执行同一批 427 项（205 旧库 +22 新功能 +152 公开 +48 私有对照）。两目标各独立过滤 48/48（Positive/Negative 各 24）。公开 native 严格报告 required/executed/passed=152，差异/错误为零；私有记录与 200 条树未验证状态分别列于 compatibility.md。远端 Linux 和独立参考 CI 链接在本笔交付记录单独提供，本地结果不代替远端证据。

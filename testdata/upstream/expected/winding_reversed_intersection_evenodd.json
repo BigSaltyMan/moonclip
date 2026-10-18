@@ -1,0 +1,185 @@
+{
+  "adapter_protocol_version": 1,
+  "case_id": "winding_reversed_intersection_evenodd",
+  "format_version": 1,
+  "input_sha256": "fa594de174bc103e50c5ad20a584e8f0349434d41f74cb8365e1e7079ace9aea",
+  "metrics": {
+    "hole_count": 0,
+    "path_count": 3,
+    "paths": [
+      {
+        "area2": "54",
+        "bounds": [
+          12,
+          6,
+          18,
+          12
+        ],
+        "vertices": 6
+      },
+      {
+        "area2": "54",
+        "bounds": [
+          3,
+          0,
+          6,
+          9
+        ],
+        "vertices": 4
+      },
+      {
+        "area2": "36",
+        "bounds": [
+          12,
+          0,
+          15,
+          6
+        ],
+        "vertices": 4
+      }
+    ],
+    "tree_depth": 1,
+    "vertex_count": 14
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        18,
+        6
+      ],
+      [
+        18,
+        12
+      ],
+      [
+        12,
+        12
+      ],
+      [
+        12,
+        9
+      ],
+      [
+        15,
+        9
+      ],
+      [
+        15,
+        6
+      ]
+    ],
+    [
+      [
+        6,
+        0
+      ],
+      [
+        6,
+        9
+      ],
+      [
+        3,
+        9
+      ],
+      [
+        3,
+        0
+      ]
+    ],
+    [
+      [
+        15,
+        0
+      ],
+      [
+        15,
+        6
+      ],
+      [
+        12,
+        6
+      ],
+      [
+        12,
+        0
+      ]
+    ]
+  ],
+  "status": "success",
+  "tree": {
+    "children": [
+      {
+        "children": [],
+        "path": [
+          [
+            18,
+            6
+          ],
+          [
+            18,
+            12
+          ],
+          [
+            12,
+            12
+          ],
+          [
+            12,
+            9
+          ],
+          [
+            15,
+            9
+          ],
+          [
+            15,
+            6
+          ]
+        ]
+      },
+      {
+        "children": [],
+        "path": [
+          [
+            6,
+            0
+          ],
+          [
+            6,
+            9
+          ],
+          [
+            3,
+            9
+          ],
+          [
+            3,
+            0
+          ]
+        ]
+      },
+      {
+        "children": [],
+        "path": [
+          [
+            15,
+            0
+          ],
+          [
+            15,
+            6
+          ],
+          [
+            12,
+            6
+          ],
+          [
+            12,
+            0
+          ]
+        ]
+      }
+    ]
+  }
+}

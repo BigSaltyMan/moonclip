@@ -16,7 +16,7 @@
       "input": "testdata/upstream/inputs/coincident_difference_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -36,7 +36,7 @@
       "input": "testdata/upstream/inputs/coincident_intersection_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -56,7 +56,7 @@
       "input": "testdata/upstream/inputs/coincident_union_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -76,7 +76,7 @@
       "input": "testdata/upstream/inputs/coincident_xor_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -96,7 +96,7 @@
       "input": "testdata/upstream/inputs/concave_difference_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -116,7 +116,7 @@
       "input": "testdata/upstream/inputs/concave_intersection_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -136,7 +136,7 @@
       "input": "testdata/upstream/inputs/concave_union_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -156,7 +156,7 @@
       "input": "testdata/upstream/inputs/concave_xor_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -176,7 +176,7 @@
       "input": "testdata/upstream/inputs/contained_difference_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -196,7 +196,7 @@
       "input": "testdata/upstream/inputs/contained_intersection_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -216,7 +216,7 @@
       "input": "testdata/upstream/inputs/contained_union_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -236,7 +236,7 @@
       "input": "testdata/upstream/inputs/contained_xor_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -246,7 +246,7 @@
       "input": "testdata/upstream/inputs/direction_ccw_difference_negative.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate_internal",
         "tree": "reference_only"
       }
     },
@@ -256,7 +256,7 @@
       "input": "testdata/upstream/inputs/direction_ccw_difference_positive.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate_internal",
         "tree": "reference_only"
       }
     },
@@ -266,7 +266,7 @@
       "input": "testdata/upstream/inputs/direction_ccw_intersection_negative.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate_internal",
         "tree": "reference_only"
       }
     },
@@ -276,7 +276,7 @@
       "input": "testdata/upstream/inputs/direction_ccw_intersection_positive.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate_internal",
         "tree": "reference_only"
       }
     },
@@ -286,7 +286,7 @@
       "input": "testdata/upstream/inputs/direction_ccw_union_negative.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate_internal",
         "tree": "reference_only"
       }
     },
@@ -296,7 +296,7 @@
       "input": "testdata/upstream/inputs/direction_ccw_union_positive.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate_internal",
         "tree": "reference_only"
       }
     },
@@ -306,7 +306,7 @@
       "input": "testdata/upstream/inputs/direction_ccw_xor_negative.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate_internal",
         "tree": "reference_only"
       }
     },
@@ -316,7 +316,7 @@
       "input": "testdata/upstream/inputs/direction_ccw_xor_positive.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate_internal",
         "tree": "reference_only"
       }
     },
@@ -326,7 +326,7 @@
       "input": "testdata/upstream/inputs/direction_cw_difference_negative.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate_internal",
         "tree": "reference_only"
       }
     },
@@ -336,7 +336,7 @@
       "input": "testdata/upstream/inputs/direction_cw_difference_positive.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate_internal",
         "tree": "reference_only"
       }
     },
@@ -346,7 +346,7 @@
       "input": "testdata/upstream/inputs/direction_cw_intersection_negative.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate_internal",
         "tree": "reference_only"
       }
     },
@@ -356,7 +356,7 @@
       "input": "testdata/upstream/inputs/direction_cw_intersection_positive.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate_internal",
         "tree": "reference_only"
       }
     },
@@ -366,7 +366,7 @@
       "input": "testdata/upstream/inputs/direction_cw_union_negative.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate_internal",
         "tree": "reference_only"
       }
     },
@@ -376,7 +376,7 @@
       "input": "testdata/upstream/inputs/direction_cw_union_positive.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate_internal",
         "tree": "reference_only"
       }
     },
@@ -386,7 +386,7 @@
       "input": "testdata/upstream/inputs/direction_cw_xor_negative.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate_internal",
         "tree": "reference_only"
       }
     },
@@ -396,7 +396,7 @@
       "input": "testdata/upstream/inputs/direction_cw_xor_positive.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate_internal",
         "tree": "reference_only"
       }
     },
@@ -416,7 +416,7 @@
       "input": "testdata/upstream/inputs/disjoint_difference_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -436,7 +436,7 @@
       "input": "testdata/upstream/inputs/disjoint_intersection_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -456,7 +456,7 @@
       "input": "testdata/upstream/inputs/disjoint_union_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -476,7 +476,7 @@
       "input": "testdata/upstream/inputs/disjoint_xor_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -496,7 +496,7 @@
       "input": "testdata/upstream/inputs/empty_both_difference_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -516,7 +516,7 @@
       "input": "testdata/upstream/inputs/empty_both_intersection_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -536,7 +536,7 @@
       "input": "testdata/upstream/inputs/empty_both_union_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -556,7 +556,7 @@
       "input": "testdata/upstream/inputs/empty_both_xor_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -576,7 +576,7 @@
       "input": "testdata/upstream/inputs/empty_clip_difference_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -596,7 +596,7 @@
       "input": "testdata/upstream/inputs/empty_clip_intersection_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -616,7 +616,7 @@
       "input": "testdata/upstream/inputs/empty_clip_union_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -636,7 +636,7 @@
       "input": "testdata/upstream/inputs/empty_clip_xor_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -656,7 +656,7 @@
       "input": "testdata/upstream/inputs/empty_subject_difference_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -676,7 +676,7 @@
       "input": "testdata/upstream/inputs/empty_subject_intersection_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -696,7 +696,7 @@
       "input": "testdata/upstream/inputs/empty_subject_union_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -716,7 +716,7 @@
       "input": "testdata/upstream/inputs/empty_subject_xor_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -736,7 +736,7 @@
       "input": "testdata/upstream/inputs/hole_difference_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -756,7 +756,7 @@
       "input": "testdata/upstream/inputs/hole_intersection_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -776,7 +776,7 @@
       "input": "testdata/upstream/inputs/hole_union_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -796,7 +796,7 @@
       "input": "testdata/upstream/inputs/hole_xor_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -816,7 +816,7 @@
       "input": "testdata/upstream/inputs/island_difference_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -836,7 +836,7 @@
       "input": "testdata/upstream/inputs/island_intersection_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -856,7 +856,7 @@
       "input": "testdata/upstream/inputs/island_union_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -876,7 +876,7 @@
       "input": "testdata/upstream/inputs/island_xor_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -896,7 +896,7 @@
       "input": "testdata/upstream/inputs/multipart_difference_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -916,7 +916,7 @@
       "input": "testdata/upstream/inputs/multipart_intersection_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -936,7 +936,7 @@
       "input": "testdata/upstream/inputs/multipart_union_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -956,7 +956,7 @@
       "input": "testdata/upstream/inputs/multipart_xor_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -976,7 +976,7 @@
       "input": "testdata/upstream/inputs/negative_collinear_difference_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -996,7 +996,7 @@
       "input": "testdata/upstream/inputs/negative_collinear_intersection_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -1016,7 +1016,7 @@
       "input": "testdata/upstream/inputs/negative_collinear_union_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -1036,7 +1036,7 @@
       "input": "testdata/upstream/inputs/negative_collinear_xor_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -1056,7 +1056,7 @@
       "input": "testdata/upstream/inputs/overlap_difference_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -1076,7 +1076,7 @@
       "input": "testdata/upstream/inputs/overlap_intersection_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -1096,7 +1096,7 @@
       "input": "testdata/upstream/inputs/overlap_union_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -1116,7 +1116,7 @@
       "input": "testdata/upstream/inputs/overlap_xor_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -1136,7 +1136,7 @@
       "input": "testdata/upstream/inputs/self_crossing_difference_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -1156,7 +1156,7 @@
       "input": "testdata/upstream/inputs/self_crossing_intersection_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -1176,7 +1176,7 @@
       "input": "testdata/upstream/inputs/self_crossing_union_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -1196,7 +1196,7 @@
       "input": "testdata/upstream/inputs/self_crossing_xor_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -1216,7 +1216,7 @@
       "input": "testdata/upstream/inputs/touch_edge_difference_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -1236,7 +1236,7 @@
       "input": "testdata/upstream/inputs/touch_edge_intersection_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -1256,7 +1256,7 @@
       "input": "testdata/upstream/inputs/touch_edge_union_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -1276,7 +1276,7 @@
       "input": "testdata/upstream/inputs/touch_edge_xor_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -1296,7 +1296,7 @@
       "input": "testdata/upstream/inputs/touch_vertex_difference_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -1316,7 +1316,7 @@
       "input": "testdata/upstream/inputs/touch_vertex_intersection_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -1336,7 +1336,7 @@
       "input": "testdata/upstream/inputs/touch_vertex_union_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
         "tree": "reference_only"
       }
     },
@@ -1356,7 +1356,647 @@
       "input": "testdata/upstream/inputs/touch_vertex_xor_nonzero.json",
       "status": "reference_only",
       "validation": {
-        "paths": "reference_only",
+        "paths": "validate",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_cancel_touch_difference_evenodd",
+      "expected": "testdata/upstream/expected/winding_cancel_touch_difference_evenodd.json",
+      "input": "testdata/upstream/inputs/winding_cancel_touch_difference_evenodd.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_cancel_touch_difference_negative",
+      "expected": "testdata/upstream/expected/winding_cancel_touch_difference_negative.json",
+      "input": "testdata/upstream/inputs/winding_cancel_touch_difference_negative.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate_internal",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_cancel_touch_difference_nonzero",
+      "expected": "testdata/upstream/expected/winding_cancel_touch_difference_nonzero.json",
+      "input": "testdata/upstream/inputs/winding_cancel_touch_difference_nonzero.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_cancel_touch_difference_positive",
+      "expected": "testdata/upstream/expected/winding_cancel_touch_difference_positive.json",
+      "input": "testdata/upstream/inputs/winding_cancel_touch_difference_positive.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate_internal",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_cancel_touch_intersection_evenodd",
+      "expected": "testdata/upstream/expected/winding_cancel_touch_intersection_evenodd.json",
+      "input": "testdata/upstream/inputs/winding_cancel_touch_intersection_evenodd.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_cancel_touch_intersection_negative",
+      "expected": "testdata/upstream/expected/winding_cancel_touch_intersection_negative.json",
+      "input": "testdata/upstream/inputs/winding_cancel_touch_intersection_negative.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate_internal",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_cancel_touch_intersection_nonzero",
+      "expected": "testdata/upstream/expected/winding_cancel_touch_intersection_nonzero.json",
+      "input": "testdata/upstream/inputs/winding_cancel_touch_intersection_nonzero.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_cancel_touch_intersection_positive",
+      "expected": "testdata/upstream/expected/winding_cancel_touch_intersection_positive.json",
+      "input": "testdata/upstream/inputs/winding_cancel_touch_intersection_positive.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate_internal",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_cancel_touch_union_evenodd",
+      "expected": "testdata/upstream/expected/winding_cancel_touch_union_evenodd.json",
+      "input": "testdata/upstream/inputs/winding_cancel_touch_union_evenodd.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_cancel_touch_union_negative",
+      "expected": "testdata/upstream/expected/winding_cancel_touch_union_negative.json",
+      "input": "testdata/upstream/inputs/winding_cancel_touch_union_negative.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate_internal",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_cancel_touch_union_nonzero",
+      "expected": "testdata/upstream/expected/winding_cancel_touch_union_nonzero.json",
+      "input": "testdata/upstream/inputs/winding_cancel_touch_union_nonzero.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_cancel_touch_union_positive",
+      "expected": "testdata/upstream/expected/winding_cancel_touch_union_positive.json",
+      "input": "testdata/upstream/inputs/winding_cancel_touch_union_positive.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate_internal",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_cancel_touch_xor_evenodd",
+      "expected": "testdata/upstream/expected/winding_cancel_touch_xor_evenodd.json",
+      "input": "testdata/upstream/inputs/winding_cancel_touch_xor_evenodd.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_cancel_touch_xor_negative",
+      "expected": "testdata/upstream/expected/winding_cancel_touch_xor_negative.json",
+      "input": "testdata/upstream/inputs/winding_cancel_touch_xor_negative.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate_internal",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_cancel_touch_xor_nonzero",
+      "expected": "testdata/upstream/expected/winding_cancel_touch_xor_nonzero.json",
+      "input": "testdata/upstream/inputs/winding_cancel_touch_xor_nonzero.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_cancel_touch_xor_positive",
+      "expected": "testdata/upstream/expected/winding_cancel_touch_xor_positive.json",
+      "input": "testdata/upstream/inputs/winding_cancel_touch_xor_positive.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate_internal",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_nested_difference_evenodd",
+      "expected": "testdata/upstream/expected/winding_nested_difference_evenodd.json",
+      "input": "testdata/upstream/inputs/winding_nested_difference_evenodd.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_nested_difference_negative",
+      "expected": "testdata/upstream/expected/winding_nested_difference_negative.json",
+      "input": "testdata/upstream/inputs/winding_nested_difference_negative.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate_internal",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_nested_difference_nonzero",
+      "expected": "testdata/upstream/expected/winding_nested_difference_nonzero.json",
+      "input": "testdata/upstream/inputs/winding_nested_difference_nonzero.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_nested_difference_positive",
+      "expected": "testdata/upstream/expected/winding_nested_difference_positive.json",
+      "input": "testdata/upstream/inputs/winding_nested_difference_positive.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate_internal",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_nested_intersection_evenodd",
+      "expected": "testdata/upstream/expected/winding_nested_intersection_evenodd.json",
+      "input": "testdata/upstream/inputs/winding_nested_intersection_evenodd.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_nested_intersection_negative",
+      "expected": "testdata/upstream/expected/winding_nested_intersection_negative.json",
+      "input": "testdata/upstream/inputs/winding_nested_intersection_negative.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate_internal",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_nested_intersection_nonzero",
+      "expected": "testdata/upstream/expected/winding_nested_intersection_nonzero.json",
+      "input": "testdata/upstream/inputs/winding_nested_intersection_nonzero.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_nested_intersection_positive",
+      "expected": "testdata/upstream/expected/winding_nested_intersection_positive.json",
+      "input": "testdata/upstream/inputs/winding_nested_intersection_positive.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate_internal",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_nested_union_evenodd",
+      "expected": "testdata/upstream/expected/winding_nested_union_evenodd.json",
+      "input": "testdata/upstream/inputs/winding_nested_union_evenodd.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_nested_union_negative",
+      "expected": "testdata/upstream/expected/winding_nested_union_negative.json",
+      "input": "testdata/upstream/inputs/winding_nested_union_negative.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate_internal",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_nested_union_nonzero",
+      "expected": "testdata/upstream/expected/winding_nested_union_nonzero.json",
+      "input": "testdata/upstream/inputs/winding_nested_union_nonzero.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_nested_union_positive",
+      "expected": "testdata/upstream/expected/winding_nested_union_positive.json",
+      "input": "testdata/upstream/inputs/winding_nested_union_positive.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate_internal",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_nested_xor_evenodd",
+      "expected": "testdata/upstream/expected/winding_nested_xor_evenodd.json",
+      "input": "testdata/upstream/inputs/winding_nested_xor_evenodd.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_nested_xor_negative",
+      "expected": "testdata/upstream/expected/winding_nested_xor_negative.json",
+      "input": "testdata/upstream/inputs/winding_nested_xor_negative.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate_internal",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_nested_xor_nonzero",
+      "expected": "testdata/upstream/expected/winding_nested_xor_nonzero.json",
+      "input": "testdata/upstream/inputs/winding_nested_xor_nonzero.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_nested_xor_positive",
+      "expected": "testdata/upstream/expected/winding_nested_xor_positive.json",
+      "input": "testdata/upstream/inputs/winding_nested_xor_positive.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate_internal",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_overlap_difference_evenodd",
+      "expected": "testdata/upstream/expected/winding_overlap_difference_evenodd.json",
+      "input": "testdata/upstream/inputs/winding_overlap_difference_evenodd.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_overlap_difference_negative",
+      "expected": "testdata/upstream/expected/winding_overlap_difference_negative.json",
+      "input": "testdata/upstream/inputs/winding_overlap_difference_negative.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate_internal",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_overlap_difference_nonzero",
+      "expected": "testdata/upstream/expected/winding_overlap_difference_nonzero.json",
+      "input": "testdata/upstream/inputs/winding_overlap_difference_nonzero.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_overlap_difference_positive",
+      "expected": "testdata/upstream/expected/winding_overlap_difference_positive.json",
+      "input": "testdata/upstream/inputs/winding_overlap_difference_positive.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate_internal",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_overlap_intersection_evenodd",
+      "expected": "testdata/upstream/expected/winding_overlap_intersection_evenodd.json",
+      "input": "testdata/upstream/inputs/winding_overlap_intersection_evenodd.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_overlap_intersection_negative",
+      "expected": "testdata/upstream/expected/winding_overlap_intersection_negative.json",
+      "input": "testdata/upstream/inputs/winding_overlap_intersection_negative.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate_internal",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_overlap_intersection_nonzero",
+      "expected": "testdata/upstream/expected/winding_overlap_intersection_nonzero.json",
+      "input": "testdata/upstream/inputs/winding_overlap_intersection_nonzero.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_overlap_intersection_positive",
+      "expected": "testdata/upstream/expected/winding_overlap_intersection_positive.json",
+      "input": "testdata/upstream/inputs/winding_overlap_intersection_positive.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate_internal",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_overlap_union_evenodd",
+      "expected": "testdata/upstream/expected/winding_overlap_union_evenodd.json",
+      "input": "testdata/upstream/inputs/winding_overlap_union_evenodd.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_overlap_union_negative",
+      "expected": "testdata/upstream/expected/winding_overlap_union_negative.json",
+      "input": "testdata/upstream/inputs/winding_overlap_union_negative.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate_internal",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_overlap_union_nonzero",
+      "expected": "testdata/upstream/expected/winding_overlap_union_nonzero.json",
+      "input": "testdata/upstream/inputs/winding_overlap_union_nonzero.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_overlap_union_positive",
+      "expected": "testdata/upstream/expected/winding_overlap_union_positive.json",
+      "input": "testdata/upstream/inputs/winding_overlap_union_positive.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate_internal",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_overlap_xor_evenodd",
+      "expected": "testdata/upstream/expected/winding_overlap_xor_evenodd.json",
+      "input": "testdata/upstream/inputs/winding_overlap_xor_evenodd.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_overlap_xor_negative",
+      "expected": "testdata/upstream/expected/winding_overlap_xor_negative.json",
+      "input": "testdata/upstream/inputs/winding_overlap_xor_negative.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate_internal",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_overlap_xor_nonzero",
+      "expected": "testdata/upstream/expected/winding_overlap_xor_nonzero.json",
+      "input": "testdata/upstream/inputs/winding_overlap_xor_nonzero.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_overlap_xor_positive",
+      "expected": "testdata/upstream/expected/winding_overlap_xor_positive.json",
+      "input": "testdata/upstream/inputs/winding_overlap_xor_positive.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate_internal",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_reversed_difference_evenodd",
+      "expected": "testdata/upstream/expected/winding_reversed_difference_evenodd.json",
+      "input": "testdata/upstream/inputs/winding_reversed_difference_evenodd.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_reversed_difference_negative",
+      "expected": "testdata/upstream/expected/winding_reversed_difference_negative.json",
+      "input": "testdata/upstream/inputs/winding_reversed_difference_negative.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate_internal",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_reversed_difference_nonzero",
+      "expected": "testdata/upstream/expected/winding_reversed_difference_nonzero.json",
+      "input": "testdata/upstream/inputs/winding_reversed_difference_nonzero.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_reversed_difference_positive",
+      "expected": "testdata/upstream/expected/winding_reversed_difference_positive.json",
+      "input": "testdata/upstream/inputs/winding_reversed_difference_positive.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate_internal",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_reversed_intersection_evenodd",
+      "expected": "testdata/upstream/expected/winding_reversed_intersection_evenodd.json",
+      "input": "testdata/upstream/inputs/winding_reversed_intersection_evenodd.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_reversed_intersection_negative",
+      "expected": "testdata/upstream/expected/winding_reversed_intersection_negative.json",
+      "input": "testdata/upstream/inputs/winding_reversed_intersection_negative.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate_internal",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_reversed_intersection_nonzero",
+      "expected": "testdata/upstream/expected/winding_reversed_intersection_nonzero.json",
+      "input": "testdata/upstream/inputs/winding_reversed_intersection_nonzero.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_reversed_intersection_positive",
+      "expected": "testdata/upstream/expected/winding_reversed_intersection_positive.json",
+      "input": "testdata/upstream/inputs/winding_reversed_intersection_positive.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate_internal",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_reversed_union_evenodd",
+      "expected": "testdata/upstream/expected/winding_reversed_union_evenodd.json",
+      "input": "testdata/upstream/inputs/winding_reversed_union_evenodd.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_reversed_union_negative",
+      "expected": "testdata/upstream/expected/winding_reversed_union_negative.json",
+      "input": "testdata/upstream/inputs/winding_reversed_union_negative.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate_internal",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_reversed_union_nonzero",
+      "expected": "testdata/upstream/expected/winding_reversed_union_nonzero.json",
+      "input": "testdata/upstream/inputs/winding_reversed_union_nonzero.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_reversed_union_positive",
+      "expected": "testdata/upstream/expected/winding_reversed_union_positive.json",
+      "input": "testdata/upstream/inputs/winding_reversed_union_positive.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate_internal",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_reversed_xor_evenodd",
+      "expected": "testdata/upstream/expected/winding_reversed_xor_evenodd.json",
+      "input": "testdata/upstream/inputs/winding_reversed_xor_evenodd.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_reversed_xor_negative",
+      "expected": "testdata/upstream/expected/winding_reversed_xor_negative.json",
+      "input": "testdata/upstream/inputs/winding_reversed_xor_negative.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate_internal",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_reversed_xor_nonzero",
+      "expected": "testdata/upstream/expected/winding_reversed_xor_nonzero.json",
+      "input": "testdata/upstream/inputs/winding_reversed_xor_nonzero.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate",
+        "tree": "reference_only"
+      }
+    },
+    {
+      "case_id": "winding_reversed_xor_positive",
+      "expected": "testdata/upstream/expected/winding_reversed_xor_positive.json",
+      "input": "testdata/upstream/inputs/winding_reversed_xor_positive.json",
+      "status": "reference_only",
+      "validation": {
+        "paths": "validate_internal",
         "tree": "reference_only"
       }
     }

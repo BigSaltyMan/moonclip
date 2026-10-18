@@ -1,0 +1,91 @@
+{
+  "case_id": "winding_overlap_union_nonzero",
+  "clip": [
+    [
+      [
+        3,
+        -3
+      ],
+      [
+        15,
+        -3
+      ],
+      [
+        15,
+        9
+      ],
+      [
+        3,
+        9
+      ]
+    ],
+    [
+      [
+        9,
+        6
+      ],
+      [
+        21,
+        6
+      ],
+      [
+        21,
+        15
+      ],
+      [
+        9,
+        15
+      ]
+    ]
+  ],
+  "fill_rule": "NonZero",
+  "format_version": 1,
+  "operation": "Union",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "source": {
+    "group": "winding_overlap",
+    "intent": "Positive double winding and both operands crossing singly and doubly covered regions",
+    "kind": "moonclip_constructed"
+  },
+  "subject": [
+    [
+      [
+        0,
+        0
+      ],
+      [
+        12,
+        0
+      ],
+      [
+        12,
+        12
+      ],
+      [
+        0,
+        12
+      ]
+    ],
+    [
+      [
+        6,
+        0
+      ],
+      [
+        18,
+        0
+      ],
+      [
+        18,
+        12
+      ],
+      [
+        6,
+        12
+      ]
+    ]
+  ]
+}

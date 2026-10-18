@@ -1,5 +1,5 @@
 // Copyright (c) 2026 BigSaltyMan. BSL-1.0; see LICENSE.
-// Closed EvenOdd contribution and output-side rules adapted from Clipper2,
+// Closed signed winding contribution and output-side rules adapted from Clipper2,
 // Copyright (c) Angus Johnson 2010-2025.
 
 ///|
@@ -13,6 +13,7 @@ pub(all) enum ClipType {
 ///|
 pub(all) enum FillRule {
   EvenOdd
+  NonZero
 } derive(Eq, Debug)
 
 ///|
@@ -86,6 +87,212 @@ fn start_connection(
 }
 
 ///|
+#warnings("-unused_constructor")
+priv enum WindingRule {
+  Parity
+  SignedNonZero
+  Positive
+  Negative
+} derive(Eq)
+
+///|
+fn winding_filled(rule : WindingRule, count : Int) -> Bool {
+  match rule {
+    Parity => count % 2 != 0
+    SignedNonZero => count != 0
+    Positive => count > 0
+    Negative => count < 0
+  }
+}
+
+///|
+// Every prefix is a sum of at most vertices.length() unit edge directions.
+// Validate before addition or negation; no unchecked abs or sign products.
+fn winding_add(
+  state : ScanState,
+  value : Int,
+  delta : Int,
+) -> Int raise ScanAbort {
+  let bound = state.vertices.length()
+  if value < -bound ||
+    value > bound ||
+    delta < -bound ||
+    delta > bound ||
+    (delta > 0 && value > bound - delta) ||
+    (delta < 0 && value < -bound - delta) {
+    scan_abort(
+      state,
+      ExecutionFailure(
+        location(BooleanOp, None, None),
+        "Winding count exceeds input edge bound",
+      ),
+    )
+  }
+  value + delta
+}
+
+///|
+fn winding_level(state : ScanState, value : Int) -> Int raise ScanAbort {
+  let value = winding_add(state, value, 0)
+  match state.boolean_rule {
+    Positive => value
+    Negative => -value
+    Parity | SignedNonZero => if value < 0 { -value } else { value }
+  }
+}
+
+///|
+// wind_count is the signed adjacent region of greater magnitude, not a
+// left-prefix count. wind_other is the other operand's prefix at this edge.
+fn winding_initialize(state : ScanState, aid : EdgeId) -> Unit raise ScanAbort {
+  let a = edge_get(state, aid)
+  let role = edge_role(state, a)
+  let mut previous = a.prev_ael
+  while previous is Some(id) {
+    let edge = edge_get(state, id)
+    scan_spend(state, 0, 1, scan_location(state, Some(a.bot), BooleanOp))
+    if edge_role(state, edge) == role {
+      break
+    }
+    previous = edge.prev_ael
+  }
+  let mut cursor = state.ael_head
+  a.wind_count = a.wind_dx
+  a.wind_other = 0
+  if previous is Some(id) {
+    let edge = edge_get(state, id)
+    ignore(winding_add(state, edge.wind_count, 0))
+    ignore(winding_add(state, edge.wind_other, 0))
+    if edge.wind_count == 0 {
+      output_error(state, "Uninitialized preceding winding count")
+    }
+    if state.boolean_rule != Parity {
+      let opposite = (edge.wind_count < 0) != (edge.wind_dx < 0)
+      let reversing = edge.wind_dx != a.wind_dx
+      if !opposite || edge.wind_count > 1 || edge.wind_count < -1 {
+        a.wind_count = if reversing {
+          edge.wind_count
+        } else {
+          winding_add(state, edge.wind_count, a.wind_dx)
+        }
+      }
+    }
+    a.wind_other = edge.wind_other
+    cursor = edge.next_ael
+  }
+  while cursor is Some(id) {
+    let edge = edge_get(state, id)
+    if id == aid {
+      break
+    }
+    scan_spend(state, 0, 1, scan_location(state, Some(a.bot), BooleanOp))
+    if edge_role(state, edge) != role {
+      a.wind_other = if state.boolean_rule == Parity {
+        1 - a.wind_other
+      } else {
+        winding_add(state, a.wind_other, edge.wind_dx)
+      }
+    }
+    cursor = edge.next_ael
+  }
+}
+
+///|
+fn winding_contributes(
+  state : ScanState,
+  op : ClipType,
+  a : ActiveEdge,
+) -> Bool raise ScanAbort {
+  (state.boolean_rule == Parity || winding_level(state, a.wind_count) == 1) &&
+  boolean_contributes(
+    op,
+    edge_role(state, a),
+    winding_filled(state.boolean_rule, a.wind_other),
+  )
+}
+
+///|
+// A joined pair remains in the AEL for winding updates, but carries no output
+// across the canceled seam. Split BEFORE changing either incident segment.
+fn boolean_split_join(
+  state : ScanState,
+  id : EdgeId,
+  point : Point64,
+) -> Unit raise ScanAbort {
+  let edge = edge_get(state, id)
+  if edge.joined is Some(other) {
+    let pair = edge_get(state, other)
+    if pair.joined != Some(id) {
+      output_error(state, "Asymmetric active seam")
+    }
+    edge.joined = None
+    pair.joined = None
+    if edge.next_ael == Some(other) {
+      start_connection(state, id, other, point, true)
+    } else if edge.prev_ael == Some(other) {
+      start_connection(state, other, id, point, true)
+    } else {
+      output_error(state, "Nonadjacent active seam")
+    }
+  }
+}
+
+///|
+fn boolean_check_join(
+  state : ScanState,
+  left : EdgeId,
+  right : EdgeId,
+  point : Point64,
+) -> Unit raise ScanAbort {
+  scan_spend(state, 0, 1, location(BooleanOp, None, None))
+  let a = edge_get(state, left)
+  let b = edge_get(state, right)
+  if a.horizontal != NonHorizontal ||
+    b.horizontal != NonHorizontal ||
+    a.joined is Some(_) ||
+    b.joined is Some(_) ||
+    a.output_end is None ||
+    b.output_end is None {
+    return
+  }
+  let at = state.vertices[a.top].point
+  let bt = state.vertices[b.top].point
+  if (point.y < at.y + 2L || point.y < bt.y + 2L) &&
+    (
+      state.vertices[a.bot].point.y > point.y ||
+      state.vertices[b.bot].point.y > point.y
+    ) {
+    return
+  }
+  if !point_on_segment_validated(point, state.vertices[a.bot].point, at) ||
+    !point_on_segment_validated(point, state.vertices[b.bot].point, bt) ||
+    cross_validated(at, point, bt) != 0L {
+    return
+  }
+  close_connection(state, left, right, point)
+  a.joined = Some(right)
+  b.joined = Some(left)
+}
+
+///|
+fn boolean_check_neighbors(
+  state : ScanState,
+  id : EdgeId,
+  point : Point64,
+) -> Unit raise ScanAbort {
+  if state.boolean_operation is None {
+    return
+  }
+  let edge = edge_get(state, id)
+  if edge.prev_ael is Some(prev) {
+    boolean_check_join(state, prev, id, point)
+  }
+  if edge.next_ael is Some(next) {
+    boolean_check_join(state, id, next, point)
+  }
+}
+
+///|
 fn boolean_decision(
   state : ScanState,
   operation : ClipType,
@@ -97,19 +304,10 @@ fn boolean_decision(
   let br = edge_role(state, b)
   match event.kind {
     Minimum => {
-      let mut other = false
-      let mut cursor = state.ael_head
-      while cursor is Some(id) && id != event.first {
-        let edge = edge_get(state, id)
-        scan_spend(state, 0, 1, scan_location(state, Some(a.bot), BooleanOp))
-        if edge_role(state, edge) != ar {
-          other = !other
-        }
-        cursor = edge.next_ael
-      }
-      a.wind_other = other
-      b.wind_other = other
-      if boolean_contributes(operation, ar, other) {
+      winding_initialize(state, event.first)
+      b.wind_count = a.wind_count
+      b.wind_other = a.wind_other
+      if winding_contributes(state, operation, a) {
         StartContour
       } else {
         Ignore
@@ -117,6 +315,8 @@ fn boolean_decision(
     }
     EntryContact | BandContact => Ignore
     Maximum => {
+      boolean_split_join(state, event.first, event.point)
+      boolean_split_join(state, event.second, event.point)
       let ah = a.output_end is Some(_)
       let bh = b.output_end is Some(_)
       if ah != bh {
@@ -135,14 +335,42 @@ fn boolean_decision(
       }
     }
     Crossing | HorizontalCrossing => {
-      if ar != br {
-        a.wind_other = !a.wind_other
-        b.wind_other = !b.wind_other
+      boolean_split_join(state, event.first, event.point)
+      boolean_split_join(state, event.second, event.point)
+      if ar == br {
+        if state.boolean_rule == Parity {
+          let old = a.wind_count
+          a.wind_count = b.wind_count
+          b.wind_count = old
+        } else {
+          let av = winding_add(state, a.wind_count, b.wind_dx)
+          let bv = winding_add(state, b.wind_count, -a.wind_dx)
+          a.wind_count = if av == 0 { -a.wind_count } else { av }
+          b.wind_count = if bv == 0 { -b.wind_count } else { bv }
+        }
+      } else {
+        a.wind_other = if state.boolean_rule == Parity {
+          1 - a.wind_other
+        } else {
+          winding_add(state, a.wind_other, b.wind_dx)
+        }
+        b.wind_other = if state.boolean_rule == Parity {
+          1 - b.wind_other
+        } else {
+          winding_add(state, b.wind_other, -a.wind_dx)
+        }
       }
       let ah = a.output_end is Some(_)
       let bh = b.output_end is Some(_)
+      let aw = winding_level(state, a.wind_count)
+      let bw = winding_level(state, b.wind_count)
+      let a_boundary = aw == 0 || aw == 1
+      let b_boundary = bw == 0 || bw == 1
+      if (!ah && !a_boundary) || (!bh && !b_boundary) {
+        return Ignore
+      }
       if ah && bh {
-        if ar != br && operation != Xor {
+        if !a_boundary || !b_boundary || (ar != br && operation != Xor) {
           CloseOrMerge
         } else {
           let ae = a.output_end.unwrap()
@@ -156,8 +384,27 @@ fn boolean_decision(
         }
       } else if ah || bh {
         ExchangeEnds
-      } else if ar != br || boolean_contributes(operation, ar, a.wind_other) {
+      } else if ar != br {
         StartContour
+      } else if aw == 1 && bw == 1 {
+        let ac = winding_level(state, a.wind_other)
+        let bc = winding_level(state, b.wind_other)
+        let start = match operation {
+          Union => ac <= 0 || bc <= 0
+          Difference =>
+            if ar == Clip {
+              ac > 0 && bc > 0
+            } else {
+              ac <= 0 && bc <= 0
+            }
+          Intersection => ac > 0 && bc > 0
+          Xor => true
+        }
+        if start {
+          StartContour
+        } else {
+          Ignore
+        }
       } else {
         Ignore
       }
@@ -171,11 +418,13 @@ fn boolean_execute(
   clip : Paths64,
   operation : ClipType,
   limits : ScanLimits,
+  rule? : WindingRule = Parity,
 ) -> Result[Paths64, ClipError] {
-  let state = match prepare_scan(subject, clip, limits~) {
+  let state = match prepare_scan(subject, clip, limits~, source_extrema=true) {
     Ok(s) => s
     Err(e) => return Err(e)
   }
+  state.boolean_rule = rule
   state.boolean_operation = Some(operation)
   try {
     while state.phase != Complete {
@@ -214,7 +463,7 @@ fn boolean_execute(
 }
 
 ///|
-/// Closed paths, independent operand parity; fixed preserve_collinear=false,
+/// Closed paths, independent operand filling; fixed preserve_collinear=false,
 /// reverse_solution=false. Difference is Subject minus Clip.
 pub fn boolean_op(
   subject : Paths64,
@@ -223,14 +472,16 @@ pub fn boolean_op(
   fill_rule? : FillRule = EvenOdd,
   limits? : Limits = Default::default(),
 ) -> Result[Paths64, ClipError] {
-  match fill_rule {
-    EvenOdd =>
-      boolean_execute(subject, clip, operation, {
-        input: limits,
-        max_nodes: 500000,
-        max_work: 5000000,
-      })
-  }
+  boolean_execute(
+    subject,
+    clip,
+    operation,
+    { input: limits, max_nodes: 500000, max_work: 5000000, },
+    rule=match fill_rule {
+      EvenOdd => Parity
+      NonZero => SignedNonZero
+    },
+  )
 }
 
 ///|
@@ -332,6 +583,8 @@ fn boolean_enter_height(
         )
         ael_swap(state, right, next)
       }
+      boolean_check_neighbors(state, left, event.point)
+      boolean_check_neighbors(state, right, event.point)
       schedule_edge(state, left)
       schedule_edge(state, right)
     }

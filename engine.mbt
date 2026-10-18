@@ -197,7 +197,9 @@ fn engine_step(
           cursor = edge.next_ael
           if state.vertices[edge.top].point.y == state.current_y.unwrap() {
             ignore(output_add_edge(state, id, state.vertices[edge.top].point))
+            boolean_split_join(state, id, state.vertices[edge.top].point)
             edge_advance(state, id)
+            boolean_check_neighbors(state, id, state.vertices[edge.bot].point)
           }
         }
         state.phase = Horizontals
@@ -264,6 +266,30 @@ fn engine_invariants(state : ScanState) -> Result[Unit, String] {
     if edge_peek(state, event.first) is None ||
       edge_peek(state, event.second) is None {
       return Err("Stale pending connection edge")
+    }
+  }
+  for index = 0; index < state.slots.length(); index = index + 1 {
+    let slot = state.slots[index]
+    if slot.edge is Some(edge) {
+      let bound = state.vertices.length()
+      if (edge.wind_dx != 1 && edge.wind_dx != -1) ||
+        edge.wind_count < -bound ||
+        edge.wind_count > bound ||
+        edge.wind_other < -bound ||
+        edge.wind_other > bound {
+        return Err("Invalid signed winding state")
+      }
+      if edge.joined is Some(other) {
+        guard edge_peek(state, other) is Some(pair) else {
+          return Err("Stale active seam")
+        }
+        if pair.joined != Some({ slot: index, generation: slot.generation, }) ||
+          (edge.prev_ael != Some(other) && edge.next_ael != Some(other)) ||
+          edge.output_end is Some(_) ||
+          pair.output_end is Some(_) {
+          return Err("Invalid active seam ownership")
+        }
+      }
     }
   }
   let stats = state.stats

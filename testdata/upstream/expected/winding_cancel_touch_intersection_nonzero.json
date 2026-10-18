@@ -1,0 +1,169 @@
+{
+  "adapter_protocol_version": 1,
+  "case_id": "winding_cancel_touch_intersection_nonzero",
+  "format_version": 1,
+  "input_sha256": "1f154b0b6df8b8619279b36f4c500fb6c157a9b00711be8ca98abd2d91892cc6",
+  "metrics": {
+    "hole_count": 0,
+    "path_count": 3,
+    "paths": [
+      {
+        "area2": "50",
+        "bounds": [
+          20,
+          10,
+          25,
+          15
+        ],
+        "vertices": 4
+      },
+      {
+        "area2": "50",
+        "bounds": [
+          15,
+          5,
+          20,
+          10
+        ],
+        "vertices": 4
+      },
+      {
+        "area2": "50",
+        "bounds": [
+          10,
+          0,
+          15,
+          5
+        ],
+        "vertices": 4
+      }
+    ],
+    "tree_depth": 1,
+    "vertex_count": 12
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        25,
+        15
+      ],
+      [
+        20,
+        15
+      ],
+      [
+        20,
+        10
+      ],
+      [
+        25,
+        10
+      ]
+    ],
+    [
+      [
+        20,
+        10
+      ],
+      [
+        15,
+        10
+      ],
+      [
+        15,
+        5
+      ],
+      [
+        20,
+        5
+      ]
+    ],
+    [
+      [
+        15,
+        5
+      ],
+      [
+        10,
+        5
+      ],
+      [
+        10,
+        0
+      ],
+      [
+        15,
+        0
+      ]
+    ]
+  ],
+  "status": "success",
+  "tree": {
+    "children": [
+      {
+        "children": [],
+        "path": [
+          [
+            25,
+            15
+          ],
+          [
+            20,
+            15
+          ],
+          [
+            20,
+            10
+          ],
+          [
+            25,
+            10
+          ]
+        ]
+      },
+      {
+        "children": [],
+        "path": [
+          [
+            20,
+            10
+          ],
+          [
+            15,
+            10
+          ],
+          [
+            15,
+            5
+          ],
+          [
+            20,
+            5
+          ]
+        ]
+      },
+      {
+        "children": [],
+        "path": [
+          [
+            15,
+            5
+          ],
+          [
+            10,
+            5
+          ],
+          [
+            10,
+            0
+          ],
+          [
+            15,
+            0
+          ]
+        ]
+      }
+    ]
+  }
+}

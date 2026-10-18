@@ -304,7 +304,7 @@ class CatalogTests(unittest.TestCase):
     def test_offline_catalog_needs_no_process_or_network(self):
         with mock.patch("subprocess.run",side_effect=AssertionError("process forbidden")), mock.patch("urllib.request.urlopen",side_effect=AssertionError("network forbidden")):
             _,records=read_manifest(ROOT,ROOT/"testdata/manifest.json",strict=True)
-            self.assertEqual(len(records),136)
+            self.assertEqual(len(records),200)
 
     def test_lock_identity_and_checksum_are_required(self):
         for field, value in (("commit", "0"*40), ("adapter_protocol_version", 2)):

@@ -72,6 +72,7 @@ pub(all) struct ErrorLocation {
 
 pub(all) enum FillRule {
   EvenOdd
+  NonZero
 } derive(Eq, @debug.Debug)
 
 pub(all) struct Limits {

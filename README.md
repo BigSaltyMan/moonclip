@@ -2,7 +2,7 @@
 
 MoonClip 是用 MoonBit 实现的整数多边形几何库，目前处于开发初期。目标版本为 `0.1.0`，尚未发布到 Mooncakes，模块名称的可用性将在发布前确认。
 
-目前已实现：不可变 `Int64` 点、有序路径与轮廓集合、结构比较、独立复制，以及精确叉积与方向、边界框、精确两倍有向面积、EvenOdd 点包含判断和开放/闭合模式的重复点整理。另已建立内部扫描线、活动边、交点事件、水平交互及输出环连接原语，采用节点复用和共享工作量预算；公开支持 EvenOdd 下的 Intersection、Union、Difference、Xor。NonZero、孔洞树、偏移、描边、小数接口和简化仍在后续计划中。
+目前已实现：不可变 `Int64` 点、有序路径与轮廓集合、结构比较、独立复制，以及精确叉积与方向、边界框、精确两倍有向面积、EvenOdd 点包含判断和开放/闭合模式的重复点整理。另已建立内部扫描线、活动边、交点事件、水平交互及输出环连接原语，采用节点复用和共享工作量预算；公开支持 EvenOdd 与 NonZero 下的 Intersection、Union、Difference、Xor。孔洞树、偏移、描边、小数接口和简化仍在后续计划中。
 
 ## 数据契约
 
@@ -155,11 +155,11 @@ git diff --check
 
 ## 内部扫描线状态
 
-扫描事件沿数值 y 从大到小调度。内部组件已接通稳定归并交点生成、相邻事件交换、水平穿越与重叠候选，以及输出环创建、两端延伸、闭合、拆分、合并和独立提取。几何事件通过显式决策入口连接输出；未提供贡献决策或未消费水平连接时保留待处理状态。公开 boolean_op 已自动生成四种操作的 EvenOdd 决策，调用方不需要提供内部动作。公开 Limits 的两个字段保持不变。架构、阶段边界与验证范围见 [内部引擎说明](docs/engine.md)。
+扫描事件沿数值 y 从大到小调度。内部组件已接通稳定归并交点生成、相邻事件交换、水平穿越与重叠候选，以及输出环创建、两端延伸、闭合、拆分、合并和独立提取。几何事件通过显式决策入口连接输出；未提供贡献决策或未消费水平连接时保留待处理状态。公开 boolean_op 已自动生成四种操作的 EvenOdd／NonZero 决策，调用方不需要提供内部动作。公开 Limits 的两个字段保持不变。架构、阶段边界与验证范围见 [内部引擎说明](docs/engine.md)。
 
 ## 固定上游参考与离线检查
 
-已建立固定 Clipper2 2.0.1 C++ 参考适配器，生成 136 个闭合路径布尔参考案例，并建立保留绕向、顶点数量和孔洞归属的轮廓/PolyTree 比较器。其中预先锁定的 60 条 EvenOdd 平铺轮廓已实际比较通过；其余 76 条填充规则及全部 136 条孔洞树仍为 reference_only。能力状态分别记录，不能把平铺通过当作整例拓扑树通过。
+已建立固定 Clipper2 2.0.1 C++ 参考适配器，生成 200 个闭合路径布尔参考案例，并建立保留绕向、顶点数量和孔洞归属的轮廓/PolyTree 比较器。预先锁定公开 EvenOdd、NonZero 各 76 条，内部 Positive、Negative 各 24 条分别对照；全部 200 条树仍为 reference_only。能力状态分别记录，不能把平铺通过当作整例拓扑树通过。
 
 普通检查使用 Python 3.11+ 标准库读取已提交数据，不下载上游、不构建或调用 C++：
 
@@ -175,21 +175,27 @@ python scripts/check_reference.py --manifest testdata/manifest.json --strict
 固定参考 [Clipper2 2.0.1](https://github.com/AngusJohnson/Clipper2/tree/21ebba05db8894f0c7217ad35ea518080f324946)，使用 BSL-1.0 许可。参考范围、版权和移植状态见 [来源记录](docs/upstream.md)；完整许可见 [LICENSE](LICENSE)。运行库由 MoonBit 实现，固定版本 C++ 实现已用于独立参考数据生成。当前平铺结果与目标覆盖见 [兼容性报告](docs/compatibility.md)。
 
 
-## EvenOdd 布尔运算
+## EvenOdd 与 NonZero 布尔运算
 
 公开入口为 `boolean_op(subject, clip, operation, fill_rule=EvenOdd, limits=...)`，返回 `Result[Paths64, ClipError]`。操作类型为 Intersection、Union、Difference、Xor；Difference 固定为 Subject 减 Clip。使用方法与逐点结果断言见 [可运行示例](cmd/example/main.mbt)，本地直接执行 `moon run --target native cmd/example`。
 
-Subject、Clip 各自计算奇偶填充，再应用操作。同组重复两次的轮廓抵消，三次保留；两组各含一条相同轮廓时，Union 保留、Xor 为空。绕向不改变 EvenOdd 填充。`Union(A, [])` 会构造 A 的 EvenOdd 填充边界，不是简单复制原始轮廓。
+默认仍为 EvenOdd。该规则下 Subject、Clip 各自计算奇偶填充，再应用操作。同组重复两次的轮廓抵消，三次保留；两组各含一条相同轮廓时，Union 保留、Xor 为空。绕向不改变 EvenOdd 填充。`Union(A, [])` 会构造 A 的 EvenOdd 填充边界，不是简单复制原始轮廓。
 
 空路径、单点、两点及全共线闭合轮廓不产生面域；自交轮廓不能按总有向面积为零删除。原始总路径数、顶点数和坐标检查先于所有空结果处理。两组输入共享 Limits；内部固定使用累计 500,000 个逻辑节点、5,000,000 个工作步骤，覆盖输入准备、扫描、交点、连接、整理和提取。耗尽时返回 ResourceLimitExceeded，不返回截断结果；独立调用重新建立状态。ExecutionFailure 表示内部执行契约失败，区别于参数错误。
 
-结果是平铺闭合轮廓，不重复首点，固定 preserve_collinear=false、reverse_solution=false；不保证环起点和轮廓顺序。外部边界与孔洞按固定配置的绕向保留，不提供已证明的父子关系。返回数组与两组输入、其他调用、内部节点完全隔离。PolyTree 在 Commit 8 接入，NonZero 在 Commit 7 接入。
+结果是平铺闭合轮廓，不重复首点，固定 preserve_collinear=false、reverse_solution=false；不保证环起点和轮廓顺序。外部边界与孔洞按固定配置的绕向保留，不提供已证明的父子关系。返回数组与两组输入、其他调用、内部节点完全隔离。PolyTree 在 Commit 8 接入；Positive、Negative 仅为私有规则，未公开承诺。
 
 示例完整检查面积为 50、150、50、100 的四种操作结果，Xor 验证两条分离条带，另检查凹轮廓。面积只作辅助，完整轮廓才是对照依据。
 
 ```bash
-python tools/conformance/generate_evenodd.py --check
+python tools/conformance/generate_boolean.py --check
 moon run --target native cmd/conformance -- --manifest testdata/manifest.json --report-json _build/conformance/report.json --report-md docs/compatibility.md --strict
 ```
 
-原生报告命令通过公开接口运行 60 条已生成的固定输入，不链接预期结果。Python 3.11+ 仅处理清单、内容哈希、已有严格比较器和报告 IO；cmd/conformance 的小型 C 桥只负责原生进程传输，根库没有文件 IO 或外部几何运行时。退出码 0 表示成功/帮助，1 表示轮廓差异，2 表示参数、完整性或执行错误。JS 独立执行同一批 60 项生成测试，不能用 native 报告替代 JS 证据。生成一致性、完整报告与双目标测试已纳入 scripts/check.sh。
+原生报告命令通过公开接口运行 152 条已生成的固定输入，不链接预期结果。Python 3.11+ 仅处理清单、内容哈希、已有严格比较器和报告 IO；cmd/conformance 的小型 C 桥只负责原生进程传输，根库没有文件 IO 或外部几何运行时。退出码 0 表示成功/帮助，1 表示轮廓差异，2 表示参数、完整性或执行错误。JS 独立执行同一批 152 项公开生成测试，另独立过滤执行 48 项内部白盒对照，不能用 native 报告替代 JS 证据。生成一致性、完整报告与双目标测试已纳入 scripts/check.sh。
+
+NonZero 按原始方向累加绕数，非零区域填充。同向叠加不会留下内部重叠边界，反向轮廓会抵消；只反转部分轮廓可能改变结果，全部同时反向保持 NonZero 区域。不会预先反转或删除重复轮廓。`point_in_polygon` 仍为单轮廓 EvenOdd 判断，不受布尔参数影响。
+
+可运行示例对两个 10×10 矩形（横向重叠 5）显式切换两规则，断言完整轮廓并辅助检查精确面积：同向时 EvenOdd 100、NonZero 150；只反转第二条均为 100；全部反向分别为 100、150。
+
+Commit 7 本地同一批 427 项在 native、JS 分别执行：205 项旧库回归、22 项新增功能、152 项公开对照、48 项私有白盒对照。Python 工具 85 项、固定参考适配器 10 项、参考重建 200 条分别记录。内部通过数来自实际过滤日志，零测试不能通过统一检查。平铺结果不证明孔洞父子关系，全部树输出待 Commit 8。

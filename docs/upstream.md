@@ -68,10 +68,10 @@ C# 源码作为主要阅读与后续移植参考；固定版本的 C++ 实现作
 
 | 上游参考文件 | 计划用途与目标 |
 | --- | --- |
-| `CSharp/Clipper2Lib/Clipper.Engine.cs` / C++ 引擎的其余部分 | 后续 NonZero/Positive/Negative、孔洞树与开放路径；尚未实现，EvenOdd 与四种公开分派已在 Commit 6 接入。 |
+| `CSharp/Clipper2Lib/Clipper.Engine.cs` / C++ 引擎的其余部分 | 后续孔洞树与开放路径；EvenOdd 已在 Commit 6、NonZero 和私有正负规则已在 Commit 7 接入。 |
 | `CSharp/Clipper2Lib/Clipper.Offset.cs` | 后续偏移与描边；尚未建立 MoonBit 对应文件。 |
 
-已提供 C++ 参考适配器；MoonClip 算法兼容性尚未运行。后续引擎、偏移等按实际实现继续补充逐文件来源记录。
+已提供 C++ 参考适配器；Commit 3 时 MoonClip 算法兼容性尚未运行。后续引擎、偏移等按实际实现继续补充逐文件来源记录。
 
 
 ## Commit 5 交点、水平交互与输出（2026-10-17）
@@ -102,3 +102,17 @@ C# 源码作为主要阅读与后续移植参考；固定版本的 C++ 实现作
 | MoonClip 自行实现 | boolean.mbt | 公开 Result 入口、ExecutionFailure 分类、共享预算收尾；完成环一般共线共享边的预算内节点连接。没有正式几何父子关系。 |
 
 所有运行几何仍为 MoonBit；cmd/conformance 的 C 代码只将 JSON 传给 Python 报告脚本，不含几何实现。参考适配器、编译定义、上游输入与参考预期均未改动。60 条 EvenOdd 平铺对照已启动真实比较，树及其余规则保持待验证；不将此笔记为全部 136 例完整兼容。
+
+
+## Commit 7 完整闭合绕数（2026-10-18）
+
+实际读取同一固定 C# Clipper.Engine.cs 完整 SetWindCountForClosedPathEdge、IsContributingClosed、IntersectEdges 闭合分支，以及 C++ clipper.engine.cpp 的 AddPaths_、CheckJoinLeft/Right、Split、UpdateEdgeIntoAEL。定位案例时只在独立临时副本中加入诊断，固定源、适配器和编译配置未变。
+
+| 上游函数 | MoonBit 文件 | 实际改写与区别 |
+| --- | --- | --- |
+| 完整绕数初始化、贡献和交点更新 | boolean.mbt、engine_types.mbt | 保留较大幅度相邻区域语义和原链方向；私有四规则、公有两规则；有界检查及符号比较替代 abs/乘积。 |
+| AddPaths_ 平台标记 | scanbeam.mbt | 实际布尔执行采用原遍历平台末端，保留低层调试首端契约、原始索引和输入方向。 |
+| CheckJoinLeft/Right、Split | boolean.mbt、engine.mbt、horizontals.mbt | 用代次句柄双向关联活动共边，事件/边段改变前分离；精确判断，累计预算和显式错误。 |
+| MoonClip 自行实现 | selection.py、generate_boolean.py、evidence.py | 输入字段选择、公开/私有分流、实际过滤记录校验，不是上游几何移植。 |
+
+运行几何仍完全由 MoonBit 实现。新增 64 条自行构造参考，原有 136 条输入及预期字节不变。公开 EO/NZ 各 76 和私有正负各 24 分开记录；全部树仍 reference_only。

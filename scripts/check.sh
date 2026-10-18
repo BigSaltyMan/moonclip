@@ -28,11 +28,16 @@ node --version
 moon check --target js --deny-warn
 moon test --target js
 moon fmt --check
+mkdir -p _build/conformance
+for target in native js; do
+  moon test --target "$target" --filter "reference internal paths: *" | tee "_build/conformance/internal-$target.log"
+  grep -Fxq 'Total tests: 48, passed: 48, failed: 0.' "_build/conformance/internal-$target.log"
+done
 printf 'Checking offline reference tools\n'
 python --version
 python -m unittest discover -s tools/conformance -p "test_*.py"
 python scripts/check_reference.py --manifest testdata/manifest.json --strict
-python tools/conformance/generate_evenodd.py --check
+python tools/conformance/generate_boolean.py --check
 moon run --target native cmd/conformance -- --manifest testdata/manifest.json --report-json _build/conformance/report.json --report-md docs/compatibility.md --strict
 git diff --exit-code -- docs/compatibility.md
 git diff --check

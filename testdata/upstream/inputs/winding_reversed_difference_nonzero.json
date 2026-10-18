@@ -1,0 +1,91 @@
+{
+  "case_id": "winding_reversed_difference_nonzero",
+  "clip": [
+    [
+      [
+        3,
+        9
+      ],
+      [
+        15,
+        9
+      ],
+      [
+        15,
+        -3
+      ],
+      [
+        3,
+        -3
+      ]
+    ],
+    [
+      [
+        9,
+        15
+      ],
+      [
+        21,
+        15
+      ],
+      [
+        21,
+        6
+      ],
+      [
+        9,
+        6
+      ]
+    ]
+  ],
+  "fill_rule": "NonZero",
+  "format_version": 1,
+  "operation": "Difference",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "source": {
+    "group": "winding_reversed",
+    "intent": "All directions reversed from winding_overlap; negative winding duality",
+    "kind": "moonclip_constructed"
+  },
+  "subject": [
+    [
+      [
+        0,
+        12
+      ],
+      [
+        12,
+        12
+      ],
+      [
+        12,
+        0
+      ],
+      [
+        0,
+        0
+      ]
+    ],
+    [
+      [
+        6,
+        12
+      ],
+      [
+        18,
+        12
+      ],
+      [
+        18,
+        0
+      ],
+      [
+        6,
+        0
+      ]
+    ]
+  ]
+}

@@ -292,3 +292,159 @@ test "fractional slanted intersections truncate coordinates without tolerance" {
     Ok([]),
   )
 }
+
+///|
+fn nz_region(
+  subject : @moonclip.Paths64,
+  clip : @moonclip.Paths64,
+  op : @moonclip.ClipType,
+  expected : @moonclip.Paths64,
+) -> Unit raise {
+  assert_eq(
+    @moonclip.boolean_op(subject, clip, op, fill_rule=NonZero).map(bb_canonical),
+    Ok(bb_canonical(expected)),
+  )
+}
+
+///|
+test "NonZero duplicates retain magnitude two three and seven without inner boundaries" {
+  let a = bb_rect(0L, 0L, 10L, 10L)
+  for n in [2, 3, 7] {
+    nz_region(Array::make(n, a), [], Union, [a])
+    nz_region(Array::make(n, bb_reverse(a)), [], Union, [a])
+  }
+}
+
+///|
+test "NonZero opposite duplicates cancel but unequal signed multiplicities remain" {
+  let a = bb_rect(0L, 0L, 10L, 10L)
+  let r = bb_reverse(a)
+  nz_region([a, r], [], Union, [])
+  nz_region([a, a, r], [], Union, [a])
+  nz_region([r, r, a], [], Union, [a])
+}
+
+///|
+test "explicit EvenOdd and omitted fill rule keep identical behavior" {
+  let a = bb_rect(0L, 0L, 10L, 10L)
+  for op in [@moonclip.Intersection, Union, Difference, Xor] {
+    assert_eq(
+      @moonclip.boolean_op([a, a], [a], op),
+      @moonclip.boolean_op([a, a], [a], op, fill_rule=EvenOdd),
+    )
+  }
+}
+
+///|
+test "NonZero partially overlapping same directions absorb interior boundaries" {
+  let a = bb_rect(0L, 0L, 10L, 10L)
+  let b = bb_rect(5L, 0L, 10L, 10L)
+  nz_region([a, b], [], Union, [bb_rect(0L, 0L, 15L, 10L)])
+  nz_region([bb_reverse(a), bb_reverse(b)], [], Union, [
+    bb_rect(0L, 0L, 15L, 10L),
+  ])
+}
+
+///|
+test "NonZero reversing only one overlapping contour changes its region" {
+  let a = bb_rect(0L, 0L, 10L, 10L)
+  let b = bb_reverse(bb_rect(5L, 0L, 10L, 10L))
+  nz_region([a, b], [], Union, [
+    bb_rect(0L, 0L, 5L, 10L),
+    bb_rect(10L, 0L, 5L, 10L),
+  ])
+}
+
+///|
+test "NonZero same oriented nesting has no hole while opposite nesting does" {
+  let a = bb_rect(-20L, -20L, 40L, 40L)
+  let b = bb_rect(-10L, -10L, 20L, 20L)
+  nz_region([a, b], [], Union, [a])
+  nz_region([a, bb_reverse(b)], [], Union, [a, bb_reverse(b)])
+}
+
+///|
+test "NonZero four levels retain alternating hole island and inner hole" {
+  let a = bb_rect(-40L, -40L, 80L, 80L)
+  let b = bb_reverse(bb_rect(-30L, -30L, 60L, 60L))
+  let c = bb_rect(-20L, -20L, 40L, 40L)
+  let d = bb_reverse(bb_rect(-10L, -10L, 20L, 20L))
+  nz_region([a, b, c, d], [], Union, [a, b, c, d])
+}
+
+///|
+test "NonZero repeated operands are independently filled for all four operations" {
+  let a = bb_rect(0L, 0L, 10L, 10L)
+  for
+    (op, expected) in [
+      (@moonclip.Intersection, [a]),
+      (Union, [a]),
+      (Difference, []),
+      (Xor, []),
+    ] {
+    nz_region([a, a], [bb_reverse(a), bb_reverse(a)], op, expected)
+  }
+}
+
+///|
+test "NonZero Difference retains operand roles with double winding" {
+  let a = bb_rect(0L, 0L, 10L, 10L)
+  let b = bb_rect(5L, 0L, 10L, 10L)
+  nz_region([a, a], [b, b], Difference, [bb_rect(0L, 0L, 5L, 10L)])
+  nz_region([b, b], [a, a], Difference, [bb_rect(10L, 0L, 5L, 10L)])
+}
+
+///|
+test "NonZero global reversal and input order preserve full contours for every operation" {
+  let s = [bb_rect(0L, 0L, 10L, 10L), bb_rect(5L, 0L, 10L, 10L)]
+  let c = [bb_rect(3L, -5L, 6L, 20L), bb_reverse(bb_rect(4L, -2L, 3L, 14L))]
+  for op in [@moonclip.Intersection, Union, Difference, Xor] {
+    let expected = @moonclip.boolean_op(s, c, op, fill_rule=NonZero).map(
+      bb_canonical,
+    )
+    assert_true(expected is Ok(_))
+    assert_eq(
+      @moonclip.boolean_op(
+        s.map(bb_reverse),
+        c.map(bb_reverse),
+        op,
+        fill_rule=NonZero,
+      ).map(bb_canonical),
+      expected,
+    )
+    assert_eq(
+      @moonclip.boolean_op([s[1], s[0]], [c[1], c[0]], op, fill_rule=NonZero).map(
+        bb_canonical,
+      ),
+      expected,
+    )
+  }
+}
+
+///|
+test "NonZero shared arrays repeated calls and result mutation preserve input isolation" {
+  let a = bb_rect(0L, 0L, 10L, 10L)
+  let saved = @moonclip.copy_path(a)
+  let input = [a, a]
+  guard @moonclip.boolean_op(input, [], Union, fill_rule=NonZero) is Ok(first) else {
+    fail("Expected NonZero region")
+  }
+  first[0][0] = @moonclip.Point64::new(99L, 99L)
+  assert_eq(a, saved)
+  nz_region(input, [], Union, [saved])
+  a[0] = @moonclip.Point64::new(-1L, 0L)
+  assert_eq(first[0][0], @moonclip.Point64::new(99L, 99L))
+}
+
+///|
+test "NonZero combined raw input budget failure does not affect a subsequent call" {
+  let a = bb_rect(0L, 0L, 10L, 10L)
+  assert_true(
+    @moonclip.boolean_op([a, a], [a], Union, fill_rule=NonZero, limits={
+      max_input_paths: 3,
+      max_input_vertices: 11,
+    })
+    is Err(ResourceLimitExceeded(_, InputVertices, 11)),
+  )
+  nz_region([a, a], [], Union, [a])
+}

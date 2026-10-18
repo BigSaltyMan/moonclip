@@ -1,0 +1,127 @@
+{
+  "case_id": "winding_nested_union_evenodd",
+  "clip": [
+    [
+      [
+        -25,
+        -15
+      ],
+      [
+        15,
+        -15
+      ],
+      [
+        15,
+        15
+      ],
+      [
+        -25,
+        15
+      ]
+    ],
+    [
+      [
+        -15,
+        5
+      ],
+      [
+        5,
+        5
+      ],
+      [
+        5,
+        -5
+      ],
+      [
+        -15,
+        -5
+      ]
+    ]
+  ],
+  "fill_rule": "EvenOdd",
+  "format_version": 1,
+  "operation": "Union",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "source": {
+    "group": "winding_nested",
+    "intent": "Outer opposite hole island and overlapping fourth contour against a holed clip",
+    "kind": "moonclip_constructed"
+  },
+  "subject": [
+    [
+      [
+        -30,
+        -30
+      ],
+      [
+        30,
+        -30
+      ],
+      [
+        30,
+        30
+      ],
+      [
+        -30,
+        30
+      ]
+    ],
+    [
+      [
+        -20,
+        20
+      ],
+      [
+        20,
+        20
+      ],
+      [
+        20,
+        -20
+      ],
+      [
+        -20,
+        -20
+      ]
+    ],
+    [
+      [
+        -10,
+        -10
+      ],
+      [
+        10,
+        -10
+      ],
+      [
+        10,
+        10
+      ],
+      [
+        -10,
+        10
+      ]
+    ],
+    [
+      [
+        5,
+        -5
+      ],
+      [
+        25,
+        -5
+      ],
+      [
+        25,
+        5
+      ],
+      [
+        5,
+        5
+      ]
+    ]
+  ]
+}
