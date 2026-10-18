@@ -1,10 +1,10 @@
 # Copyright (c) 2026 BigSaltyMan. BSL-1.0; see LICENSE.
-"""Lock 116 explicit offset requests before executing MoonClip. Never expectations."""
+"""Append 156 locked offset requests before executing MoonClip. Never expectations."""
 import sys
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(ROOT/'tools/conformance'))
-from compare import canonical_bytes
+from compare import canonical_bytes, load, require, validate_input
 
 def rect(a,b,c,d):return [[a,b],[c,b],[c,d],[a,d]]
 
@@ -23,31 +23,51 @@ def definitions():
     ]
 
 def main():
+    old_selection=load(ROOT/'testdata/offset-selection.json',True)
+    manifest=load(ROOT/'testdata/offset-manifest.json',True)
+    old_ids=set(old_selection['case_ids'])
+    require(len(old_ids)==116,'constructor','expected locked 116-case baseline')
+    old_entries=[e for e in manifest['cases'] if e['case_id'] in old_ids]
+    require(len(old_entries)==116,'constructor','missing old entry')
+    for e in old_entries:
+        case=load(ROOT/e['input'],True);validate_input(case,e['case_id'])
+        require('arc_tolerance' not in case and case['join_type'] in ('Miter','Bevel'),e['case_id'],'old baseline changed')
     entries=[]
-    def write(group,paths,delta,label,join,fill,miter,intent):
+    def write(group,paths,delta,label,join,fill,intent,tolerance=None):
         cid=f'offset_{group}_{label}_{join.lower()}_{fill.lower()}'
-        case={'format_version':2,'case_id':cid,'source':{'kind':'moonclip_constructed','group':group,'intent':intent},'operation':'OffsetPolygons','paths':paths,'delta':delta,'join_type':join,'miter_limit':miter,'fill_rule':fill,'options':{'preserve_collinear':False,'reverse_solution':False}}
-        name=f'testdata/offset/inputs/{cid}.json'
-        (ROOT/name).parent.mkdir(parents=True,exist_ok=True)
-        (ROOT/name).write_bytes(canonical_bytes(case))
+        case={'format_version':2,'case_id':cid,'source':{'kind':'moonclip_constructed','group':group,'intent':intent},'operation':'OffsetPolygons','paths':paths,'delta':delta,'join_type':join,'miter_limit':2.0,'fill_rule':fill,'options':{'preserve_collinear':False,'reverse_solution':False}}
+        if tolerance is not None:case['arc_tolerance']=tolerance
+        validate_input(case,cid)
+        name=f'testdata/offset/inputs/{cid}.json';target=ROOT/name
+        encoded=canonical_bytes(case)
+        if target.exists():require(target.read_bytes()==encoded,cid,'locked definition differs')
+        else:target.write_bytes(encoded)
         entries.append({'case_id':cid,'input':name,'expected':f'testdata/offset/expected/{cid}.json','status':'validate','validation':{'paths':'validate'}})
     for group,paths,positive,negative,intent in definitions():
         for fill in ('EvenOdd','NonZero'):
-            for join in ('Miter','Bevel'):
-                for delta,label in ((positive,'positive'),(negative,'negative')):write(group,paths,delta,label,join,fill,2.0,intent)
+            for join in ('Square','Round'):
+                for delta,label in ((positive,'positive'),(negative,'negative')):write(group,paths,delta,label,join,fill,intent)
     for delta,label in ((0.0,'zero'),(0.49,'p049'),(-0.49,'n049'),(0.5,'p05'),(-0.5,'n05')):
         for fill in ('EvenOdd','NonZero'):
-            for join in ('Miter','Bevel'):write('small',[rect(0,0,10,10),rect(5,0,15,10)],delta,label,join,fill,2.0,'Normalize overlapping region before insignificant or threshold distance')
-    acute=definitions()[6][1]
-    for limit in (4.0,10.0):
-        for fill in ('EvenOdd','NonZero'):
-            for delta,label in ((3.0,'positive'),(-2.0,'negative')):write('miter'+str(int(limit)),acute,delta,label,'Miter',fill,limit,'Extra miter limit at the same acute geometry and distances')
+            for join in ('Square','Round'):write('small',[rect(0,0,10,10),rect(5,0,15,10)],delta,label,join,fill,'Normalize overlapping region before insignificant or threshold distance')
     for delta,label in ((-5.0,'exact'),(-6.0,'beyond')):
         for fill in ('EvenOdd','NonZero'):
-            for join in ('Miter','Bevel'):write('collapse',[rect(0,0,10,10)],delta,label,join,fill,2.0,'Contraction exactly degenerates or disappears')
-    entries.sort(key=lambda e:e['case_id']);assert len(entries)==116 and len({e['case_id'] for e in entries})==116
-    (ROOT/'testdata/offset/expected').mkdir(parents=True,exist_ok=True)
-    (ROOT/'testdata/offset-manifest.json').write_bytes(canonical_bytes({'format_version':2,'kind':'offset','oracle_lock':'tools/oracle/upstream-lock.json','cases':entries}))
-    (ROOT/'testdata/offset-selection.json').write_bytes(canonical_bytes({'format_version':2,'kind':'offset','expected_count':116,'case_ids':[e['case_id'] for e in entries]}))
-    print('Locked 116 offset input IDs and definitions; no expectations generated')
+            for join in ('Square','Round'):write('collapse',[rect(0,0,10,10)],delta,label,join,fill,'Contraction exactly degenerates or disappears')
+    for group,paths,_,_,_ in definitions():
+        if group not in ('rectangle','acute','hole','neck'):continue
+        scaled=[[[x*5,y*5] for x,y in p] for p in paths]
+        for tolerance,label in ((0.05,'t005'),(0.25,'t025'),(1.0,'t100')):
+            for fill in ('EvenOdd','NonZero'):
+                for delta,sign in ((10.0,'positive'),(-10.0,'negative')):
+                    write('arc_'+group,scaled,delta,label+'_'+sign,'Round',fill,'Scale 5, signed radius 10, explicit tolerance; neck contraction splits the twenty-unit bridge',tolerance)
+    entries.sort(key=lambda e:e['case_id'])
+    require(len(entries)==156 and len({e['case_id'] for e in entries})==156,'constructor','expected 156 unique new cases')
+    require(not old_ids&{e['case_id'] for e in entries},'constructor','new/old overlap')
+    combined=sorted(old_entries+entries,key=lambda e:e['case_id'])
+    (ROOT/'testdata/offset-manifest.json').write_bytes(canonical_bytes({'format_version':2,'kind':'offset','oracle_lock':'tools/oracle/upstream-lock.json','cases':combined}))
+    selection=canonical_bytes({'format_version':2,'kind':'offset','expected_count':156,'case_ids':[e['case_id'] for e in entries]})
+    target=ROOT/'testdata/offset-join-selection.json'
+    if target.exists():require(target.read_bytes()==selection,'constructor','new selection changed')
+    else:target.write_bytes(selection)
+    print('Locked 156 new offset inputs; reused 116 baseline records without rewriting inputs or selection; no expectations generated')
 if __name__=='__main__':main()

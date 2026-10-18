@@ -37,6 +37,42 @@
       }
     },
     {
+      "case_id": "offset_acute_negative_round_evenodd",
+      "expected": "testdata/offset/expected/offset_acute_negative_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_acute_negative_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_acute_negative_round_nonzero",
+      "expected": "testdata/offset/expected/offset_acute_negative_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_acute_negative_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_acute_negative_square_evenodd",
+      "expected": "testdata/offset/expected/offset_acute_negative_square_evenodd.json",
+      "input": "testdata/offset/inputs/offset_acute_negative_square_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_acute_negative_square_nonzero",
+      "expected": "testdata/offset/expected/offset_acute_negative_square_nonzero.json",
+      "input": "testdata/offset/inputs/offset_acute_negative_square_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
       "case_id": "offset_acute_positive_bevel_evenodd",
       "expected": "testdata/offset/expected/offset_acute_positive_bevel_evenodd.json",
       "input": "testdata/offset/inputs/offset_acute_positive_bevel_evenodd.json",
@@ -67,6 +103,474 @@
       "case_id": "offset_acute_positive_miter_nonzero",
       "expected": "testdata/offset/expected/offset_acute_positive_miter_nonzero.json",
       "input": "testdata/offset/inputs/offset_acute_positive_miter_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_acute_positive_round_evenodd",
+      "expected": "testdata/offset/expected/offset_acute_positive_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_acute_positive_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_acute_positive_round_nonzero",
+      "expected": "testdata/offset/expected/offset_acute_positive_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_acute_positive_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_acute_positive_square_evenodd",
+      "expected": "testdata/offset/expected/offset_acute_positive_square_evenodd.json",
+      "input": "testdata/offset/inputs/offset_acute_positive_square_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_acute_positive_square_nonzero",
+      "expected": "testdata/offset/expected/offset_acute_positive_square_nonzero.json",
+      "input": "testdata/offset/inputs/offset_acute_positive_square_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_acute_t005_negative_round_evenodd",
+      "expected": "testdata/offset/expected/offset_arc_acute_t005_negative_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_arc_acute_t005_negative_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_acute_t005_negative_round_nonzero",
+      "expected": "testdata/offset/expected/offset_arc_acute_t005_negative_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_arc_acute_t005_negative_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_acute_t005_positive_round_evenodd",
+      "expected": "testdata/offset/expected/offset_arc_acute_t005_positive_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_arc_acute_t005_positive_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_acute_t005_positive_round_nonzero",
+      "expected": "testdata/offset/expected/offset_arc_acute_t005_positive_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_arc_acute_t005_positive_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_acute_t025_negative_round_evenodd",
+      "expected": "testdata/offset/expected/offset_arc_acute_t025_negative_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_arc_acute_t025_negative_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_acute_t025_negative_round_nonzero",
+      "expected": "testdata/offset/expected/offset_arc_acute_t025_negative_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_arc_acute_t025_negative_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_acute_t025_positive_round_evenodd",
+      "expected": "testdata/offset/expected/offset_arc_acute_t025_positive_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_arc_acute_t025_positive_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_acute_t025_positive_round_nonzero",
+      "expected": "testdata/offset/expected/offset_arc_acute_t025_positive_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_arc_acute_t025_positive_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_acute_t100_negative_round_evenodd",
+      "expected": "testdata/offset/expected/offset_arc_acute_t100_negative_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_arc_acute_t100_negative_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_acute_t100_negative_round_nonzero",
+      "expected": "testdata/offset/expected/offset_arc_acute_t100_negative_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_arc_acute_t100_negative_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_acute_t100_positive_round_evenodd",
+      "expected": "testdata/offset/expected/offset_arc_acute_t100_positive_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_arc_acute_t100_positive_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_acute_t100_positive_round_nonzero",
+      "expected": "testdata/offset/expected/offset_arc_acute_t100_positive_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_arc_acute_t100_positive_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_hole_t005_negative_round_evenodd",
+      "expected": "testdata/offset/expected/offset_arc_hole_t005_negative_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_arc_hole_t005_negative_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_hole_t005_negative_round_nonzero",
+      "expected": "testdata/offset/expected/offset_arc_hole_t005_negative_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_arc_hole_t005_negative_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_hole_t005_positive_round_evenodd",
+      "expected": "testdata/offset/expected/offset_arc_hole_t005_positive_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_arc_hole_t005_positive_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_hole_t005_positive_round_nonzero",
+      "expected": "testdata/offset/expected/offset_arc_hole_t005_positive_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_arc_hole_t005_positive_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_hole_t025_negative_round_evenodd",
+      "expected": "testdata/offset/expected/offset_arc_hole_t025_negative_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_arc_hole_t025_negative_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_hole_t025_negative_round_nonzero",
+      "expected": "testdata/offset/expected/offset_arc_hole_t025_negative_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_arc_hole_t025_negative_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_hole_t025_positive_round_evenodd",
+      "expected": "testdata/offset/expected/offset_arc_hole_t025_positive_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_arc_hole_t025_positive_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_hole_t025_positive_round_nonzero",
+      "expected": "testdata/offset/expected/offset_arc_hole_t025_positive_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_arc_hole_t025_positive_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_hole_t100_negative_round_evenodd",
+      "expected": "testdata/offset/expected/offset_arc_hole_t100_negative_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_arc_hole_t100_negative_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_hole_t100_negative_round_nonzero",
+      "expected": "testdata/offset/expected/offset_arc_hole_t100_negative_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_arc_hole_t100_negative_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_hole_t100_positive_round_evenodd",
+      "expected": "testdata/offset/expected/offset_arc_hole_t100_positive_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_arc_hole_t100_positive_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_hole_t100_positive_round_nonzero",
+      "expected": "testdata/offset/expected/offset_arc_hole_t100_positive_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_arc_hole_t100_positive_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_neck_t005_negative_round_evenodd",
+      "expected": "testdata/offset/expected/offset_arc_neck_t005_negative_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_arc_neck_t005_negative_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_neck_t005_negative_round_nonzero",
+      "expected": "testdata/offset/expected/offset_arc_neck_t005_negative_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_arc_neck_t005_negative_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_neck_t005_positive_round_evenodd",
+      "expected": "testdata/offset/expected/offset_arc_neck_t005_positive_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_arc_neck_t005_positive_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_neck_t005_positive_round_nonzero",
+      "expected": "testdata/offset/expected/offset_arc_neck_t005_positive_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_arc_neck_t005_positive_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_neck_t025_negative_round_evenodd",
+      "expected": "testdata/offset/expected/offset_arc_neck_t025_negative_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_arc_neck_t025_negative_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_neck_t025_negative_round_nonzero",
+      "expected": "testdata/offset/expected/offset_arc_neck_t025_negative_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_arc_neck_t025_negative_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_neck_t025_positive_round_evenodd",
+      "expected": "testdata/offset/expected/offset_arc_neck_t025_positive_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_arc_neck_t025_positive_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_neck_t025_positive_round_nonzero",
+      "expected": "testdata/offset/expected/offset_arc_neck_t025_positive_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_arc_neck_t025_positive_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_neck_t100_negative_round_evenodd",
+      "expected": "testdata/offset/expected/offset_arc_neck_t100_negative_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_arc_neck_t100_negative_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_neck_t100_negative_round_nonzero",
+      "expected": "testdata/offset/expected/offset_arc_neck_t100_negative_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_arc_neck_t100_negative_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_neck_t100_positive_round_evenodd",
+      "expected": "testdata/offset/expected/offset_arc_neck_t100_positive_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_arc_neck_t100_positive_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_neck_t100_positive_round_nonzero",
+      "expected": "testdata/offset/expected/offset_arc_neck_t100_positive_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_arc_neck_t100_positive_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_rectangle_t005_negative_round_evenodd",
+      "expected": "testdata/offset/expected/offset_arc_rectangle_t005_negative_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_arc_rectangle_t005_negative_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_rectangle_t005_negative_round_nonzero",
+      "expected": "testdata/offset/expected/offset_arc_rectangle_t005_negative_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_arc_rectangle_t005_negative_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_rectangle_t005_positive_round_evenodd",
+      "expected": "testdata/offset/expected/offset_arc_rectangle_t005_positive_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_arc_rectangle_t005_positive_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_rectangle_t005_positive_round_nonzero",
+      "expected": "testdata/offset/expected/offset_arc_rectangle_t005_positive_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_arc_rectangle_t005_positive_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_rectangle_t025_negative_round_evenodd",
+      "expected": "testdata/offset/expected/offset_arc_rectangle_t025_negative_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_arc_rectangle_t025_negative_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_rectangle_t025_negative_round_nonzero",
+      "expected": "testdata/offset/expected/offset_arc_rectangle_t025_negative_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_arc_rectangle_t025_negative_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_rectangle_t025_positive_round_evenodd",
+      "expected": "testdata/offset/expected/offset_arc_rectangle_t025_positive_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_arc_rectangle_t025_positive_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_rectangle_t025_positive_round_nonzero",
+      "expected": "testdata/offset/expected/offset_arc_rectangle_t025_positive_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_arc_rectangle_t025_positive_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_rectangle_t100_negative_round_evenodd",
+      "expected": "testdata/offset/expected/offset_arc_rectangle_t100_negative_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_arc_rectangle_t100_negative_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_rectangle_t100_negative_round_nonzero",
+      "expected": "testdata/offset/expected/offset_arc_rectangle_t100_negative_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_arc_rectangle_t100_negative_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_rectangle_t100_positive_round_evenodd",
+      "expected": "testdata/offset/expected/offset_arc_rectangle_t100_positive_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_arc_rectangle_t100_positive_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_arc_rectangle_t100_positive_round_nonzero",
+      "expected": "testdata/offset/expected/offset_arc_rectangle_t100_positive_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_arc_rectangle_t100_positive_round_nonzero.json",
       "status": "validate",
       "validation": {
         "paths": "validate"
@@ -109,6 +613,42 @@
       }
     },
     {
+      "case_id": "offset_collapse_beyond_round_evenodd",
+      "expected": "testdata/offset/expected/offset_collapse_beyond_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_collapse_beyond_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_collapse_beyond_round_nonzero",
+      "expected": "testdata/offset/expected/offset_collapse_beyond_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_collapse_beyond_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_collapse_beyond_square_evenodd",
+      "expected": "testdata/offset/expected/offset_collapse_beyond_square_evenodd.json",
+      "input": "testdata/offset/inputs/offset_collapse_beyond_square_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_collapse_beyond_square_nonzero",
+      "expected": "testdata/offset/expected/offset_collapse_beyond_square_nonzero.json",
+      "input": "testdata/offset/inputs/offset_collapse_beyond_square_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
       "case_id": "offset_collapse_exact_bevel_evenodd",
       "expected": "testdata/offset/expected/offset_collapse_exact_bevel_evenodd.json",
       "input": "testdata/offset/inputs/offset_collapse_exact_bevel_evenodd.json",
@@ -139,6 +679,42 @@
       "case_id": "offset_collapse_exact_miter_nonzero",
       "expected": "testdata/offset/expected/offset_collapse_exact_miter_nonzero.json",
       "input": "testdata/offset/inputs/offset_collapse_exact_miter_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_collapse_exact_round_evenodd",
+      "expected": "testdata/offset/expected/offset_collapse_exact_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_collapse_exact_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_collapse_exact_round_nonzero",
+      "expected": "testdata/offset/expected/offset_collapse_exact_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_collapse_exact_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_collapse_exact_square_evenodd",
+      "expected": "testdata/offset/expected/offset_collapse_exact_square_evenodd.json",
+      "input": "testdata/offset/inputs/offset_collapse_exact_square_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_collapse_exact_square_nonzero",
+      "expected": "testdata/offset/expected/offset_collapse_exact_square_nonzero.json",
+      "input": "testdata/offset/inputs/offset_collapse_exact_square_nonzero.json",
       "status": "validate",
       "validation": {
         "paths": "validate"
@@ -181,6 +757,42 @@
       }
     },
     {
+      "case_id": "offset_concave_l_negative_round_evenodd",
+      "expected": "testdata/offset/expected/offset_concave_l_negative_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_concave_l_negative_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_concave_l_negative_round_nonzero",
+      "expected": "testdata/offset/expected/offset_concave_l_negative_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_concave_l_negative_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_concave_l_negative_square_evenodd",
+      "expected": "testdata/offset/expected/offset_concave_l_negative_square_evenodd.json",
+      "input": "testdata/offset/inputs/offset_concave_l_negative_square_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_concave_l_negative_square_nonzero",
+      "expected": "testdata/offset/expected/offset_concave_l_negative_square_nonzero.json",
+      "input": "testdata/offset/inputs/offset_concave_l_negative_square_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
       "case_id": "offset_concave_l_positive_bevel_evenodd",
       "expected": "testdata/offset/expected/offset_concave_l_positive_bevel_evenodd.json",
       "input": "testdata/offset/inputs/offset_concave_l_positive_bevel_evenodd.json",
@@ -211,6 +823,42 @@
       "case_id": "offset_concave_l_positive_miter_nonzero",
       "expected": "testdata/offset/expected/offset_concave_l_positive_miter_nonzero.json",
       "input": "testdata/offset/inputs/offset_concave_l_positive_miter_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_concave_l_positive_round_evenodd",
+      "expected": "testdata/offset/expected/offset_concave_l_positive_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_concave_l_positive_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_concave_l_positive_round_nonzero",
+      "expected": "testdata/offset/expected/offset_concave_l_positive_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_concave_l_positive_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_concave_l_positive_square_evenodd",
+      "expected": "testdata/offset/expected/offset_concave_l_positive_square_evenodd.json",
+      "input": "testdata/offset/inputs/offset_concave_l_positive_square_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_concave_l_positive_square_nonzero",
+      "expected": "testdata/offset/expected/offset_concave_l_positive_square_nonzero.json",
+      "input": "testdata/offset/inputs/offset_concave_l_positive_square_nonzero.json",
       "status": "validate",
       "validation": {
         "paths": "validate"
@@ -253,6 +901,42 @@
       }
     },
     {
+      "case_id": "offset_hole_negative_round_evenodd",
+      "expected": "testdata/offset/expected/offset_hole_negative_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_hole_negative_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_hole_negative_round_nonzero",
+      "expected": "testdata/offset/expected/offset_hole_negative_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_hole_negative_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_hole_negative_square_evenodd",
+      "expected": "testdata/offset/expected/offset_hole_negative_square_evenodd.json",
+      "input": "testdata/offset/inputs/offset_hole_negative_square_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_hole_negative_square_nonzero",
+      "expected": "testdata/offset/expected/offset_hole_negative_square_nonzero.json",
+      "input": "testdata/offset/inputs/offset_hole_negative_square_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
       "case_id": "offset_hole_positive_bevel_evenodd",
       "expected": "testdata/offset/expected/offset_hole_positive_bevel_evenodd.json",
       "input": "testdata/offset/inputs/offset_hole_positive_bevel_evenodd.json",
@@ -283,6 +967,42 @@
       "case_id": "offset_hole_positive_miter_nonzero",
       "expected": "testdata/offset/expected/offset_hole_positive_miter_nonzero.json",
       "input": "testdata/offset/inputs/offset_hole_positive_miter_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_hole_positive_round_evenodd",
+      "expected": "testdata/offset/expected/offset_hole_positive_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_hole_positive_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_hole_positive_round_nonzero",
+      "expected": "testdata/offset/expected/offset_hole_positive_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_hole_positive_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_hole_positive_square_evenodd",
+      "expected": "testdata/offset/expected/offset_hole_positive_square_evenodd.json",
+      "input": "testdata/offset/inputs/offset_hole_positive_square_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_hole_positive_square_nonzero",
+      "expected": "testdata/offset/expected/offset_hole_positive_square_nonzero.json",
+      "input": "testdata/offset/inputs/offset_hole_positive_square_nonzero.json",
       "status": "validate",
       "validation": {
         "paths": "validate"
@@ -325,6 +1045,42 @@
       }
     },
     {
+      "case_id": "offset_island_negative_round_evenodd",
+      "expected": "testdata/offset/expected/offset_island_negative_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_island_negative_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_island_negative_round_nonzero",
+      "expected": "testdata/offset/expected/offset_island_negative_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_island_negative_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_island_negative_square_evenodd",
+      "expected": "testdata/offset/expected/offset_island_negative_square_evenodd.json",
+      "input": "testdata/offset/inputs/offset_island_negative_square_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_island_negative_square_nonzero",
+      "expected": "testdata/offset/expected/offset_island_negative_square_nonzero.json",
+      "input": "testdata/offset/inputs/offset_island_negative_square_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
       "case_id": "offset_island_positive_bevel_evenodd",
       "expected": "testdata/offset/expected/offset_island_positive_bevel_evenodd.json",
       "input": "testdata/offset/inputs/offset_island_positive_bevel_evenodd.json",
@@ -355,6 +1111,42 @@
       "case_id": "offset_island_positive_miter_nonzero",
       "expected": "testdata/offset/expected/offset_island_positive_miter_nonzero.json",
       "input": "testdata/offset/inputs/offset_island_positive_miter_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_island_positive_round_evenodd",
+      "expected": "testdata/offset/expected/offset_island_positive_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_island_positive_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_island_positive_round_nonzero",
+      "expected": "testdata/offset/expected/offset_island_positive_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_island_positive_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_island_positive_square_evenodd",
+      "expected": "testdata/offset/expected/offset_island_positive_square_evenodd.json",
+      "input": "testdata/offset/inputs/offset_island_positive_square_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_island_positive_square_nonzero",
+      "expected": "testdata/offset/expected/offset_island_positive_square_nonzero.json",
+      "input": "testdata/offset/inputs/offset_island_positive_square_nonzero.json",
       "status": "validate",
       "validation": {
         "paths": "validate"
@@ -469,6 +1261,42 @@
       }
     },
     {
+      "case_id": "offset_mixed_overlap_negative_round_evenodd",
+      "expected": "testdata/offset/expected/offset_mixed_overlap_negative_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_mixed_overlap_negative_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_mixed_overlap_negative_round_nonzero",
+      "expected": "testdata/offset/expected/offset_mixed_overlap_negative_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_mixed_overlap_negative_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_mixed_overlap_negative_square_evenodd",
+      "expected": "testdata/offset/expected/offset_mixed_overlap_negative_square_evenodd.json",
+      "input": "testdata/offset/inputs/offset_mixed_overlap_negative_square_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_mixed_overlap_negative_square_nonzero",
+      "expected": "testdata/offset/expected/offset_mixed_overlap_negative_square_nonzero.json",
+      "input": "testdata/offset/inputs/offset_mixed_overlap_negative_square_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
       "case_id": "offset_mixed_overlap_positive_bevel_evenodd",
       "expected": "testdata/offset/expected/offset_mixed_overlap_positive_bevel_evenodd.json",
       "input": "testdata/offset/inputs/offset_mixed_overlap_positive_bevel_evenodd.json",
@@ -499,6 +1327,42 @@
       "case_id": "offset_mixed_overlap_positive_miter_nonzero",
       "expected": "testdata/offset/expected/offset_mixed_overlap_positive_miter_nonzero.json",
       "input": "testdata/offset/inputs/offset_mixed_overlap_positive_miter_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_mixed_overlap_positive_round_evenodd",
+      "expected": "testdata/offset/expected/offset_mixed_overlap_positive_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_mixed_overlap_positive_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_mixed_overlap_positive_round_nonzero",
+      "expected": "testdata/offset/expected/offset_mixed_overlap_positive_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_mixed_overlap_positive_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_mixed_overlap_positive_square_evenodd",
+      "expected": "testdata/offset/expected/offset_mixed_overlap_positive_square_evenodd.json",
+      "input": "testdata/offset/inputs/offset_mixed_overlap_positive_square_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_mixed_overlap_positive_square_nonzero",
+      "expected": "testdata/offset/expected/offset_mixed_overlap_positive_square_nonzero.json",
+      "input": "testdata/offset/inputs/offset_mixed_overlap_positive_square_nonzero.json",
       "status": "validate",
       "validation": {
         "paths": "validate"
@@ -541,6 +1405,42 @@
       }
     },
     {
+      "case_id": "offset_multipart_negative_round_evenodd",
+      "expected": "testdata/offset/expected/offset_multipart_negative_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_multipart_negative_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_multipart_negative_round_nonzero",
+      "expected": "testdata/offset/expected/offset_multipart_negative_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_multipart_negative_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_multipart_negative_square_evenodd",
+      "expected": "testdata/offset/expected/offset_multipart_negative_square_evenodd.json",
+      "input": "testdata/offset/inputs/offset_multipart_negative_square_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_multipart_negative_square_nonzero",
+      "expected": "testdata/offset/expected/offset_multipart_negative_square_nonzero.json",
+      "input": "testdata/offset/inputs/offset_multipart_negative_square_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
       "case_id": "offset_multipart_positive_bevel_evenodd",
       "expected": "testdata/offset/expected/offset_multipart_positive_bevel_evenodd.json",
       "input": "testdata/offset/inputs/offset_multipart_positive_bevel_evenodd.json",
@@ -571,6 +1471,42 @@
       "case_id": "offset_multipart_positive_miter_nonzero",
       "expected": "testdata/offset/expected/offset_multipart_positive_miter_nonzero.json",
       "input": "testdata/offset/inputs/offset_multipart_positive_miter_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_multipart_positive_round_evenodd",
+      "expected": "testdata/offset/expected/offset_multipart_positive_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_multipart_positive_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_multipart_positive_round_nonzero",
+      "expected": "testdata/offset/expected/offset_multipart_positive_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_multipart_positive_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_multipart_positive_square_evenodd",
+      "expected": "testdata/offset/expected/offset_multipart_positive_square_evenodd.json",
+      "input": "testdata/offset/inputs/offset_multipart_positive_square_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_multipart_positive_square_nonzero",
+      "expected": "testdata/offset/expected/offset_multipart_positive_square_nonzero.json",
+      "input": "testdata/offset/inputs/offset_multipart_positive_square_nonzero.json",
       "status": "validate",
       "validation": {
         "paths": "validate"
@@ -613,6 +1549,42 @@
       }
     },
     {
+      "case_id": "offset_neck_negative_round_evenodd",
+      "expected": "testdata/offset/expected/offset_neck_negative_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_neck_negative_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_neck_negative_round_nonzero",
+      "expected": "testdata/offset/expected/offset_neck_negative_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_neck_negative_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_neck_negative_square_evenodd",
+      "expected": "testdata/offset/expected/offset_neck_negative_square_evenodd.json",
+      "input": "testdata/offset/inputs/offset_neck_negative_square_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_neck_negative_square_nonzero",
+      "expected": "testdata/offset/expected/offset_neck_negative_square_nonzero.json",
+      "input": "testdata/offset/inputs/offset_neck_negative_square_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
       "case_id": "offset_neck_positive_bevel_evenodd",
       "expected": "testdata/offset/expected/offset_neck_positive_bevel_evenodd.json",
       "input": "testdata/offset/inputs/offset_neck_positive_bevel_evenodd.json",
@@ -643,6 +1615,42 @@
       "case_id": "offset_neck_positive_miter_nonzero",
       "expected": "testdata/offset/expected/offset_neck_positive_miter_nonzero.json",
       "input": "testdata/offset/inputs/offset_neck_positive_miter_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_neck_positive_round_evenodd",
+      "expected": "testdata/offset/expected/offset_neck_positive_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_neck_positive_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_neck_positive_round_nonzero",
+      "expected": "testdata/offset/expected/offset_neck_positive_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_neck_positive_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_neck_positive_square_evenodd",
+      "expected": "testdata/offset/expected/offset_neck_positive_square_evenodd.json",
+      "input": "testdata/offset/inputs/offset_neck_positive_square_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_neck_positive_square_nonzero",
+      "expected": "testdata/offset/expected/offset_neck_positive_square_nonzero.json",
+      "input": "testdata/offset/inputs/offset_neck_positive_square_nonzero.json",
       "status": "validate",
       "validation": {
         "paths": "validate"
@@ -685,6 +1693,42 @@
       }
     },
     {
+      "case_id": "offset_overlap_negative_round_evenodd",
+      "expected": "testdata/offset/expected/offset_overlap_negative_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_overlap_negative_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_overlap_negative_round_nonzero",
+      "expected": "testdata/offset/expected/offset_overlap_negative_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_overlap_negative_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_overlap_negative_square_evenodd",
+      "expected": "testdata/offset/expected/offset_overlap_negative_square_evenodd.json",
+      "input": "testdata/offset/inputs/offset_overlap_negative_square_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_overlap_negative_square_nonzero",
+      "expected": "testdata/offset/expected/offset_overlap_negative_square_nonzero.json",
+      "input": "testdata/offset/inputs/offset_overlap_negative_square_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
       "case_id": "offset_overlap_positive_bevel_evenodd",
       "expected": "testdata/offset/expected/offset_overlap_positive_bevel_evenodd.json",
       "input": "testdata/offset/inputs/offset_overlap_positive_bevel_evenodd.json",
@@ -715,6 +1759,42 @@
       "case_id": "offset_overlap_positive_miter_nonzero",
       "expected": "testdata/offset/expected/offset_overlap_positive_miter_nonzero.json",
       "input": "testdata/offset/inputs/offset_overlap_positive_miter_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_overlap_positive_round_evenodd",
+      "expected": "testdata/offset/expected/offset_overlap_positive_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_overlap_positive_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_overlap_positive_round_nonzero",
+      "expected": "testdata/offset/expected/offset_overlap_positive_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_overlap_positive_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_overlap_positive_square_evenodd",
+      "expected": "testdata/offset/expected/offset_overlap_positive_square_evenodd.json",
+      "input": "testdata/offset/inputs/offset_overlap_positive_square_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_overlap_positive_square_nonzero",
+      "expected": "testdata/offset/expected/offset_overlap_positive_square_nonzero.json",
+      "input": "testdata/offset/inputs/offset_overlap_positive_square_nonzero.json",
       "status": "validate",
       "validation": {
         "paths": "validate"
@@ -757,6 +1837,42 @@
       }
     },
     {
+      "case_id": "offset_rectangle_negative_round_evenodd",
+      "expected": "testdata/offset/expected/offset_rectangle_negative_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_rectangle_negative_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_rectangle_negative_round_nonzero",
+      "expected": "testdata/offset/expected/offset_rectangle_negative_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_rectangle_negative_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_rectangle_negative_square_evenodd",
+      "expected": "testdata/offset/expected/offset_rectangle_negative_square_evenodd.json",
+      "input": "testdata/offset/inputs/offset_rectangle_negative_square_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_rectangle_negative_square_nonzero",
+      "expected": "testdata/offset/expected/offset_rectangle_negative_square_nonzero.json",
+      "input": "testdata/offset/inputs/offset_rectangle_negative_square_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
       "case_id": "offset_rectangle_positive_bevel_evenodd",
       "expected": "testdata/offset/expected/offset_rectangle_positive_bevel_evenodd.json",
       "input": "testdata/offset/inputs/offset_rectangle_positive_bevel_evenodd.json",
@@ -787,6 +1903,42 @@
       "case_id": "offset_rectangle_positive_miter_nonzero",
       "expected": "testdata/offset/expected/offset_rectangle_positive_miter_nonzero.json",
       "input": "testdata/offset/inputs/offset_rectangle_positive_miter_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_rectangle_positive_round_evenodd",
+      "expected": "testdata/offset/expected/offset_rectangle_positive_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_rectangle_positive_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_rectangle_positive_round_nonzero",
+      "expected": "testdata/offset/expected/offset_rectangle_positive_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_rectangle_positive_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_rectangle_positive_square_evenodd",
+      "expected": "testdata/offset/expected/offset_rectangle_positive_square_evenodd.json",
+      "input": "testdata/offset/inputs/offset_rectangle_positive_square_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_rectangle_positive_square_nonzero",
+      "expected": "testdata/offset/expected/offset_rectangle_positive_square_nonzero.json",
+      "input": "testdata/offset/inputs/offset_rectangle_positive_square_nonzero.json",
       "status": "validate",
       "validation": {
         "paths": "validate"
@@ -829,6 +1981,42 @@
       }
     },
     {
+      "case_id": "offset_self_crossing_negative_round_evenodd",
+      "expected": "testdata/offset/expected/offset_self_crossing_negative_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_self_crossing_negative_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_self_crossing_negative_round_nonzero",
+      "expected": "testdata/offset/expected/offset_self_crossing_negative_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_self_crossing_negative_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_self_crossing_negative_square_evenodd",
+      "expected": "testdata/offset/expected/offset_self_crossing_negative_square_evenodd.json",
+      "input": "testdata/offset/inputs/offset_self_crossing_negative_square_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_self_crossing_negative_square_nonzero",
+      "expected": "testdata/offset/expected/offset_self_crossing_negative_square_nonzero.json",
+      "input": "testdata/offset/inputs/offset_self_crossing_negative_square_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
       "case_id": "offset_self_crossing_positive_bevel_evenodd",
       "expected": "testdata/offset/expected/offset_self_crossing_positive_bevel_evenodd.json",
       "input": "testdata/offset/inputs/offset_self_crossing_positive_bevel_evenodd.json",
@@ -859,6 +2047,42 @@
       "case_id": "offset_self_crossing_positive_miter_nonzero",
       "expected": "testdata/offset/expected/offset_self_crossing_positive_miter_nonzero.json",
       "input": "testdata/offset/inputs/offset_self_crossing_positive_miter_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_self_crossing_positive_round_evenodd",
+      "expected": "testdata/offset/expected/offset_self_crossing_positive_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_self_crossing_positive_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_self_crossing_positive_round_nonzero",
+      "expected": "testdata/offset/expected/offset_self_crossing_positive_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_self_crossing_positive_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_self_crossing_positive_square_evenodd",
+      "expected": "testdata/offset/expected/offset_self_crossing_positive_square_evenodd.json",
+      "input": "testdata/offset/inputs/offset_self_crossing_positive_square_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_self_crossing_positive_square_nonzero",
+      "expected": "testdata/offset/expected/offset_self_crossing_positive_square_nonzero.json",
+      "input": "testdata/offset/inputs/offset_self_crossing_positive_square_nonzero.json",
       "status": "validate",
       "validation": {
         "paths": "validate"
@@ -901,6 +2125,42 @@
       }
     },
     {
+      "case_id": "offset_small_n049_round_evenodd",
+      "expected": "testdata/offset/expected/offset_small_n049_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_small_n049_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_small_n049_round_nonzero",
+      "expected": "testdata/offset/expected/offset_small_n049_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_small_n049_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_small_n049_square_evenodd",
+      "expected": "testdata/offset/expected/offset_small_n049_square_evenodd.json",
+      "input": "testdata/offset/inputs/offset_small_n049_square_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_small_n049_square_nonzero",
+      "expected": "testdata/offset/expected/offset_small_n049_square_nonzero.json",
+      "input": "testdata/offset/inputs/offset_small_n049_square_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
       "case_id": "offset_small_n05_bevel_evenodd",
       "expected": "testdata/offset/expected/offset_small_n05_bevel_evenodd.json",
       "input": "testdata/offset/inputs/offset_small_n05_bevel_evenodd.json",
@@ -931,6 +2191,42 @@
       "case_id": "offset_small_n05_miter_nonzero",
       "expected": "testdata/offset/expected/offset_small_n05_miter_nonzero.json",
       "input": "testdata/offset/inputs/offset_small_n05_miter_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_small_n05_round_evenodd",
+      "expected": "testdata/offset/expected/offset_small_n05_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_small_n05_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_small_n05_round_nonzero",
+      "expected": "testdata/offset/expected/offset_small_n05_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_small_n05_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_small_n05_square_evenodd",
+      "expected": "testdata/offset/expected/offset_small_n05_square_evenodd.json",
+      "input": "testdata/offset/inputs/offset_small_n05_square_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_small_n05_square_nonzero",
+      "expected": "testdata/offset/expected/offset_small_n05_square_nonzero.json",
+      "input": "testdata/offset/inputs/offset_small_n05_square_nonzero.json",
       "status": "validate",
       "validation": {
         "paths": "validate"
@@ -973,6 +2269,42 @@
       }
     },
     {
+      "case_id": "offset_small_p049_round_evenodd",
+      "expected": "testdata/offset/expected/offset_small_p049_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_small_p049_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_small_p049_round_nonzero",
+      "expected": "testdata/offset/expected/offset_small_p049_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_small_p049_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_small_p049_square_evenodd",
+      "expected": "testdata/offset/expected/offset_small_p049_square_evenodd.json",
+      "input": "testdata/offset/inputs/offset_small_p049_square_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_small_p049_square_nonzero",
+      "expected": "testdata/offset/expected/offset_small_p049_square_nonzero.json",
+      "input": "testdata/offset/inputs/offset_small_p049_square_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
       "case_id": "offset_small_p05_bevel_evenodd",
       "expected": "testdata/offset/expected/offset_small_p05_bevel_evenodd.json",
       "input": "testdata/offset/inputs/offset_small_p05_bevel_evenodd.json",
@@ -1009,6 +2341,42 @@
       }
     },
     {
+      "case_id": "offset_small_p05_round_evenodd",
+      "expected": "testdata/offset/expected/offset_small_p05_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_small_p05_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_small_p05_round_nonzero",
+      "expected": "testdata/offset/expected/offset_small_p05_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_small_p05_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_small_p05_square_evenodd",
+      "expected": "testdata/offset/expected/offset_small_p05_square_evenodd.json",
+      "input": "testdata/offset/inputs/offset_small_p05_square_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_small_p05_square_nonzero",
+      "expected": "testdata/offset/expected/offset_small_p05_square_nonzero.json",
+      "input": "testdata/offset/inputs/offset_small_p05_square_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
       "case_id": "offset_small_zero_bevel_evenodd",
       "expected": "testdata/offset/expected/offset_small_zero_bevel_evenodd.json",
       "input": "testdata/offset/inputs/offset_small_zero_bevel_evenodd.json",
@@ -1039,6 +2407,42 @@
       "case_id": "offset_small_zero_miter_nonzero",
       "expected": "testdata/offset/expected/offset_small_zero_miter_nonzero.json",
       "input": "testdata/offset/inputs/offset_small_zero_miter_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_small_zero_round_evenodd",
+      "expected": "testdata/offset/expected/offset_small_zero_round_evenodd.json",
+      "input": "testdata/offset/inputs/offset_small_zero_round_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_small_zero_round_nonzero",
+      "expected": "testdata/offset/expected/offset_small_zero_round_nonzero.json",
+      "input": "testdata/offset/inputs/offset_small_zero_round_nonzero.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_small_zero_square_evenodd",
+      "expected": "testdata/offset/expected/offset_small_zero_square_evenodd.json",
+      "input": "testdata/offset/inputs/offset_small_zero_square_evenodd.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "offset_small_zero_square_nonzero",
+      "expected": "testdata/offset/expected/offset_small_zero_square_nonzero.json",
+      "input": "testdata/offset/inputs/offset_small_zero_square_nonzero.json",
       "status": "validate",
       "validation": {
         "paths": "validate"

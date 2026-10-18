@@ -2,7 +2,7 @@
 
 MoonClip 是用 MoonBit 实现的整数多边形几何库，目前处于开发初期。目标版本为 `0.1.0`，尚未发布到 Mooncakes，模块名称的可用性将在发布前确认。
 
-目前已实现：不可变 `Int64` 点、有序路径与轮廓集合、结构比较、独立复制，以及精确叉积与方向、边界框、精确两倍有向面积、EvenOdd 点包含判断和开放/闭合模式的重复点整理。另已建立内部扫描线、活动边、交点事件、水平交互及输出环连接原语，采用节点复用和共享工作量预算；公开支持 EvenOdd 与 NonZero 下的 Intersection、Union、Difference、Xor。孔洞树由 boolean_tree 提供；闭合区域偏移已公开 Miter、Bevel。公开 Square、Round、圆弧容差、开放描边、小数接口和简化仍在后续计划中。
+目前已实现：不可变 `Int64` 点、有序路径与轮廓集合、结构比较、独立复制，以及精确叉积与方向、边界框、精确两倍有向面积、EvenOdd 点包含判断和开放/闭合模式的重复点整理。另已建立内部扫描线、活动边、交点事件、水平交互及输出环连接原语，采用节点复用和共享工作量预算；公开支持 EvenOdd 与 NonZero 下的 Intersection、Union、Difference、Xor。孔洞树由 boolean_tree 提供；闭合区域偏移已公开 Miter、Bevel、Square、Round，以及 MiterLimit / ArcTolerance。开放描边、小数接口和简化仍在后续计划中。
 
 ## 数据契约
 
@@ -43,7 +43,7 @@ moon run --target native cmd/example
 示例代码位于 [`cmd/example/main.mbt`](cmd/example/main.mbt)，通过公开接口验证复制隔离、负坐标边界框、方向、精确面积和点包含，整理重复点后检查源数据未变，并捕获坐标及预算错误。当前完整示例还检查四种布尔操作、孔洞树和闭合偏移；成功输出：
 
 ```text
-MoonClip geometry, Boolean, PolyTree and offset OK
+MoonClip geometry, Boolean, PolyTree and four offset joins OK
 ```
 
 对应示例包导入根库后，可直接调用公开接口：
@@ -220,13 +220,13 @@ Commit 7 本地同一批 427 项在 native、JS 分别执行：205 项旧库回�
 
 输入先共同执行选定 EvenOdd / NonZero 的 Union，保持原始绕向直到填充完成。默认 NonZero 与 boolean_op 的默认 EvenOdd 不同。同向重叠、反向抵消和零总面积自交均由这一步构造实际区域，空/单点/两点不产生开放描边。结果固定外轮廓正向、孔洞反向，之后使用同一有符号距离生成连接并以内部 Positive Union 清理。不会逐条独立偏移再拼接。
 
-当前公开 `JoinType` 仅 Miter、Bevel，选项采用具名构造 `OffsetOptions::new(join=Bevel, miter_limit=2.0)`。默认 Miter；MiterLimit 为尖角长度相对偏移距离的倍数，默认及最小值均为 2。超限执行内部 Square 回退，几何结果与连接两个偏移端点的 Bevel 不同。合法 MiterLimit 不影响 Bevel；Square / Round 尚未公开，尚无 ArcTolerance。
+当前公开 `JoinType` 为 Miter、Bevel、Square、Round，选项采用具名构造 `OffsetOptions::new(join=Bevel, miter_limit=2.0)`。默认 Miter；MiterLimit 为尖角长度相对偏移距离的倍数，默认及最小值均为 2。超限执行内部 Square 回退，几何结果与连接两个偏移端点的 Bevel 不同。合法 MiterLimit 不影响 Bevel、Square、Round；Square 复用同一方角构造，Round 通过 ArcTolerance 控制采样。
 
 距离必须有限，MiterLimit 必须有限且至少 2；空输入、零距离也先验证选项及原始输入。偏移接受有限小数距离，输出仍为整数网格，这不构成 PointD 接口。偏移点用正负半整数远离零的舍入，区别于扫描投影 ties-to-even。`abs(delta)<0.5`（含 ±0.0）返回独立的规范化区域；±0.5 真正生成偏移点，网格舍入可能不对称。矩形 [0,0]–[10,10] 的 Miter 偏移 +2、-2 分别为 [-2,-2]–[12,12]、[2,2]–[8,8]，-6 消失；受检示例同时断言完整轮廓。
 
 规范化、法线/连接生成、最终清理及提取共用累计 500,000 节点 / 5,000,000 工作量。原始路径/顶点额度只检查一次；Bevel 生成的新顶点消耗内部额度，不重新消耗原始输入额度。生成坐标在清理前验证，即使后续可能被删除也不能越界。返回值独立拥有存储；失败不修改源，下一次调用重新建立预算。错误生成位置不能唯一对应原输入时，索引为 None。
 
-116 条独立偏移输入在首次运行偏移前锁定，固定 C++ Clipper2 独立执行“Union 规范化 → Polygon Offset”产生预期；协议 v2 与原有 Boolean v1 分开。完整轮廓只规范化循环起点及轮廓顺序，保留绕向、顶点和重数，不使用误差容差。原有 200 条 Boolean 输入/预期和两个选择文件保持字节不变。总参考输入 316，偏移仅验证公开平铺能力，没有 offset_tree。
+Commit 9 的 116 条独立偏移输入在首次运行偏移前锁定，固定 C++ Clipper2 独立执行“Union 规范化 → Polygon Offset”产生预期；协议 v2 与原有 Boolean v1 分开。完整轮廓只规范化循环起点及轮廓顺序，保留绕向、顶点和重数，不使用误差容差。原有 200 条 Boolean 输入/预期和两个选择文件保持字节不变。Commit 9 总参考输入 316；当前为 472（Boolean 200＋Offset 272），偏移仅验证公开平铺能力，没有 offset_tree。
 
 ```bash
 python tools/conformance/generate_offset.py --check
@@ -235,4 +235,19 @@ moon test --target js --filter "reference offset paths: *"
 moon run --target native cmd/conformance -- --manifest testdata/manifest.json --offset-manifest testdata/offset-manifest.json --report-json _build/conformance/report.json --report-md docs/compatibility.md --strict
 ```
 
-Commit 9 同一批 810 项为旧 659 +116 偏移对照 +35 功能/数值/预算测试，每目标分别执行；工具 124 项、实际适配器 20 项另计。当前本地结果与最终 Linux CI 证据分开记录，见 [验证记录](docs/toolchain.md) 和 [兼容性报告](docs/compatibility.md)。Mooncakes 安装方式仍待实际发布后补充。
+Commit 9 的历史基线为同一批 810 项为旧 659 +116 偏移对照 +35 功能/数值/预算测试，每目标分别执行；工具 124 项、实际适配器 20 项另计。当前本地结果与最终 Linux CI 证据分开记录，见 [验证记录](docs/toolchain.md) 和 [兼容性报告](docs/compatibility.md)。Mooncakes 安装方式仍待实际发布后补充。
+
+
+## 四种连接与 ArcTolerance
+
+闭合偏移现支持 `Miter / Bevel / Square / Round` 和 `MiterLimit / ArcTolerance`。默认仍为 Miter、MiterLimit=2、ArcTolerance=0、填充 NonZero。构造器增加可选 `arc_tolerance=`，旧调用无需补参；无关的合法参数不改变几何，但所有参数都验证。`arc_tolerance` 必须有限且非负，即使空输入、零/极小距离也不能绕过校验。
+
+Square 在凸连接处构造沿角平分方向截出的方角，与直接连接两偏移端点的 Bevel 有不同的完整轮廓。Miter 超限继续使用这同一个 Square 实现。Round 使用固定版本的圆弧参数与逐步旋转，近共线角也进入 Round；凹角仍先生成供最终 Union 清理的连接。
+
+ArcTolerance 单位与坐标相同，0 为自动值；固定版本将 `0 < arc_tolerance <= 1e-12` 同样视为自动，使用半径的 0.002 倍。显式容差大于半径时按半径计算。细分受固定的 `r*π` 采样上限、整数舍入和区域清理影响，**ArcTolerance 不是最终整数轮廓的绝对误差保证**。更细采样消耗累计预算；超限返回错误，不临时增大容差或截断输出。舍入重复的采样点仍计费，不能要求任意最终轮廓的顶点数随容差变小而严格增加。
+
+受检示例以同一 [0,0]–[100,100] 区域执行 `OffsetOptions::new(join=Square)` 和 `OffsetOptions::new(join=Round, arc_tolerance=0.25)`，delta=10，断言全部轮廓后输出确定的成功标记。核心公式、半整数转换和解析误差检查见 [数值说明](docs/numerics.md)。
+
+新增 156 条对照由 `offset-join-selection.json` 单独锁定，与旧 116 条选择互斥且共同完整覆盖 272 条偏移。旧请求不补写 arc_tolerance，输入哈希和预期保持字节不变。协议 v2 允许省略容差并默认 0，仍严格拒绝未知字段。实际命令继续只链接输入/哈希，272 条预期只由测试和报告读取。
+
+Commit 10 同一批 **1006 项=810 原回归＋156 新对照＋40 功能测试**，native、JS 分别执行。工具 134 项、实际适配器 29 项独立记录；参考重建为 Boolean 200＋Offset 272＝472。公开偏移仍为闭合平铺，开放折线和 Butt、Square、Round 端点留待 Commit 11。

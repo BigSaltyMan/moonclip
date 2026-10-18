@@ -1,0 +1,112 @@
+{
+  "adapter_protocol_version": 2,
+  "case_id": "offset_arc_neck_t100_negative_round_nonzero",
+  "format_version": 2,
+  "input_sha256": "21302dcd4cad4df2c1a965a259d70451f414f6b6116d0189e0e0b0a5ba86f2d2",
+  "metrics": {
+    "path_count": 2,
+    "paths": [
+      {
+        "area2": "12920",
+        "bounds": [
+          10,
+          10,
+          100,
+          90
+        ],
+        "vertices": 9
+      },
+      {
+        "area2": "12920",
+        "bounds": [
+          150,
+          10,
+          240,
+          90
+        ],
+        "vertices": 9
+      }
+    ],
+    "vertex_count": 18
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        90,
+        10
+      ],
+      [
+        90,
+        40
+      ],
+      [
+        94,
+        48
+      ],
+      [
+        100,
+        50
+      ],
+      [
+        92,
+        54
+      ],
+      [
+        90,
+        60
+      ],
+      [
+        90,
+        90
+      ],
+      [
+        10,
+        90
+      ],
+      [
+        10,
+        10
+      ]
+    ],
+    [
+      [
+        158,
+        46
+      ],
+      [
+        160,
+        40
+      ],
+      [
+        160,
+        10
+      ],
+      [
+        240,
+        10
+      ],
+      [
+        240,
+        90
+      ],
+      [
+        160,
+        90
+      ],
+      [
+        160,
+        60
+      ],
+      [
+        156,
+        52
+      ],
+      [
+        150,
+        50
+      ]
+    ]
+  ],
+  "status": "success"
+}

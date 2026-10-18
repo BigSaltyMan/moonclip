@@ -83,14 +83,18 @@ double finite_number(const json& value, const std::string& where) {
   return number;
 }
 json execute_offset(const json& request) {
-  keys(request, {"format_version", "case_id", "source", "operation", "fill_rule", "options", "paths", "delta", "join_type", "miter_limit"}, "offset request");
+  json base_request=request;
+  base_request.erase("arc_tolerance");
+  keys(base_request, {"format_version", "case_id", "source", "operation", "fill_rule", "options", "paths", "delta", "join_type", "miter_limit"}, "offset request");
+  double arc_tolerance=request.contains("arc_tolerance") ? finite_number(request["arc_tolerance"], "arc_tolerance") : 0.0;
+  require(arc_tolerance >= 0.0, "arc_tolerance: must be non-negative");
   integer(request["format_version"], "offset format_version", 2, 2);
   double delta = finite_number(request["delta"], "delta");
   double miter = finite_number(request["miter_limit"], "miter_limit");
   require(miter >= 2, "miter_limit: must be at least 2");
   require(request["join_type"].is_string(), "join_type: expected string");
   auto join = request["join_type"].get<std::string>();
-  require(join == "Miter" || join == "Bevel", "join_type: unsupported join");
+  require(join == "Miter" || join == "Bevel" || join == "Square" || join == "Round", "join_type: unsupported join");
   require(request["fill_rule"] == "EvenOdd" || request["fill_rule"] == "NonZero", "fill_rule: unsupported offset rule");
   // Reuse strict v1 provenance/options validation and independent fixed-engine Union.
   json normalize = {{"format_version", 1}, {"case_id", request["case_id"]},
@@ -102,9 +106,22 @@ json execute_offset(const json& request) {
   Paths64 result;
   if (!normalized.empty()) {
     require(std::abs(delta) <= 2000000000.0, "delta: unsafe offset distance");
-    require(join == "Bevel" || std::abs(delta) < 0.5 || std::isfinite(miter * miter), "miter_limit: numeric overflow");
-    ClipperOffset offset(miter, 0.0, false, false);
-    offset.AddPaths(normalized, join == "Miter" ? JoinType::Miter : JoinType::Bevel, EndType::Polygon);
+    require(join != "Miter" || std::abs(delta) < 0.5 || std::isfinite(miter * miter), "miter_limit: numeric overflow");
+    if (join == "Round" && std::abs(delta) >= 0.5) {
+      // Adapter-only bounded execution guard, before upstream's int cast/loop.
+      // This is a conservative sample ceiling, not an alternative offset result.
+      const double radius=std::abs(delta), pi=std::acos(-1.0);
+      const double tolerance=arc_tolerance > 1e-12 ? std::min(radius,arc_tolerance) : radius*0.002;
+      const double argument=1.0-tolerance/radius;
+      const double circle=argument == 1.0 ? radius*pi : std::min(pi/std::acos(argument),radius*pi);
+      const double per_corner=std::ceil(circle/2.0)+1.0;
+      require(std::isfinite(per_corner) && per_corner <= static_cast<double>(kMaxVertices) &&
+              static_cast<double>(vertices)*per_corner <= static_cast<double>(kMaxVertices),
+              "Round sampling exceeds adapter resource limit");
+    }
+    ClipperOffset offset(miter, arc_tolerance, false, false);
+    JoinType join_type = join == "Miter" ? JoinType::Miter : join == "Bevel" ? JoinType::Bevel : join == "Square" ? JoinType::Square : JoinType::Round;
+    offset.AddPaths(normalized, join_type, EndType::Polygon);
     offset.Execute(delta, result);
     require(offset.ErrorCode() == 0, "Clipper2 offset execution failed");
   }

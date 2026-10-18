@@ -1,0 +1,14 @@
+{
+  "adapter_protocol_version": 2,
+  "case_id": "offset_collapse_exact_square_evenodd",
+  "format_version": 2,
+  "input_sha256": "14d4fcec05ecea1949795b6355b87a5dbacfc08a7a3ca3821f2ba4a4330a0f4b",
+  "metrics": {
+    "path_count": 0,
+    "paths": [],
+    "vertex_count": 0
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [],
+  "status": "success"
+}

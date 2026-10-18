@@ -1,0 +1,56 @@
+{
+  "case_id": "offset_small_n049_square_nonzero",
+  "delta": -0.49,
+  "fill_rule": "NonZero",
+  "format_version": 2,
+  "join_type": "Square",
+  "miter_limit": 2.0,
+  "operation": "OffsetPolygons",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [
+      [
+        0,
+        0
+      ],
+      [
+        10,
+        0
+      ],
+      [
+        10,
+        10
+      ],
+      [
+        0,
+        10
+      ]
+    ],
+    [
+      [
+        5,
+        0
+      ],
+      [
+        15,
+        0
+      ],
+      [
+        15,
+        10
+      ],
+      [
+        5,
+        10
+      ]
+    ]
+  ],
+  "source": {
+    "group": "small",
+    "intent": "Normalize overlapping region before insignificant or threshold distance",
+    "kind": "moonclip_constructed"
+  }
+}

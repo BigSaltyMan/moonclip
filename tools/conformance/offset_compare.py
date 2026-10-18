@@ -15,8 +15,11 @@ def finite(value, where):
 
 
 def validate_offset_input(value, where):
-    keys(value, {"format_version", "case_id", "source", "operation", "fill_rule", "options",
-                 "paths", "delta", "join_type", "miter_limit"}, where)
+    fields = {"format_version", "case_id", "source", "operation", "fill_rule", "options",
+              "paths", "delta", "join_type", "miter_limit"}
+    if type(value) is dict and "arc_tolerance" in value:
+        fields.add("arc_tolerance")
+    keys(value, fields, where)
     require(type(value["format_version"]) is int and value["format_version"] == 2, where, "unknown offset protocol")
     require(value["operation"] == "OffsetPolygons", where, "unknown offset operation")
     # Reuse v1 provenance and fixed output options validation without changing v1.
@@ -24,10 +27,12 @@ def validate_offset_input(value, where):
     proxy.update(format_version=1, operation="Union", subject=value["paths"], clip=[])
     validate_input(proxy, where)
     require(value["fill_rule"] in ("EvenOdd", "NonZero"), where, "unsupported offset fill rule")
-    require(type(value["join_type"]) is str and value["join_type"] in ("Miter", "Bevel"), where, "unknown offset join")
+    require(type(value["join_type"]) is str and value["join_type"] in ("Miter", "Bevel", "Square", "Round"), where, "unknown offset join")
     finite(value["delta"], where + ".delta")
     finite(value["miter_limit"], where + ".miter_limit")
     require(value["miter_limit"] >= 2, where, "miter limit must be at least 2")
+    finite(value.get("arc_tolerance", 0.0), where + ".arc_tolerance")
+    require(value.get("arc_tolerance", 0.0) >= 0, where, "arc tolerance must be non-negative")
 
 
 def validate_offset_geometry(value, where="offset result"):
@@ -83,11 +88,22 @@ def read_offset_manifest(root, manifest, require_expected=True, strict=True):
     return lock,records
 
 
+def validate_offset_selections(root, records):
+    batches=[]
+    for name,count in (("offset-selection.json",116),("offset-join-selection.json",156)):
+        selected=load(root/"testdata"/name,True)
+        keys(selected,{"format_version","kind","expected_count","case_ids"},"offset selection")
+        require(type(selected["format_version"]) is int and selected["format_version"]==2 and selected["kind"]=="offset","offset selection","invalid format")
+        require(type(selected["expected_count"]) is int and selected["expected_count"]==count,"offset selection",f"expected {count}")
+        ids=selected["case_ids"]
+        require(type(ids) is list and len(ids)==count and all(type(i) is str for i in ids),name,"invalid IDs/count")
+        require(ids==sorted(set(ids)),name,"duplicate or unsorted IDs")
+        batches.append(set(ids))
+    require(not batches[0]&batches[1],"offset selections","overlapping batches")
+    require(batches[0]|batches[1]=={r[1]["case_id"] for r in records} and len(records)==272,"offset selections","incomplete or extra cases")
+
+
 def offset_selection(root):
     lock,records=read_offset_manifest(root,root/"testdata/offset-manifest.json")
-    selected=load(root/"testdata/offset-selection.json",True)
-    keys(selected,{"format_version","kind","expected_count","case_ids"},"offset selection")
-    require(type(selected["format_version"]) is int and selected["format_version"]==2 and selected["kind"]=="offset","offset selection","invalid format")
-    require(type(selected["expected_count"]) is int and selected["expected_count"]==116,"offset selection","expected 116")
-    require(selected["case_ids"]==sorted(r[1]["case_id"] for r in records) and len(records)==116,"offset selection","selection mismatch")
+    validate_offset_selections(root,records)
     return lock,records

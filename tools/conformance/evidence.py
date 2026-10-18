@@ -41,6 +41,6 @@ def offset_evidence(directory):
         text=path.read_text(encoding='utf-8')
         require(text.splitlines().count('Selection: reference offset paths: *')==1,str(path),'missing offset selection marker')
         summaries=re.findall(r'Total tests: (\d+), passed: (\d+), failed: (\d+)\.',text)
-        require(summaries==[('116','116','0')],str(path),'expected exactly 116 successful offset cases')
-        result[target]={'status':'passed','executed':116,'passed':116,'failed':0}
+        require(summaries==[('272','272','0')],str(path),'expected exactly 272 successful offset cases')
+        result[target]={'status':'passed','executed':272,'passed':272,'failed':0}
     return result

@@ -1,0 +1,100 @@
+{
+  "adapter_protocol_version": 2,
+  "case_id": "offset_multipart_positive_round_evenodd",
+  "format_version": 2,
+  "input_sha256": "ccceec1f835dda8024dd19c1bbc54872ab399d615493b0cd25b3370d342701d4",
+  "metrics": {
+    "path_count": 1,
+    "paths": [
+      {
+        "area2": "934",
+        "bounds": [
+          -3,
+          -3,
+          27,
+          13
+        ],
+        "vertices": 18
+      }
+    ],
+    "vertex_count": 18
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        12,
+        -2
+      ],
+      [
+        13,
+        -3
+      ],
+      [
+        24,
+        -3
+      ],
+      [
+        26,
+        -2
+      ],
+      [
+        27,
+        -1
+      ],
+      [
+        27,
+        10
+      ],
+      [
+        26,
+        12
+      ],
+      [
+        25,
+        13
+      ],
+      [
+        14,
+        13
+      ],
+      [
+        12,
+        12
+      ],
+      [
+        11,
+        13
+      ],
+      [
+        0,
+        13
+      ],
+      [
+        -2,
+        12
+      ],
+      [
+        -3,
+        11
+      ],
+      [
+        -3,
+        0
+      ],
+      [
+        -2,
+        -2
+      ],
+      [
+        -1,
+        -3
+      ],
+      [
+        10,
+        -3
+      ]
+    ]
+  ],
+  "status": "success"
+}

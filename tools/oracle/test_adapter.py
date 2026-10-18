@@ -123,7 +123,7 @@ class AdapterTests(unittest.TestCase):
             self.assertEqual(result.returncode,2)
 
     def test_offset_unknown_join_rule_and_protocol_rejected(self):
-        for field,value in (('join_type','Round'),('join_type','Unknown'),('join_type',True),('fill_rule','Positive'),('format_version',1),('format_version',True),('miter_limit',1.999)):
+        for field,value in (('join_type','round'),('join_type','Unknown'),('join_type',True),('fill_rule','Positive'),('format_version',1),('format_version',True),('miter_limit',1.999)):
             case=self.offset_case();case[field]=value;self.rejected(case)
 
     def test_offset_zero_is_union_normalization(self):
@@ -170,6 +170,72 @@ class AdapterTests(unittest.TestCase):
         case=self.offset_case();case['paths']=[]
         self.assertEqual(decode(self.call(case).stdout)['paths'],[])
         case['miter_limit']=1;self.rejected(case)
+
+    def test_square_and_round_actual_full_contours(self):
+        for join in ('square','round'):
+            for sign in ('positive','negative'):
+                case=self.offset_case('offset_rectangle_'+sign+'_'+join+'_nonzero')
+                actual=self.call(case);self.assertEqual(actual.returncode,0)
+                expected=load(ROOT/f"testdata/offset/expected/{case['case_id']}.json",True)
+                self.assertEqual(normalize_paths(decode(actual.stdout)['paths']),normalize_paths(expected['paths']))
+
+    def test_explicit_round_tolerance_is_forwarded(self):
+        outputs=[]
+        for label in ('t005','t025','t100'):
+            case=self.offset_case('offset_arc_rectangle_'+label+'_positive_round_nonzero')
+            actual=self.call(case);self.assertEqual(actual.returncode,0)
+            expected=load(ROOT/f"testdata/offset/expected/{case['case_id']}.json",True)
+            value=decode(actual.stdout)
+            self.assertEqual(normalize_paths(value['paths']),normalize_paths(expected['paths']))
+            outputs.append(sum(map(len,value['paths'])))
+        self.assertEqual(outputs,[24,16,12])
+
+    def test_optional_arc_field_is_backward_compatible(self):
+        case=self.offset_case('offset_rectangle_positive_round_nonzero')
+        old=self.call(case);case['arc_tolerance']=0.0
+        self.assertEqual(decode(old.stdout),decode(self.call(case).stdout))
+
+    def test_invalid_arc_tolerance_rejected_for_all_joins(self):
+        for join in ('Miter','Bevel','Square','Round'):
+            for value in (True,False,'0.25',None,[],{},-0.01):
+                case=self.offset_case();case.update(join_type=join,arc_tolerance=value);self.rejected(case)
+        for token in ('NaN','Infinity','-Infinity','1e400'):
+            case=self.offset_case();case['arc_tolerance']=0.25
+            raw=canonical_bytes(case).decode().replace('"arc_tolerance": 0.25','"arc_tolerance": '+token)
+            result=subprocess.run([str(self.binary)],input=raw.encode(),capture_output=True,timeout=5)
+            self.assertEqual(result.returncode,2)
+
+    def test_arc_validation_runs_before_empty_or_tiny_offset(self):
+        for delta in (0.0,0.49,-0.49):
+            case=self.offset_case();case.update(paths=[],delta=delta,arc_tolerance=-1.0);self.rejected(case)
+
+    def test_tiny_positive_and_large_tolerance_follow_fixed_reference(self):
+        case=self.offset_case('offset_rectangle_positive_round_nonzero')
+        original=normalize_paths(decode(self.call(case).stdout)['paths'])
+        for value in (1e-20,1e-12):
+            case['arc_tolerance']=value
+            self.assertEqual(normalize_paths(decode(self.call(case).stdout)['paths']),original)
+        case['arc_tolerance']=2.0
+        capped=normalize_paths(decode(self.call(case).stdout)['paths'])
+        case['arc_tolerance']=1e300
+        self.assertEqual(normalize_paths(decode(self.call(case).stdout)['paths']),capped)
+
+    def test_arc_field_keeps_unknown_field_rejection(self):
+        case=self.offset_case();case.update(arc_tolerance=0.25,unexpected=1);self.rejected(case)
+
+    def test_irrelevant_arc_tolerance_preserves_nonround_results(self):
+        for join in ('Miter','Bevel','Square'):
+            case=self.offset_case();case['join_type']=join
+            before=normalize_paths(decode(self.call(case).stdout)['paths'])
+            case['arc_tolerance']=0.001
+            self.assertEqual(normalize_paths(decode(self.call(case).stdout)['paths']),before)
+
+    def test_round_excessive_sampling_is_rejected_before_upstream_int_loop(self):
+        case=self.offset_case('offset_rectangle_positive_round_nonzero')
+        case.update(delta=1000000000.0,arc_tolerance=1e-11)
+        result=self.call(case)
+        self.assertEqual(result.returncode,2)
+        self.assertIn(b'adapter resource limit',result.stderr)
 
     def case_commit(self):
         return load(ROOT/'tools/oracle/upstream-lock.json',True)['commit']

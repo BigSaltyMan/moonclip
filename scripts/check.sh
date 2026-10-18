@@ -31,7 +31,7 @@ moon fmt --check
 mkdir -p _build/conformance
 for target in native js; do
   { printf 'Selection: reference offset paths: *\n'; moon test --target "$target" --filter "reference offset paths: *"; } | tee "_build/conformance/offset-$target.log"
-  grep -Fxq 'Total tests: 116, passed: 116, failed: 0.' "_build/conformance/offset-$target.log"
+  grep -Fxq 'Total tests: 272, passed: 272, failed: 0.' "_build/conformance/offset-$target.log"
   moon test --target "$target" --filter "reference internal paths: *" | tee "_build/conformance/internal-$target.log"
   grep -Fxq 'Total tests: 48, passed: 48, failed: 0.' "_build/conformance/internal-$target.log"
   for kind in public internal; do

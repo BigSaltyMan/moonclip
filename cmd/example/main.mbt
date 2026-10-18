@@ -85,7 +85,8 @@ fn main raise {
   run_winding_example()
   run_tree_example()
   run_offset_example()
-  println("MoonClip geometry, Boolean, PolyTree and offset OK")
+  run_join_example()
+  println("MoonClip geometry, Boolean, PolyTree and four offset joins OK")
 }
 
 ///|
@@ -345,4 +346,58 @@ fn run_offset_example() -> Unit raise {
     )
     is Err(InvalidInput(_, _)),
   )
+}
+
+///|
+fn run_join_example() -> Unit raise {
+  let region = [example_rect(0L, 0L, 100L, 100L)]
+  guard @moonclip.offset_polygons(
+      region,
+      10.0,
+      options=@moonclip.OffsetOptions::new(join=Square),
+    )
+    is Ok(square) else {
+    fail("Expected Square offset")
+  }
+  example_result(square, [
+    [
+      @moonclip.Point64::new(-10L, -4L),
+      @moonclip.Point64::new(-4L, -10L),
+      @moonclip.Point64::new(104L, -10L),
+      @moonclip.Point64::new(110L, -4L),
+      @moonclip.Point64::new(110L, 104L),
+      @moonclip.Point64::new(104L, 110L),
+      @moonclip.Point64::new(-4L, 110L),
+      @moonclip.Point64::new(-10L, 104L),
+    ],
+  ])
+  guard @moonclip.offset_polygons(
+      region,
+      10.0,
+      options=@moonclip.OffsetOptions::new(join=Round, arc_tolerance=0.25),
+    )
+    is Ok(round) else {
+    fail("Expected Round offset")
+  }
+  example_result(round, [
+    [
+      @moonclip.Point64::new(104L, -9L),
+      @moonclip.Point64::new(108L, -6L),
+      @moonclip.Point64::new(110L, -2L),
+      @moonclip.Point64::new(110L, 100L),
+      @moonclip.Point64::new(109L, 104L),
+      @moonclip.Point64::new(106L, 108L),
+      @moonclip.Point64::new(102L, 110L),
+      @moonclip.Point64::new(0L, 110L),
+      @moonclip.Point64::new(-4L, 109L),
+      @moonclip.Point64::new(-8L, 106L),
+      @moonclip.Point64::new(-10L, 102L),
+      @moonclip.Point64::new(-10L, 0L),
+      @moonclip.Point64::new(-9L, -4L),
+      @moonclip.Point64::new(-6L, -8L),
+      @moonclip.Point64::new(-2L, -10L),
+      @moonclip.Point64::new(100L, -10L),
+    ],
+  ])
+  assert_true(square != round)
 }

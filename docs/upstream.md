@@ -148,3 +148,17 @@ C# 源码作为主要阅读与后续移植参考；固定版本的 C++ 实现作
 | 参考工具，自主实现 | tools/oracle、tools/conformance | C++ 参考适配器 v2 与原 v1 分开；116 份预锁定自构造输入、严格数据/报告及独立测试。 |
 
 实际改写文件保留 Angus Johnson 2010–2025 版权及 BSL-1.0 声明，项目代码版权 BigSaltyMan 2026。运行库全部几何由 MoonBit 实现，无新依赖。C++ 仅用于独立预期生成；固定源完整归档及原始许可仍由原锁校验。新增编译输入 offset.cpp 与协议 v2 写入锁；原 Boolean v1、200 份输入/预期和两个选择文件字节未动。公开 Square、Round、ArcTolerance、开放描边引擎仍为后续范围。
+
+
+## Commit 10 方角、圆角与精度（2026-10-18）
+
+实际核对同一固定提交 CPP/Clipper2Lib/src/clipper.offset.cpp 的 DoRound、DoGroupOffset、OffsetPoint 与 arc_const/floating_point_tolerance；未改变固定上游SHA、编译选项及依赖。offset.mbt 保留 Angus Johnson 2010–2025 的 BSL-1.0 声明，MoonClip 自主逻辑版权 BigSaltyMan 2026。
+
+| 实际来源 | MoonBit 文件 | 本笔改写 |
+| --- | --- | --- |
+| DoSquare / OffsetPoint | offset.mbt | 公开 Square 复用已移植方角，Round 排除近共线 Miter 快速路径，凹角仍优先。 |
+| DoGroupOffset 圆弧参数 | offset.mbt | 同一有效容差、采样上限和旋转参数；显式处理 acos(1) 的采样上限分支，并增加有限性检查。 |
+| DoRound | offset.mbt | 保留 atan2 转角、ceil 步数、固定旋转次序及直接终点；无开放路径 j==k 分支。 |
+| MoonClip 自行实现 | offset.mbt、参考工具与测试 | 可选参数校验、实际点数预算预检、共享账本、v2兼容字段、两批选择和独立参考；参考适配器仅增加保守采样安全检查，不生成替代几何。 |
+
+运行库仍为纯 MoonBit；新增使用固定工具链 core/math，未新增第三方包。40项功能和156条独立参考分别验证，旧316对参考保持字节不变。开放折线、端点样式仍计划由Commit 11接入。

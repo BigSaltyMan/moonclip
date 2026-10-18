@@ -1,25 +1,29 @@
 // Copyright (c) 2026 BigSaltyMan. BSL-1.0; see LICENSE.
-// Normal, corner and Square fallback formulas adapted from Clipper2 2.0.1,
+// Normal, corner and arc formulas adapted from Clipper2 2.0.1,
 // Copyright (c) Angus Johnson 2010-2025. Container and budget plumbing is MoonClip.
 
 ///|
 pub(all) enum JoinType {
   Miter
   Bevel
+  Square
+  Round
 } derive(Eq, Debug)
 
 ///|
 pub struct OffsetOptions {
   join : JoinType
   miter_limit : Double
+  arc_tolerance : Double
 } derive(Eq, Debug)
 
 ///|
 pub fn OffsetOptions::new(
   join? : JoinType = Miter,
   miter_limit? : Double = 2.0,
+  arc_tolerance? : Double = 0.0,
 ) -> OffsetOptions {
-  { join, miter_limit, }
+  { join, miter_limit, arc_tolerance, }
 }
 
 ///|
@@ -199,6 +203,134 @@ fn offset_square(
 }
 
 ///|
+priv struct OffsetArc {
+  step_sin : Double
+  step_cos : Double
+  steps_per_rad : Double
+}
+
+///|
+// Fixed Clipper2 automatic tolerance, radius cap and global rotation step.
+fn offset_arc_parameters(
+  delta : Double,
+  tolerance : Double,
+) -> OffsetArc raise ScanAbort {
+  let radius = offset_finite(delta.abs())
+  if radius < 0.5 {
+    raise ScanAbort(
+      NumericFailure(
+        location(OffsetGenerate, None, None),
+        "Arc parameters require radius at least 0.5",
+      ),
+    )
+  }
+  let effective = if tolerance > 1.0e-12 {
+    if tolerance < radius {
+      tolerance
+    } else {
+      radius
+    }
+  } else {
+    radius * 0.002
+  }
+  let cap = offset_finite(radius * @math.PI)
+  let argument = 1.0 - effective / radius
+  // With sub-ULP tolerance acos(1)==0: source min(+Infinity, cap) selects cap.
+  // Express that branch explicitly, without creating a non-finite intermediate.
+  let steps = if argument == 1.0 {
+    cap
+  } else {
+    let requested = offset_finite(@math.PI / @math.acos(argument))
+    if requested < cap {
+      requested
+    } else {
+      cap
+    }
+  }
+  let step = offset_finite(2.0 * @math.PI / steps)
+  let sine = offset_finite(@math.sin(step))
+  {
+    step_sin: if delta < 0.0 {
+      -sine
+    } else {
+      sine
+    },
+    step_cos: offset_finite(@math.cos(step)),
+    steps_per_rad: steps / (2.0 * @math.PI),
+  }
+}
+
+///|
+// No charge here: offset_push charges every attempted sample, even equal grid points.
+// Preflight the complete corner before any point allocation or integer conversion.
+fn offset_arc_steps(
+  arc : OffsetArc,
+  angle : Double,
+  budget : CallBudget,
+) -> Int raise ScanAbort {
+  let steps = offset_finite(
+    @double.ceil(arc.steps_per_rad * offset_finite(angle).abs()),
+  )
+  if steps < 0.0 {
+    raise ScanAbort(
+      NumericFailure(
+        location(OffsetGenerate, None, None),
+        "Negative arc step count",
+      ),
+    )
+  }
+  let points = if steps < 1.0 { 2.0 } else { steps + 1.0 }
+  let loc = location(OffsetGenerate, None, None)
+  if points > (budget.limits.max_nodes - budget.stats.nodes).to_double() {
+    raise ScanAbort(
+      ResourceLimitExceeded(loc, InternalNodes, budget.limits.max_nodes),
+    )
+  }
+  if points > (budget.limits.max_work - budget.stats.work).to_double() {
+    raise ScanAbort(
+      ResourceLimitExceeded(loc, ScanWork, budget.limits.max_work),
+    )
+  }
+  if steps > 2147483646.0 {
+    raise ScanAbort(
+      NumericFailure(loc, "Arc step count cannot be represented as Int"),
+    )
+  }
+  steps.to_int()
+}
+
+///|
+fn offset_round(
+  path : Path64,
+  p : Point64,
+  a : OffsetVector,
+  b : OffsetVector,
+  delta : Double,
+  angle : Double,
+  arc : OffsetArc,
+  budget : CallBudget,
+) -> Unit raise ScanAbort {
+  let steps = offset_arc_steps(arc, angle, budget)
+  let mut x = a.x * delta
+  let mut y = a.y * delta
+  offset_push(path, p.x.to_double() + x, p.y.to_double() + y, budget)
+  for i = 1; i < steps; i = i + 1 {
+    // Both components use the old vector, exactly as PointD's source constructor.
+    let next_x = x * arc.step_cos - arc.step_sin * y
+    y = x * arc.step_sin + y * arc.step_cos
+    x = next_x
+    offset_push(path, p.x.to_double() + x, p.y.to_double() + y, budget)
+  }
+  // Direct endpoint; do not accumulate rotations into the terminal normal.
+  offset_push(
+    path,
+    p.x.to_double() + b.x * delta,
+    p.y.to_double() + b.y * delta,
+    budget,
+  )
+}
+
+///|
 fn offset_corner(
   path : Path64,
   p : Point64,
@@ -209,6 +341,7 @@ fn offset_corner(
   options : OffsetOptions,
   threshold : Double,
   budget : CallBudget,
+  arc? : OffsetArc,
 ) -> Unit raise ScanAbort {
   offset_spend(budget, 0, 1)
   let raw_sine = offset_finite(b.y * a.x - a.y * b.x)
@@ -234,10 +367,27 @@ fn offset_corner(
       p.y.to_double() + b.y * delta,
       budget,
     )
-  } else if cosine > 0.999 {
+  } else if cosine > 0.999 && options.join != Round {
     offset_miter(path, p, a, b, delta, cosine, budget)
   } else {
     match options.join {
+      Square => offset_square(path, p, previous, a, b, delta, budget)
+      Round => {
+        let arc = match arc {
+          Some(value) => value
+          None => offset_arc_parameters(delta, options.arc_tolerance)
+        }
+        offset_round(
+          path,
+          p,
+          a,
+          b,
+          delta,
+          offset_finite(@math.atan2(sine, cosine)),
+          arc,
+          budget,
+        )
+      }
       Miter =>
         if cosine > threshold - 1.0 {
           offset_miter(path, p, a, b, delta, cosine, budget)
@@ -271,7 +421,12 @@ fn offset_generate(
 ) -> Paths64 raise ScanAbort {
   let threshold = match options.join {
     Miter => 2.0 / offset_finite(options.miter_limit * options.miter_limit)
-    Bevel => 0.0
+    Bevel | Square | Round => 0.0
+  }
+  let arc = if options.join == Round {
+    Some(offset_arc_parameters(delta, options.arc_tolerance))
+  } else {
+    None
   }
   offset_spend(budget, 1, 1)
   offset_spend(budget, paths.length(), paths.length())
@@ -294,6 +449,7 @@ fn offset_generate(
         options,
         threshold,
         budget,
+        arc?,
       )
     }
     result.push(output)
@@ -318,6 +474,13 @@ fn offset_execute(
     options.miter_limit.is_inf() ||
     options.miter_limit < 2.0 {
     return Err(InvalidInput(loc, "Miter limit must be finite and at least 2"))
+  }
+  if options.arc_tolerance.is_nan() ||
+    options.arc_tolerance.is_inf() ||
+    options.arc_tolerance < 0.0 {
+    return Err(
+      InvalidInput(loc, "Arc tolerance must be finite and non-negative"),
+    )
   }
   let budget = match budget {
     Some(value) => value

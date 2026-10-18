@@ -88,3 +88,12 @@ bash scripts/generate_reference.sh --manifest testdata/manifest.json --check
 ```
 
 116 offset inputs and 200 Boolean inputs are separate catalogs. Offset publication stages the whole batch and replaces only testdata/offset/expected after all requests succeed. It never writes Boolean expectations. Actual adapter tests: 20 (10 retained +10 offset). Ordinary CI uses only committed data; rebuild-reference executes both full catalogs with the real C++ binary.
+
+
+## Commit 10 optional ArcTolerance and new joins
+
+Offset v2 now accepts Miter/Bevel/Square/Round and optional arc_tolerance (default 0.0). Tolerance must be a finite numeric token >=0; booleans, strings, negative/nonfinite values and unknown fields are rejected, including empty/zero inputs. Real JoinType::Square / JoinType::Round and the requested tolerance are passed to the fixed ClipperOffset constructor. Boolean v1 and old116 offset request/expectation bytes are unchanged.
+
+The old116 selection is immutable; offset-join-selection locks156 new cases, with disjoint complete union272. The constructor reuses verified old records and refuses changed definitions. Explicit tolerance cases use four geometries scaled5, signed radius10, tolerances.05/.25/1.0, both fill rules (48 cases). Reference output still comes entirely from fixed C++ Union then Offset.
+
+Before calling upstream Round, the adapter bounds a conservative sample estimate (normalized vertices times maximum half-circle samples) by100000, preventing unsafe upstream int casts or unbounded loops for adversarial tiny tolerance/large radius. This adapter execution guard only rejects oversized requests; it never changes tolerance or geometry. MoonClip uses its own actual per-corner cumulative budgets. Integration tests total29; offline tools134. Independent rebuild now checks200 Boolean+272 Offset=472 files; ordinary CI does not build/invoke C++.

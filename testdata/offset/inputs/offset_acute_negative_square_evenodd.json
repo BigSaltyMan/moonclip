@@ -1,0 +1,34 @@
+{
+  "case_id": "offset_acute_negative_square_evenodd",
+  "delta": -2.0,
+  "fill_rule": "EvenOdd",
+  "format_version": 2,
+  "join_type": "Square",
+  "miter_limit": 2.0,
+  "operation": "OffsetPolygons",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [
+      [
+        0,
+        0
+      ],
+      [
+        60,
+        0
+      ],
+      [
+        2,
+        10
+      ]
+    ]
+  ],
+  "source": {
+    "group": "acute",
+    "intent": "Acute triangle tests miter to square fallback",
+    "kind": "moonclip_constructed"
+  }
+}

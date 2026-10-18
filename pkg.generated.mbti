@@ -82,6 +82,8 @@ pub(all) enum FillRule {
 pub(all) enum JoinType {
   Miter
   Bevel
+  Square
+  Round
 } derive(Eq, @debug.Debug)
 
 pub(all) struct Limits {
@@ -93,8 +95,9 @@ pub impl Default for Limits
 pub struct OffsetOptions {
   join : JoinType
   miter_limit : Double
+  arc_tolerance : Double
 } derive(Eq, @debug.Debug)
-pub fn OffsetOptions::new(join? : JoinType, miter_limit? : Double) -> Self
+pub fn OffsetOptions::new(join? : JoinType, miter_limit? : Double, arc_tolerance? : Double) -> Self
 pub impl Default for OffsetOptions
 
 pub(all) enum Orientation {

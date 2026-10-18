@@ -1,0 +1,38 @@
+{
+  "case_id": "offset_collapse_exact_round_evenodd",
+  "delta": -5.0,
+  "fill_rule": "EvenOdd",
+  "format_version": 2,
+  "join_type": "Round",
+  "miter_limit": 2.0,
+  "operation": "OffsetPolygons",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [
+      [
+        0,
+        0
+      ],
+      [
+        10,
+        0
+      ],
+      [
+        10,
+        10
+      ],
+      [
+        0,
+        10
+      ]
+    ]
+  ],
+  "source": {
+    "group": "collapse",
+    "intent": "Contraction exactly degenerates or disappears",
+    "kind": "moonclip_constructed"
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "arc_tolerance": 1.0,
+  "case_id": "offset_arc_neck_t100_negative_round_nonzero",
+  "delta": -10.0,
+  "fill_rule": "NonZero",
+  "format_version": 2,
+  "join_type": "Round",
+  "miter_limit": 2.0,
+  "operation": "OffsetPolygons",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [
+      [
+        0,
+        0
+      ],
+      [
+        100,
+        0
+      ],
+      [
+        100,
+        40
+      ],
+      [
+        150,
+        40
+      ],
+      [
+        150,
+        0
+      ],
+      [
+        250,
+        0
+      ],
+      [
+        250,
+        100
+      ],
+      [
+        150,
+        100
+      ],
+      [
+        150,
+        60
+      ],
+      [
+        100,
+        60
+      ],
+      [
+        100,
+        100
+      ],
+      [
+        0,
+        100
+      ]
+    ]
+  ],
+  "source": {
+    "group": "arc_neck",
+    "intent": "Scale 5, signed radius 10, explicit tolerance; neck contraction splits the twenty-unit bridge",
+    "kind": "moonclip_constructed"
+  }
+}

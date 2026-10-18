@@ -1,0 +1,57 @@
+{
+  "arc_tolerance": 0.05,
+  "case_id": "offset_arc_hole_t005_positive_round_evenodd",
+  "delta": 10.0,
+  "fill_rule": "EvenOdd",
+  "format_version": 2,
+  "join_type": "Round",
+  "miter_limit": 2.0,
+  "operation": "OffsetPolygons",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [
+      [
+        -150,
+        -150
+      ],
+      [
+        150,
+        -150
+      ],
+      [
+        150,
+        150
+      ],
+      [
+        -150,
+        150
+      ]
+    ],
+    [
+      [
+        -50,
+        50
+      ],
+      [
+        50,
+        50
+      ],
+      [
+        50,
+        -50
+      ],
+      [
+        -50,
+        -50
+      ]
+    ]
+  ],
+  "source": {
+    "group": "arc_hole",
+    "intent": "Scale 5, signed radius 10, explicit tolerance; neck contraction splits the twenty-unit bridge",
+    "kind": "moonclip_constructed"
+  }
+}

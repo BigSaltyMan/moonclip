@@ -136,3 +136,18 @@ Miter 使用 `q=delta/(cosine+1)`，尖角为顶点加 `(previousNormal+currentN
 CallBudget 持有跨 ScanState 共用的 ScanStats 与固定 ScanLimits。规范化、生成（外层/路径/法线/生成顶点）、清理、快照的节点和工作量累计递增，阶段清理只释放状态，不退款。清理预检从剩余工作量扣除。原始输入路径/顶点只预检一次；内部清理绕过原始输入数量限制，仍验证坐标、数组结构及累计工作量。规范化/生成不能唯一追溯原始输入，内部 SourceId 带来源标记，错误位置不伪造原始索引。公开 Limits 两字段未改变；公开布尔/树独立调用仍各自拥有预算。
 
 abs(delta)<0.5 返回已经规范化且独立拥有数组的结果；参数、坐标、原始预算均不能绕过。35 项功能测试含精确累计额度/少一个单位、生成及清理分别耗尽、失败重试、四原始顶点生成八个 Bevel 顶点，以及 native/JS 同预期半整数和边界拒绝。没有新增运行库依赖。
+
+
+## Commit 10 Square、Round 与 ArcTolerance
+
+公开 Square 直接复用 offset_square；Miter 超限仍调用同一函数。凹角分类在样式分派之前，近共线 cosine>0.999 的 Miter 快速路径只供非 Round 样式，Round 不跳过圆弧。所有新点继续通过 offset_push / offset_coordinate，半整数远离零，生成坐标必须在清理前合法。
+
+规范化非空且 abs(delta)>=0.5 后才计算 Round 参数。令 r=abs(delta)：容差大于 1e-12 时 effective=min(r,tolerance)，否则 effective=r*0.002；steps360=min(π/acos(1-effective/r),r*π)，step=2π/steps360，steps_per_rad=steps360/(2π)。当 1-effective/r 因 Double 舍入成为 1 时，显式采用 r*π，等价固定源码 min(+Infinity,cap)，不制造无检查的 Infinity 或转整数。其余中间值都检查有限性。r*π 是算法采样上限，不是节点预算或误差保证。
+
+step_sin=sin(step)、step_cos=cos(step)，负 delta 将 step_sin 取反。每角 angle=atan2(sine,cosine)，steps=ceil(steps_per_rad*abs(angle))。先发出前法线偏移点，中间 i=1..steps-1 用旧向量同时旋转两个分量，最后直接发出当前法线偏移点。保持全局固定旋转步长，不将当前角平均分段；终点不依赖累计旋转。这也是整数网格上圆角样本不必对称的原因。
+
+offset_arc_steps 在 Double→Int 之前检查有限性、非负性、剩余节点/工作量及 Int 范围。实际输出点数为 steps<=1 时 2，否则 steps+1。整个角的采样预检在任何点分配和循环之前完成，只检查而不扣费；offset_push 实际逐点扣费，包括舍入后相同的样本。每角、路径、清理均共享 Commit 9 CallBudget，失败无部分结果，下一次调用重新开始。
+
+解析测试预先固定 r=100、tolerance=0.25、sagitta 绝对数值误差 1e-11、40 次旋转半径误差 1e-10；该例 steps360<r*π，采样上限不生效。解析误差在浮点圆弧上验证，整数半径检查允许固定 0.71 的二维舍入影响；这两项不放宽参考轮廓比较。272 条参考仍逐坐标、绕向、顶点数、重数严格比较。
+
+使用固定工具链自带 moonbitlang/core/math 的 sin/cos/acos/atan2：native、JS 同一接口，无新增 Mooncakes 依赖。core 的 MIT 来源与已有 core 依赖相同。原有整数谓词不使用浮点 epsilon；圆弧参数 1e-12 分支来自固定偏移算法，仅作用于采样。

@@ -60,8 +60,10 @@ def evaluate(manifest,results):
 
 def evaluate_offset(manifest, results):
     from compare import read_manifest
+    from offset_compare import validate_offset_selections
     _, records=read_manifest(ROOT,manifest,strict=True)
-    require(len(records)==116 and all(c['operation']=='OffsetPolygons' for _,c,_,_ in records),'offset','expected 116 offset cases')
+    validate_offset_selections(ROOT,records)
+    require(len(records)==272 and all(c['operation']=='OffsetPolygons' for _,c,_,_ in records),'offset','expected 272 offset cases')
     require(type(results) is list,'offset actual','expected results array')
     actual={}
     for result in results:
@@ -83,7 +85,7 @@ def evaluate_offset(manifest, results):
             except Invalid as error:detail.update(status='difference',message=str(error))
             else:detail['status']='passed'
         details.append(detail)
-    return {**summary(details),'required':116,'reference_cases':116,'capability':'public paths','cases':details}
+    return {**summary(details),'required':272,'reference_cases':272,'capability':'public paths','cases':details}
 
 
 def markdown(report):
@@ -102,7 +104,7 @@ def markdown(report):
     if 'offset' in report:
         r=report['offset']
         lines+=['','# Offset compatibility','',f"Offset public paths: {r['passed']}/{r['executed']}; required={r['required']}, differences={r['differences']}, execution_errors={r['execution_errors']}.",'',
-          'Boolean reference cases: 200. Offset reference cases: 116. Total independent reference inputs: 316. Offset has no public tree interface; hole/island composition is covered separately by functional tests.','',
+          'Boolean reference cases: 200. Offset reference cases: 272. Total independent reference inputs: 472. Offset has no public tree interface; hole/island composition is covered separately by functional tests.','',
           '| Target | Offset filtered paths |','| --- | --- |']
         for target in ('native','js'):
             e=report.get('offset_evidence',{}).get(target,{})
@@ -133,7 +135,7 @@ def main():
         print(f"Native conformance: cases={report['required']}, paths={report['paths']['passed']}/{report['paths']['executed']}, tree={report['tree']['passed']}/{report['tree']['executed']}, both={report['passed']}, differences={report['differences']}, execution_errors={report['execution_errors']}")
         offset=report.get('offset',{})
         if offset:
-            print(f"Native offset conformance: cases=116, paths={offset['passed']}/{offset['executed']}, differences={offset['differences']}, execution_errors={offset['execution_errors']}")
+            print(f"Native offset conformance: cases=272, paths={offset['passed']}/{offset['executed']}, differences={offset['differences']}, execution_errors={offset['execution_errors']}")
         return 2 if report['execution_errors'] or offset.get('execution_errors') else 1 if report['differences'] or offset.get('differences') else 0
     except (Invalid,OSError,ValueError,KeyError,TypeError) as error:
         print(f'Conformance error: {error}',file=sys.stderr);return 2

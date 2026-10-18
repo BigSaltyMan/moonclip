@@ -62,3 +62,12 @@ MoonBit 工具链继续固定为上述版本，运行库和公开接口不因参
 实际独立过滤 Offset native/JS 各 116/116；原 Boolean 152 公开平铺及 152 公开树、48 私有平铺及 48 私有树分别保留。原生严格报告 Boolean paths/tree 各 152/152、Offset paths 116/116，差异和执行错误均为 0，详见 compatibility.md。工具 124/124（保留 104），真实参考适配器 20/20（保留 10），这两类不计入库测试数。
 
 参考构建使用 GNU C++ 14.2.0、CMake 3.30.2、Ninja 1.12.1、C++17 Release、HI_PRECISION=0；固定同 SHA 的 engine.cpp 和新增 offset.cpp。116 新偏移预期实际 --write 并 --check，200 旧 Boolean 全部 --check 字节一致。脚本检查格式、接口、两目标测试/过滤证据、示例、两份离线目录、生成器及分能力报告。Linux 普通 CI 与独立参考 CI 均需按最终提交的 Actions 运行记录另核对；本节是 Windows 本地证据，不代替远端结果。
+
+
+## Commit 10 本地结果（2026-10-18）
+
+工具链仍为 moon / moonrun 0.1.20260915 (2e1a46d 2026-09-15)、moonc v0.10.13+cbb11c36f (2026-09-15)，Node.js v24.18.0、Python 3.11.9。新增导入固定 core/math，无新增 Mooncakes 包。native、JS 各1006/1006（旧810＋156新对照＋40功能），严格警告检查、native构建、四连接示例成功，输出 `MoonClip geometry, Boolean, PolyTree and four offset joins OK`。
+
+偏移实际独立过滤两端各272/272；原Boolean公开平铺与树各152、私有平铺与树各48保留。原生严格报告 Boolean 两能力各152/152，Offset272/272，差异和执行错误均为0。离线工具134/134（保留124，新增10），真实适配器29/29（保留20，新增9），不计入MoonBit测试数。
+
+参考构建继续 GNU C++14.2.0、CMake3.30.2、Ninja1.12.1、C++17 Release、HI_PRECISION=0，同固定SHA、依赖及编译输入。新增156条参考已锁定、独立生成，并对Boolean200＋Offset272全部逐字节重建核对；原316对数据、旧选择、规划书和构建锁保持字节不变。统一检查脚本验证格式、接口、测试、专属过滤日志、两选择联合、示例、生成器、严格报告和Git差异。最终Linux普通检查与独立参考CI按同提交的Actions日志分别核对，本节仅记录Windows本地结果。

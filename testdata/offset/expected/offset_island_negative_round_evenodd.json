@@ -1,0 +1,116 @@
+{
+  "adapter_protocol_version": 2,
+  "case_id": "offset_island_negative_round_evenodd",
+  "format_version": 2,
+  "input_sha256": "29fe4427e576fbb7b6d74d8dc4b46bcfd9463478435e35b96564c936ef6353a2",
+  "metrics": {
+    "path_count": 3,
+    "paths": [
+      {
+        "area2": "10368",
+        "bounds": [
+          -36,
+          -36,
+          36,
+          36
+        ],
+        "vertices": 4
+      },
+      {
+        "area2": "-6696",
+        "bounds": [
+          -29,
+          -29,
+          29,
+          29
+        ],
+        "vertices": 8
+      },
+      {
+        "area2": "288",
+        "bounds": [
+          -6,
+          -6,
+          6,
+          6
+        ],
+        "vertices": 4
+      }
+    ],
+    "vertex_count": 16
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        36,
+        -36
+      ],
+      [
+        36,
+        36
+      ],
+      [
+        -36,
+        36
+      ],
+      [
+        -36,
+        -36
+      ]
+    ],
+    [
+      [
+        -29,
+        -25
+      ],
+      [
+        -29,
+        27
+      ],
+      [
+        -25,
+        29
+      ],
+      [
+        27,
+        29
+      ],
+      [
+        29,
+        25
+      ],
+      [
+        29,
+        -27
+      ],
+      [
+        25,
+        -29
+      ],
+      [
+        -27,
+        -29
+      ]
+    ],
+    [
+      [
+        6,
+        -6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        -6,
+        6
+      ],
+      [
+        -6,
+        -6
+      ]
+    ]
+  ],
+  "status": "success"
+}

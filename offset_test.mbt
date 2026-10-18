@@ -391,3 +391,423 @@ test "offset failure leaves original untouched and next call fresh" {
   assert_eq(p, saved)
   of_result([p], 2.0, [bb_rect(-2L, -2L, 14L, 14L)])
 }
+
+///|
+fn jo_square() -> @moonclip.Paths64 {
+  [
+    [
+      @moonclip.Point64::new(-2L, -1L),
+      @moonclip.Point64::new(-1L, -2L),
+      @moonclip.Point64::new(11L, -2L),
+      @moonclip.Point64::new(12L, -1L),
+      @moonclip.Point64::new(12L, 11L),
+      @moonclip.Point64::new(11L, 12L),
+      @moonclip.Point64::new(-1L, 12L),
+      @moonclip.Point64::new(-2L, 11L),
+    ],
+  ]
+}
+
+///|
+fn jo_round_options(tolerance? : Double = 0.0) -> @moonclip.OffsetOptions {
+  @moonclip.OffsetOptions::new(join=Round, arc_tolerance=tolerance)
+}
+
+///|
+fn jo_full_round() -> @moonclip.Paths64 {
+  [
+    [
+      @moonclip.Point64::new(-10L, 0L),
+      @moonclip.Point64::new(-6L, -8L),
+      @moonclip.Point64::new(0L, -10L),
+      @moonclip.Point64::new(100L, -10L),
+      @moonclip.Point64::new(108L, -6L),
+      @moonclip.Point64::new(110L, 0L),
+      @moonclip.Point64::new(110L, 100L),
+      @moonclip.Point64::new(106L, 108L),
+      @moonclip.Point64::new(100L, 110L),
+      @moonclip.Point64::new(0L, 110L),
+      @moonclip.Point64::new(-8L, 106L),
+      @moonclip.Point64::new(-10L, 100L),
+    ],
+  ]
+}
+
+///|
+test "offset joins square 1 full Square differs from Bevel" {
+  let paths = [bb_rect(0L, 0L, 10L, 10L)]
+  of_result(
+    paths,
+    2.0,
+    jo_square(),
+    options=@moonclip.OffsetOptions::new(join=Square),
+  )
+  assert_true(
+    @moonclip.offset_polygons(
+      paths,
+      2.0,
+      options=@moonclip.OffsetOptions::new(join=Bevel),
+    ).map(bb_canonical) !=
+    Ok(bb_canonical(jo_square())),
+  )
+}
+
+///|
+test "offset joins square 3 default Miter behavior unchanged" {
+  of_result(
+    [bb_rect(0L, 0L, 10L, 10L)],
+    2.0,
+    [bb_rect(-2L, -2L, 14L, 14L)],
+    options=@moonclip.OffsetOptions::new(),
+  )
+}
+
+///|
+test "offset joins square 4 legal miter limits cannot affect Square" {
+  for limit in [2.0, 20.0, 1.0e300] {
+    of_result(
+      [bb_rect(0L, 0L, 10L, 10L)],
+      2.0,
+      jo_square(),
+      options=@moonclip.OffsetOptions::new(join=Square, miter_limit=limit),
+    )
+  }
+}
+
+///|
+test "offset joins square 5 irrelevant legal arc parameters preserve old joins" {
+  for join in [@moonclip.Miter, @moonclip.Bevel, @moonclip.Square] {
+    let expected = @moonclip.offset_polygons(
+      [of_acute()],
+      3.0,
+      options=@moonclip.OffsetOptions::new(join~),
+    ).map(bb_canonical)
+    for tolerance in [0.0, 1.0e-12, 0.25, 1.0e300] {
+      assert_eq(
+        @moonclip.offset_polygons(
+          [of_acute()],
+          3.0,
+          options=@moonclip.OffsetOptions::new(join~, arc_tolerance=tolerance),
+        ).map(bb_canonical),
+        expected,
+      )
+    }
+  }
+}
+
+///|
+test "offset joins square 6 orthogonal Square and Miter are different complete rings" {
+  let input = [bb_rect(0L, 0L, 10L, 10L)]
+  let square = @moonclip.offset_polygons(
+    input,
+    2.0,
+    options=@moonclip.OffsetOptions::new(join=Square),
+  ).map(bb_canonical)
+  assert_eq(square, Ok(bb_canonical(jo_square())))
+  assert_true(square != @moonclip.offset_polygons(input, 2.0).map(bb_canonical))
+}
+
+///|
+test "offset joins round 1 fixed rotation full rectangle" {
+  of_result(
+    [bb_rect(0L, 0L, 100L, 100L)],
+    10.0,
+    jo_full_round(),
+    options=jo_round_options(tolerance=1.0),
+  )
+}
+
+///|
+test "offset joins round 2 negative outer contraction keeps concave cleanup" {
+  of_result(
+    [bb_rect(0L, 0L, 100L, 100L)],
+    -10.0,
+    [bb_rect(10L, 10L, 80L, 80L)],
+    options=jo_round_options(tolerance=0.25),
+  )
+}
+
+///|
+test "offset joins round 3 holes change oppositely and preserve tree identity" {
+  let input = [
+    bb_rect(0L, 0L, 100L, 100L),
+    bb_reverse(bb_rect(30L, 30L, 40L, 40L)),
+  ]
+  guard @moonclip.offset_polygons(
+      input,
+      10.0,
+      options=jo_round_options(tolerance=1.0),
+    )
+    is Ok(expanded) else {
+    fail("Expected Round region")
+  }
+  let expected = jo_full_round()
+  expected.push(bb_reverse(bb_rect(40L, 40L, 20L, 20L)))
+  assert_eq(bb_canonical(expanded), bb_canonical(expected))
+  guard @moonclip.offset_polygons(
+      input,
+      -10.0,
+      options=jo_round_options(tolerance=1.0),
+    )
+    is Ok(shrunk) else {
+    fail("Expected Round region")
+  }
+  guard @moonclip.boolean_tree(shrunk, [], Union, fill_rule=NonZero) is Ok(tree) else {
+    fail("Expected independent tree composition")
+  }
+  assert_eq(tree.roots().length(), 1)
+  let hole = tree.roots()[0].children()[0]
+  assert_true(hole.is_hole())
+  assert_eq(
+    @moonclip.point_in_polygon(@moonclip.Point64::new(25L, 50L), hole.contour()),
+    Ok(Inside),
+  )
+}
+
+///|
+test "offset joins round 4 selected explicit tolerances change complete sampling" {
+  let counts = [(0.05, 24), (0.25, 16), (1.0, 12)]
+  for (tolerance, count) in counts {
+    guard @moonclip.offset_polygons(
+        [bb_rect(0L, 0L, 50L, 50L)],
+        10.0,
+        options=jo_round_options(tolerance~),
+      )
+      is Ok(result) else {
+      fail("Expected Round")
+    }
+    assert_eq(result.length(), 1)
+    assert_eq(result[0].length(), count)
+  }
+}
+
+///|
+test "offset joins round 10 half grid threshold uses Round generation" {
+  let input = [bb_rect(0L, 0L, 10L, 10L)]
+  of_result(
+    input,
+    0.5,
+    [
+      [
+        @moonclip.Point64::new(-1L, 0L),
+        @moonclip.Point64::new(0L, -1L),
+        @moonclip.Point64::new(10L, -1L),
+        @moonclip.Point64::new(11L, 0L),
+        @moonclip.Point64::new(11L, 10L),
+        @moonclip.Point64::new(10L, 11L),
+        @moonclip.Point64::new(0L, 11L),
+        @moonclip.Point64::new(-1L, 10L),
+      ],
+    ],
+    options=jo_round_options(),
+  )
+  of_result(input, -0.5, [bb_rect(1L, 1L, 9L, 9L)], options=jo_round_options())
+}
+
+///|
+test "offset joins parameters 1 optional arc defaults preserve existing construction" {
+  let options : @moonclip.OffsetOptions = Default::default()
+  assert_eq(
+    options,
+    @moonclip.OffsetOptions::new(join=Miter, miter_limit=2.0, arc_tolerance=0.0),
+  )
+}
+
+///|
+test "offset joins parameters 2 negative tolerance is rejected for every join" {
+  for
+    join in [
+      @moonclip.Miter,
+      @moonclip.Bevel,
+      @moonclip.Square,
+      @moonclip.Round,
+    ] {
+    assert_true(
+      @moonclip.offset_polygons(
+        [bb_rect(0L, 0L, 10L, 10L)],
+        2.0,
+        options=@moonclip.OffsetOptions::new(join~, arc_tolerance=-0.001),
+      )
+      is Err(InvalidInput({ stage: OffsetParameters, .. }, _)),
+    )
+  }
+}
+
+///|
+test "offset joins parameters 3 NaN tolerance is rejected" {
+  assert_true(
+    @moonclip.offset_polygons(
+      [],
+      1.0,
+      options=jo_round_options(tolerance=@double.not_a_number),
+    )
+    is Err(InvalidInput({ stage: OffsetParameters, .. }, _)),
+  )
+}
+
+///|
+test "offset joins parameters 4 infinite tolerances are rejected" {
+  for tolerance in [@double.infinity, @double.neg_infinity] {
+    assert_true(
+      @moonclip.offset_polygons([], 2.0, options=jo_round_options(tolerance~))
+      is Err(InvalidInput({ stage: OffsetParameters, .. }, _)),
+    )
+  }
+}
+
+///|
+test "offset joins parameters 5 empty input still checks both options" {
+  assert_true(
+    @moonclip.offset_polygons(
+      [],
+      1.0,
+      options=@moonclip.OffsetOptions::new(join=Square, arc_tolerance=-1.0),
+    )
+    is Err(InvalidInput(_, _)),
+  )
+  assert_true(
+    @moonclip.offset_polygons(
+      [],
+      1.0,
+      options=@moonclip.OffsetOptions::new(join=Round, miter_limit=1.0),
+    )
+    is Err(InvalidInput(_, _)),
+  )
+}
+
+///|
+test "offset joins parameters 6 zero and tiny distance do not bypass validation" {
+  for delta in [0.0, -0.0, 0.49, -0.49] {
+    assert_true(
+      @moonclip.offset_polygons(
+        [bb_rect(0L, 0L, 10L, 10L)],
+        delta,
+        options=jo_round_options(tolerance=-1.0),
+      )
+      is Err(InvalidInput({ stage: OffsetParameters, .. }, _)),
+    )
+  }
+}
+
+///|
+test "offset joins parameters 7 tiny positive tolerance uses automatic branch" {
+  let input = [bb_rect(0L, 0L, 100L, 100L)]
+  let automatic = @moonclip.offset_polygons(
+    input,
+    10.0,
+    options=jo_round_options(),
+  ).map(bb_canonical)
+  for tolerance in [0.0, -0.0, 1.0e-20, 1.0e-12] {
+    assert_eq(
+      @moonclip.offset_polygons(
+        input,
+        10.0,
+        options=jo_round_options(tolerance~),
+      ).map(bb_canonical),
+      automatic,
+    )
+  }
+}
+
+///|
+test "offset joins parameters 8 tolerance larger than radius is capped" {
+  let input = [bb_rect(0L, 0L, 100L, 100L)]
+  let capped = @moonclip.offset_polygons(
+    input,
+    10.0,
+    options=jo_round_options(tolerance=10.0),
+  ).map(bb_canonical)
+  for tolerance in [10.0, 100.0, 1.0e300] {
+    assert_eq(
+      @moonclip.offset_polygons(
+        input,
+        10.0,
+        options=jo_round_options(tolerance~),
+      ).map(bb_canonical),
+      capped,
+    )
+  }
+}
+
+///|
+test "offset joins isolation 1 both new joins preserve input and winding" {
+  let p = bb_rect(0L, 0L, 100L, 100L)
+  let input = [p, bb_reverse(bb_rect(30L, 30L, 40L, 40L))]
+  let saved = @moonclip.copy_paths(input)
+  for join in [@moonclip.Square, @moonclip.Round] {
+    assert_true(
+      @moonclip.offset_polygons(
+        input,
+        3.0,
+        options=@moonclip.OffsetOptions::new(join~),
+      )
+      is Ok(_),
+    )
+    assert_eq(input, saved)
+  }
+}
+
+///|
+test "offset joins isolation 2 result mutation cannot reach source" {
+  let input = [bb_rect(0L, 0L, 100L, 100L)]
+  let saved = @moonclip.copy_paths(input)
+  guard @moonclip.offset_polygons(input, 10.0, options=jo_round_options())
+    is Ok(result) else {
+    fail("Expected Round")
+  }
+  result[0][0] = @moonclip.Point64::new(999L, 999L)
+  result.clear()
+  assert_eq(input, saved)
+}
+
+///|
+test "offset joins isolation 3 repeated calls own their arrays" {
+  let input = [bb_rect(0L, 0L, 100L, 100L)]
+  guard @moonclip.offset_polygons(input, 10.0, options=jo_round_options())
+    is Ok(a) else {
+    fail("Expected Round")
+  }
+  guard @moonclip.offset_polygons(input, 10.0, options=jo_round_options())
+    is Ok(b) else {
+    fail("Expected Round")
+  }
+  let saved = @moonclip.copy_paths(b)
+  a[0].clear()
+  input[0][0] = @moonclip.Point64::new(1L, 1L)
+  assert_eq(b, saved)
+}
+
+///|
+test "offset joins isolation 4 failed generation leaves next call fresh" {
+  let p = bb_rect(999999990L, 0L, 10L, 10L)
+  let saved = p.copy()
+  assert_true(
+    @moonclip.offset_polygons([p], 10.0, options=jo_round_options()) is Err(_),
+  )
+  assert_eq(p, saved)
+  of_result(
+    [bb_rect(0L, 0L, 100L, 100L)],
+    10.0,
+    jo_full_round(),
+    options=jo_round_options(tolerance=1.0),
+  )
+}
+
+///|
+test "offset joins isolation 5 tiny distances still normalize shared raw inputs" {
+  let p = bb_rect(0L, 0L, 10L, 10L)
+  for delta in [0.0, -0.0, 0.49, -0.49] {
+    for join in [@moonclip.Square, @moonclip.Round] {
+      assert_eq(
+        @moonclip.offset_polygons(
+          [p, p],
+          delta,
+          fill_rule=EvenOdd,
+          options=@moonclip.OffsetOptions::new(join~),
+        ),
+        Ok([]),
+      )
+      of_result([p, p], delta, [p], options=@moonclip.OffsetOptions::new(join~))
+    }
+  }
+}

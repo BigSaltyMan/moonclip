@@ -7,7 +7,7 @@ from selection import ROOT
 
 
 def call(case):
-    return '@moonclip.offset_polygons('+paths(case['paths'])+','+repr(float(case['delta']))+',fill_rule=@moonclip.'+case['fill_rule']+',options=@moonclip.OffsetOptions::new(join=@moonclip.'+case['join_type']+',miter_limit='+repr(float(case['miter_limit']))+'))'
+    return '@moonclip.offset_polygons('+paths(case['paths'])+','+repr(float(case['delta']))+',fill_rule=@moonclip.'+case['fill_rule']+',options=@moonclip.OffsetOptions::new(join=@moonclip.'+case['join_type']+',miter_limit='+repr(float(case['miter_limit']))+',arc_tolerance='+repr(float(case.get('arc_tolerance',0.0)))+'))'
 
 
 def generated():
@@ -27,4 +27,4 @@ if __name__=='__main__':
         if args.check:
             if target.read_bytes()!=expected:raise SystemExit('Generated offset data is stale: '+name)
         else:target.write_bytes(expected)
-    print('Offset selection: 116 public paths; '+('check passed' if args.check else 'generated'))
+    print('Offset selection: 272 public paths (116 retained +156 joins); '+('check passed' if args.check else 'generated'))

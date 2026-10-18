@@ -210,3 +210,12 @@ PolyTree64/PolyNode64 对外字段均私有，内部 TreeData 扁平存轮廓、
 所有区域共同生成并清理，孔洞不会当作独立实心区域偏移。方向统一后无论 delta 正负均用 Positive；充分收缩反转片段因绕数被剔除。非填充退化输入不会走单点/两点的开放描边分支。偏移只公开平铺；功能测试另将结果交给现有 boolean_tree 验证外/孔/岛组合，不能算作 offset_tree。
 
 参考 C++ 适配器新增操作专用 v2，实际固定引擎 Union 后由 ClipperOffset EndType::Polygon 生成预期；CMake 同时编译同 SHA 的 engine.cpp 和 offset.cpp，HI_PRECISION=0。普通 CI 离线读取 116 份预期；独立参考 CI 实际构建并逐字节重建 200 Boolean +116 Offset。命令只编译原始输入和哈希，预期由 Python 严格报告读取。
+
+
+## Commit 10 圆弧生成与预算
+
+OffsetOptions 增加可选 arc_tolerance=0；JoinType 增加 Square / Round，无公开 EndType。既有规范化→生成→Positive 清理→提取流水线不变。只有真实偏移分支且非空的 Round 计算一次组级 OffsetArc，路径和每角复用；内部角辅助的独立调用也可自行计算参数。Square 复用 Miter 回退辅助，非 Round 的近共线快速分支保留。
+
+每个圆弧在分配点之前以精确的待输出点数检查累计剩余额度，检查本身不重复扣费。角工作量、法线、每个实际样本（包括网格重合点）和清理继续扣同一 CallBudget；不按路径或连接重新领取预算。数量超限不降精度，数值非法不强制转换。OffsetGenerate 错误不伪造原始路径索引，清理错误保留既有定位阶段。功能测试覆盖采样 0/1/普通步数、次路径耗尽、生成可过但清理不足、失败后重试。
+
+普通检查实际运行 1006 项/目标及独立偏移过滤 272 项/目标，并验证旧 116 与新 156 两批选择的互斥、完整性。独立参考继续固定 C++ 同提交与 HI_PRECISION=0，真实接入 Square / Round / ArcTolerance，重建 Boolean 200 与 Offset 272 共472条。偏移仍只有公开平铺入口；树组合证据不宣称 offset_tree 或开放描边。
