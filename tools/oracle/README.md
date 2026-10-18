@@ -71,3 +71,20 @@ python scripts/check_reference.py --manifest testdata/manifest.json --strict
 比较器只消除循环起点、平铺排列和同一父节点下的子节点排列，保留绕向、所有顶点、重复数量、父子关系和层级。重复最小坐标采用完整循环序列比较；采用线性时间最小旋转算法，不反向、不去共线点、不加容差、不用面积或 MoonClip Xor 代替比较。
 
 本笔仅支持闭合路径布尔参考，不含开放路径布尔、偏移、描边、小数、简化或 Minkowski Sum。参考案例全部为 `reference_only`，不能计作 MoonClip 对应操作已通过。覆盖和实际执行记录见 [reference-cases.md](../../docs/reference-cases.md)。
+
+
+## Offset protocol v2
+
+Boolean requests/results remain protocol 1. `operation=OffsetPolygons` requires format_version=2, paths, finite numeric delta, join_type=Miter/Bevel, finite miter_limit>=2, fill_rule=EvenOdd/NonZero and both fixed output options false. Numeric booleans/strings are rejected, as are unknown joins and private fill rules. Results are v2 paths only, with no inferred tree. Generation attaches original input SHA256 and exact path metrics.
+
+The adapter independently calls fixed-engine Union on all original inputs, then ClipperOffset(miter_limit,0,false,false), EndType::Polygon. It never takes normalized geometry or expectations from MoonClip. CMake adds the locked clipper.offset.cpp, keeps engine.cpp and CLIPPER2_HI_PRECISION=0; dependency versions/checksums/licenses are unchanged. Lock records offset_protocol_version=2 separately. Source verification still audits the complete fixed archive.
+
+```bash
+bash scripts/build_oracle.sh
+python tools/oracle/test_adapter.py
+bash scripts/generate_reference.sh --manifest testdata/offset-manifest.json --write
+bash scripts/generate_reference.sh --manifest testdata/offset-manifest.json --check
+bash scripts/generate_reference.sh --manifest testdata/manifest.json --check
+```
+
+116 offset inputs and 200 Boolean inputs are separate catalogs. Offset publication stages the whole batch and replaces only testdata/offset/expected after all requests succeed. It never writes Boolean expectations. Actual adapter tests: 20 (10 retained +10 offset). Ordinary CI uses only committed data; rebuild-reference executes both full catalogs with the real C++ binary.

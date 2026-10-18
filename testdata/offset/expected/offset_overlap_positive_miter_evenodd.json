@@ -1,0 +1,72 @@
+{
+  "adapter_protocol_version": 2,
+  "case_id": "offset_overlap_positive_miter_evenodd",
+  "format_version": 2,
+  "input_sha256": "14c6262890b7ba9e6ecc3f87be675c9cf74d987b10014138a20d18ae2afdb33e",
+  "metrics": {
+    "path_count": 2,
+    "paths": [
+      {
+        "area2": "832",
+        "bounds": [
+          -3,
+          -3,
+          13,
+          23
+        ],
+        "vertices": 4
+      },
+      {
+        "area2": "832",
+        "bounds": [
+          17,
+          -3,
+          33,
+          23
+        ],
+        "vertices": 4
+      }
+    ],
+    "vertex_count": 8
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        13,
+        23
+      ],
+      [
+        -3,
+        23
+      ],
+      [
+        -3,
+        -3
+      ],
+      [
+        13,
+        -3
+      ]
+    ],
+    [
+      [
+        33,
+        23
+      ],
+      [
+        17,
+        23
+      ],
+      [
+        17,
+        -3
+      ],
+      [
+        33,
+        -3
+      ]
+    ]
+  ],
+  "status": "success"
+}

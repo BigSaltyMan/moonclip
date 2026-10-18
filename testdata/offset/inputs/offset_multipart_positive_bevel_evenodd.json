@@ -1,0 +1,56 @@
+{
+  "case_id": "offset_multipart_positive_bevel_evenodd",
+  "delta": 3.0,
+  "fill_rule": "EvenOdd",
+  "format_version": 2,
+  "join_type": "Bevel",
+  "miter_limit": 2.0,
+  "operation": "OffsetPolygons",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [
+      [
+        0,
+        0
+      ],
+      [
+        10,
+        0
+      ],
+      [
+        10,
+        10
+      ],
+      [
+        0,
+        10
+      ]
+    ],
+    [
+      [
+        14,
+        0
+      ],
+      [
+        24,
+        0
+      ],
+      [
+        24,
+        10
+      ],
+      [
+        14,
+        10
+      ]
+    ]
+  ],
+  "source": {
+    "group": "multipart",
+    "intent": "Expansion merges a four-unit gap",
+    "kind": "moonclip_constructed"
+  }
+}

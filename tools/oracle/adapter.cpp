@@ -1,6 +1,8 @@
 // Copyright (c) 2026 BigSaltyMan. BSL-1.0; see LICENSE.
 // Adapter only: all clipping is performed by the locked C++ Clipper2 engine.
 #include "clipper2/clipper.engine.h"
+#include "clipper2/clipper.offset.h"
+#include <cmath>
 #include "json.hpp"
 #include <iostream>
 #include <iterator>
@@ -73,7 +75,50 @@ void configure(Clipper64& engine, const Paths64& subject, const Paths64& clip, c
   engine.AddSubject(subject);
   engine.AddClip(clip);
 }
+json execute(const json& request);
+double finite_number(const json& value, const std::string& where) {
+  require(value.is_number(), where + ": expected finite numeric token");
+  double number = value.get<double>();
+  require(std::isfinite(number), where + ": expected finite number");
+  return number;
+}
+json execute_offset(const json& request) {
+  keys(request, {"format_version", "case_id", "source", "operation", "fill_rule", "options", "paths", "delta", "join_type", "miter_limit"}, "offset request");
+  integer(request["format_version"], "offset format_version", 2, 2);
+  double delta = finite_number(request["delta"], "delta");
+  double miter = finite_number(request["miter_limit"], "miter_limit");
+  require(miter >= 2, "miter_limit: must be at least 2");
+  require(request["join_type"].is_string(), "join_type: expected string");
+  auto join = request["join_type"].get<std::string>();
+  require(join == "Miter" || join == "Bevel", "join_type: unsupported join");
+  require(request["fill_rule"] == "EvenOdd" || request["fill_rule"] == "NonZero", "fill_rule: unsupported offset rule");
+  // Reuse strict v1 provenance/options validation and independent fixed-engine Union.
+  json normalize = {{"format_version", 1}, {"case_id", request["case_id"]},
+    {"source", request["source"]}, {"operation", "Union"}, {"fill_rule", request["fill_rule"]},
+    {"options", request["options"]}, {"subject", request["paths"]}, {"clip", json::array()}};
+  auto region = execute(normalize);
+  size_t count = 0, vertices = 0;
+  auto normalized = paths(region["paths"], "normalized", count, vertices);
+  Paths64 result;
+  if (!normalized.empty()) {
+    require(std::abs(delta) <= 2000000000.0, "delta: unsafe offset distance");
+    require(join == "Bevel" || std::abs(delta) < 0.5 || std::isfinite(miter * miter), "miter_limit: numeric overflow");
+    ClipperOffset offset(miter, 0.0, false, false);
+    offset.AddPaths(normalized, join == "Miter" ? JoinType::Miter : JoinType::Bevel, EndType::Polygon);
+    offset.Execute(delta, result);
+    require(offset.ErrorCode() == 0, "Clipper2 offset execution failed");
+  }
+  json output = json::array();
+  for (const auto& path : result) {
+    for (const auto& p : path)
+      require(p.x >= -1000000000 && p.x <= 1000000000 && p.y >= -1000000000 && p.y <= 1000000000, "generated coordinate outside supported range");
+    output.push_back(output_path(path));
+  }
+  return {{"format_version", 2}, {"adapter_protocol_version", 2}, {"case_id", request["case_id"]},
+          {"oracle_commit", kCommit}, {"status", "success"}, {"paths", output}};
+}
 json execute(const json& request) {
+  if (request.is_object() && request.value("operation", json()) == "OffsetPolygons") return execute_offset(request);
   keys(request, {"format_version", "case_id", "source", "operation", "fill_rule", "options", "subject", "clip"}, "request");
   require(integer(request["format_version"], "format_version", 1, 1) == 1, "unknown protocol");
   require(request["case_id"].is_string(), "case_id: expected string");

@@ -1,0 +1,64 @@
+{
+  "adapter_protocol_version": 2,
+  "case_id": "offset_self_crossing_negative_miter_nonzero",
+  "format_version": 2,
+  "input_sha256": "5cf1dd1ae0541ac4b88ce41e40a0d09b34295c7fb9c7e28816e5acf609784037",
+  "metrics": {
+    "path_count": 2,
+    "paths": [
+      {
+        "area2": "338",
+        "bounds": [
+          -13,
+          4,
+          13,
+          17
+        ],
+        "vertices": 3
+      },
+      {
+        "area2": "338",
+        "bounds": [
+          -13,
+          -17,
+          13,
+          -4
+        ],
+        "vertices": 3
+      }
+    ],
+    "vertex_count": 6
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        13,
+        17
+      ],
+      [
+        -13,
+        17
+      ],
+      [
+        0,
+        4
+      ]
+    ],
+    [
+      [
+        13,
+        -17
+      ],
+      [
+        0,
+        -4
+      ],
+      [
+        -13,
+        -17
+      ]
+    ]
+  ],
+  "status": "success"
+}

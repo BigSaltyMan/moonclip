@@ -7,6 +7,7 @@
   "commit": "21ebba05db8894f0c7217ad35ea518080f324946",
   "compile_inputs": [
     "CPP/Clipper2Lib/src/clipper.engine.cpp",
+    "CPP/Clipper2Lib/src/clipper.offset.cpp",
     "CPP/Clipper2Lib/include/clipper2/*.h"
   ],
   "dependencies": [
@@ -21,6 +22,7 @@
     }
   ],
   "license": "BSL-1.0",
+  "offset_protocol_version": 2,
   "repository": "https://github.com/AngusJohnson/Clipper2",
   "tag": "Clipper2_2.0.1"
 }

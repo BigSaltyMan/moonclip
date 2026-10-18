@@ -25,6 +25,9 @@ pub(all) enum Stage {
   OutputTopology
   BooleanOp
   PolyTree
+  OffsetParameters
+  OffsetGenerate
+  OffsetCleanup
 } derive(Eq, Debug)
 
 ///|

@@ -95,6 +95,8 @@ fn scan_check_inputs(
   subject : Paths64,
   clip : Paths64,
   limits : ScanLimits,
+  spent_work? : Int = 0,
+  internal_input? : Bool = false,
 ) -> Result[Int, ClipError] {
   if limits.max_nodes < 0 || limits.max_work < 0 {
     return Err(
@@ -104,10 +106,12 @@ fn scan_check_inputs(
       ),
     )
   }
-  if check_limits(limits.input, EnginePrepare, subject.length()) is Some(error) {
+  if !internal_input &&
+    check_limits(limits.input, EnginePrepare, subject.length()) is Some(error) {
     return Err(error)
   }
-  if clip.length() > limits.input.max_input_paths - subject.length() {
+  if !internal_input &&
+    clip.length() > limits.input.max_input_paths - subject.length() {
     return Err(
       ResourceLimitExceeded(
         location(EnginePrepare, Some(limits.input.max_input_paths), None),
@@ -116,15 +120,30 @@ fn scan_check_inputs(
       ),
     )
   }
+  let stage = if internal_input { OffsetCleanup } else { EnginePrepare }
+  if clip.length() > 2147483647 - subject.length() {
+    return Err(
+      ResourceLimitExceeded(
+        location(stage, None, None),
+        InternalNodes,
+        limits.max_nodes,
+      ),
+    )
+  }
   let total = subject.length() + clip.length()
-  let mut vertices_left = limits.input.max_input_vertices
-  let mut work_left = limits.max_work
+  let mut vertices_left = if internal_input {
+    2147483647
+  } else {
+    limits.input.max_input_vertices
+  }
+  let initial_work = limits.max_work - spent_work
+  let mut work_left = initial_work
   // Preflight the count and coordinate passes without overflowing count sums.
   for _pass = 0; _pass < 2; _pass = _pass + 1 {
     if total > work_left {
       return Err(
         ResourceLimitExceeded(
-          location(EnginePrepare, None, None),
+          location(stage, None, None),
           ScanWork,
           limits.max_work,
         ),
@@ -141,9 +160,21 @@ fn scan_check_inputs(
     if path.length() > vertices_left {
       return Err(
         ResourceLimitExceeded(
-          location(EnginePrepare, Some(i), Some(vertices_left)),
-          InputVertices,
-          limits.input.max_input_vertices,
+          if internal_input {
+            location(stage, None, None)
+          } else {
+            location(stage, Some(i), Some(vertices_left))
+          },
+          if internal_input {
+            InternalNodes
+          } else {
+            InputVertices
+          },
+          if internal_input {
+            limits.max_nodes
+          } else {
+            limits.input.max_input_vertices
+          },
         ),
       )
     }
@@ -151,7 +182,19 @@ fn scan_check_inputs(
     if path.length() > work_left {
       return Err(
         ResourceLimitExceeded(
-          location(EnginePrepare, Some(i), Some(work_left)),
+          location(
+            stage,
+            if internal_input {
+              None
+            } else {
+              Some(i)
+            },
+            if internal_input {
+              None
+            } else {
+              Some(work_left)
+            },
+          ),
           ScanWork,
           limits.max_work,
         ),
@@ -166,18 +209,37 @@ fn scan_check_inputs(
       clip[i - subject.length()]
     }
     for j = 0; j < path.length(); j = j + 1 {
-      if check_point(path[j], location(EnginePrepare, Some(i), Some(j)))
+      if check_point(
+          path[j],
+          location(
+            stage,
+            if internal_input {
+              None
+            } else {
+              Some(i)
+            },
+            if internal_input {
+              None
+            } else {
+              Some(j)
+            },
+          ),
+        )
         is Some(error) {
         return Err(error)
       }
     }
   }
-  Ok(limits.max_work - work_left)
+  Ok(initial_work - work_left)
 }
 
 ///|
 fn source_location(source : SourceId, stage : Stage) -> ErrorLocation {
-  location(stage, Some(source.global_path), Some(source.vertex))
+  if source.internal_input {
+    location(stage, None, None)
+  } else {
+    location(stage, Some(source.global_path), Some(source.vertex))
+  }
 }
 
 ///|
@@ -188,7 +250,15 @@ fn prepare_path(
   path_index : Int,
   global_index : Int,
 ) -> Unit raise ScanAbort {
-  let loc = location(EnginePrepare, Some(global_index), None)
+  let loc = location(
+    EnginePrepare,
+    if state.internal_input {
+      None
+    } else {
+      Some(global_index)
+    },
+    None,
+  )
   scan_spend(state, 1, 1, loc)
   // Count exactly before allocating the normalized snapshot or vertex records.
   let mut count = 0
@@ -214,6 +284,7 @@ fn prepare_path(
       original += 1
     }
     let source : SourceId = {
+      internal_input: state.internal_input,
       role,
       path: path_index,
       global_path: global_index,
@@ -392,12 +463,26 @@ fn prepare_scan(
   clip : Paths64,
   limits? : ScanLimits = Default::default(),
   source_extrema? : Bool = false,
+  budget? : CallBudget,
+  internal_input? : Bool = false,
 ) -> Result[ScanState, ClipError] {
-  let preflight_work = match scan_check_inputs(subject, clip, limits) {
+  let budget = match budget {
+    Some(value) => value
+    None => new_call_budget(limits)
+  }
+  let limits = budget.limits
+  let preflight_work = match
+    scan_check_inputs(
+      subject,
+      clip,
+      limits,
+      spent_work=budget.stats.work,
+      internal_input~,
+    ) {
     Err(error) => return Err(error)
     Ok(work) => work
   }
-  let state = new_scan_state(limits)
+  let state = new_scan_state(limits, budget~, internal_input~)
   try {
     scan_spend(state, 0, preflight_work, location(EnginePrepare, None, None))
     for i = 0; i < subject.length(); i = i + 1 {

@@ -1,0 +1,38 @@
+{
+  "case_id": "offset_self_crossing_positive_bevel_nonzero",
+  "delta": 3.0,
+  "fill_rule": "NonZero",
+  "format_version": 2,
+  "join_type": "Bevel",
+  "miter_limit": 2.0,
+  "operation": "OffsetPolygons",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [
+      [
+        -20,
+        -20
+      ],
+      [
+        20,
+        20
+      ],
+      [
+        -20,
+        20
+      ],
+      [
+        20,
+        -20
+      ]
+    ]
+  ],
+  "source": {
+    "group": "self_crossing",
+    "intent": "Zero-area bowtie must normalize into filled lobes",
+    "kind": "moonclip_constructed"
+  }
+}

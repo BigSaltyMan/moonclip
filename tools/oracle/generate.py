@@ -62,7 +62,7 @@ def generate(root, manifest, mode, command, timeout=20):
         (work / "generation-report.json").write_bytes(canonical_bytes(report))
         if mode == "write":
             # Publish only after the entire batch succeeds. Roll back a failed rename.
-            destination = root / "testdata/upstream/expected"
+            destination = root / ("testdata/offset/expected" if records[0][1]["operation"] == "OffsetPolygons" else "testdata/upstream/expected")
             backup = Path(temp) / "previous"
             existed = destination.exists()
             if existed:

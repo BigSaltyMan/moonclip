@@ -1,0 +1,72 @@
+{
+  "adapter_protocol_version": 2,
+  "case_id": "offset_small_p05_miter_evenodd",
+  "format_version": 2,
+  "input_sha256": "40d0ef39fbc1547c0bd208c9a9b63a9f42cffde76558996f2f193f5c2522ee07",
+  "metrics": {
+    "path_count": 2,
+    "paths": [
+      {
+        "area2": "168",
+        "bounds": [
+          -1,
+          -1,
+          6,
+          11
+        ],
+        "vertices": 4
+      },
+      {
+        "area2": "144",
+        "bounds": [
+          10,
+          -1,
+          16,
+          11
+        ],
+        "vertices": 4
+      }
+    ],
+    "vertex_count": 8
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        6,
+        11
+      ],
+      [
+        -1,
+        11
+      ],
+      [
+        -1,
+        -1
+      ],
+      [
+        6,
+        -1
+      ]
+    ],
+    [
+      [
+        16,
+        11
+      ],
+      [
+        10,
+        11
+      ],
+      [
+        10,
+        -1
+      ],
+      [
+        16,
+        -1
+      ]
+    ]
+  ],
+  "status": "success"
+}

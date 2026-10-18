@@ -1,0 +1,56 @@
+{
+  "case_id": "offset_hole_negative_miter_nonzero",
+  "delta": -4.0,
+  "fill_rule": "NonZero",
+  "format_version": 2,
+  "join_type": "Miter",
+  "miter_limit": 2.0,
+  "operation": "OffsetPolygons",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [
+      [
+        -30,
+        -30
+      ],
+      [
+        30,
+        -30
+      ],
+      [
+        30,
+        30
+      ],
+      [
+        -30,
+        30
+      ]
+    ],
+    [
+      [
+        -10,
+        10
+      ],
+      [
+        10,
+        10
+      ],
+      [
+        10,
+        -10
+      ],
+      [
+        -10,
+        -10
+      ]
+    ]
+  ],
+  "source": {
+    "group": "hole",
+    "intent": "Positive distance closes the hole; negative expands it",
+    "kind": "moonclip_constructed"
+  }
+}

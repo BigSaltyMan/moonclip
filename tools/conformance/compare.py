@@ -139,6 +139,9 @@ def normalize_tree(tree):
     return tuple(sorted(visit(child) for child in tree["children"]))
 
 def validate_geometry(value, where="result"):
+    if type(value) is dict and value.get("format_version") == 2:
+        from offset_compare import validate_offset_geometry
+        return validate_offset_geometry(value, where)
     require(type(value) is dict, where, "expected result object")
     require(value.get("status") == "success", where, "tool failure is not a successful geometry result")
     require("paths" in value and "tree" in value, where, "missing geometry")
@@ -150,6 +153,9 @@ def area2(path):
     return sum(a[0]*b[1] - a[1]*b[0] for a, b in zip(path, path[1:] + path[:1]))
 
 def metrics(value):
+    if value.get("format_version") == 2:
+        from offset_compare import offset_metrics
+        return offset_metrics(value)
     _, depth, holes = walk_tree(value["tree"])
     return {
         "path_count": len(value["paths"]),
@@ -166,9 +172,15 @@ def compare(left, right, case_id="comparison"):
     validate_geometry(left, case_id + ".expected")
     validate_geometry(right, case_id + ".actual")
     require(normalize_paths(left["paths"]) == normalize_paths(right["paths"]), case_id + ".paths", "contours differ (coordinates, vertices, winding or multiplicity)")
+    if left.get("format_version") == 2 or right.get("format_version") == 2:
+        require(left.get("format_version") == right.get("format_version"), case_id, "protocol mismatch")
+        return
     require(normalize_tree(left["tree"]) == normalize_tree(right["tree"]), case_id + ".tree", "parentage, depth or node contours differ")
 
 def validate_input(value, where):
+    if type(value) is dict and value.get("operation") == "OffsetPolygons":
+        from offset_compare import validate_offset_input
+        return validate_offset_input(value, where)
     keys(value, {"format_version", "case_id", "source", "operation", "fill_rule", "options", "subject", "clip"}, where)
     require(type(value["format_version"]) is int and value["format_version"] == 1, where, "unknown input format version")
     require(type(value["case_id"]) is str and re.fullmatch(r"[a-z0-9][a-z0-9_-]{0,100}", value["case_id"]), where, "invalid case ID")
@@ -196,6 +208,9 @@ def validate_input(value, where):
     require(count <= MAX_VERTICES and len(value["subject"]) + len(value["clip"]) <= MAX_PATHS, where, "combined input budget exceeded")
 
 def validate_result(value, case, digest, lock, where):
+    if case.get("operation") == "OffsetPolygons":
+        from offset_compare import validate_offset_result
+        return validate_offset_result(value, case, digest, lock, where)
     keys(value, {"format_version", "case_id", "input_sha256", "oracle_commit", "adapter_protocol_version", "status", "paths", "tree", "metrics"}, where)
     require(type(value["format_version"]) is int and value["format_version"] == 1, where, "unknown result format")
     require(type(value["adapter_protocol_version"]) is int and value["adapter_protocol_version"] == lock["adapter_protocol_version"], where, "unknown adapter protocol version")
@@ -216,13 +231,14 @@ def confined(root, name):
     return result
 
 def validate_lock(lock):
-    keys(lock, {"repository", "tag", "commit", "license", "adapter_protocol_version", "archive", "compile_inputs", "dependencies"}, "lock")
+    keys(lock, {"repository", "tag", "commit", "license", "adapter_protocol_version", "offset_protocol_version", "archive", "compile_inputs", "dependencies"}, "lock")
     require(lock["repository"] == "https://github.com/AngusJohnson/Clipper2" and lock["tag"] == "Clipper2_2.0.1" and lock["commit"] == "21ebba05db8894f0c7217ad35ea518080f324946", "lock", "unexpected fixed upstream identity")
     require(lock["license"] == "BSL-1.0" and type(lock["adapter_protocol_version"]) is int and lock["adapter_protocol_version"] == 1, "lock", "unknown license/protocol")
+    require(type(lock["offset_protocol_version"]) is int and lock["offset_protocol_version"] == 2, "lock", "unknown offset protocol")
     keys(lock["archive"], {"url", "sha256"}, "lock.archive")
     require(lock["archive"]["url"] == "https://codeload.github.com/AngusJohnson/Clipper2/tar.gz/" + lock["commit"], "lock", "archive URL must use full commit")
     require(lock["archive"]["sha256"] == "897b7ed793b6a0565f7b1d34367f2301e08d541d82aa238b5f4042b701c811dc", "lock", "unexpected upstream archive checksum")
-    require(lock["compile_inputs"] == ["CPP/Clipper2Lib/src/clipper.engine.cpp", "CPP/Clipper2Lib/include/clipper2/*.h"], "lock", "unexpected compile inputs")
+    require(lock["compile_inputs"] == ["CPP/Clipper2Lib/src/clipper.engine.cpp", "CPP/Clipper2Lib/src/clipper.offset.cpp", "CPP/Clipper2Lib/include/clipper2/*.h"], "lock", "unexpected compile inputs")
     require(type(lock["dependencies"]) is list and len(lock["dependencies"]) == 1, "lock", "unexpected dependencies")
     dep = lock["dependencies"][0]
     keys(dep, {"name", "version", "url", "sha256", "license", "license_url", "license_sha256"}, "lock.dependency")
@@ -233,6 +249,9 @@ def validate_lock(lock):
 
 def read_manifest(root, manifest, require_expected=True, strict=True):
     value = load(manifest, strict)
+    if type(value) is dict and value.get("kind") == "offset":
+        from offset_compare import read_offset_manifest
+        return read_offset_manifest(root, manifest, require_expected, strict)
     keys(value, {"format_version", "oracle_lock", "cases"}, "manifest")
     require(type(value["format_version"]) is int and value["format_version"] == 1, "manifest", "unknown format version")
     require(value["oracle_lock"] == "tools/oracle/upstream-lock.json", "manifest", "unexpected oracle lock")

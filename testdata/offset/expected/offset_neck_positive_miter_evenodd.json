@@ -1,0 +1,76 @@
+{
+  "adapter_protocol_version": 2,
+  "case_id": "offset_neck_positive_miter_evenodd",
+  "format_version": 2,
+  "input_sha256": "1b1aa038dc9746fd64ea9b410479d4eda2b47df919778c296cbb5601327dea33",
+  "metrics": {
+    "path_count": 1,
+    "paths": [
+      {
+        "area2": "2784",
+        "bounds": [
+          -3,
+          -3,
+          53,
+          23
+        ],
+        "vertices": 12
+      }
+    ],
+    "vertex_count": 12
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        23,
+        5
+      ],
+      [
+        27,
+        5
+      ],
+      [
+        27,
+        -3
+      ],
+      [
+        53,
+        -3
+      ],
+      [
+        53,
+        23
+      ],
+      [
+        27,
+        23
+      ],
+      [
+        27,
+        15
+      ],
+      [
+        23,
+        15
+      ],
+      [
+        23,
+        23
+      ],
+      [
+        -3,
+        23
+      ],
+      [
+        -3,
+        -3
+      ],
+      [
+        23,
+        -3
+      ]
+    ]
+  ],
+  "status": "success"
+}

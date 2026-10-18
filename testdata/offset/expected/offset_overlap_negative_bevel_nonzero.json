@@ -1,0 +1,44 @@
+{
+  "adapter_protocol_version": 2,
+  "case_id": "offset_overlap_negative_bevel_nonzero",
+  "format_version": 2,
+  "input_sha256": "261e71101c7068e74ac3d488b99d98d28e00243760aec1433afdcd0aad23b8bd",
+  "metrics": {
+    "path_count": 1,
+    "paths": [
+      {
+        "area2": "672",
+        "bounds": [
+          3,
+          3,
+          27,
+          17
+        ],
+        "vertices": 4
+      }
+    ],
+    "vertex_count": 4
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        27,
+        3
+      ],
+      [
+        27,
+        17
+      ],
+      [
+        3,
+        17
+      ],
+      [
+        3,
+        3
+      ]
+    ]
+  ],
+  "status": "success"
+}

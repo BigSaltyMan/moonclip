@@ -1,0 +1,56 @@
+{
+  "case_id": "offset_small_n05_miter_evenodd",
+  "delta": -0.5,
+  "fill_rule": "EvenOdd",
+  "format_version": 2,
+  "join_type": "Miter",
+  "miter_limit": 2.0,
+  "operation": "OffsetPolygons",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [
+      [
+        0,
+        0
+      ],
+      [
+        10,
+        0
+      ],
+      [
+        10,
+        10
+      ],
+      [
+        0,
+        10
+      ]
+    ],
+    [
+      [
+        5,
+        0
+      ],
+      [
+        15,
+        0
+      ],
+      [
+        15,
+        10
+      ],
+      [
+        5,
+        10
+      ]
+    ]
+  ],
+  "source": {
+    "group": "small",
+    "intent": "Normalize overlapping region before insignificant or threshold distance",
+    "kind": "moonclip_constructed"
+  }
+}

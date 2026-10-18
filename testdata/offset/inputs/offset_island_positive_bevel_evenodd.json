@@ -1,0 +1,74 @@
+{
+  "case_id": "offset_island_positive_bevel_evenodd",
+  "delta": 4.0,
+  "fill_rule": "EvenOdd",
+  "format_version": 2,
+  "join_type": "Bevel",
+  "miter_limit": 2.0,
+  "operation": "OffsetPolygons",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [
+      [
+        -40,
+        -40
+      ],
+      [
+        40,
+        -40
+      ],
+      [
+        40,
+        40
+      ],
+      [
+        -40,
+        40
+      ]
+    ],
+    [
+      [
+        -25,
+        25
+      ],
+      [
+        25,
+        25
+      ],
+      [
+        25,
+        -25
+      ],
+      [
+        -25,
+        -25
+      ]
+    ],
+    [
+      [
+        -10,
+        -10
+      ],
+      [
+        10,
+        -10
+      ],
+      [
+        10,
+        10
+      ],
+      [
+        -10,
+        10
+      ]
+    ]
+  ],
+  "source": {
+    "group": "island",
+    "intent": "Outer hole island orientation",
+    "kind": "moonclip_constructed"
+  }
+}

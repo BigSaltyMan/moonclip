@@ -30,3 +30,17 @@ def tree_evidence(directory):
             require(summaries==[(str(count),str(count),'0')],str(path),'wrong tree execution count or failures')
             result[kind][target]={'status':'passed','executed':count,'passed':count,'failed':0}
     return result
+
+
+def offset_evidence(directory):
+    result={}
+    for target in ('native','js'):
+        path=directory/('offset-'+target+'.log')
+        if not path.exists():
+            result[target]={'status':'not_recorded'};continue
+        text=path.read_text(encoding='utf-8')
+        require(text.splitlines().count('Selection: reference offset paths: *')==1,str(path),'missing offset selection marker')
+        summaries=re.findall(r'Total tests: (\d+), passed: (\d+), failed: (\d+)\.',text)
+        require(summaries==[('116','116','0')],str(path),'expected exactly 116 successful offset cases')
+        result[target]={'status':'passed','executed':116,'passed':116,'failed':0}
+    return result

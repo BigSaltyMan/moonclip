@@ -107,13 +107,13 @@ fn output_spend(
   if nodes < 0 || work < 0 {
     output_error(state, "Negative output budget charge")
   }
-  if nodes > state.limits.max_nodes - state.stats.nodes {
+  if nodes > state.budget.limits.max_nodes - state.budget.stats.nodes {
     scan_abort(
       state,
       ResourceLimitExceeded(loc, InternalNodes, state.limits.max_nodes),
     )
   }
-  if work > state.limits.max_work - state.stats.work {
+  if work > state.budget.limits.max_work - state.budget.stats.work {
     scan_abort(
       state,
       ResourceLimitExceeded(loc, ScanWork, state.limits.max_work),
@@ -910,7 +910,7 @@ fn output_repair_local(
       let needed = (if insert_main { 1 } else { 0 }) +
         (if keep_triangle { 2 } else { 0 })
       // Preflight all related record/node allocations and mutation work together.
-      if needed > state.limits.max_nodes - state.stats.nodes {
+      if needed > state.budget.limits.max_nodes - state.budget.stats.nodes {
         scan_abort(
           state,
           ResourceLimitExceeded(
@@ -920,7 +920,7 @@ fn output_repair_local(
           ),
         )
       }
-      if needed + 1 > state.limits.max_work - state.stats.work {
+      if needed + 1 > state.budget.limits.max_work - state.budget.stats.work {
         scan_abort(
           state,
           ResourceLimitExceeded(

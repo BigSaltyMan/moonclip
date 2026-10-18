@@ -1,0 +1,100 @@
+{
+  "adapter_protocol_version": 2,
+  "case_id": "offset_island_positive_miter_nonzero",
+  "format_version": 2,
+  "input_sha256": "1aecb582a2cf5ee8734bd63e9c8390bc4b7b1e8970a7bcc8a8de126066b04ed6",
+  "metrics": {
+    "path_count": 3,
+    "paths": [
+      {
+        "area2": "15488",
+        "bounds": [
+          -44,
+          -44,
+          44,
+          44
+        ],
+        "vertices": 4
+      },
+      {
+        "area2": "-3528",
+        "bounds": [
+          -21,
+          -21,
+          21,
+          21
+        ],
+        "vertices": 4
+      },
+      {
+        "area2": "1568",
+        "bounds": [
+          -14,
+          -14,
+          14,
+          14
+        ],
+        "vertices": 4
+      }
+    ],
+    "vertex_count": 12
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        44,
+        44
+      ],
+      [
+        -44,
+        44
+      ],
+      [
+        -44,
+        -44
+      ],
+      [
+        44,
+        -44
+      ]
+    ],
+    [
+      [
+        -21,
+        -21
+      ],
+      [
+        -21,
+        21
+      ],
+      [
+        21,
+        21
+      ],
+      [
+        21,
+        -21
+      ]
+    ],
+    [
+      [
+        14,
+        14
+      ],
+      [
+        -14,
+        14
+      ],
+      [
+        -14,
+        -14
+      ],
+      [
+        14,
+        -14
+      ]
+    ]
+  ],
+  "status": "success"
+}

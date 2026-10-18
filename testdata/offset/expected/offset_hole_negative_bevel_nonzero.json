@@ -1,0 +1,88 @@
+{
+  "adapter_protocol_version": 2,
+  "case_id": "offset_hole_negative_bevel_nonzero",
+  "format_version": 2,
+  "input_sha256": "92aeaaa1650334c4b50f4b32664a9438d14d67934b70c01b7a3a35833b95d4b7",
+  "metrics": {
+    "path_count": 2,
+    "paths": [
+      {
+        "area2": "5408",
+        "bounds": [
+          -26,
+          -26,
+          26,
+          26
+        ],
+        "vertices": 4
+      },
+      {
+        "area2": "-1504",
+        "bounds": [
+          -14,
+          -14,
+          14,
+          14
+        ],
+        "vertices": 8
+      }
+    ],
+    "vertex_count": 12
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        26,
+        -26
+      ],
+      [
+        26,
+        26
+      ],
+      [
+        -26,
+        26
+      ],
+      [
+        -26,
+        -26
+      ]
+    ],
+    [
+      [
+        -14,
+        -10
+      ],
+      [
+        -14,
+        10
+      ],
+      [
+        -10,
+        14
+      ],
+      [
+        10,
+        14
+      ],
+      [
+        14,
+        10
+      ],
+      [
+        14,
+        -10
+      ],
+      [
+        10,
+        -14
+      ],
+      [
+        -10,
+        -14
+      ]
+    ]
+  ],
+  "status": "success"
+}

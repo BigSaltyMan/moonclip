@@ -84,7 +84,8 @@ fn main raise {
   run_boolean_example()
   run_winding_example()
   run_tree_example()
-  println("MoonClip geometry, Boolean and PolyTree OK")
+  run_offset_example()
+  println("MoonClip geometry, Boolean, PolyTree and offset OK")
 }
 
 ///|
@@ -260,4 +261,88 @@ fn run_tree_example() -> Unit raise {
   assert_eq(tree.roots().length(), 1)
   assert_eq(tree.roots()[0].children().length(), 1)
   example_result([tree.roots()[0].children()[0].contour()], [hole])
+}
+
+///|
+fn run_offset_example() -> Unit raise {
+  let rectangle = [example_rect(0L, 0L, 10L, 10L)]
+  for
+    (delta, expected) in [
+      (2.0, [example_rect(-2L, -2L, 14L, 14L)]),
+      (-2.0, [example_rect(2L, 2L, 6L, 6L)]),
+      (-6.0, []),
+    ] {
+    guard @moonclip.offset_polygons(rectangle, delta) is Ok(result) else {
+      fail("Expected rectangle offset")
+    }
+    example_result(result, expected)
+  }
+  let triangle = [
+    @moonclip.Point64::new(0L, 0L),
+    @moonclip.Point64::new(60L, 0L),
+    @moonclip.Point64::new(2L, 10L),
+  ]
+  guard @moonclip.offset_polygons([triangle], 3.0) is Ok(miter) else {
+    fail("Expected Miter")
+  }
+  example_result(miter, [
+    [
+      @moonclip.Point64::new(-4L, -3L),
+      @moonclip.Point64::new(63L, -3L),
+      @moonclip.Point64::new(63L, 2L),
+      @moonclip.Point64::new(0L, 13L),
+    ],
+  ])
+  guard @moonclip.offset_polygons(
+      [triangle],
+      3.0,
+      options=@moonclip.OffsetOptions::new(join=Bevel),
+    )
+    is Ok(bevel) else {
+    fail("Expected Bevel")
+  }
+  example_result(bevel, [
+    [
+      @moonclip.Point64::new(-3L, 1L),
+      @moonclip.Point64::new(0L, -3L),
+      @moonclip.Point64::new(60L, -3L),
+      @moonclip.Point64::new(61L, 3L),
+      @moonclip.Point64::new(3L, 13L),
+      @moonclip.Point64::new(-1L, 11L),
+    ],
+  ])
+  let region = [
+    example_rect(-30L, -30L, 60L, 60L),
+    example_reverse(example_rect(-10L, -10L, 20L, 20L)),
+  ]
+  for
+    (delta, expected) in [
+      (
+        2.0,
+        [
+          example_rect(-32L, -32L, 64L, 64L),
+          example_reverse(example_rect(-8L, -8L, 16L, 16L)),
+        ],
+      ),
+      (
+        -2.0,
+        [
+          example_rect(-28L, -28L, 56L, 56L),
+          example_reverse(example_rect(-12L, -12L, 24L, 24L)),
+        ],
+      ),
+    ] {
+    guard @moonclip.offset_polygons(region, delta) is Ok(result) else {
+      fail("Expected region offset")
+    }
+    example_result(result, expected)
+  }
+  assert_true(
+    @moonclip.offset_polygons(
+      [],
+      0.0,
+      options=@moonclip.OffsetOptions::new(miter_limit=1.0),
+    )
+    is Err(InvalidInput(_, _)),
+  )
 }

@@ -58,6 +58,34 @@ def evaluate(manifest,results):
     report['paths']=summary(details,'paths');report['tree']=summary(details,'tree')
     return report
 
+def evaluate_offset(manifest, results):
+    from compare import read_manifest
+    _, records=read_manifest(ROOT,manifest,strict=True)
+    require(len(records)==116 and all(c['operation']=='OffsetPolygons' for _,c,_,_ in records),'offset','expected 116 offset cases')
+    require(type(results) is list,'offset actual','expected results array')
+    actual={}
+    for result in results:
+        require(type(result) is dict and type(result.get('case_id')) is str,'offset actual','missing case ID')
+        cid=result['case_id'];require(cid not in actual,cid,'duplicate offset result');actual[cid]=result
+    require(set(actual)=={e['case_id'] for e,_,_,_ in records},'offset actual','missing or extra offset results')
+    details=[]
+    for entry,case,digest,expected in records:
+        cid=case['case_id'];r=actual[cid]
+        require(r.get('input_sha256')==digest,cid,'compiled offset hash mismatch')
+        detail={'case_id':cid}
+        if r.get('status')=='error':
+            require(set(r)=={'case_id','input_sha256','status','error'} and type(r['error']) is str,cid,'invalid offset error')
+            detail.update(status='execution_error',message=r['error'])
+        else:
+            require(set(r)=={'case_id','input_sha256','status','paths'} and r['status']=='success',cid,'invalid offset success')
+            validate_paths(r['paths'],cid+'.offset',output=True)
+            try:compare_paths(expected['paths'],r['paths'],cid+'.offset')
+            except Invalid as error:detail.update(status='difference',message=str(error))
+            else:detail['status']='passed'
+        details.append(detail)
+    return {**summary(details),'required':116,'reference_cases':116,'capability':'public paths','cases':details}
+
+
 def markdown(report):
     lines=['# Boolean compatibility','','Pinned Clipper2 2.0.1, commit `21ebba05db8894f0c7217ad35ea518080f324946`; ordinary precision, preserve_collinear=false, reverse_solution=false.','',
       f"Public cases: {report['required']}; both passed={report['passed']}, differences={report['differences']}, execution_errors={report['execution_errors']}. Reference catalog: {report['reference_cases']}.",'',
@@ -71,24 +99,42 @@ def markdown(report):
         lines.append('| '+target+' | '+' | '.join(values)+' |')
     lines+=['','Filtered counts are read from actual logs. Tree logs require their own selection markers; old paths logs cannot establish tree execution. Internal rules each cover 24 cases.','','Only cyclic ring starts and sibling order are normalized. Parentage, depth, full coordinates, vertex counts, winding and multiplicity remain significant.','','| Case | Native paths | Native tree | Both |','| --- | --- | --- | --- |']
     lines += [f"| {r['case_id']} | {r['paths']} | {r['tree']} | {r['status']} |" for r in report['cases']]
+    if 'offset' in report:
+        r=report['offset']
+        lines+=['','# Offset compatibility','',f"Offset public paths: {r['passed']}/{r['executed']}; required={r['required']}, differences={r['differences']}, execution_errors={r['execution_errors']}.",'',
+          'Boolean reference cases: 200. Offset reference cases: 116. Total independent reference inputs: 316. Offset has no public tree interface; hole/island composition is covered separately by functional tests.','',
+          '| Target | Offset filtered paths |','| --- | --- |']
+        for target in ('native','js'):
+            e=report.get('offset_evidence',{}).get(target,{})
+            value=str(e['passed'])+'/'+str(e['executed']) if e.get('status')=='passed' else 'not recorded'
+            lines.append('| '+target+' | '+value+' |')
+        lines+=['','| Offset case | Native paths |','| --- | --- |']
+        lines += [f"| {c['case_id']} | {c['status']} |" for c in r['cases']]
     return '\n'.join(lines)+'\n'
 
 def main():
     parser=argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,description='Execute independent MoonClip paths and tree comparisons. Exit codes: 0 success/help; 1 differences; 2 arguments, integrity or execution errors.')
     parser.add_argument('--manifest',type=Path,default=ROOT/'testdata/manifest.json')
+    parser.add_argument('--offset-manifest',type=Path,help='Include independently executed offset protocol v2 cases')
     parser.add_argument('--report-json',type=Path,default=ROOT/'_build/conformance/report.json')
     parser.add_argument('--report-md',type=Path,default=ROOT/'docs/compatibility.md')
     parser.add_argument('--strict',action='store_true',help='Require exactly 152 public cases with independent paths and tree results (also enforced by default)')
     try:
         envelope=json.load(sys.stdin);args=parser.parse_args(envelope['args'][1:])
         report=evaluate(args.manifest.resolve(),envelope['results'])
-        from evidence import internal_evidence,tree_evidence
+        from evidence import internal_evidence,tree_evidence,offset_evidence
+        if args.offset_manifest:
+            report['offset']=evaluate_offset(args.offset_manifest.resolve(),envelope.get('offset_results'))
+            report['offset_evidence']=offset_evidence(ROOT/'_build/conformance')
         report['internal']=internal_evidence(ROOT/'_build/conformance')
         report['tree_evidence']=tree_evidence(ROOT/'_build/conformance')
         args.report_json.parent.mkdir(parents=True,exist_ok=True);args.report_md.parent.mkdir(parents=True,exist_ok=True)
         args.report_json.write_bytes(canonical_bytes(report));args.report_md.write_text(markdown(report),encoding='utf-8',newline='\n')
         print(f"Native conformance: cases={report['required']}, paths={report['paths']['passed']}/{report['paths']['executed']}, tree={report['tree']['passed']}/{report['tree']['executed']}, both={report['passed']}, differences={report['differences']}, execution_errors={report['execution_errors']}")
-        return 2 if report['execution_errors'] else 1 if report['differences'] else 0
+        offset=report.get('offset',{})
+        if offset:
+            print(f"Native offset conformance: cases=116, paths={offset['passed']}/{offset['executed']}, differences={offset['differences']}, execution_errors={offset['execution_errors']}")
+        return 2 if report['execution_errors'] or offset.get('execution_errors') else 1 if report['differences'] or offset.get('differences') else 0
     except (Invalid,OSError,ValueError,KeyError,TypeError) as error:
         print(f'Conformance error: {error}',file=sys.stderr);return 2
 if __name__=='__main__':sys.exit(main())

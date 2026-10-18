@@ -1,0 +1,14 @@
+{
+  "adapter_protocol_version": 2,
+  "case_id": "offset_collapse_beyond_bevel_evenodd",
+  "format_version": 2,
+  "input_sha256": "d5ae6c62ee000dad9a7c3440101124a4820da480f447272e9bbe68f35c415bfb",
+  "metrics": {
+    "path_count": 0,
+    "paths": [],
+    "vertex_count": 0
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [],
+  "status": "success"
+}

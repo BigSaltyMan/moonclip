@@ -1,0 +1,60 @@
+{
+  "adapter_protocol_version": 2,
+  "case_id": "offset_rectangle_positive_bevel_nonzero",
+  "format_version": 2,
+  "input_sha256": "cd7d30eef026fa17ac622632b66394fd7cc7c2dd1f87d6a61ae42dd8fea5d5a2",
+  "metrics": {
+    "path_count": 1,
+    "paths": [
+      {
+        "area2": "376",
+        "bounds": [
+          -2,
+          -2,
+          12,
+          12
+        ],
+        "vertices": 8
+      }
+    ],
+    "vertex_count": 8
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        12,
+        0
+      ],
+      [
+        12,
+        10
+      ],
+      [
+        10,
+        12
+      ],
+      [
+        0,
+        12
+      ],
+      [
+        -2,
+        10
+      ],
+      [
+        -2,
+        0
+      ],
+      [
+        0,
+        -2
+      ],
+      [
+        10,
+        -2
+      ]
+    ]
+  ],
+  "status": "success"
+}

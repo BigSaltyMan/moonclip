@@ -21,6 +21,7 @@ priv enum PathRole {
 
 ///|
 priv struct SourceId {
+  internal_input : Bool
   role : PathRole
   path : Int
   global_path : Int
@@ -151,7 +152,17 @@ priv struct ScanStats {
 } derive(Eq, Debug)
 
 ///|
+// One cumulative ledger; ScanState aliases these immutable limits and mutable stats.
+// Releasing a phase never refunds prior work or allocation charges.
+priv struct CallBudget {
+  limits : ScanLimits
+  stats : ScanStats
+}
+
+///|
 priv struct ScanState {
+  budget : CallBudget
+  internal_input : Bool
   limits : ScanLimits
   stats : ScanStats
   vertices : Array[Vertex]
@@ -193,7 +204,7 @@ priv suberror ScanAbort {
 }
 
 ///|
-fn new_scan_state(limits : ScanLimits) -> ScanState {
+fn new_call_budget(limits : ScanLimits) -> CallBudget {
   {
     limits,
     stats: {
@@ -208,6 +219,24 @@ fn new_scan_state(limits : ScanLimits) -> ScanState {
       output_records: 0,
       output_points: 0,
     },
+  }
+}
+
+///|
+fn new_scan_state(
+  limits : ScanLimits,
+  budget? : CallBudget,
+  internal_input? : Bool = false,
+) -> ScanState {
+  let budget = match budget {
+    Some(value) => value
+    None => new_call_budget(limits)
+  }
+  {
+    budget,
+    internal_input,
+    limits: budget.limits,
+    stats: budget.stats,
     vertices: [],
     paths: [],
     minima: [],
@@ -271,7 +300,11 @@ fn scan_location(
   match vertex {
     Some(id) => {
       let source = state.vertices[id].source
-      location(stage, Some(source.global_path), Some(source.vertex))
+      if state.internal_input {
+        location(stage, None, None)
+      } else {
+        location(stage, Some(source.global_path), Some(source.vertex))
+      }
     }
     None => location(stage, None, None)
   }

@@ -27,6 +27,8 @@ pub fn normalize_path(Array[Point64], PathMode, limits? : Limits) -> Result[Arra
 
 pub fn normalize_paths(Array[Array[Point64]], PathMode, limits? : Limits) -> Result[Array[Array[Point64]], ClipError]
 
+pub fn offset_polygons(Array[Array[Point64]], Double, fill_rule? : FillRule, options? : OffsetOptions, limits? : Limits) -> Result[Array[Array[Point64]], ClipError]
+
 pub fn orientation(Point64, Point64, Point64, limits? : Limits) -> Result[Orientation, ClipError]
 
 pub fn point_in_polygon(Point64, Array[Point64], limits? : Limits) -> Result[PointLocation, ClipError]
@@ -77,11 +79,23 @@ pub(all) enum FillRule {
   NonZero
 } derive(Eq, @debug.Debug)
 
+pub(all) enum JoinType {
+  Miter
+  Bevel
+} derive(Eq, @debug.Debug)
+
 pub(all) struct Limits {
   max_input_paths : Int
   max_input_vertices : Int
 } derive(Eq, @debug.Debug)
 pub impl Default for Limits
+
+pub struct OffsetOptions {
+  join : JoinType
+  miter_limit : Double
+} derive(Eq, @debug.Debug)
+pub fn OffsetOptions::new(join? : JoinType, miter_limit? : Double) -> Self
+pub impl Default for OffsetOptions
 
 pub(all) enum Orientation {
   CounterClockwise
@@ -147,6 +161,9 @@ pub(all) enum Stage {
   OutputTopology
   BooleanOp
   PolyTree
+  OffsetParameters
+  OffsetGenerate
+  OffsetCleanup
 } derive(Eq, @debug.Debug)
 
 // Type aliases

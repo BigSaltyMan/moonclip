@@ -100,6 +100,77 @@ class AdapterTests(unittest.TestCase):
         finally:
             target.write_bytes(saved)
 
+    def offset_case(self, name='offset_rectangle_positive_miter_nonzero'):
+        return load(ROOT/f'testdata/offset/inputs/{name}.json',True)
+
+    def test_offset_full_rectangle_both_signs(self):
+        for sign in ('positive','negative'):
+            case=self.offset_case('offset_rectangle_'+sign+'_miter_nonzero')
+            result=self.call(case);self.assertEqual(result.returncode,0)
+            value=decode(result.stdout);validate_geometry(value)
+            expected=load(ROOT/f"testdata/offset/expected/{case['case_id']}.json",True)
+            self.assertEqual(normalize_paths(value['paths']),normalize_paths(expected['paths']))
+            self.assertNotIn('tree',value)
+
+    def test_offset_numeric_tokens_rejected(self):
+        for field in ('delta','miter_limit'):
+            for token in (True,False,'2',None,[],{}):
+                case=self.offset_case();case[field]=token
+                with self.subTest(field=field,token=token):self.rejected(case)
+        for token in ('NaN','Infinity','-Infinity','1e400'):
+            text=canonical_bytes(self.offset_case()).decode().replace('"delta": 2.0','"delta": '+token)
+            result=subprocess.run([str(self.binary)],input=text.encode(),capture_output=True,timeout=5)
+            self.assertEqual(result.returncode,2)
+
+    def test_offset_unknown_join_rule_and_protocol_rejected(self):
+        for field,value in (('join_type','Round'),('join_type','Unknown'),('join_type',True),('fill_rule','Positive'),('format_version',1),('format_version',True),('miter_limit',1.999)):
+            case=self.offset_case();case[field]=value;self.rejected(case)
+
+    def test_offset_zero_is_union_normalization(self):
+        case=self.offset_case();case['delta']=0.0;case['paths']*=2
+        result=decode(self.call(case).stdout)
+        self.assertEqual(normalize_paths(result['paths']),normalize_paths(case['paths'][:1]))
+        case['fill_rule']='EvenOdd'
+        self.assertEqual(decode(self.call(case).stdout)['paths'],[])
+
+    def test_offset_holes_and_islands_full_geometry(self):
+        for group in ('hole','island'):
+            for sign in ('positive','negative'):
+                case=self.offset_case('offset_'+group+'_'+sign+'_miter_nonzero')
+                result=self.call(case);self.assertEqual(result.returncode,0)
+                expected=load(ROOT/f"testdata/offset/expected/{case['case_id']}.json",True)
+                self.assertEqual(normalize_paths(decode(result.stdout)['paths']),normalize_paths(expected['paths']))
+
+    def test_offset_square_fallback_differs_from_bevel(self):
+        m=self.offset_case('offset_acute_positive_miter_nonzero')
+        b=self.offset_case('offset_acute_positive_bevel_nonzero')
+        self.assertNotEqual(normalize_paths(decode(self.call(m).stdout)['paths']),normalize_paths(decode(self.call(b).stdout)['paths']))
+        expected=normalize_paths(decode(self.call(b).stdout)['paths'])
+        b['miter_limit']=1e300
+        self.assertEqual(normalize_paths(decode(self.call(b).stdout)['paths']),expected)
+
+    def test_offset_collapse_empty_and_degenerate_inputs(self):
+        case=self.offset_case();case['delta']=-6
+        self.assertEqual(decode(self.call(case).stdout)['paths'],[])
+        case['paths']=[[],[[0,0]],[[0,0],[10,10]]];case['delta']=4
+        self.assertEqual(decode(self.call(case).stdout)['paths'],[])
+
+    def test_offset_generated_coordinates_and_huge_delta_rejected(self):
+        case=self.offset_case();case['paths']=[[[999999990,0],[1000000000,0],[1000000000,10],[999999990,10]]]
+        self.rejected(case)
+        case=self.offset_case();case['delta']=1e300;self.rejected(case)
+
+    def test_offset_missing_fields_and_fixed_options_rejected(self):
+        original=self.offset_case()
+        for field in original:
+            case=copy.deepcopy(original);del case[field];self.rejected(case)
+        case=copy.deepcopy(original);case['options']['reverse_solution']=True;self.rejected(case)
+
+    def test_offset_empty_still_checks_parameters(self):
+        case=self.offset_case();case['paths']=[]
+        self.assertEqual(decode(self.call(case).stdout)['paths'],[])
+        case['miter_limit']=1;self.rejected(case)
+
     def case_commit(self):
         return load(ROOT/'tools/oracle/upstream-lock.json',True)['commit']
 

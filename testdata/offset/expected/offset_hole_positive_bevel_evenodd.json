@@ -1,0 +1,60 @@
+{
+  "adapter_protocol_version": 2,
+  "case_id": "offset_hole_positive_bevel_evenodd",
+  "format_version": 2,
+  "input_sha256": "3be581567f1ccdd5a6dcfece6632f00368b505ef7b5735806c1be7e252521a21",
+  "metrics": {
+    "path_count": 1,
+    "paths": [
+      {
+        "area2": "13536",
+        "bounds": [
+          -42,
+          -42,
+          42,
+          42
+        ],
+        "vertices": 8
+      }
+    ],
+    "vertex_count": 8
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        42,
+        -30
+      ],
+      [
+        42,
+        30
+      ],
+      [
+        30,
+        42
+      ],
+      [
+        -30,
+        42
+      ],
+      [
+        -42,
+        30
+      ],
+      [
+        -42,
+        -30
+      ],
+      [
+        -30,
+        -42
+      ],
+      [
+        30,
+        -42
+      ]
+    ]
+  ],
+  "status": "success"
+}

@@ -176,3 +176,133 @@ Only cyclic ring starts and sibling order are normalized. Parentage, depth, full
 | winding_reversed_union_nonzero | passed | passed | passed |
 | winding_reversed_xor_evenodd | passed | passed | passed |
 | winding_reversed_xor_nonzero | passed | passed | passed |
+
+# Offset compatibility
+
+Offset public paths: 116/116; required=116, differences=0, execution_errors=0.
+
+Boolean reference cases: 200. Offset reference cases: 116. Total independent reference inputs: 316. Offset has no public tree interface; hole/island composition is covered separately by functional tests.
+
+| Target | Offset filtered paths |
+| --- | --- |
+| native | 116/116 |
+| js | 116/116 |
+
+| Offset case | Native paths |
+| --- | --- |
+| offset_acute_negative_bevel_evenodd | passed |
+| offset_acute_negative_bevel_nonzero | passed |
+| offset_acute_negative_miter_evenodd | passed |
+| offset_acute_negative_miter_nonzero | passed |
+| offset_acute_positive_bevel_evenodd | passed |
+| offset_acute_positive_bevel_nonzero | passed |
+| offset_acute_positive_miter_evenodd | passed |
+| offset_acute_positive_miter_nonzero | passed |
+| offset_collapse_beyond_bevel_evenodd | passed |
+| offset_collapse_beyond_bevel_nonzero | passed |
+| offset_collapse_beyond_miter_evenodd | passed |
+| offset_collapse_beyond_miter_nonzero | passed |
+| offset_collapse_exact_bevel_evenodd | passed |
+| offset_collapse_exact_bevel_nonzero | passed |
+| offset_collapse_exact_miter_evenodd | passed |
+| offset_collapse_exact_miter_nonzero | passed |
+| offset_concave_l_negative_bevel_evenodd | passed |
+| offset_concave_l_negative_bevel_nonzero | passed |
+| offset_concave_l_negative_miter_evenodd | passed |
+| offset_concave_l_negative_miter_nonzero | passed |
+| offset_concave_l_positive_bevel_evenodd | passed |
+| offset_concave_l_positive_bevel_nonzero | passed |
+| offset_concave_l_positive_miter_evenodd | passed |
+| offset_concave_l_positive_miter_nonzero | passed |
+| offset_hole_negative_bevel_evenodd | passed |
+| offset_hole_negative_bevel_nonzero | passed |
+| offset_hole_negative_miter_evenodd | passed |
+| offset_hole_negative_miter_nonzero | passed |
+| offset_hole_positive_bevel_evenodd | passed |
+| offset_hole_positive_bevel_nonzero | passed |
+| offset_hole_positive_miter_evenodd | passed |
+| offset_hole_positive_miter_nonzero | passed |
+| offset_island_negative_bevel_evenodd | passed |
+| offset_island_negative_bevel_nonzero | passed |
+| offset_island_negative_miter_evenodd | passed |
+| offset_island_negative_miter_nonzero | passed |
+| offset_island_positive_bevel_evenodd | passed |
+| offset_island_positive_bevel_nonzero | passed |
+| offset_island_positive_miter_evenodd | passed |
+| offset_island_positive_miter_nonzero | passed |
+| offset_miter10_negative_miter_evenodd | passed |
+| offset_miter10_negative_miter_nonzero | passed |
+| offset_miter10_positive_miter_evenodd | passed |
+| offset_miter10_positive_miter_nonzero | passed |
+| offset_miter4_negative_miter_evenodd | passed |
+| offset_miter4_negative_miter_nonzero | passed |
+| offset_miter4_positive_miter_evenodd | passed |
+| offset_miter4_positive_miter_nonzero | passed |
+| offset_mixed_overlap_negative_bevel_evenodd | passed |
+| offset_mixed_overlap_negative_bevel_nonzero | passed |
+| offset_mixed_overlap_negative_miter_evenodd | passed |
+| offset_mixed_overlap_negative_miter_nonzero | passed |
+| offset_mixed_overlap_positive_bevel_evenodd | passed |
+| offset_mixed_overlap_positive_bevel_nonzero | passed |
+| offset_mixed_overlap_positive_miter_evenodd | passed |
+| offset_mixed_overlap_positive_miter_nonzero | passed |
+| offset_multipart_negative_bevel_evenodd | passed |
+| offset_multipart_negative_bevel_nonzero | passed |
+| offset_multipart_negative_miter_evenodd | passed |
+| offset_multipart_negative_miter_nonzero | passed |
+| offset_multipart_positive_bevel_evenodd | passed |
+| offset_multipart_positive_bevel_nonzero | passed |
+| offset_multipart_positive_miter_evenodd | passed |
+| offset_multipart_positive_miter_nonzero | passed |
+| offset_neck_negative_bevel_evenodd | passed |
+| offset_neck_negative_bevel_nonzero | passed |
+| offset_neck_negative_miter_evenodd | passed |
+| offset_neck_negative_miter_nonzero | passed |
+| offset_neck_positive_bevel_evenodd | passed |
+| offset_neck_positive_bevel_nonzero | passed |
+| offset_neck_positive_miter_evenodd | passed |
+| offset_neck_positive_miter_nonzero | passed |
+| offset_overlap_negative_bevel_evenodd | passed |
+| offset_overlap_negative_bevel_nonzero | passed |
+| offset_overlap_negative_miter_evenodd | passed |
+| offset_overlap_negative_miter_nonzero | passed |
+| offset_overlap_positive_bevel_evenodd | passed |
+| offset_overlap_positive_bevel_nonzero | passed |
+| offset_overlap_positive_miter_evenodd | passed |
+| offset_overlap_positive_miter_nonzero | passed |
+| offset_rectangle_negative_bevel_evenodd | passed |
+| offset_rectangle_negative_bevel_nonzero | passed |
+| offset_rectangle_negative_miter_evenodd | passed |
+| offset_rectangle_negative_miter_nonzero | passed |
+| offset_rectangle_positive_bevel_evenodd | passed |
+| offset_rectangle_positive_bevel_nonzero | passed |
+| offset_rectangle_positive_miter_evenodd | passed |
+| offset_rectangle_positive_miter_nonzero | passed |
+| offset_self_crossing_negative_bevel_evenodd | passed |
+| offset_self_crossing_negative_bevel_nonzero | passed |
+| offset_self_crossing_negative_miter_evenodd | passed |
+| offset_self_crossing_negative_miter_nonzero | passed |
+| offset_self_crossing_positive_bevel_evenodd | passed |
+| offset_self_crossing_positive_bevel_nonzero | passed |
+| offset_self_crossing_positive_miter_evenodd | passed |
+| offset_self_crossing_positive_miter_nonzero | passed |
+| offset_small_n049_bevel_evenodd | passed |
+| offset_small_n049_bevel_nonzero | passed |
+| offset_small_n049_miter_evenodd | passed |
+| offset_small_n049_miter_nonzero | passed |
+| offset_small_n05_bevel_evenodd | passed |
+| offset_small_n05_bevel_nonzero | passed |
+| offset_small_n05_miter_evenodd | passed |
+| offset_small_n05_miter_nonzero | passed |
+| offset_small_p049_bevel_evenodd | passed |
+| offset_small_p049_bevel_nonzero | passed |
+| offset_small_p049_miter_evenodd | passed |
+| offset_small_p049_miter_nonzero | passed |
+| offset_small_p05_bevel_evenodd | passed |
+| offset_small_p05_bevel_nonzero | passed |
+| offset_small_p05_miter_evenodd | passed |
+| offset_small_p05_miter_nonzero | passed |
+| offset_small_zero_bevel_evenodd | passed |
+| offset_small_zero_bevel_nonzero | passed |
+| offset_small_zero_miter_evenodd | passed |
+| offset_small_zero_miter_nonzero | passed |

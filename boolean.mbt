@@ -425,8 +425,18 @@ fn[T] boolean_compute(
   limits : ScanLimits,
   rule : WindingRule,
   extract : (ScanState) -> T raise ScanAbort,
+  budget? : CallBudget,
+  internal_input? : Bool = false,
 ) -> Result[T, ClipError] {
-  let state = match prepare_scan(subject, clip, limits~, source_extrema=true) {
+  let state = match
+    prepare_scan(
+      subject,
+      clip,
+      limits~,
+      source_extrema=true,
+      budget?,
+      internal_input~,
+    ) {
     Ok(s) => s
     Err(e) => return Err(e)
   }

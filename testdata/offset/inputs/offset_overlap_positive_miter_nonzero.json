@@ -1,0 +1,56 @@
+{
+  "case_id": "offset_overlap_positive_miter_nonzero",
+  "delta": 3.0,
+  "fill_rule": "NonZero",
+  "format_version": 2,
+  "join_type": "Miter",
+  "miter_limit": 2.0,
+  "operation": "OffsetPolygons",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [
+      [
+        0,
+        0
+      ],
+      [
+        20,
+        0
+      ],
+      [
+        20,
+        20
+      ],
+      [
+        0,
+        20
+      ]
+    ],
+    [
+      [
+        10,
+        0
+      ],
+      [
+        30,
+        0
+      ],
+      [
+        30,
+        20
+      ],
+      [
+        10,
+        20
+      ]
+    ]
+  ],
+  "source": {
+    "group": "overlap",
+    "intent": "Same-direction inputs normalized together",
+    "kind": "moonclip_constructed"
+  }
+}

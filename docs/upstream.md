@@ -132,3 +132,19 @@ C# 源码作为主要阅读与后续移植参考；固定版本的 C++ 实现作
 | MoonClip 自行实现 | conformance 生成器/运行器/报告 | 两个公开入口独立执行，分别传输路径/树协议；公开/私有分流及专属过滤日志。 |
 
 所有运行几何与树归属由 MoonBit 实现，没有新增依赖。参考适配器、固定构建、参考协议、200 份输入/预期和选择文件未改；本笔只迁移清单能力状态和消费已有树预期。公开规则仍为两种，内部正负规则不公开。版权及 BSL-1.0 声明沿用。
+
+
+## Commit 9 闭合偏移（2026-10-18）
+
+继续固定 Clipper2_2.0.1 / `21ebba05db8894f0c7217ad35ea518080f324946`。本笔实际逐项核对 C++ `CPP/Clipper2Lib/src/clipper.offset.cpp` 及 `clipper.core.h`；C# 仍为整体引擎主要阅读来源，这次偏移数值顺序以固定 C++ 普通精度作为独立对照。官方 [ClipperOffset](https://www.angusj.com/clipper2/Docs/Units/Clipper.Offset/Classes/ClipperOffset/_Body.htm) / [MiterLimit](https://www.angusj.com/clipper2/Docs/Units/Clipper.Offset/Classes/ClipperOffset/Properties/MiterLimit.htm) 仅用于语义核对。
+
+| 实际参考 | MoonBit 文件 | 本笔改写与区别 |
+| --- | --- | --- |
+| offset.cpp GetUnitNormal、BuildNormals、OffsetPoint | offset.mbt | 按法线、正负距离、凹连接三点、近直线分类改写；入口先共同 Union，不使用单点/开放轮廓分支。 |
+| DoMiter、DoBevel、DoSquare、GetAvgUnitVector、ReflectPoint | offset.mbt | Miter 阈值严格大于、超限内部 Square 回退；Bevel 独立；Square 用固定线交点/反射次序；Round 未移植。 |
+| core.h Double CrossProduct、GetLineIntersectPt、Point 浮点构造 | offset.mbt | 核对向量叉积符号、线参数钳制及 std::round；MoonBit 自行增加有限性、Int64 转换与坐标边界错误。 |
+| ExecuteInternal 的方向相关 Union 目标 | offset.mbt、boolean.mbt | 正外负孔规范化后固定 Positive 清理；abs(delta)<0.5 返回已规范化独立结果。 |
+| MoonClip 自行实现 | engine_types.mbt、scanbeam.mbt、offset.mbt | 跨阶段累计预算、原始/生成输入区分、Result 及参数校验、来源隔离、纯 MoonBit 容器。 |
+| 参考工具，自主实现 | tools/oracle、tools/conformance | C++ 参考适配器 v2 与原 v1 分开；116 份预锁定自构造输入、严格数据/报告及独立测试。 |
+
+实际改写文件保留 Angus Johnson 2010–2025 版权及 BSL-1.0 声明，项目代码版权 BigSaltyMan 2026。运行库全部几何由 MoonBit 实现，无新依赖。C++ 仅用于独立预期生成；固定源完整归档及原始许可仍由原锁校验。新增编译输入 offset.cpp 与协议 v2 写入锁；原 Boolean v1、200 份输入/预期和两个选择文件字节未动。公开 Square、Round、ArcTolerance、开放描边引擎仍为后续范围。

@@ -48,6 +48,7 @@ fn main {
   let envelope = Json::object({
     "args": @env.args().to_json(),
     "results": run_cases().to_json(),
+    "offset_results": run_offset_cases().to_json(),
   })
   exit_code(report(@utf8.encode(envelope.stringify())))
 }
@@ -89,4 +90,30 @@ fn actual_tree(tree : @moonclip.PolyTree64) -> Json {
     }
   }
   Json::object({ "children": Json::array([]) })
+}
+
+///|
+fn actual_offset_case(
+  case_id : String,
+  digest : String,
+  result : Result[@moonclip.Paths64, @moonclip.ClipError],
+) -> Json {
+  match result {
+    Ok(paths) =>
+      Json::object({
+        "case_id": case_id.to_json(),
+        "input_sha256": digest.to_json(),
+        "status": "success".to_json(),
+        "paths": paths
+        .map(fn(path) { path.map(fn(p) { [p.x.to_int(), p.y.to_int()] }) })
+        .to_json(),
+      })
+    Err(error) =>
+      Json::object({
+        "case_id": case_id.to_json(),
+        "input_sha256": digest.to_json(),
+        "status": "error".to_json(),
+        "error": error.message().to_json(),
+      })
+  }
 }
