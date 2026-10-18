@@ -46,3 +46,10 @@ MoonBit 工具链继续固定为上述版本，运行库和公开接口不因参
 工具链保持 `moon 0.1.20260915 (2e1a46d)`、`moonc v0.10.13+cbb11c36f`、`moonrun 0.1.20260915 (2e1a46d)`。保留原有 128 项回归，新增 62 项内部数值、事件、水平、输出与组合测试，共 190 项，native 与 JS 使用相同预期分别执行，不能相加为独立用例数。完整脚本和 Linux 结果按最终提交的 Actions 日志核对。
 
 参考编译现在显式定义 CLIPPER2_HI_PRECISION=0，并在 environment.json 记录；此前默认也是普通分支。因修改构建配置，实际使用 GNU C++ 14.2.0、CMake 3.30.2、Python 3.11.9 重新构建，10 项实际适配器测试通过，136 例重建比较一致。参考预期、协议及 reference_only 分类未改动；普通 CI 的 55 项离线检查与独立 rebuild-reference CI 分别作为证据，不能互相替代。
+
+
+## Commit 6（2026-10-18）
+
+继续使用 moon 0.1.20260915 (2e1a46d)、moonc v0.10.13+cbb11c36f、moonrun 0.1.20260915 (2e1a46d)。根库没有新增 Mooncakes 依赖。库测试 205 项（保留原有 190 项），固定对照 60 项；native、JS 各 265 项独立执行。离线工具 68 项（保留原有 55 项）；原生 CLI 额外实际输出并严格比较 60 项，报告为 required=60/executed=60/passed=60/differences=0/execution_errors=0。
+
+原生命令使用 Python 3.11.9 及标准库负责报告 IO 与严格比较，小型原生 C 桥负责进程传输，运行库几何完全由 MoonBit 执行。参考 C++ 适配器、构建定义和预期未修改，本笔不重复触发独立参考重建。Linux native、JS 和严格对照证据以最终提交的普通 Actions 日志为准。

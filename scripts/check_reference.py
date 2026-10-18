@@ -15,7 +15,7 @@ def main():
     args = parser.parse_args()
     try:
         _, records = read_manifest(ROOT, args.manifest.resolve(), strict=args.strict)
-        print(f"Reference cases: {len(records)} (reference_only); MoonClip boolean compatibility: not run")
+        print(f"Reference cases: {len(records)}; integrity only; contour execution is checked by cmd/conformance; tree remains reference_only")
         print("Operations: " + str(dict(sorted(Counter(c['operation'] for _, c, _, _ in records).items()))))
         print("Fill rules: " + str(dict(sorted(Counter(c['fill_rule'] for _, c, _, _ in records).items()))))
     except (Invalid, OSError) as error:

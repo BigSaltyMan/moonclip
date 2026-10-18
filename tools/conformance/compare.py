@@ -243,7 +243,12 @@ def read_manifest(root, manifest, require_expected=True, strict=True):
     require(bool(value["cases"]), "manifest", "empty case manifest")
     seen, inputs, outputs, records = set(), set(), set(), []
     for entry in value["cases"]:
-        keys(entry, {"case_id", "input", "expected", "status"}, "manifest.case")
+        fields={"case_id", "input", "expected", "status"}
+        if "validation" in entry:
+            fields.add("validation")
+            keys(entry["validation"], {"paths", "tree"}, "manifest.validation")
+            require(entry["validation"]["tree"] == "reference_only" and entry["validation"]["paths"] in ("validate", "reference_only"), "manifest.validation", "unsupported capability status")
+        keys(entry, fields, "manifest.case")
         cid = entry["case_id"]
         require(type(cid) is str and cid not in seen, "manifest", "duplicate or invalid case ID")
         seen.add(cid)
@@ -254,6 +259,9 @@ def read_manifest(root, manifest, require_expected=True, strict=True):
         case = load(ip, strict)
         validate_input(case, cid)
         require(case["case_id"] == cid, cid, "input case ID mismatch")
+        if "validation" in entry:
+            required="validate" if case["fill_rule"]=="EvenOdd" else "reference_only"
+            require(entry["validation"]["paths"]==required,cid,"capability selection disagrees with fill rule")
         digest = sha256(ip.read_bytes())
         expected = None
         if require_expected:
@@ -280,3 +288,9 @@ def main():
 
 if __name__ == "__main__":
     sys.exit(main())
+
+
+def compare_paths(expected, actual, where="paths"):
+    validate_paths(expected, where+".expected", output=True)
+    validate_paths(actual, where+".actual", output=True)
+    require(normalize_paths(expected)==normalize_paths(actual),where,"contours differ (coordinates, vertices, winding or multiplicity)")

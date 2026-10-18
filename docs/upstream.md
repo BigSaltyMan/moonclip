@@ -68,7 +68,7 @@ C# 源码作为主要阅读与后续移植参考；固定版本的 C++ 实现作
 
 | 上游参考文件 | 计划用途与目标 |
 | --- | --- |
-| `CSharp/Clipper2Lib/Clipper.Engine.cs` / C++ 引擎的其余部分 | 后续运算贡献判定、填充规则、完整布尔分派与孔洞树；尚未实现。 |
+| `CSharp/Clipper2Lib/Clipper.Engine.cs` / C++ 引擎的其余部分 | 后续 NonZero/Positive/Negative、孔洞树与开放路径；尚未实现，EvenOdd 与四种公开分派已在 Commit 6 接入。 |
 | `CSharp/Clipper2Lib/Clipper.Offset.cs` | 后续偏移与描边；尚未建立 MoonBit 对应文件。 |
 
 已提供 C++ 参考适配器；MoonClip 算法兼容性尚未运行。后续引擎、偏移等按实际实现继续补充逐文件来源记录。
@@ -88,3 +88,17 @@ C# 源码作为主要阅读与后续移植参考；固定版本的 C++ 实现作
 | MoonClip 自行实现 | engine.mbt、其余新增文件 | 显式贡献决策队列、跨组件累计预算、输出环诊断、错误终止、来源和拆分记录；没有孔洞归属推断或公开 Boolean API。 |
 
 参考 CMake 现显式指定 `CLIPPER2_HI_PRECISION=0`，原来未定义该宏时选择的也是普通分支；构建报告增加 compile_definitions。因固定影响结果的编译选项，重新验证实际适配器和全部参考重建。未改动 136 例预期与 reference_only 状态；内部事件组合测试不计为上游布尔兼容性通过。
+
+
+## Commit 6 EvenOdd 贡献与四种操作（2026-10-18）
+
+实际读取同一固定提交 CSharp/Clipper2Lib/Clipper.Engine.cs 的 IsContributingClosed、SetWindCountForClosedPathEdge、InsertLocalMinimaIntoAEL、IntersectEdges、AddLocalMinPoly、AddLocalMaxPoly、JoinOutrecPaths。
+
+| 上游路线 | MoonBit 文件 | 改写说明 |
+| --- | --- | --- |
+| 闭合 EvenOdd 绕数初始化与 IsContributingClosed | boolean.mbt、engine_types.mbt | 仅实现闭合 EvenOdd；wind_other 保存另一操作数的区域奇偶，ClipType 组合独立操作数区域；四种操作和 FillRule 正式公开。 |
+| InsertLocalMinimaIntoAEL / IntersectEdges | boolean.mbt、engine.mbt、intersections.mbt | 成对插入后逐条执行右边界跨越，自动贡献回调复用真实交点与水平事件；不使用测试决策或直接排序跳过连接。 |
+| AddLocalMinPoly / JoinOutrecPaths 的输出端与方向 | boolean.mbt、output.mbt | 按前一个已贡献活动边决定输出两侧；合并时维护原记录方向和剩余活动端，保持索引环与重定向。 |
+| MoonClip 自行实现 | boolean.mbt | 公开 Result 入口、ExecutionFailure 分类、共享预算收尾；完成环一般共线共享边的预算内节点连接。没有正式几何父子关系。 |
+
+所有运行几何仍为 MoonBit；cmd/conformance 的 C 代码只将 JSON 传给 Python 报告脚本，不含几何实现。参考适配器、编译定义、上游输入与参考预期均未改动。60 条 EvenOdd 平铺对照已启动真实比较，树及其余规则保持待验证；不将此笔记为全部 136 例完整兼容。

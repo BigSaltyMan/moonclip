@@ -1,0 +1,13 @@
+supported_targets = "native"
+
+import {
+  "BigSaltyMan/moonclip",
+  "moonbitlang/core/env",
+  "moonbitlang/core/encoding/utf8",
+}
+
+pkgtype(kind: "executable")
+
+options(
+  "native-stub": [ "bridge.c" ],
+)

@@ -12,4 +12,4 @@ keywords = [ "geometry", "polygon" ]
 
 preferred_target = "native"
 
-description = "Integer polygon geometry for MoonBit (data model foundation)"
+description = "Integer polygon geometry and EvenOdd Boolean operations for MoonBit"

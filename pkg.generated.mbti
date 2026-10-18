@@ -11,6 +11,8 @@ pub const COORDINATE_LIMIT : Int64 = 1_000_000_000
 
 pub fn area2(Array[Point64], limits? : Limits) -> Result[@bigint.BigInt, ClipError]
 
+pub fn boolean_op(Array[Array[Point64]], Array[Array[Point64]], ClipType, fill_rule? : FillRule, limits? : Limits) -> Result[Array[Array[Point64]], ClipError]
+
 pub fn bounds(Array[Point64], limits? : Limits) -> Result[Bounds64?, ClipError]
 
 pub fn copy_path(Array[Point64]) -> Array[Point64]
@@ -49,15 +51,27 @@ pub(all) struct Bounds64 {
 pub(all) enum ClipError {
   InvalidInput(ErrorLocation, String)
   CoordinateOutOfRange(ErrorLocation, Axis, Int64)
+  ExecutionFailure(ErrorLocation, String)
   NumericFailure(ErrorLocation, String)
   ResourceLimitExceeded(ErrorLocation, ResourceKind, Int)
 } derive(Eq, @debug.Debug)
 pub fn ClipError::message(Self) -> String
 
+pub(all) enum ClipType {
+  Intersection
+  Union
+  Difference
+  Xor
+} derive(Eq, @debug.Debug)
+
 pub(all) struct ErrorLocation {
   stage : Stage
   path_index : Int?
   vertex_index : Int?
+} derive(Eq, @debug.Debug)
+
+pub(all) enum FillRule {
+  EvenOdd
 } derive(Eq, @debug.Debug)
 
 pub(all) struct Limits {
@@ -114,6 +128,7 @@ pub(all) enum Stage {
   Intersections
   HorizontalEvents
   OutputTopology
+  BooleanOp
 } derive(Eq, @debug.Debug)
 
 // Type aliases

@@ -387,6 +387,11 @@ fn output_close_or_merge(
   if be.side == Back {
     output_reverse(state, right)
   }
+  let preserve_front = state.boolean_operation is Some(_) && ae.side == Front
+  if preserve_front {
+    output_reverse(state, left)
+    output_reverse(state, right)
+  }
   let remaining_a = if ae.side == Front { ac.back_edge } else { ac.front_edge }
   let remaining_b = if be.side == Front { bc.back_edge } else { bc.front_edge }
   output_spend(state, 0, left.length() + right.length())
@@ -411,16 +416,16 @@ fn output_close_or_merge(
     n.prev = if i == 0 { left[left.length() - 1] } else { right[i - 1] }
     n.next = if i + 1 == right.length() { first } else { right[i + 1] }
   }
-  ac.anchor = Some(first)
+  ac.anchor = Some(if preserve_front { right[0] } else { first })
   ac.revision += 1
   bc.anchor = None
   bc.status = Redirect(ar)
   bc.revision += 1
   if remaining_a is Some(e) {
-    output_bind(state, e, ar, Front)
+    output_bind(state, e, ar, if preserve_front { Back } else { Front })
   }
   if remaining_b is Some(e) {
-    output_bind(state, e, ar, Back)
+    output_bind(state, e, ar, if preserve_front { Front } else { Back })
   }
 }
 

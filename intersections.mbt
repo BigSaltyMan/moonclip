@@ -73,7 +73,14 @@ fn apply_connection(
   scan_spend(state, 0, 1, location(OutputTopology, None, None))
   match decision {
     Ignore => ()
-    StartContour => output_start(state, event.first, event.second, event.point)
+    StartContour =>
+      start_connection(
+        state,
+        event.first,
+        event.second,
+        event.point,
+        event.kind == Minimum,
+      )
     ContinueContours => {
       ignore(output_add_edge(state, event.first, event.point))
       ignore(output_add_edge(state, event.second, event.point))
@@ -84,18 +91,19 @@ fn apply_connection(
       output_exchange(state, event.first, event.second)
     }
     CloseOrMerge =>
-      output_close_or_merge(state, event.first, event.second, event.point)
+      close_connection(state, event.first, event.second, event.point)
     CloseAndStart => {
       guard edge_get(state, event.first).output_end is Some(end) else {
         output_error(state, "Missing split source")
       }
       let source = output_resolve(state, end.record)
-      output_close_or_merge(state, event.first, event.second, event.point)
-      output_start(
+      close_connection(state, event.first, event.second, event.point)
+      start_connection(
         state,
         event.first,
         event.second,
         event.point,
+        false,
         split_from=Some(source),
       )
     }

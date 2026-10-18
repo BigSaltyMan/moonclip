@@ -4,7 +4,7 @@
 
 136 个输入均由 BigSaltyMan 于 2026 年为 MoonClip 自行构造，BSL-1.0。每份输入的 `source.kind` 为 `moonclip_constructed`，`source.group` 定位到下表，`source.intent` 记录构造目的。没有复制上游测试数据。定义脚本为 `tools/oracle/construct_cases.py`；稳定 ID 为 `组名_操作_规则`，不依赖数组下标。
 
-每个预期由固定 Clipper2 C++ 提交 `21ebba05db8894f0c7217ad35ea518080f324946` 真实执行生成，并关联同名输入的完整文件 SHA256。清单内所有状态均为 **reference_only**：参考已经生成，MoonClip 尚未实现或接入这些布尔操作。
+每个预期由固定 Clipper2 C++ 提交 `21ebba05db8894f0c7217ad35ea518080f324946` 真实执行生成，并关联同名输入的完整文件 SHA256。案例级状态保留 reference_only，能力级 validation 另行区分：Commit 6 的 60 条 EvenOdd 平铺轮廓已实际比较通过；全部树输出和其余规则仍为参考数据。
 
 ## 覆盖矩阵
 
@@ -60,3 +60,8 @@ bash scripts/generate_reference.sh --manifest testdata/manifest.json --check
 前两条离线运行；第三条需要预先构建参考程序。普通 CI 执行前两条，手动参考 CI 另执行真实构建、10 项适配器集成测试和全部重建。成功空结果、参考生成数、工具测试数、MoonBit 的 71 项基础回归不相互替代。MoonClip 布尔兼容性尚未运行，没有布尔运算兼容性通过数。
 
 工具限制：UTF-8 JSON 最多 8 MiB，输入/输出最多 10,000 条路径及 100,000 个顶点，树深最多 64；根容器不计为真实轮廓。输出必须保留顶点与绕向且不重复存储首点。当前没有偏移、描边、小数、开放路径或完整几何兼容性矩阵。后续分段不同的几何结果需另立独立证据，不能直接删点或放宽容差。
+
+
+## Commit 6 能力级验证
+
+清单保留案例级 reference_only，并增加 validation.paths / validation.tree。预先锁定的全部 60 条 EvenOdd 的 paths=validate，其余 76 条 paths=reference_only；全部 136 条 tree=reference_only。固定集合见 testdata/evenodd-selection.json，实际逐例平铺结果见 compatibility.md。生成测试在 native 与 JS 分别执行，不修改参考坐标、绕向、顶点或预期哈希。

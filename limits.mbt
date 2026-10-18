@@ -23,6 +23,7 @@ pub(all) enum Stage {
   Intersections
   HorizontalEvents
   OutputTopology
+  BooleanOp
 } derive(Eq, Debug)
 
 ///|
@@ -52,6 +53,7 @@ pub(all) struct ErrorLocation {
 pub(all) enum ClipError {
   InvalidInput(ErrorLocation, String)
   CoordinateOutOfRange(ErrorLocation, Axis, Int64)
+  ExecutionFailure(ErrorLocation, String)
   NumericFailure(ErrorLocation, String)
   ResourceLimitExceeded(ErrorLocation, ResourceKind, Int)
 } derive(Eq, Debug)
@@ -59,7 +61,9 @@ pub(all) enum ClipError {
 ///|
 pub fn ClipError::message(self : ClipError) -> String {
   match self {
-    InvalidInput(_, message) | NumericFailure(_, message) => message
+    InvalidInput(_, message)
+    | ExecutionFailure(_, message)
+    | NumericFailure(_, message) => message
     CoordinateOutOfRange(_, axis, value) => {
       let name = match axis {
         X => "x"

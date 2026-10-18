@@ -81,5 +81,98 @@ fn main raise {
     @moonclip.normalize_paths([contour, []], @moonclip.Closed, limits~)
     is Err(ResourceLimitExceeded(_, InputPaths, 1)),
   )
-  println("MoonClip geometry foundation OK")
+  run_boolean_example()
+  println("MoonClip geometry and EvenOdd Boolean OK")
+}
+
+///|
+fn example_rect(x : Int64, y : Int64, w : Int64, h : Int64) -> @moonclip.Path64 {
+  [
+    @moonclip.Point64::new(x, y),
+    @moonclip.Point64::new(x + w, y),
+    @moonclip.Point64::new(x + w, y + h),
+    @moonclip.Point64::new(x, y + h),
+  ]
+}
+
+///|
+fn example_same_ring(a : @moonclip.Path64, b : @moonclip.Path64) -> Bool {
+  if a.length() != b.length() {
+    return false
+  }
+  for shift = 0; shift < b.length(); shift = shift + 1 {
+    let mut same = true
+    for i = 0; i < a.length(); i = i + 1 {
+      if a[i] != b[(shift + i) % b.length()] {
+        same = false
+        break
+      }
+    }
+    if same {
+      return true
+    }
+  }
+  a.is_empty()
+}
+
+///|
+fn example_result(
+  actual : @moonclip.Paths64,
+  expected : @moonclip.Paths64,
+) -> Unit raise {
+  assert_eq(actual.length(), expected.length())
+  let matched = Array::make(expected.length(), false)
+  for path in actual {
+    let mut found = false
+    for i = 0; i < expected.length(); i = i + 1 {
+      if !matched[i] && example_same_ring(path, expected[i]) {
+        matched[i] = true
+        found = true
+        break
+      }
+    }
+    assert_true(found)
+  }
+}
+
+///|
+fn run_boolean_example() -> Unit raise {
+  let a = example_rect(0L, 0L, 10L, 10L)
+  let b = example_rect(5L, 0L, 10L, 10L)
+  for
+    (operation, expected, twice_area) in [
+      (@moonclip.Intersection, [example_rect(5L, 0L, 5L, 10L)], 100N),
+      (@moonclip.Union, [example_rect(0L, 0L, 15L, 10L)], 300N),
+      (@moonclip.Difference, [example_rect(0L, 0L, 5L, 10L)], 100N),
+      (
+        @moonclip.Xor,
+        [example_rect(0L, 0L, 5L, 10L), example_rect(10L, 0L, 5L, 10L)],
+        200N,
+      ),
+    ] {
+    guard @moonclip.boolean_op([a], [b], operation) is Ok(actual) else {
+      fail("Boolean operation failed")
+    }
+    example_result(actual, expected)
+    let mut total = 0N
+    for path in actual {
+      guard @moonclip.area2(path) is Ok(value) else {
+        fail("Expected exact area")
+      }
+      total += value
+    }
+    assert_eq(total, twice_area)
+  }
+  let concave = [
+    @moonclip.Point64::new(0L, 0L),
+    @moonclip.Point64::new(12L, 0L),
+    @moonclip.Point64::new(12L, 4L),
+    @moonclip.Point64::new(4L, 4L),
+    @moonclip.Point64::new(4L, 12L),
+    @moonclip.Point64::new(0L, 12L),
+  ]
+  guard @moonclip.boolean_op([concave], [], Union) is Ok(actual) else {
+    fail("Concave union failed")
+  }
+  example_result(actual, [concave])
 }

@@ -32,4 +32,7 @@ printf 'Checking offline reference tools\n'
 python --version
 python -m unittest discover -s tools/conformance -p "test_*.py"
 python scripts/check_reference.py --manifest testdata/manifest.json --strict
+python tools/conformance/generate_evenodd.py --check
+moon run --target native cmd/conformance -- --manifest testdata/manifest.json --report-json _build/conformance/report.json --report-md docs/compatibility.md --strict
+git diff --exit-code -- docs/compatibility.md
 git diff --check

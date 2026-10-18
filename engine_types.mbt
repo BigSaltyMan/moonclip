@@ -86,6 +86,7 @@ priv struct ActiveEdge {
   mut in_sel : Bool
   mut queued_horizontal : Bool
   mut at_exit : Bool
+  mut wind_other : Bool
   mut output_end : OutputEnd?
 }
 
@@ -161,6 +162,7 @@ priv struct ScanState {
   free_slots : Array[Int]
   horizontal_queue : Array[EdgeId]
   exits : Array[ExitEvent]
+  mut boolean_operation : ClipType?
   output : OutputState
   intersections : Array[IntersectEvent]
   mut intersection_cursor : Int
@@ -213,6 +215,7 @@ fn new_scan_state(limits : ScanLimits) -> ScanState {
     free_slots: [],
     horizontal_queue: [],
     exits: [],
+    boolean_operation: None,
     output: new_output_state(),
     intersections: [],
     intersection_cursor: 0,
@@ -378,6 +381,7 @@ fn edge_allocate(state : ScanState, chain_id : Int) -> EdgeId raise ScanAbort {
     in_sel: false,
     queued_horizontal: false,
     at_exit: false,
+    wind_other: false,
     output_end: None,
   }
   let index = match state.free_slots.pop() {

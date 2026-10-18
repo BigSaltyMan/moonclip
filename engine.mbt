@@ -51,6 +51,8 @@ fn engine_step(
       return Ok(state.phase)
     }
     match state.phase {
+      EnterMinima if state.boolean_operation is Some(operation) =>
+        boolean_enter_height(state, operation)
       EnterMinima => {
         let y = state.current_y.unwrap()
         // Preserve the immutable minima indices before enter_height removes the bucket.
