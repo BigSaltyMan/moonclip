@@ -41,3 +41,7 @@ jobs:
         run: bash scripts/generate_reference.sh --manifest testdata/composition-manifest.json --check
       - name: Check offline composition catalog
         run: python scripts/check_reference.py --manifest testdata/composition-manifest.json --strict
+      - name: Rebuild decimal-grid and actual ClipperD reference results
+        run: bash scripts/generate_reference.sh --manifest testdata/decimal-manifest.json --check
+      - name: Check offline decimal catalog and route counts
+        run: python scripts/check_reference.py --manifest testdata/decimal-manifest.json --strict

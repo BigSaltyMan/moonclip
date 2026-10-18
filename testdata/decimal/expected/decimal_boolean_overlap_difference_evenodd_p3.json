@@ -1,0 +1,69 @@
+{
+  "adapter_protocol_version": 5,
+  "case_id": "decimal_boolean_overlap_difference_evenodd_p3",
+  "format_version": 5,
+  "grid_paths": [
+    [
+      [
+        250,
+        -5250
+      ],
+      [
+        250,
+        4750
+      ],
+      [
+        -10250,
+        4750
+      ],
+      [
+        -10250,
+        -5250
+      ]
+    ]
+  ],
+  "input_sha256": "d87c997570a218e1ceebbd6ad513920db88c35373fe53c8c1aff58ebe033c937",
+  "metrics": {
+    "grid": {
+      "path_count": 1,
+      "paths": [
+        {
+          "area2": "210000000",
+          "bounds": [
+            -10250,
+            -5250,
+            250,
+            4750
+          ],
+          "vertices": 4
+        }
+      ],
+      "vertex_count": 4
+    }
+  },
+  "operation": "BooleanD",
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        0.25,
+        -5.25
+      ],
+      [
+        0.25,
+        4.75
+      ],
+      [
+        -10.25,
+        4.75
+      ],
+      [
+        -10.25,
+        -5.25
+      ]
+    ]
+  ],
+  "precision": 3,
+  "reference_route": "DecimalGrid",
+  "status": "success"
+}

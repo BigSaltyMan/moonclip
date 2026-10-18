@@ -1,0 +1,20 @@
+{
+  "adapter_protocol_version": 5,
+  "case_id": "decimal_stroke_round_butt_p0",
+  "format_version": 5,
+  "grid_paths": [],
+  "input_sha256": "8fef505ce4d01e7072faf2bdcb3f41c4efe1c6a91d8bfb1f2e5325381d629567",
+  "metrics": {
+    "grid": {
+      "path_count": 0,
+      "paths": [],
+      "vertex_count": 0
+    }
+  },
+  "operation": "StrokeD",
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [],
+  "precision": 0,
+  "reference_route": "DecimalGrid",
+  "status": "success"
+}

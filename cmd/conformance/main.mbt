@@ -51,6 +51,7 @@ fn main {
     "offset_results": run_offset_cases().to_json(),
     "stroke_results": run_stroke_cases().to_json(),
     "composition_results": run_composition_cases().to_json(),
+    "decimal_results": run_decimal_cases().to_json(),
   })
   exit_code(report(@utf8.encode(envelope.stringify())))
 }
@@ -170,4 +171,65 @@ fn composition_success(
     "intermediate": Json::object({ "paths": composition_paths(intermediate) }),
     "final": Json::object(result),
   })
+}
+
+///|
+fn decimal_json_integer(value : Double) -> Int {
+  let whole = value.to_int64()
+  let fraction = value - whole.to_double()
+  (if fraction >= 0.5 {
+    whole + 1L
+  } else if fraction <= -0.5 {
+    whole - 1L
+  } else {
+    whole
+  }).to_int()
+}
+
+///|
+fn actual_decimal_case(
+  id : String,
+  digest : String,
+  operation : String,
+  route : String,
+  digits : Int,
+  result : Result[@moonclip.PathsD, @moonclip.ClipError],
+) -> Json {
+  match result {
+    Err(error) =>
+      Json::object({
+        "case_id": id.to_json(),
+        "input_sha256": digest.to_json(),
+        "status": "error".to_json(),
+        "error": error.message().to_json(),
+      })
+    Ok(paths) => {
+      let scale = match digits {
+        0 => 1.0
+        1 => 10.0
+        2 => 100.0
+        3 => 1000.0
+        4 => 10000.0
+        5 => 100000.0
+        _ => 1000000.0
+      }
+      let grids = paths.map(fn(path) {
+        path.map(fn(p) {
+          [decimal_json_integer(p.x * scale), decimal_json_integer(p.y * scale)]
+        })
+      })
+      let decimals = paths.map(fn(path) { path.map(fn(p) { [p.x, p.y] }) })
+      Json::object({
+        "case_id": id.to_json(),
+        "input_sha256": digest.to_json(),
+        "status": "success".to_json(),
+        "format_version": (5).to_json(),
+        "operation": operation.to_json(),
+        "reference_route": route.to_json(),
+        "precision": digits.to_json(),
+        "grid_paths": grids.to_json(),
+        "paths": decimals.to_json(),
+      })
+    }
+  }
 }

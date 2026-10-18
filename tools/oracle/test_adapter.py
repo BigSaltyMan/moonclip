@@ -377,6 +377,84 @@ class AdapterTests(unittest.TestCase):
             case=self.composition_case();case['steps'][i]['fill_rule']='Positive';self.rejected(case)
         case=self.composition_case('composition_inset_hole_d2');case['steps'][1]['operation']='Xor';self.rejected(case)
 
+    def decimal_case(self,cid='decimal_boolean_overlap_union_nonzero_p3'):
+        return load(ROOT/f'testdata/decimal/inputs/{cid}.json',True)
+
+    def test_decimal_all_220_real_grid_and_physical_results(self):
+        from decimal_compare import decimal_selection
+        _,records=decimal_selection(ROOT)
+        for _,case,_,expected in records:
+            result=self.call(case);self.assertEqual(result.returncode,0,result.stderr)
+            compare(expected,decode(result.stdout),case['case_id'])
+
+    def test_decimal_actual_clipperd_rejects_off_grid_raw_result(self):
+        c=self.decimal_case('decimal_clipperd_intersection_nonzero_p3')
+        c['subject']=[[[0,0],[3,0],[0,1]]];c['clip']=[[[1,-1],[2,-1],[2,2],[1,2]]]
+        result=self.call(c);self.assertEqual(result.returncode,2)
+        self.assertIn(b'raw ClipperD output is not on the target decimal grid',result.stderr)
+        c['reference_route']='DecimalGrid'
+        self.assertEqual(self.call(c).returncode,0)
+
+    def test_decimal_clipperd_common_24_are_actual_outputs(self):
+        from decimal_compare import decimal_selection
+        _,records=decimal_selection(ROOT)
+        selected=[c for _,c,_,_ in records if c['reference_route']=='ClipperDCommonGrid']
+        self.assertEqual(len(selected),24)
+        for c in selected:self.assertEqual(decode(self.call(c).stdout)['reference_route'],'ClipperDCommonGrid')
+
+    def test_decimal_manual_original_unit_union_and_offset(self):
+        c=self.decimal_case();c['subject']=[[[0,0],[1,0],[1,1],[0,1]]];c['clip']=[]
+        out=decode(self.call(c).stdout)
+        self.assertEqual(normalize_paths(out['grid_paths']),normalize_paths([[[0,0],[1000,0],[1000,1000],[0,1000]]]))
+        c=self.decimal_case('decimal_offset_miter_out_nonzero_p3');c['paths']=[[[0,0],[1,0],[1,1],[0,1]]]
+        out=decode(self.call(c).stdout)
+        self.assertEqual(normalize_paths(out['paths']),normalize_paths([[[-0.2,-0.2],[1.2,-0.2],[1.2,1.2],[-0.2,1.2]]]))
+
+    def test_decimal_cpp_round_neighbours_and_signed_ties(self):
+        for v,want in [(0.49999999999999994,0),(0.5,1),(0.5000000000000001,1),(-0.49999999999999994,0),(-0.5,-1),(-0.5000000000000001,-1)]:
+            c=self.decimal_case();c['precision']=0;c['subject']=[[[v,-2],[3,-2],[3,2],[v,2]]];c['clip']=[]
+            result=self.call(c);self.assertEqual(result.returncode,0,result.stderr)
+            out=decode(result.stdout);self.assertEqual(min(p[0] for path in out['grid_paths'] for p in path),want)
+
+    def test_decimal_unknown_fields_versions_and_precision(self):
+        for field,value in [('format_version',True),('precision',-1),('precision',7),('precision',3.0),('grid','Binary'),('reference_route','Unknown'),('unexpected',1)]:
+            c=self.decimal_case();c[field]=value;self.rejected(c)
+
+    def test_decimal_missing_fields_rejected(self):
+        original=self.decimal_case()
+        for field in original:c=copy.deepcopy(original);del c[field];self.rejected(c)
+
+    def test_decimal_original_bound_cannot_round_back_inside(self):
+        import math
+        for precision,scale in enumerate((1,10,100,1000,10000,100000,1000000)):
+            c=self.decimal_case();c['precision']=precision;c['subject'][0][0][0]=math.nextafter(1000000000/scale,math.inf);self.rejected(c)
+
+    def test_decimal_distinct_positions_merging_rejected(self):
+        c=self.decimal_case();c['subject']=[[[0,0],[1,0],[0,1]]];c['clip']=[[[0.0001,0],[2,0],[2,1]]];self.rejected(c)
+
+    def test_decimal_degenerate_closed_and_original_duplicates(self):
+        c=self.decimal_case();c['subject']=[[[0,0],[1,0.0001],[2,0]]];self.rejected(c)
+        c=self.decimal_case();c['subject'][0].insert(1,c['subject'][0][0]);self.assertEqual(self.call(c).returncode,0)
+
+    def test_decimal_scaled_parameter_overflow_and_bad_options(self):
+        for field,value in [('delta',1e308),('miter_limit',1),('arc_tolerance',-1),('arc_tolerance',1e308),('join_type','Unknown')]:
+            c=self.decimal_case('decimal_offset_miter_out_nonzero_p6');c[field]=value;self.rejected(c)
+
+    def test_decimal_subgrid_width_runs_validated_empty_route(self):
+        c=self.decimal_case('decimal_stroke_round_round_p0')
+        out=decode(self.call(c).stdout);self.assertEqual(out['paths'],[]);self.assertEqual(out['grid_paths'],[])
+        c['path'][0][0]=1000000001;self.rejected(c)
+
+    def test_decimal_output_zero_normalized_and_unit_ratio_exact(self):
+        from decimal_compare import validate_decimal_geometry
+        c=self.decimal_case('decimal_clipperd_intersection_evenodd_p3');out=decode(self.call(c).stdout);validate_decimal_geometry(out)
+        for grid,path in zip(out['grid_paths'],out['paths']):
+            for gp,p in zip(grid,path):self.assertEqual(p,[v/1000 for v in gp])
+
+    def test_decimal_clipperd_route_only_accepts_shared_grid_inputs(self):
+        c=self.decimal_case();c['reference_route']='ClipperDCommonGrid';c['subject'][0][0][0]=0.1;self.rejected(c)
+        c=self.decimal_case('decimal_stroke_miter_butt_p3');c['reference_route']='ClipperDCommonGrid';self.rejected(c)
+
     def case_commit(self):
         return load(ROOT/'tools/oracle/upstream-lock.json',True)['commit']
 

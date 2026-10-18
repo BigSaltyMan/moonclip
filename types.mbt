@@ -35,3 +35,31 @@ pub fn copy_path(path : Path64) -> Path64 {
 pub fn copy_paths(paths : Paths64) -> Paths64 {
   paths.map(copy_path)
 }
+
+///|
+/// Raw immutable floating-point storage; geometry entry points validate and quantize.
+pub(all) struct PointD {
+  x : Double
+  y : Double
+} derive(Eq, Debug)
+
+///|
+pub fn PointD::new(x : Double, y : Double) -> PointD {
+  { x, y, }
+}
+
+///|
+pub type PathD = Array[PointD]
+
+///|
+pub type PathsD = Array[PathD]
+
+///|
+pub fn copy_path_d(path : PathD) -> PathD {
+  path.copy()
+}
+
+///|
+pub fn copy_paths_d(paths : PathsD) -> PathsD {
+  paths.map(copy_path_d)
+}

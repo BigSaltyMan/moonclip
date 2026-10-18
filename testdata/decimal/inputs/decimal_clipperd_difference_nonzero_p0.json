@@ -1,0 +1,59 @@
+{
+  "case_id": "decimal_clipperd_difference_nonzero_p0",
+  "clip": [
+    [
+      [
+        0,
+        -8
+      ],
+      [
+        24,
+        -8
+      ],
+      [
+        24,
+        8
+      ],
+      [
+        0,
+        8
+      ]
+    ]
+  ],
+  "clip_type": "Difference",
+  "fill_rule": "NonZero",
+  "format_version": 5,
+  "grid": "DecimalHalfAwayFromZero",
+  "operation": "BooleanD",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "precision": 0,
+  "reference_route": "ClipperDCommonGrid",
+  "source": {
+    "group": "BooleanD_ClipperDCommonGrid",
+    "intent": "Fixed decimal grid; decimal_clipperd_difference_nonzero_p0",
+    "kind": "moonclip_constructed"
+  },
+  "subject": [
+    [
+      [
+        -12,
+        -8
+      ],
+      [
+        12,
+        -8
+      ],
+      [
+        12,
+        8
+      ],
+      [
+        -12,
+        8
+      ]
+    ]
+  ]
+}

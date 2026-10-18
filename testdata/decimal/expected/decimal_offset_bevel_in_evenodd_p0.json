@@ -1,0 +1,115 @@
+{
+  "adapter_protocol_version": 5,
+  "case_id": "decimal_offset_bevel_in_evenodd_p0",
+  "format_version": 5,
+  "grid_paths": [
+    [
+      [
+        15,
+        15
+      ],
+      [
+        -5,
+        15
+      ],
+      [
+        -5,
+        -5
+      ],
+      [
+        15,
+        -5
+      ]
+    ],
+    [
+      [
+        0,
+        10
+      ],
+      [
+        10,
+        10
+      ],
+      [
+        10,
+        0
+      ],
+      [
+        0,
+        0
+      ]
+    ]
+  ],
+  "input_sha256": "94a2ff39a248b0d396faa0c0c688bd870974460aff786aa972a7b4ea034d28bf",
+  "metrics": {
+    "grid": {
+      "path_count": 2,
+      "paths": [
+        {
+          "area2": "800",
+          "bounds": [
+            -5,
+            -5,
+            15,
+            15
+          ],
+          "vertices": 4
+        },
+        {
+          "area2": "-200",
+          "bounds": [
+            0,
+            0,
+            10,
+            10
+          ],
+          "vertices": 4
+        }
+      ],
+      "vertex_count": 8
+    }
+  },
+  "operation": "OffsetD",
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        15.0,
+        15.0
+      ],
+      [
+        -5.0,
+        15.0
+      ],
+      [
+        -5.0,
+        -5.0
+      ],
+      [
+        15.0,
+        -5.0
+      ]
+    ],
+    [
+      [
+        0.0,
+        10.0
+      ],
+      [
+        10.0,
+        10.0
+      ],
+      [
+        10.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0
+      ]
+    ]
+  ],
+  "precision": 0,
+  "reference_route": "DecimalGrid",
+  "status": "success"
+}

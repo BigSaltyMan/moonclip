@@ -45,6 +45,8 @@ def expected_directory(records):
         return 'testdata/upstream/expected'
     if operations == {'OffsetPolygons'}:
         return 'testdata/offset/expected'
+    if operations <= {'BooleanD','OffsetD','StrokeD'}:
+        return 'testdata/decimal/expected'
     if operations == {'Composition'}:
         return 'testdata/composition/expected'
     if operations == {'StrokePolyline'}:

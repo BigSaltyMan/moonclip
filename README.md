@@ -2,7 +2,7 @@
 
 MoonClip 是用 MoonBit 实现的整数多边形几何库，目前处于开发初期。目标版本为 `0.1.0`，尚未发布到 Mooncakes，模块名称的可用性将在发布前确认。
 
-目前已实现：不可变 `Int64` 点、有序路径与轮廓集合、结构比较、独立复制，以及精确叉积与方向、边界框、精确两倍有向面积、EvenOdd 点包含判断和开放/闭合模式的重复点整理。另已建立内部扫描线、活动边、交点事件、水平交互及输出环连接原语，采用节点复用和共享工作量预算；公开支持 EvenOdd 与 NonZero 下的 Intersection、Union、Difference、Xor。孔洞树由 boolean_tree 提供；闭合区域偏移已公开 Miter、Bevel、Square、Round，以及 MiterLimit / ArcTolerance。开放描边已由 stroke_polyline 提供；小数接口和简化仍在后续计划中。
+目前已实现：不可变 `Int64` 点、有序路径与轮廓集合、结构比较、独立复制，以及精确叉积与方向、边界框、精确两倍有向面积、EvenOdd 点包含判断和开放/闭合模式的重复点整理。另已建立内部扫描线、活动边、交点事件、水平交互及输出环连接原语，采用节点复用和共享工作量预算；公开支持 EvenOdd 与 NonZero 下的 Intersection、Union、Difference、Xor。孔洞树由 boolean_tree 提供；闭合区域偏移已公开 Miter、Bevel、Square、Round，以及 MiterLimit / ArcTolerance。开放描边已由 stroke_polyline 提供；小数 Boolean、Offset、Stroke 已接入统一十进制精度，显式简化仍在后续计划中。
 
 ## 数据契约
 
@@ -43,7 +43,7 @@ moon run --target native cmd/example
 示例代码位于 [`cmd/example/main.mbt`](cmd/example/main.mbt)，通过公开接口验证复制隔离、负坐标边界框、方向、精确面积和点包含，整理重复点后检查源数据未变，并捕获坐标及预算错误。当前完整示例还检查四种布尔操作、孔洞树、闭合偏移，以及下面三类组合；成功输出：
 
 ```text
-MoonClip geometry, Boolean, PolyTree, offset, stroke and composition OK
+MoonClip geometry, Boolean, PolyTree, offset, stroke, composition and decimal OK
 ```
 
 对应示例包导入根库后，可直接调用公开接口：
@@ -274,7 +274,7 @@ moon test --target js --filter "reference stroke paths: *"
 moon run --target native cmd/conformance -- --manifest testdata/manifest.json --offset-manifest testdata/offset-manifest.json --stroke-manifest testdata/stroke-manifest.json --report-json _build/conformance/report.json --report-md docs/compatibility.md --strict
 ```
 
-当前保持整数坐标接口。三类组合验收已接入；小数坐标及缩放留给 Commit 13。
+整数和小数接口均已提供；三类组合验收已接入，显式轮廓简化留给 Commit 14。
 
 
 ## 组合流程与资源保护
@@ -285,4 +285,15 @@ moon run --target native cmd/conformance -- --manifest testdata/manifest.json --
 
 Commit 12 补计输入整理存储、法向量及结果容器、环索引、输出复制、树验证和生产诊断费用；负收费被拒绝，两项预算原子更新，清理不退款。内部默认仍为 500,000 节点、5,000,000 工作量；公开 Limits、接口、完整描边宽度、ArcTolerance 与整数舍入语义不变。
 
-当前验收为 native、JS 同一批各 **1414 项**（1330 回归＋24 组合对照＋60 功能），工具 **179 项**、真实适配器 **51 项**分别计数。独立参考为 **772 条**（200 Boolean＋272 Offset＋276 Stroke＋24 组合），两步不拆成独立案例。报告分别列中间和最终差异；预算测试不代表与 Clipper2 资源限制兼容。普通 Linux 检查和固定 C++ 参考重建分别验证，执行证据见[兼容报告](docs/compatibility.md)。
+Commit 12 验收为 native、JS 同一批各 **1414 项**（1330 回归＋24 组合对照＋60 功能），工具 **179 项**、真实适配器 **51 项**分别计数。独立参考为 **772 条**（200 Boolean＋272 Offset＋276 Stroke＋24 组合），两步不拆成独立案例。报告分别列中间和最终差异；预算测试不代表与 Clipper2 资源限制兼容。普通 Linux 检查和固定 C++ 参考重建分别验证，执行证据见[兼容报告](docs/compatibility.md)。
+
+
+## 小数坐标与统一精度
+
+新增 PointD、PathD、PathsD、独立复制辅助，以及 boolean_op_d、offset_polygons_d、stroke_polyline_d。Precision::new 支持0—6，默认3；三个入口统一使用10^precision，参数单位和默认填充/端点沿用对应整数入口。precision=3 时坐标范围为±1,000,000，delta=.2进入核心为200，width=.4为400；ArcTolerance同步缩放，MiterLimit不变。完整调用见[受检示例](cmd/example/main.mbt)。
+
+小数构造保存原始Double；入口先检查原单位范围，再缩放并按半整数远离零量化。不同原始位置合并到同一网格点、非空闭合轮廓不足三个不同非共线点时明确报QuantizationFailure，原本相同点允许重复，空轮廓允许。错误保留原始索引与轴，越界值使用原单位和精度；不修改整数退化输入契约。量化、合并索引、整数求值和输出转换共用一次累计预算，失败不返回部分结果。
+
+输出精确遵循网格整数除以倍率，零规范为+0.0。Double并非任意十进制精确数；输入量化、交点投影和圆弧近似是不同误差来源，半格局部坐标界不构成整体拓扑保证。固定ClipperD使用二进制倍率，因此报告单列196条十进制网格参考和24条真实ClipperD共同网格参考，不泛化为全部ClipperD兼容。详见[小数契约](docs/decimal.md)。
+
+当前同一批native、JS各1714项（1414回归＋220对照＋80功能），小数过滤各220；工具209、真实适配器65分别计数。独立参考为992条，旧772条输入、预期及清单/选择保持字节不变。普通CI和独立Cpp重建分别核对，报告保留操作、精度、参考路线、网格及原单位差异。

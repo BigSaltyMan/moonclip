@@ -804,3 +804,261 @@ Each recipe counts once. Both real intermediate and final outputs are compared. 
 | composition_stroke_hole_round | passed | passed | passed |  |
 | composition_stroke_straight_butt | passed | passed | passed |  |
 | composition_stroke_straight_round | passed | passed | passed |  |
+
+# Decimal compatibility
+
+Decimal public paths: 220/220; required=220; differences=0; execution_errors=0. Independent reference total: 772 +220 =992.
+
+MoonClip always uses 10^precision. DecimalGrid invokes the pinned integer routes after independent std::round quantization; ClipperDCommonGrid really invokes ClipperD and verifies its raw output lies on the target grid before any integer conversion. These 24 common-grid cases do not establish general ClipperD equivalence.
+
+Comparison checks full integer contours AND exact coordinate64 / scale decoding, finite output and positive zero; re-quantizing arbitrary decimal output is insufficient. Quantization rejection and budgets are MoonClip contract tests.
+
+| Reference route | Required | Executed | Passed | Differences | Execution errors |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| DecimalGrid | 196 | 196 | 196 | 0 | 0 |
+| ClipperDCommonGrid | 24 | 24 | 24 | 0 | 0 |
+
+| Operation | Cases | Precision coverage |
+| --- | ---: | --- |
+| BooleanD | 136 | 0: 24, 1: 16, 2: 16, 3: 24, 4: 16, 5: 16, 6: 24 |
+| OffsetD | 48 | 0: 16, 3: 16, 6: 16 |
+| StrokeD | 36 | 0: 12, 3: 12, 6: 12 |
+
+| Parameter | Actual case coverage |
+| --- | --- |
+| clip_type | Difference: 34, Intersection: 34, Union: 34, Xor: 34 |
+| fill_rule | EvenOdd: 92, NonZero: 92 |
+| join_type | Bevel: 21, Miter: 21, Round: 21, Square: 21 |
+| cap_type | Butt: 12, Round: 12, Square: 12 |
+| delta | -0.2: 24, 0.2: 24 |
+| width | 0.4: 36 |
+| miter_limit | 2.0: 84 |
+| arc_tolerance | 0.025: 84 |
+
+| Target | Decimal filtered paths |
+| --- | --- |
+| native | 220/220 |
+| js | 220/220 |
+
+| Decimal case | Route | Precision | Grid contours | Decoded coordinates | Status |
+| --- | --- | ---: | --- | --- | --- |
+| decimal_boolean_hole_difference_evenodd_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_boolean_hole_difference_evenodd_p1 | DecimalGrid | 1 | passed | passed | passed |
+| decimal_boolean_hole_difference_evenodd_p2 | DecimalGrid | 2 | passed | passed | passed |
+| decimal_boolean_hole_difference_evenodd_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_boolean_hole_difference_evenodd_p4 | DecimalGrid | 4 | passed | passed | passed |
+| decimal_boolean_hole_difference_evenodd_p5 | DecimalGrid | 5 | passed | passed | passed |
+| decimal_boolean_hole_difference_evenodd_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_boolean_hole_difference_nonzero_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_boolean_hole_difference_nonzero_p1 | DecimalGrid | 1 | passed | passed | passed |
+| decimal_boolean_hole_difference_nonzero_p2 | DecimalGrid | 2 | passed | passed | passed |
+| decimal_boolean_hole_difference_nonzero_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_boolean_hole_difference_nonzero_p4 | DecimalGrid | 4 | passed | passed | passed |
+| decimal_boolean_hole_difference_nonzero_p5 | DecimalGrid | 5 | passed | passed | passed |
+| decimal_boolean_hole_difference_nonzero_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_boolean_hole_intersection_evenodd_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_boolean_hole_intersection_evenodd_p1 | DecimalGrid | 1 | passed | passed | passed |
+| decimal_boolean_hole_intersection_evenodd_p2 | DecimalGrid | 2 | passed | passed | passed |
+| decimal_boolean_hole_intersection_evenodd_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_boolean_hole_intersection_evenodd_p4 | DecimalGrid | 4 | passed | passed | passed |
+| decimal_boolean_hole_intersection_evenodd_p5 | DecimalGrid | 5 | passed | passed | passed |
+| decimal_boolean_hole_intersection_evenodd_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_boolean_hole_intersection_nonzero_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_boolean_hole_intersection_nonzero_p1 | DecimalGrid | 1 | passed | passed | passed |
+| decimal_boolean_hole_intersection_nonzero_p2 | DecimalGrid | 2 | passed | passed | passed |
+| decimal_boolean_hole_intersection_nonzero_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_boolean_hole_intersection_nonzero_p4 | DecimalGrid | 4 | passed | passed | passed |
+| decimal_boolean_hole_intersection_nonzero_p5 | DecimalGrid | 5 | passed | passed | passed |
+| decimal_boolean_hole_intersection_nonzero_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_boolean_hole_union_evenodd_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_boolean_hole_union_evenodd_p1 | DecimalGrid | 1 | passed | passed | passed |
+| decimal_boolean_hole_union_evenodd_p2 | DecimalGrid | 2 | passed | passed | passed |
+| decimal_boolean_hole_union_evenodd_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_boolean_hole_union_evenodd_p4 | DecimalGrid | 4 | passed | passed | passed |
+| decimal_boolean_hole_union_evenodd_p5 | DecimalGrid | 5 | passed | passed | passed |
+| decimal_boolean_hole_union_evenodd_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_boolean_hole_union_nonzero_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_boolean_hole_union_nonzero_p1 | DecimalGrid | 1 | passed | passed | passed |
+| decimal_boolean_hole_union_nonzero_p2 | DecimalGrid | 2 | passed | passed | passed |
+| decimal_boolean_hole_union_nonzero_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_boolean_hole_union_nonzero_p4 | DecimalGrid | 4 | passed | passed | passed |
+| decimal_boolean_hole_union_nonzero_p5 | DecimalGrid | 5 | passed | passed | passed |
+| decimal_boolean_hole_union_nonzero_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_boolean_hole_xor_evenodd_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_boolean_hole_xor_evenodd_p1 | DecimalGrid | 1 | passed | passed | passed |
+| decimal_boolean_hole_xor_evenodd_p2 | DecimalGrid | 2 | passed | passed | passed |
+| decimal_boolean_hole_xor_evenodd_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_boolean_hole_xor_evenodd_p4 | DecimalGrid | 4 | passed | passed | passed |
+| decimal_boolean_hole_xor_evenodd_p5 | DecimalGrid | 5 | passed | passed | passed |
+| decimal_boolean_hole_xor_evenodd_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_boolean_hole_xor_nonzero_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_boolean_hole_xor_nonzero_p1 | DecimalGrid | 1 | passed | passed | passed |
+| decimal_boolean_hole_xor_nonzero_p2 | DecimalGrid | 2 | passed | passed | passed |
+| decimal_boolean_hole_xor_nonzero_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_boolean_hole_xor_nonzero_p4 | DecimalGrid | 4 | passed | passed | passed |
+| decimal_boolean_hole_xor_nonzero_p5 | DecimalGrid | 5 | passed | passed | passed |
+| decimal_boolean_hole_xor_nonzero_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_boolean_overlap_difference_evenodd_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_boolean_overlap_difference_evenodd_p1 | DecimalGrid | 1 | passed | passed | passed |
+| decimal_boolean_overlap_difference_evenodd_p2 | DecimalGrid | 2 | passed | passed | passed |
+| decimal_boolean_overlap_difference_evenodd_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_boolean_overlap_difference_evenodd_p4 | DecimalGrid | 4 | passed | passed | passed |
+| decimal_boolean_overlap_difference_evenodd_p5 | DecimalGrid | 5 | passed | passed | passed |
+| decimal_boolean_overlap_difference_evenodd_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_boolean_overlap_difference_nonzero_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_boolean_overlap_difference_nonzero_p1 | DecimalGrid | 1 | passed | passed | passed |
+| decimal_boolean_overlap_difference_nonzero_p2 | DecimalGrid | 2 | passed | passed | passed |
+| decimal_boolean_overlap_difference_nonzero_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_boolean_overlap_difference_nonzero_p4 | DecimalGrid | 4 | passed | passed | passed |
+| decimal_boolean_overlap_difference_nonzero_p5 | DecimalGrid | 5 | passed | passed | passed |
+| decimal_boolean_overlap_difference_nonzero_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_boolean_overlap_intersection_evenodd_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_boolean_overlap_intersection_evenodd_p1 | DecimalGrid | 1 | passed | passed | passed |
+| decimal_boolean_overlap_intersection_evenodd_p2 | DecimalGrid | 2 | passed | passed | passed |
+| decimal_boolean_overlap_intersection_evenodd_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_boolean_overlap_intersection_evenodd_p4 | DecimalGrid | 4 | passed | passed | passed |
+| decimal_boolean_overlap_intersection_evenodd_p5 | DecimalGrid | 5 | passed | passed | passed |
+| decimal_boolean_overlap_intersection_evenodd_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_boolean_overlap_intersection_nonzero_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_boolean_overlap_intersection_nonzero_p1 | DecimalGrid | 1 | passed | passed | passed |
+| decimal_boolean_overlap_intersection_nonzero_p2 | DecimalGrid | 2 | passed | passed | passed |
+| decimal_boolean_overlap_intersection_nonzero_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_boolean_overlap_intersection_nonzero_p4 | DecimalGrid | 4 | passed | passed | passed |
+| decimal_boolean_overlap_intersection_nonzero_p5 | DecimalGrid | 5 | passed | passed | passed |
+| decimal_boolean_overlap_intersection_nonzero_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_boolean_overlap_union_evenodd_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_boolean_overlap_union_evenodd_p1 | DecimalGrid | 1 | passed | passed | passed |
+| decimal_boolean_overlap_union_evenodd_p2 | DecimalGrid | 2 | passed | passed | passed |
+| decimal_boolean_overlap_union_evenodd_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_boolean_overlap_union_evenodd_p4 | DecimalGrid | 4 | passed | passed | passed |
+| decimal_boolean_overlap_union_evenodd_p5 | DecimalGrid | 5 | passed | passed | passed |
+| decimal_boolean_overlap_union_evenodd_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_boolean_overlap_union_nonzero_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_boolean_overlap_union_nonzero_p1 | DecimalGrid | 1 | passed | passed | passed |
+| decimal_boolean_overlap_union_nonzero_p2 | DecimalGrid | 2 | passed | passed | passed |
+| decimal_boolean_overlap_union_nonzero_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_boolean_overlap_union_nonzero_p4 | DecimalGrid | 4 | passed | passed | passed |
+| decimal_boolean_overlap_union_nonzero_p5 | DecimalGrid | 5 | passed | passed | passed |
+| decimal_boolean_overlap_union_nonzero_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_boolean_overlap_xor_evenodd_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_boolean_overlap_xor_evenodd_p1 | DecimalGrid | 1 | passed | passed | passed |
+| decimal_boolean_overlap_xor_evenodd_p2 | DecimalGrid | 2 | passed | passed | passed |
+| decimal_boolean_overlap_xor_evenodd_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_boolean_overlap_xor_evenodd_p4 | DecimalGrid | 4 | passed | passed | passed |
+| decimal_boolean_overlap_xor_evenodd_p5 | DecimalGrid | 5 | passed | passed | passed |
+| decimal_boolean_overlap_xor_evenodd_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_boolean_overlap_xor_nonzero_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_boolean_overlap_xor_nonzero_p1 | DecimalGrid | 1 | passed | passed | passed |
+| decimal_boolean_overlap_xor_nonzero_p2 | DecimalGrid | 2 | passed | passed | passed |
+| decimal_boolean_overlap_xor_nonzero_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_boolean_overlap_xor_nonzero_p4 | DecimalGrid | 4 | passed | passed | passed |
+| decimal_boolean_overlap_xor_nonzero_p5 | DecimalGrid | 5 | passed | passed | passed |
+| decimal_boolean_overlap_xor_nonzero_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_clipperd_difference_evenodd_p0 | ClipperDCommonGrid | 0 | passed | passed | passed |
+| decimal_clipperd_difference_evenodd_p3 | ClipperDCommonGrid | 3 | passed | passed | passed |
+| decimal_clipperd_difference_evenodd_p6 | ClipperDCommonGrid | 6 | passed | passed | passed |
+| decimal_clipperd_difference_nonzero_p0 | ClipperDCommonGrid | 0 | passed | passed | passed |
+| decimal_clipperd_difference_nonzero_p3 | ClipperDCommonGrid | 3 | passed | passed | passed |
+| decimal_clipperd_difference_nonzero_p6 | ClipperDCommonGrid | 6 | passed | passed | passed |
+| decimal_clipperd_intersection_evenodd_p0 | ClipperDCommonGrid | 0 | passed | passed | passed |
+| decimal_clipperd_intersection_evenodd_p3 | ClipperDCommonGrid | 3 | passed | passed | passed |
+| decimal_clipperd_intersection_evenodd_p6 | ClipperDCommonGrid | 6 | passed | passed | passed |
+| decimal_clipperd_intersection_nonzero_p0 | ClipperDCommonGrid | 0 | passed | passed | passed |
+| decimal_clipperd_intersection_nonzero_p3 | ClipperDCommonGrid | 3 | passed | passed | passed |
+| decimal_clipperd_intersection_nonzero_p6 | ClipperDCommonGrid | 6 | passed | passed | passed |
+| decimal_clipperd_union_evenodd_p0 | ClipperDCommonGrid | 0 | passed | passed | passed |
+| decimal_clipperd_union_evenodd_p3 | ClipperDCommonGrid | 3 | passed | passed | passed |
+| decimal_clipperd_union_evenodd_p6 | ClipperDCommonGrid | 6 | passed | passed | passed |
+| decimal_clipperd_union_nonzero_p0 | ClipperDCommonGrid | 0 | passed | passed | passed |
+| decimal_clipperd_union_nonzero_p3 | ClipperDCommonGrid | 3 | passed | passed | passed |
+| decimal_clipperd_union_nonzero_p6 | ClipperDCommonGrid | 6 | passed | passed | passed |
+| decimal_clipperd_xor_evenodd_p0 | ClipperDCommonGrid | 0 | passed | passed | passed |
+| decimal_clipperd_xor_evenodd_p3 | ClipperDCommonGrid | 3 | passed | passed | passed |
+| decimal_clipperd_xor_evenodd_p6 | ClipperDCommonGrid | 6 | passed | passed | passed |
+| decimal_clipperd_xor_nonzero_p0 | ClipperDCommonGrid | 0 | passed | passed | passed |
+| decimal_clipperd_xor_nonzero_p3 | ClipperDCommonGrid | 3 | passed | passed | passed |
+| decimal_clipperd_xor_nonzero_p6 | ClipperDCommonGrid | 6 | passed | passed | passed |
+| decimal_offset_bevel_in_evenodd_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_offset_bevel_in_evenodd_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_offset_bevel_in_evenodd_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_offset_bevel_in_nonzero_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_offset_bevel_in_nonzero_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_offset_bevel_in_nonzero_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_offset_bevel_out_evenodd_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_offset_bevel_out_evenodd_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_offset_bevel_out_evenodd_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_offset_bevel_out_nonzero_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_offset_bevel_out_nonzero_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_offset_bevel_out_nonzero_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_offset_miter_in_evenodd_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_offset_miter_in_evenodd_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_offset_miter_in_evenodd_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_offset_miter_in_nonzero_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_offset_miter_in_nonzero_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_offset_miter_in_nonzero_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_offset_miter_out_evenodd_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_offset_miter_out_evenodd_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_offset_miter_out_evenodd_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_offset_miter_out_nonzero_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_offset_miter_out_nonzero_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_offset_miter_out_nonzero_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_offset_round_in_evenodd_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_offset_round_in_evenodd_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_offset_round_in_evenodd_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_offset_round_in_nonzero_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_offset_round_in_nonzero_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_offset_round_in_nonzero_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_offset_round_out_evenodd_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_offset_round_out_evenodd_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_offset_round_out_evenodd_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_offset_round_out_nonzero_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_offset_round_out_nonzero_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_offset_round_out_nonzero_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_offset_square_in_evenodd_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_offset_square_in_evenodd_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_offset_square_in_evenodd_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_offset_square_in_nonzero_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_offset_square_in_nonzero_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_offset_square_in_nonzero_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_offset_square_out_evenodd_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_offset_square_out_evenodd_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_offset_square_out_evenodd_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_offset_square_out_nonzero_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_offset_square_out_nonzero_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_offset_square_out_nonzero_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_stroke_bevel_butt_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_stroke_bevel_butt_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_stroke_bevel_butt_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_stroke_bevel_round_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_stroke_bevel_round_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_stroke_bevel_round_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_stroke_bevel_square_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_stroke_bevel_square_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_stroke_bevel_square_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_stroke_miter_butt_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_stroke_miter_butt_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_stroke_miter_butt_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_stroke_miter_round_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_stroke_miter_round_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_stroke_miter_round_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_stroke_miter_square_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_stroke_miter_square_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_stroke_miter_square_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_stroke_round_butt_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_stroke_round_butt_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_stroke_round_butt_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_stroke_round_round_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_stroke_round_round_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_stroke_round_round_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_stroke_round_square_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_stroke_round_square_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_stroke_round_square_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_stroke_square_butt_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_stroke_square_butt_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_stroke_square_butt_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_stroke_square_round_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_stroke_square_round_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_stroke_square_round_p6 | DecimalGrid | 6 | passed | passed | passed |
+| decimal_stroke_square_square_p0 | DecimalGrid | 0 | passed | passed | passed |
+| decimal_stroke_square_square_p3 | DecimalGrid | 3 | passed | passed | passed |
+| decimal_stroke_square_square_p6 | DecimalGrid | 6 | passed | passed | passed |

@@ -169,6 +169,49 @@ def evaluate_composition(manifest,results):
     return report
 
 
+def evaluate_decimal(manifest,results):
+    from decimal_compare import decimal_selection,validate_decimal_geometry
+    from compare import read_manifest,keys
+    from collections import Counter
+    _,records=read_manifest(ROOT,manifest,strict=True)
+    _,selected=decimal_selection(ROOT)
+    require(records==selected,'decimal','manifest differs from locked selection')
+    require(type(results) is list,'decimal actual','expected results array')
+    actual={}
+    for r in results:
+        require(type(r) is dict and type(r.get('case_id')) is str,'decimal actual','missing ID')
+        require(r['case_id'] not in actual,r['case_id'],'duplicate decimal result');actual[r['case_id']]=r
+    require(set(actual)=={e['case_id'] for e,_,_,_ in records},'decimal actual','missing or extra decimal results')
+    details=[]
+    for e,c,d,v in records:
+        cid=c['case_id'];r=actual[cid]
+        require(r.get('input_sha256')==d,cid,'compiled decimal input hash mismatch')
+        detail=dict(case_id=cid,operation=c['operation'],precision=c['precision'],reference_route=c['reference_route'])
+        if r.get('status')=='error':
+            keys(r,{'case_id','input_sha256','status','error'},cid);require(type(r['error']) is str,cid,'invalid decimal execution error')
+            detail.update(status='execution_error',grid_paths='execution_error',decoded='execution_error',message=r['error'])
+        else:
+            keys(r,{'case_id','input_sha256','status','format_version','operation','reference_route','precision','grid_paths','paths'},cid)
+            require(type(r['format_version']) is int and r['format_version']==5 and r['status']=='success',cid,'invalid decimal success envelope')
+            require(all(r[k]==c[k] for k in ('operation','precision','reference_route')),cid,'compiled decimal metadata mismatch')
+            validate_paths(r['grid_paths'],cid+'.grid_paths',True)
+            try:compare_paths(v['grid_paths'],r['grid_paths'],cid+'.grid_paths')
+            except Invalid as error:detail.update(grid_paths='difference',grid_message=str(error))
+            else:detail['grid_paths']='passed'
+            try:validate_decimal_geometry(r,cid+'.decoded')
+            except Invalid as error:detail.update(decoded='difference',decoded_message=str(error))
+            else:detail['decoded']='passed'
+            detail['status']='passed' if detail['grid_paths']==detail['decoded']=='passed' else 'difference'
+        details.append(detail)
+    report={**summary(details),'required':220,'reference_cases':220,'cases':details}
+    report['routes']={route:{**summary([d for d in details if d['reference_route']==route]),'required':count} for route,count in [('DecimalGrid',196),('ClipperDCommonGrid',24)]}
+    report['operations']={op:{'count':sum(c['operation']==op for _,c,_,_ in records),'precisions':dict(sorted(Counter(str(c['precision']) for _,c,_,_ in records if c['operation']==op).items()))} for op in ('BooleanD','OffsetD','StrokeD')}
+    report['parameters']={field:dict(sorted(Counter(str(c[field]) for _,c,_,_ in records if field in c).items())) for field in ('clip_type','fill_rule','join_type','cap_type','delta','width','miter_limit','arc_tolerance')}
+    report['grid_paths']={**summary(details,'grid_paths'),'required':220}
+    report['decoded']={**summary(details,'decoded'),'required':220}
+    return report
+
+
 def markdown(report):
     lines=['# Boolean compatibility','','Pinned Clipper2 2.0.1, commit `21ebba05db8894f0c7217ad35ea518080f324946`; ordinary precision, preserve_collinear=false, reverse_solution=false.','',
       f"Public cases: {report['required']}; both passed={report['passed']}, differences={report['differences']}, execution_errors={report['execution_errors']}. Reference catalog: {report['reference_cases']}.",'',
@@ -219,6 +262,24 @@ def markdown(report):
             lines.append('| '+target+' | '+value+' |')
         lines+=['','| Recipe ID | Intermediate | Final | Status | Failure step |','| --- | --- | --- | --- | --- |']
         lines += [f"| {c['case_id']} | {c['intermediate']} | {c['final']} | {c['status']} | {c.get('failure_step','')} |" for c in r['cases']]
+    if 'decimal' in report:
+        r=report['decimal']
+        lines+=['','# Decimal compatibility','',f"Decimal public paths: {r['passed']}/{r['executed']}; required=220; differences={r['differences']}; execution_errors={r['execution_errors']}. Independent reference total: 772 +220 =992.",'',
+          'MoonClip always uses 10^precision. DecimalGrid invokes the pinned integer routes after independent std::round quantization; ClipperDCommonGrid really invokes ClipperD and verifies its raw output lies on the target grid before any integer conversion. These 24 common-grid cases do not establish general ClipperD equivalence.','',
+          'Comparison checks full integer contours AND exact coordinate64 / scale decoding, finite output and positive zero; re-quantizing arbitrary decimal output is insufficient. Quantization rejection and budgets are MoonClip contract tests.','',
+          '| Reference route | Required | Executed | Passed | Differences | Execution errors |','| --- | ---: | ---: | ---: | ---: | ---: |']
+        for route,v in r['routes'].items():lines.append(f"| {route} | {v['required']} | {v['executed']} | {v['passed']} | {v['differences']} | {v['execution_errors']} |")
+        lines+=['','| Operation | Cases | Precision coverage |','| --- | ---: | --- |']
+        for op,v in r['operations'].items():lines.append('| '+op+' | '+str(v['count'])+' | '+', '.join(k+': '+str(n) for k,n in v['precisions'].items())+' |')
+        lines+=['','| Parameter | Actual case coverage |','| --- | --- |']
+        lines += ['| '+field+' | '+', '.join(k+': '+str(n) for k,n in counts.items())+' |' for field,counts in r['parameters'].items()]
+        lines+=['','| Target | Decimal filtered paths |','| --- | --- |']
+        for target in ('native','js'):
+            e=report.get('decimal_evidence',{}).get(target,{})
+            value=str(e['passed'])+'/'+str(e['executed']) if e.get('status')=='passed' else 'not recorded'
+            lines.append('| '+target+' | '+value+' |')
+        lines+=['','| Decimal case | Route | Precision | Grid contours | Decoded coordinates | Status |','| --- | --- | ---: | --- | --- | --- |']
+        lines += [f"| {c['case_id']} | {c['reference_route']} | {c['precision']} | {c['grid_paths']} | {c['decoded']} | {c['status']} |" for c in r['cases']]
     return '\n'.join(lines)+'\n'
 
 def main():
@@ -227,13 +288,14 @@ def main():
     parser.add_argument('--offset-manifest',type=Path,help='Include independently executed offset protocol v2 cases')
     parser.add_argument('--stroke-manifest',type=Path,help='Include independent open stroke protocol v3 cases')
     parser.add_argument('--composition-manifest',type=Path,help='Include fixed two-step protocol v4 recipes')
+    parser.add_argument('--decimal-manifest',type=Path,help='Include 196 decimal-grid and 24 actual ClipperD common-grid inputs')
     parser.add_argument('--report-json',type=Path,default=ROOT/'_build/conformance/report.json')
     parser.add_argument('--report-md',type=Path,default=ROOT/'docs/compatibility.md')
     parser.add_argument('--strict',action='store_true',help='Require exactly 152 public cases with independent paths and tree results (also enforced by default)')
     try:
         envelope=json.load(sys.stdin);args=parser.parse_args(envelope['args'][1:])
         report=evaluate(args.manifest.resolve(),envelope['results'])
-        from evidence import internal_evidence,tree_evidence,offset_evidence,stroke_evidence,composition_evidence
+        from evidence import internal_evidence,tree_evidence,offset_evidence,stroke_evidence,composition_evidence,decimal_evidence
         if args.offset_manifest:
             report['offset']=evaluate_offset(args.offset_manifest.resolve(),envelope.get('offset_results'))
             report['offset_evidence']=offset_evidence(ROOT/'_build/conformance')
@@ -243,6 +305,9 @@ def main():
         if args.composition_manifest:
             report['composition']=evaluate_composition(args.composition_manifest.resolve(),envelope.get('composition_results'))
             report['composition_evidence']=composition_evidence(ROOT/'_build/conformance')
+        if args.decimal_manifest:
+            report['decimal']=evaluate_decimal(args.decimal_manifest.resolve(),envelope.get('decimal_results'))
+            report['decimal_evidence']=decimal_evidence(ROOT/'_build/conformance')
         report['internal']=internal_evidence(ROOT/'_build/conformance')
         report['tree_evidence']=tree_evidence(ROOT/'_build/conformance')
         args.report_json.parent.mkdir(parents=True,exist_ok=True);args.report_md.parent.mkdir(parents=True,exist_ok=True)
@@ -257,7 +322,10 @@ def main():
         composition=report.get('composition',{})
         if composition:
             print(f"Native composition conformance: recipes=24, intermediate={composition['intermediate']['passed']}/24, final={composition['final']['passed']}/24, both={composition['passed']}, differences={composition['differences']}, execution_errors={composition['execution_errors']}")
-        return 2 if any(r.get('execution_errors') for r in (report,offset,stroke,composition)) else 1 if any(r.get('differences') for r in (report,offset,stroke,composition)) else 0
+        decimal=report.get('decimal',{})
+        if decimal:
+            print(f"Native decimal conformance: cases=220, DecimalGrid={decimal['routes']['DecimalGrid']['passed']}/196, ClipperDCommonGrid={decimal['routes']['ClipperDCommonGrid']['passed']}/24, grid={decimal['grid_paths']['passed']}/220, decoded={decimal['decoded']['passed']}/220, differences={decimal['differences']}, execution_errors={decimal['execution_errors']}")
+        return 2 if any(r.get('execution_errors') for r in (report,offset,stroke,composition,decimal)) else 1 if any(r.get('differences') for r in (report,offset,stroke,composition,decimal)) else 0
     except (Invalid,OSError,ValueError,KeyError,TypeError) as error:
         print(f'Conformance error: {error}',file=sys.stderr);return 2
 if __name__=='__main__':sys.exit(main())

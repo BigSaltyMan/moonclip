@@ -1,0 +1,36 @@
+{
+  "arc_tolerance": 0.025,
+  "cap_type": "Butt",
+  "case_id": "decimal_stroke_bevel_butt_p3",
+  "format_version": 5,
+  "grid": "DecimalHalfAwayFromZero",
+  "join_type": "Bevel",
+  "miter_limit": 2.0,
+  "operation": "StrokeD",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "path": [
+    [
+      -2.25,
+      -1.25
+    ],
+    [
+      10.75,
+      -1.25
+    ],
+    [
+      10.75,
+      12.75
+    ]
+  ],
+  "precision": 3,
+  "reference_route": "DecimalGrid",
+  "source": {
+    "group": "StrokeD_DecimalGrid",
+    "intent": "Fixed decimal grid; decimal_stroke_bevel_butt_p3",
+    "kind": "moonclip_constructed"
+  },
+  "width": 0.4
+}

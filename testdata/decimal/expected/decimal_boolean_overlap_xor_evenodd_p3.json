@@ -1,0 +1,115 @@
+{
+  "adapter_protocol_version": 5,
+  "case_id": "decimal_boolean_overlap_xor_evenodd_p3",
+  "format_version": 5,
+  "grid_paths": [
+    [
+      [
+        250,
+        -5250
+      ],
+      [
+        250,
+        4750
+      ],
+      [
+        -10250,
+        4750
+      ],
+      [
+        -10250,
+        -5250
+      ]
+    ],
+    [
+      [
+        20250,
+        4750
+      ],
+      [
+        9750,
+        4750
+      ],
+      [
+        9750,
+        -5250
+      ],
+      [
+        20250,
+        -5250
+      ]
+    ]
+  ],
+  "input_sha256": "5bef4ae0c9c681a38c52cdd5a19c887f47dc04e9bff6c345e0007af5abc9aafe",
+  "metrics": {
+    "grid": {
+      "path_count": 2,
+      "paths": [
+        {
+          "area2": "210000000",
+          "bounds": [
+            -10250,
+            -5250,
+            250,
+            4750
+          ],
+          "vertices": 4
+        },
+        {
+          "area2": "210000000",
+          "bounds": [
+            9750,
+            -5250,
+            20250,
+            4750
+          ],
+          "vertices": 4
+        }
+      ],
+      "vertex_count": 8
+    }
+  },
+  "operation": "BooleanD",
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        0.25,
+        -5.25
+      ],
+      [
+        0.25,
+        4.75
+      ],
+      [
+        -10.25,
+        4.75
+      ],
+      [
+        -10.25,
+        -5.25
+      ]
+    ],
+    [
+      [
+        20.25,
+        4.75
+      ],
+      [
+        9.75,
+        4.75
+      ],
+      [
+        9.75,
+        -5.25
+      ],
+      [
+        20.25,
+        -5.25
+      ]
+    ]
+  ],
+  "precision": 3,
+  "reference_route": "DecimalGrid",
+  "status": "success"
+}

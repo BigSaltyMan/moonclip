@@ -88,8 +88,9 @@ fn main raise {
   run_join_example()
   run_stroke_example()
   run_composition_example()
+  run_decimal_example()
   println(
-    "MoonClip geometry, Boolean, PolyTree, offset, stroke and composition OK",
+    "MoonClip geometry, Boolean, PolyTree, offset, stroke, composition and decimal OK",
   )
 }
 
@@ -530,4 +531,118 @@ fn run_composition_example() -> Unit raise {
     fail("Composition intersection failed")
   }
   example_result(clipped, [example_rect(0L, 8L, 20L, 4L)])
+}
+
+///|
+fn example_box_d(
+  x1 : Double,
+  y1 : Double,
+  x2 : Double,
+  y2 : Double,
+) -> @moonclip.PathD {
+  [
+    @moonclip.PointD::new(x1, y1),
+    @moonclip.PointD::new(x2, y1),
+    @moonclip.PointD::new(x2, y2),
+    @moonclip.PointD::new(x1, y2),
+  ]
+}
+
+///|
+fn example_decimal_rectangle(
+  value : @moonclip.PathsD,
+  x1 : Double,
+  y1 : Double,
+  x2 : Double,
+  y2 : Double,
+) -> Unit raise {
+  assert_eq(value.length(), 1)
+  let expected = example_box_d(x1, y1, x2, y2)
+  let path = value[0]
+  assert_eq(path.length(), 4)
+  for start = 0; start < 4; start = start + 1 {
+    if path[start] == expected[0] {
+      for i = 0; i < 4; i = i + 1 {
+        assert_eq(path[(start + i) % 4], expected[i])
+      }
+      return
+    }
+  }
+  fail("Decimal contour differs from the complete expected rectangle")
+}
+
+///|
+fn run_decimal_example() -> Unit raise {
+  guard @moonclip.Precision::new(3) is Ok(precision) else {
+    fail("Expected supported precision")
+  }
+  let subject = [example_box_d(-1.25, -0.25, 1.25, 1.25)]
+  let clip = [example_box_d(0.25, -0.25, 2.25, 1.25)]
+  let saved = @moonclip.copy_paths_d(subject)
+  guard @moonclip.boolean_op_d(
+      subject,
+      clip,
+      @moonclip.Union,
+      precision~,
+      fill_rule=@moonclip.NonZero,
+    )
+    is Ok(united) else {
+    fail("Decimal Union failed")
+  }
+  example_decimal_rectangle(united, -1.25, -0.25, 2.25, 1.25)
+  guard @moonclip.offset_polygons_d(
+      united,
+      0.2,
+      precision~,
+      fill_rule=@moonclip.NonZero,
+    )
+    is Ok(expanded) else {
+    fail("Decimal offset failed")
+  }
+  example_decimal_rectangle(expanded, -1.45, -0.45, 2.45, 1.45)
+  let route = [
+    @moonclip.PointD::new(-1.0, 0.0),
+    @moonclip.PointD::new(3.0, 0.0),
+  ]
+  guard @moonclip.stroke_polyline_d(
+      route,
+      0.4,
+      precision~,
+      cap=@moonclip.CapType::Butt,
+    )
+    is Ok(coverage) else {
+    fail("Decimal stroke failed")
+  }
+  example_decimal_rectangle(coverage, -1.0, -0.2, 3.0, 0.2)
+  guard @moonclip.boolean_op_d(
+      coverage,
+      [example_box_d(0.0, -1.0, 2.0, 1.0)],
+      @moonclip.Intersection,
+      precision~,
+      fill_rule=@moonclip.NonZero,
+    )
+    is Ok(clipped) else {
+    fail("Decimal intersection failed")
+  }
+  example_decimal_rectangle(clipped, 0.0, -0.2, 2.0, 0.2)
+  assert_eq(subject, saved)
+  assert_true(
+    @moonclip.stroke_polyline_d(
+      [@moonclip.PointD::new(0.0001, 0.0), @moonclip.PointD::new(0.0002, 0.0)],
+      0.0,
+      precision~,
+    )
+    is Err(
+      @moonclip.QuantizationFailure(
+        {
+          stage: @moonclip.DecimalQuantize,
+          path_index: Some(0),
+          vertex_index: Some(1),
+        },
+        None,
+        Some({ path_index: Some(0), vertex_index: Some(0), .. }),
+        _
+      )
+    ),
+  )
 }

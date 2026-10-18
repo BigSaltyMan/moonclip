@@ -178,3 +178,17 @@ C# 源码作为主要阅读与后续移植参考；固定版本的 C++ 实现作
 | 自有参考工具 | stroke_compare/generate/adapter/report | 独立v3、276输入、严格目录分派及报告；Cpp仍只用于数据生成。 |
 
 实际移植文件保留Angus Johnson2010–2025及BSL-1.0声明，自有实现版权BigSaltyMan2026。运行几何全部MoonBit，无新增运行库依赖；原上游/归档/许可/编译选项保持固定，锁仅新增描边协议标识。小数接口和缩放尚在Commit13范围。
+
+
+## Commit 13 小数参考与自有转换（2026-10-18）
+
+固定版本、SHA及许可不变。本笔实际核对CPP/Clipper2Lib/include/clipper2/clipper.engine.h的ClipperD构造、AddSubject/AddClip/Execute，以及clipper.h的InflatePaths(PathsD)。前者使用2的幂倍率，后者使用10的幂；MoonClip统一十进制，不移植ClipperD倍率，也不直接用便捷InflatePaths改变已有规范化和小距离语义。
+
+| 实际来源/设计 | MoonBit或参考文件 | 修改与归属 |
+| --- | --- | --- |
+| ClipperD二进制倍率与Execute | tools/oracle/adapter.cpp | 24条共同网格路线真正调用固定实现，先验证原始结果网格成员；仅测试工具。 |
+| InflatePaths(PathsD)十进制单位概念 | decimal.mbt | 沿用坐标、距离和容差同尺度的设计；固定0—6倍率表及统一网格为MoonClip契约。未直接改写此便捷函数。 |
+| MoonClip自有 | types.mbt、decimal.mbt、limits.mbt | PointD/复制、不可变Precision、尾数舍入、原单位检查、跨输入合并索引、精确退化诊断、预算适配和Result错误。 |
+| MoonClip自有参考工具 | decimal_compare/generate/construct、adapter、report | v5双表示、196十进制参考、24真正ClipperD参考、完整网格与精确解码比较及独立目录。 |
+
+本笔新增运行代码均为MoonBit自有实现，版权BigSaltyMan2026、BSL-1.0，无新增运行库依赖；已有移植的整数引擎仍保留Angus Johnson版权。C++只用于独立生成和重建参考。未提前实现简化、删点统计或其他后续引擎。

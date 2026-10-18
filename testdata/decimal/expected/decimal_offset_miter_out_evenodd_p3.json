@@ -1,0 +1,115 @@
+{
+  "adapter_protocol_version": 5,
+  "case_id": "decimal_offset_miter_out_evenodd_p3",
+  "format_version": 5,
+  "grid_paths": [
+    [
+      [
+        14950,
+        14950
+      ],
+      [
+        -5450,
+        14950
+      ],
+      [
+        -5450,
+        -5450
+      ],
+      [
+        14950,
+        -5450
+      ]
+    ],
+    [
+      [
+        -50,
+        -50
+      ],
+      [
+        -50,
+        9550
+      ],
+      [
+        9550,
+        9550
+      ],
+      [
+        9550,
+        -50
+      ]
+    ]
+  ],
+  "input_sha256": "d081d05c6560a42005eaec9238e7fe8c7c4f3f52258d857738a7cd0c47b394fa",
+  "metrics": {
+    "grid": {
+      "path_count": 2,
+      "paths": [
+        {
+          "area2": "832320000",
+          "bounds": [
+            -5450,
+            -5450,
+            14950,
+            14950
+          ],
+          "vertices": 4
+        },
+        {
+          "area2": "-184320000",
+          "bounds": [
+            -50,
+            -50,
+            9550,
+            9550
+          ],
+          "vertices": 4
+        }
+      ],
+      "vertex_count": 8
+    }
+  },
+  "operation": "OffsetD",
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        14.95,
+        14.95
+      ],
+      [
+        -5.45,
+        14.95
+      ],
+      [
+        -5.45,
+        -5.45
+      ],
+      [
+        14.95,
+        -5.45
+      ]
+    ],
+    [
+      [
+        -0.05,
+        -0.05
+      ],
+      [
+        -0.05,
+        9.55
+      ],
+      [
+        9.55,
+        9.55
+      ],
+      [
+        9.55,
+        -0.05
+      ]
+    ]
+  ],
+  "precision": 3,
+  "reference_route": "DecimalGrid",
+  "status": "success"
+}

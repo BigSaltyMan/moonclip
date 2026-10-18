@@ -31,6 +31,9 @@ pub(all) enum Stage {
   StrokeParameters
   StrokeGenerate
   StrokeCleanup
+  DecimalParameters
+  DecimalQuantize
+  DecimalOutput
 } derive(Eq, Debug)
 
 ///|
@@ -63,12 +66,15 @@ pub(all) enum ClipError {
   ExecutionFailure(ErrorLocation, String)
   NumericFailure(ErrorLocation, String)
   ResourceLimitExceeded(ErrorLocation, ResourceKind, Int)
+  QuantizationFailure(ErrorLocation, Axis?, ErrorLocation?, String)
+  DecimalCoordinateOutOfRange(ErrorLocation, Axis, Double, Int)
 } derive(Eq, Debug)
 
 ///|
 pub fn ClipError::message(self : ClipError) -> String {
   match self {
-    InvalidInput(_, message)
+    QuantizationFailure(_, _, _, message)
+    | InvalidInput(_, message)
     | ExecutionFailure(_, message)
     | NumericFailure(_, message) => message
     CoordinateOutOfRange(_, axis, value) => {
@@ -77,6 +83,10 @@ pub fn ClipError::message(self : ClipError) -> String {
         Y => "y"
       }
       "Coordinate \{name}=\{value} is outside [-1000000000, 1000000000]"
+    }
+    DecimalCoordinateOutOfRange(_, axis, value, digits) => {
+      let name = if axis == X { "x" } else { "y" }
+      "Decimal coordinate \{name}=\{value} is outside the supported range at precision \{digits}"
     }
     ResourceLimitExceeded(_, resource, limit) => {
       let name = match resource {

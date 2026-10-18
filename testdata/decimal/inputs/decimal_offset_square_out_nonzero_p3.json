@@ -1,0 +1,60 @@
+{
+  "arc_tolerance": 0.025,
+  "case_id": "decimal_offset_square_out_nonzero_p3",
+  "delta": 0.2,
+  "fill_rule": "NonZero",
+  "format_version": 5,
+  "grid": "DecimalHalfAwayFromZero",
+  "join_type": "Square",
+  "miter_limit": 2.0,
+  "operation": "OffsetD",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [
+      [
+        -5.25,
+        -5.25
+      ],
+      [
+        14.75,
+        -5.25
+      ],
+      [
+        14.75,
+        14.75
+      ],
+      [
+        -5.25,
+        14.75
+      ]
+    ],
+    [
+      [
+        -0.25,
+        9.75
+      ],
+      [
+        9.75,
+        9.75
+      ],
+      [
+        9.75,
+        -0.25
+      ],
+      [
+        -0.25,
+        -0.25
+      ]
+    ]
+  ],
+  "precision": 3,
+  "reference_route": "DecimalGrid",
+  "source": {
+    "group": "OffsetD_DecimalGrid",
+    "intent": "Fixed decimal grid; decimal_offset_square_out_nonzero_p3",
+    "kind": "moonclip_constructed"
+  }
+}

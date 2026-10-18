@@ -3,6 +3,7 @@
 #include "clipper2/clipper.engine.h"
 #include "clipper2/clipper.offset.h"
 #include <cmath>
+#include <map>
 #include "json.hpp"
 #include <iostream>
 #include <iterator>
@@ -207,7 +208,9 @@ struct CompositionFailure : std::runtime_error {
   CompositionFailure(int index, const std::string& message) : std::runtime_error(message), step(index) {}
 };
 json execute_composition(const json& request);
+json execute_decimal(const json& request);
 json execute(const json& request) {
+  if (request.is_object() && (request.value("operation",json())=="BooleanD" || request.value("operation",json())=="OffsetD" || request.value("operation",json())=="StrokeD")) return execute_decimal(request);
   if (request.is_object() && request.value("operation",json())=="Composition") return execute_composition(request);
   if (request.is_object() && request.value("operation",json())=="StrokePolyline") return execute_stroke(request);
   if (request.is_object() && request.value("operation", json()) == "OffsetPolygons") return execute_offset(request);
@@ -293,6 +296,122 @@ json execute_composition(const json& request) {
   }
   return {{"format_version",4},{"adapter_protocol_version",4},{"case_id",request["case_id"]},
     {"oracle_commit",kCommit},{"status","success"},{"recipe",recipe},{"intermediate",intermediate},{"final",final}};
+}
+// v5 deliberately uses a decimal grid, independently of ClipperD's binary scale.
+json execute_decimal(const json& request) {
+  require(request.is_object() && request["operation"].is_string(),"decimal operation");
+  const auto operation=request["operation"].get<std::string>();
+  if (operation=="BooleanD") keys(request,{"format_version","operation","case_id","source","options","precision","grid","reference_route","subject","clip","clip_type","fill_rule"},"decimal Boolean");
+  else if (operation=="OffsetD") keys(request,{"format_version","operation","case_id","source","options","precision","grid","reference_route","paths","delta","fill_rule","join_type","miter_limit","arc_tolerance"},"decimal offset");
+  else keys(request,{"format_version","operation","case_id","source","options","precision","grid","reference_route","path","width","join_type","cap_type","miter_limit","arc_tolerance"},"decimal stroke");
+  integer(request["format_version"],"decimal version",5,5);
+  const auto id=request_metadata(request);
+  const int precision=static_cast<int>(integer(request["precision"],"precision",0,6));
+  const double scales[]={1,10,100,1000,10000,100000,1000000};
+  const double scale=scales[precision], bound=1000000000.0/scale;
+  require(request["grid"]=="DecimalHalfAwayFromZero","unknown decimal grid");
+  require(request["reference_route"].is_string(),"decimal route: expected string");
+  const auto route=request["reference_route"].get<std::string>();
+  require(route=="DecimalGrid" || (route=="ClipperDCommonGrid" && operation=="BooleanD"),"unknown decimal reference route");
+  if (operation!="StrokeD") require(request["fill_rule"]=="EvenOdd" || request["fill_rule"]=="NonZero","unsupported decimal fill");
+  double distance=0,miter=2,tolerance=0;
+  if (operation!="BooleanD") {
+    distance=finite_number(request[operation=="OffsetD"?"delta":"width"],"distance");
+    require(operation!="StrokeD" || distance>=0,"negative decimal width");
+    miter=finite_number(request["miter_limit"],"miter_limit");
+    tolerance=finite_number(request["arc_tolerance"],"arc_tolerance");
+    require(miter>=2 && tolerance>=0,"invalid decimal options");
+    require(request["join_type"]=="Miter" || request["join_type"]=="Bevel" || request["join_type"]=="Square" || request["join_type"]=="Round","unknown decimal join");
+    if (operation=="StrokeD") require(request["cap_type"]=="Butt" || request["cap_type"]=="Square" || request["cap_type"]=="Round","unknown decimal cap");
+    distance*=scale;tolerance*=scale;
+    require(std::isfinite(distance) && std::isfinite(tolerance),"decimal parameter scaling overflow");
+  }
+  size_t path_count=0,vertex_count=0;
+  std::map<std::pair<int64_t,int64_t>,std::pair<double,double>> seen;
+  auto quantize=[&](const json& input) {
+    require(input.is_array() && input.size()<=kMaxPaths-path_count,"decimal input path limit");
+    path_count+=input.size();
+    Paths64 grids;PathsD originals;
+    for (const auto& path : input) {
+      require(path.is_array() && path.size()<=kMaxVertices-vertex_count,"decimal raw vertex limit");
+      vertex_count+=path.size();Path64 grid;PathD original;
+      for (const auto& point : path) {
+        require(point.is_array() && point.size()==2,"decimal point: expected pair");
+        double x=finite_number(point[0],"x"),y=finite_number(point[1],"y");
+        require(x>=-bound && x<=bound && y>=-bound && y<=bound,"decimal original coordinate range");
+        const double sx=x*scale,sy=y*scale;
+        require(std::isfinite(sx) && std::isfinite(sy) && sx>=-1000000000.0 && sx<=1000000000.0 && sy>=-1000000000.0 && sy<=1000000000.0,"decimal scaled coordinate range");
+        if (route=="ClipperDCommonGrid") {
+          const double binary=std::ldexp(1.0,std::ilogb(scale)+1);
+          require(sx==std::round(sx) && sy==std::round(sy) && x*binary==std::round(x*binary) && y*binary==std::round(y*binary),"decimal input not on both grids");
+        }
+        const auto key=std::make_pair(static_cast<int64_t>(std::round(sx)),static_cast<int64_t>(std::round(sy)));
+        const auto raw=std::make_pair(x,y);
+        auto existing=seen.find(key);
+        require(existing==seen.end() || existing->second==raw,"distinct decimal positions merge");
+        seen.emplace(key,raw);grid.emplace_back(key.first,key.second);original.emplace_back(x,y);
+      }
+      if (operation!="StrokeD" && !grid.empty()) {
+        auto a=grid[0];size_t j=1;
+        while (j<grid.size() && grid[j]==a) ++j;
+        bool noncollinear=false;
+        if (j<grid.size()) for (const auto& c : grid) {
+          const auto& b=grid[j];
+          if ((b.x-a.x)*(c.y-a.y)-(b.y-a.y)*(c.x-a.x)!=0) {noncollinear=true;break;}
+        }
+        require(noncollinear,"quantized closed input is degenerate");
+      }
+      grids.push_back(std::move(grid));originals.push_back(std::move(original));
+    }
+    return std::make_pair(grids,originals);
+  };
+  const json empty=json::array();
+  auto left=quantize(operation=="BooleanD" ? request["subject"] : operation=="OffsetD" ? request["paths"] : json::array({request["path"]}));
+  auto right=quantize(operation=="BooleanD" ? request["clip"] : empty);
+  json grid_output=json::array(), decimal_output=json::array();
+  if (route=="ClipperDCommonGrid") {
+    const auto op=request["clip_type"];
+    require(op=="Intersection" || op=="Union" || op=="Difference" || op=="Xor","unknown decimal Boolean operation");
+    ClipType type=op=="Intersection"?ClipType::Intersection:op=="Union"?ClipType::Union:op=="Difference"?ClipType::Difference:ClipType::Xor;
+    ClipperD engine(precision);
+    engine.PreserveCollinear(false);engine.ReverseSolution(false);
+    engine.AddSubject(left.second);engine.AddClip(right.second);
+    PathsD output;
+    require(engine.Execute(type,request["fill_rule"]=="EvenOdd"?FillRule::EvenOdd:FillRule::NonZero,output) && engine.ErrorCode()==0,"actual ClipperD execution failed");
+    for (const auto& path : output) {
+      json gp=json::array(),dp=json::array();
+      for (const auto& p : path) {
+        const double sx=p.x*scale,sy=p.y*scale;
+        require(std::isfinite(sx) && std::isfinite(sy) && sx==std::round(sx) && sy==std::round(sy) && p.x==sx/scale && p.y==sy/scale,"raw ClipperD output is not on the target decimal grid");
+        require(sx>=-1000000000.0 && sx<=1000000000.0 && sy>=-1000000000.0 && sy<=1000000000.0,"ClipperD output range");
+        gp.push_back({static_cast<int64_t>(sx),static_cast<int64_t>(sy)});
+        dp.push_back({p.x==0?0.0:p.x,p.y==0?0.0:p.y});
+      }
+      grid_output.push_back(gp);decimal_output.push_back(dp);
+    }
+  } else {
+    json integer_request={{"case_id",id},{"source",request["source"]},{"options",request["options"]}};
+    json l=json::array(),r=json::array();
+    for (const auto& p : left.first) l.push_back(output_path(p));
+    for (const auto& p : right.first) r.push_back(output_path(p));
+    if (operation=="BooleanD") {
+      integer_request.update({{"format_version",1},{"operation",request["clip_type"]},{"subject",l},{"clip",r},{"fill_rule",request["fill_rule"]}});
+    } else {
+      integer_request.update({{"format_version",operation=="OffsetD"?2:3},{"operation",operation=="OffsetD"?"OffsetPolygons":"StrokePolyline"},{"join_type",request["join_type"]},{"miter_limit",miter},{"arc_tolerance",tolerance}});
+      if (operation=="OffsetD") integer_request.update({{"paths",l},{"delta",distance},{"fill_rule",request["fill_rule"]}});
+      else integer_request.update({{"path",l[0]},{"width",distance},{"cap_type",request["cap_type"]}});
+    }
+    bool empty_stroke=false;
+    if (operation=="StrokeD") {auto effective=left.first[0];StripDuplicates(effective,false);empty_stroke=distance<1.0 || effective.size()<2;}
+    if (!empty_stroke) grid_output=execute(integer_request)["paths"];
+    for (const auto& path : grid_output) {
+      json dp=json::array();
+      for (const auto& p : path) {auto x=p[0].get<int64_t>(),y=p[1].get<int64_t>();dp.push_back({x==0?0.0:static_cast<double>(x)/scale,y==0?0.0:static_cast<double>(y)/scale});}
+      decimal_output.push_back(dp);
+    }
+  }
+  size_t pc=0,vc=0;paths(grid_output,"decimal output",pc,vc);
+  return {{"format_version",5},{"adapter_protocol_version",5},{"case_id",id},{"oracle_commit",kCommit},{"status","success"},{"operation",operation},{"precision",precision},{"reference_route",route},{"grid_paths",grid_output},{"paths",decimal_output}};
 }
 int main() {
   try {

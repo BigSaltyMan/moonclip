@@ -11,6 +11,7 @@
     "CPP/Clipper2Lib/include/clipper2/*.h"
   ],
   "composition_protocol_version": 4,
+  "decimal_protocol_version": 5,
   "dependencies": [
     {
       "license": "MIT",

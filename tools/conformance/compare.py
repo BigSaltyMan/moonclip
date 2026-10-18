@@ -139,6 +139,9 @@ def normalize_tree(tree):
     return tuple(sorted(visit(child) for child in tree["children"]))
 
 def validate_geometry(value, where="result"):
+    if type(value) is dict and value.get("format_version") == 5:
+        from decimal_compare import validate_decimal_geometry
+        return validate_decimal_geometry(value, where)
     if type(value) is dict and value.get("format_version") == 4:
         from composition_compare import validate_composition_geometry
         return validate_composition_geometry(value, where)
@@ -159,6 +162,9 @@ def area2(path):
     return sum(a[0]*b[1] - a[1]*b[0] for a, b in zip(path, path[1:] + path[:1]))
 
 def metrics(value):
+    if type(value) is dict and value.get("format_version") == 5:
+        from decimal_compare import decimal_metrics
+        return decimal_metrics(value)
     if type(value) is dict and value.get("format_version") == 4:
         from composition_compare import composition_metrics
         return composition_metrics(value)
@@ -178,6 +184,9 @@ def metrics(value):
     }
 
 def compare(left, right, case_id="comparison"):
+    if left.get('format_version')==5 or right.get('format_version')==5:
+        from decimal_compare import compare_decimal
+        return compare_decimal(left,right,case_id)
     if left.get('format_version')==4 or right.get('format_version')==4:
         from composition_compare import compare_composition
         return compare_composition(left,right,case_id)
@@ -190,6 +199,9 @@ def compare(left, right, case_id="comparison"):
     require(normalize_tree(left["tree"]) == normalize_tree(right["tree"]), case_id + ".tree", "parentage, depth or node contours differ")
 
 def validate_input(value, where):
+    if type(value) is dict and value.get("operation") in ("BooleanD","OffsetD","StrokeD"):
+        from decimal_compare import validate_decimal_input
+        return validate_decimal_input(value, where)
     if type(value) is dict and value.get("operation") == "Composition":
         from composition_compare import validate_composition_input
         return validate_composition_input(value, where)
@@ -226,6 +238,9 @@ def validate_input(value, where):
     require(count <= MAX_VERTICES and len(value["subject"]) + len(value["clip"]) <= MAX_PATHS, where, "combined input budget exceeded")
 
 def validate_result(value, case, digest, lock, where):
+    if type(value) is dict and case.get("operation") in ("BooleanD","OffsetD","StrokeD"):
+        from decimal_compare import validate_decimal_result
+        return validate_decimal_result(value, case, digest, lock, where)
     if type(value) is dict and case.get("operation") == "Composition":
         from composition_compare import validate_composition_result
         return validate_composition_result(value, case, digest, lock, where)
@@ -255,8 +270,9 @@ def confined(root, name):
     return result
 
 def validate_lock(lock):
-    keys(lock, {"repository", "tag", "commit", "license", "adapter_protocol_version", "offset_protocol_version", "stroke_protocol_version", "composition_protocol_version", "archive", "compile_inputs", "dependencies"}, "lock")
+    keys(lock, {"repository", "tag", "commit", "license", "adapter_protocol_version", "offset_protocol_version", "stroke_protocol_version", "composition_protocol_version", "decimal_protocol_version", "archive", "compile_inputs", "dependencies"}, "lock")
     require(type(lock['composition_protocol_version']) is int and lock['composition_protocol_version']==4,'lock','unknown composition protocol')
+    require(type(lock['decimal_protocol_version']) is int and lock['decimal_protocol_version']==5,'lock','unknown decimal protocol')
     require(lock["repository"] == "https://github.com/AngusJohnson/Clipper2" and lock["tag"] == "Clipper2_2.0.1" and lock["commit"] == "21ebba05db8894f0c7217ad35ea518080f324946", "lock", "unexpected fixed upstream identity")
     require(lock["license"] == "BSL-1.0" and type(lock["adapter_protocol_version"]) is int and lock["adapter_protocol_version"] == 1, "lock", "unknown license/protocol")
     require(type(lock["offset_protocol_version"]) is int and lock["offset_protocol_version"] == 2, "lock", "unknown offset protocol")
@@ -275,6 +291,9 @@ def validate_lock(lock):
 
 def read_manifest(root, manifest, require_expected=True, strict=True):
     value = load(manifest, strict)
+    if type(value) is dict and value.get('kind')=='decimal':
+        from decimal_compare import read_decimal_manifest
+        return read_decimal_manifest(root,manifest,require_expected,strict)
     if type(value) is dict and value.get('kind')=='composition':
         from composition_compare import read_composition_manifest
         return read_composition_manifest(root,manifest,require_expected,strict)

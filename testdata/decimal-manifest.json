@@ -1,0 +1,2207 @@
+{
+  "cases": [
+    {
+      "case_id": "decimal_boolean_hole_difference_evenodd_p0",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_difference_evenodd_p0.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_difference_evenodd_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_difference_evenodd_p1",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_difference_evenodd_p1.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_difference_evenodd_p1.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_difference_evenodd_p2",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_difference_evenodd_p2.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_difference_evenodd_p2.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_difference_evenodd_p3",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_difference_evenodd_p3.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_difference_evenodd_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_difference_evenodd_p4",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_difference_evenodd_p4.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_difference_evenodd_p4.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_difference_evenodd_p5",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_difference_evenodd_p5.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_difference_evenodd_p5.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_difference_evenodd_p6",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_difference_evenodd_p6.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_difference_evenodd_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_difference_nonzero_p0",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_difference_nonzero_p0.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_difference_nonzero_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_difference_nonzero_p1",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_difference_nonzero_p1.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_difference_nonzero_p1.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_difference_nonzero_p2",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_difference_nonzero_p2.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_difference_nonzero_p2.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_difference_nonzero_p3",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_difference_nonzero_p3.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_difference_nonzero_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_difference_nonzero_p4",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_difference_nonzero_p4.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_difference_nonzero_p4.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_difference_nonzero_p5",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_difference_nonzero_p5.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_difference_nonzero_p5.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_difference_nonzero_p6",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_difference_nonzero_p6.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_difference_nonzero_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_intersection_evenodd_p0",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_intersection_evenodd_p0.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_intersection_evenodd_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_intersection_evenodd_p1",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_intersection_evenodd_p1.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_intersection_evenodd_p1.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_intersection_evenodd_p2",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_intersection_evenodd_p2.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_intersection_evenodd_p2.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_intersection_evenodd_p3",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_intersection_evenodd_p3.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_intersection_evenodd_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_intersection_evenodd_p4",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_intersection_evenodd_p4.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_intersection_evenodd_p4.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_intersection_evenodd_p5",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_intersection_evenodd_p5.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_intersection_evenodd_p5.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_intersection_evenodd_p6",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_intersection_evenodd_p6.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_intersection_evenodd_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_intersection_nonzero_p0",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_intersection_nonzero_p0.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_intersection_nonzero_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_intersection_nonzero_p1",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_intersection_nonzero_p1.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_intersection_nonzero_p1.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_intersection_nonzero_p2",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_intersection_nonzero_p2.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_intersection_nonzero_p2.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_intersection_nonzero_p3",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_intersection_nonzero_p3.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_intersection_nonzero_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_intersection_nonzero_p4",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_intersection_nonzero_p4.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_intersection_nonzero_p4.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_intersection_nonzero_p5",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_intersection_nonzero_p5.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_intersection_nonzero_p5.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_intersection_nonzero_p6",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_intersection_nonzero_p6.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_intersection_nonzero_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_union_evenodd_p0",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_union_evenodd_p0.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_union_evenodd_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_union_evenodd_p1",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_union_evenodd_p1.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_union_evenodd_p1.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_union_evenodd_p2",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_union_evenodd_p2.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_union_evenodd_p2.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_union_evenodd_p3",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_union_evenodd_p3.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_union_evenodd_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_union_evenodd_p4",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_union_evenodd_p4.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_union_evenodd_p4.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_union_evenodd_p5",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_union_evenodd_p5.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_union_evenodd_p5.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_union_evenodd_p6",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_union_evenodd_p6.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_union_evenodd_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_union_nonzero_p0",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_union_nonzero_p0.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_union_nonzero_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_union_nonzero_p1",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_union_nonzero_p1.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_union_nonzero_p1.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_union_nonzero_p2",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_union_nonzero_p2.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_union_nonzero_p2.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_union_nonzero_p3",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_union_nonzero_p3.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_union_nonzero_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_union_nonzero_p4",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_union_nonzero_p4.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_union_nonzero_p4.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_union_nonzero_p5",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_union_nonzero_p5.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_union_nonzero_p5.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_union_nonzero_p6",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_union_nonzero_p6.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_union_nonzero_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_xor_evenodd_p0",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_xor_evenodd_p0.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_xor_evenodd_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_xor_evenodd_p1",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_xor_evenodd_p1.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_xor_evenodd_p1.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_xor_evenodd_p2",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_xor_evenodd_p2.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_xor_evenodd_p2.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_xor_evenodd_p3",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_xor_evenodd_p3.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_xor_evenodd_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_xor_evenodd_p4",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_xor_evenodd_p4.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_xor_evenodd_p4.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_xor_evenodd_p5",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_xor_evenodd_p5.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_xor_evenodd_p5.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_xor_evenodd_p6",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_xor_evenodd_p6.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_xor_evenodd_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_xor_nonzero_p0",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_xor_nonzero_p0.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_xor_nonzero_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_xor_nonzero_p1",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_xor_nonzero_p1.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_xor_nonzero_p1.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_xor_nonzero_p2",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_xor_nonzero_p2.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_xor_nonzero_p2.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_xor_nonzero_p3",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_xor_nonzero_p3.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_xor_nonzero_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_xor_nonzero_p4",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_xor_nonzero_p4.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_xor_nonzero_p4.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_xor_nonzero_p5",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_xor_nonzero_p5.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_xor_nonzero_p5.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_hole_xor_nonzero_p6",
+      "expected": "testdata/decimal/expected/decimal_boolean_hole_xor_nonzero_p6.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_hole_xor_nonzero_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_difference_evenodd_p0",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_difference_evenodd_p0.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_difference_evenodd_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_difference_evenodd_p1",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_difference_evenodd_p1.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_difference_evenodd_p1.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_difference_evenodd_p2",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_difference_evenodd_p2.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_difference_evenodd_p2.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_difference_evenodd_p3",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_difference_evenodd_p3.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_difference_evenodd_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_difference_evenodd_p4",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_difference_evenodd_p4.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_difference_evenodd_p4.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_difference_evenodd_p5",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_difference_evenodd_p5.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_difference_evenodd_p5.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_difference_evenodd_p6",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_difference_evenodd_p6.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_difference_evenodd_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_difference_nonzero_p0",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_difference_nonzero_p0.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_difference_nonzero_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_difference_nonzero_p1",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_difference_nonzero_p1.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_difference_nonzero_p1.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_difference_nonzero_p2",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_difference_nonzero_p2.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_difference_nonzero_p2.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_difference_nonzero_p3",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_difference_nonzero_p3.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_difference_nonzero_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_difference_nonzero_p4",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_difference_nonzero_p4.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_difference_nonzero_p4.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_difference_nonzero_p5",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_difference_nonzero_p5.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_difference_nonzero_p5.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_difference_nonzero_p6",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_difference_nonzero_p6.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_difference_nonzero_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_intersection_evenodd_p0",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_intersection_evenodd_p0.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_intersection_evenodd_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_intersection_evenodd_p1",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_intersection_evenodd_p1.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_intersection_evenodd_p1.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_intersection_evenodd_p2",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_intersection_evenodd_p2.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_intersection_evenodd_p2.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_intersection_evenodd_p3",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_intersection_evenodd_p3.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_intersection_evenodd_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_intersection_evenodd_p4",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_intersection_evenodd_p4.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_intersection_evenodd_p4.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_intersection_evenodd_p5",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_intersection_evenodd_p5.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_intersection_evenodd_p5.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_intersection_evenodd_p6",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_intersection_evenodd_p6.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_intersection_evenodd_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_intersection_nonzero_p0",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_intersection_nonzero_p0.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_intersection_nonzero_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_intersection_nonzero_p1",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_intersection_nonzero_p1.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_intersection_nonzero_p1.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_intersection_nonzero_p2",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_intersection_nonzero_p2.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_intersection_nonzero_p2.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_intersection_nonzero_p3",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_intersection_nonzero_p3.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_intersection_nonzero_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_intersection_nonzero_p4",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_intersection_nonzero_p4.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_intersection_nonzero_p4.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_intersection_nonzero_p5",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_intersection_nonzero_p5.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_intersection_nonzero_p5.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_intersection_nonzero_p6",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_intersection_nonzero_p6.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_intersection_nonzero_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_union_evenodd_p0",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_union_evenodd_p0.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_union_evenodd_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_union_evenodd_p1",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_union_evenodd_p1.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_union_evenodd_p1.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_union_evenodd_p2",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_union_evenodd_p2.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_union_evenodd_p2.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_union_evenodd_p3",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_union_evenodd_p3.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_union_evenodd_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_union_evenodd_p4",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_union_evenodd_p4.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_union_evenodd_p4.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_union_evenodd_p5",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_union_evenodd_p5.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_union_evenodd_p5.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_union_evenodd_p6",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_union_evenodd_p6.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_union_evenodd_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_union_nonzero_p0",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_union_nonzero_p0.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_union_nonzero_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_union_nonzero_p1",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_union_nonzero_p1.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_union_nonzero_p1.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_union_nonzero_p2",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_union_nonzero_p2.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_union_nonzero_p2.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_union_nonzero_p3",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_union_nonzero_p3.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_union_nonzero_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_union_nonzero_p4",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_union_nonzero_p4.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_union_nonzero_p4.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_union_nonzero_p5",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_union_nonzero_p5.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_union_nonzero_p5.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_union_nonzero_p6",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_union_nonzero_p6.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_union_nonzero_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_xor_evenodd_p0",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_xor_evenodd_p0.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_xor_evenodd_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_xor_evenodd_p1",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_xor_evenodd_p1.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_xor_evenodd_p1.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_xor_evenodd_p2",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_xor_evenodd_p2.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_xor_evenodd_p2.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_xor_evenodd_p3",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_xor_evenodd_p3.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_xor_evenodd_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_xor_evenodd_p4",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_xor_evenodd_p4.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_xor_evenodd_p4.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_xor_evenodd_p5",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_xor_evenodd_p5.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_xor_evenodd_p5.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_xor_evenodd_p6",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_xor_evenodd_p6.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_xor_evenodd_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_xor_nonzero_p0",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_xor_nonzero_p0.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_xor_nonzero_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_xor_nonzero_p1",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_xor_nonzero_p1.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_xor_nonzero_p1.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_xor_nonzero_p2",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_xor_nonzero_p2.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_xor_nonzero_p2.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_xor_nonzero_p3",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_xor_nonzero_p3.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_xor_nonzero_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_xor_nonzero_p4",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_xor_nonzero_p4.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_xor_nonzero_p4.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_xor_nonzero_p5",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_xor_nonzero_p5.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_xor_nonzero_p5.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_boolean_overlap_xor_nonzero_p6",
+      "expected": "testdata/decimal/expected/decimal_boolean_overlap_xor_nonzero_p6.json",
+      "input": "testdata/decimal/inputs/decimal_boolean_overlap_xor_nonzero_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_clipperd_difference_evenodd_p0",
+      "expected": "testdata/decimal/expected/decimal_clipperd_difference_evenodd_p0.json",
+      "input": "testdata/decimal/inputs/decimal_clipperd_difference_evenodd_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_clipperd_difference_evenodd_p3",
+      "expected": "testdata/decimal/expected/decimal_clipperd_difference_evenodd_p3.json",
+      "input": "testdata/decimal/inputs/decimal_clipperd_difference_evenodd_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_clipperd_difference_evenodd_p6",
+      "expected": "testdata/decimal/expected/decimal_clipperd_difference_evenodd_p6.json",
+      "input": "testdata/decimal/inputs/decimal_clipperd_difference_evenodd_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_clipperd_difference_nonzero_p0",
+      "expected": "testdata/decimal/expected/decimal_clipperd_difference_nonzero_p0.json",
+      "input": "testdata/decimal/inputs/decimal_clipperd_difference_nonzero_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_clipperd_difference_nonzero_p3",
+      "expected": "testdata/decimal/expected/decimal_clipperd_difference_nonzero_p3.json",
+      "input": "testdata/decimal/inputs/decimal_clipperd_difference_nonzero_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_clipperd_difference_nonzero_p6",
+      "expected": "testdata/decimal/expected/decimal_clipperd_difference_nonzero_p6.json",
+      "input": "testdata/decimal/inputs/decimal_clipperd_difference_nonzero_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_clipperd_intersection_evenodd_p0",
+      "expected": "testdata/decimal/expected/decimal_clipperd_intersection_evenodd_p0.json",
+      "input": "testdata/decimal/inputs/decimal_clipperd_intersection_evenodd_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_clipperd_intersection_evenodd_p3",
+      "expected": "testdata/decimal/expected/decimal_clipperd_intersection_evenodd_p3.json",
+      "input": "testdata/decimal/inputs/decimal_clipperd_intersection_evenodd_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_clipperd_intersection_evenodd_p6",
+      "expected": "testdata/decimal/expected/decimal_clipperd_intersection_evenodd_p6.json",
+      "input": "testdata/decimal/inputs/decimal_clipperd_intersection_evenodd_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_clipperd_intersection_nonzero_p0",
+      "expected": "testdata/decimal/expected/decimal_clipperd_intersection_nonzero_p0.json",
+      "input": "testdata/decimal/inputs/decimal_clipperd_intersection_nonzero_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_clipperd_intersection_nonzero_p3",
+      "expected": "testdata/decimal/expected/decimal_clipperd_intersection_nonzero_p3.json",
+      "input": "testdata/decimal/inputs/decimal_clipperd_intersection_nonzero_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_clipperd_intersection_nonzero_p6",
+      "expected": "testdata/decimal/expected/decimal_clipperd_intersection_nonzero_p6.json",
+      "input": "testdata/decimal/inputs/decimal_clipperd_intersection_nonzero_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_clipperd_union_evenodd_p0",
+      "expected": "testdata/decimal/expected/decimal_clipperd_union_evenodd_p0.json",
+      "input": "testdata/decimal/inputs/decimal_clipperd_union_evenodd_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_clipperd_union_evenodd_p3",
+      "expected": "testdata/decimal/expected/decimal_clipperd_union_evenodd_p3.json",
+      "input": "testdata/decimal/inputs/decimal_clipperd_union_evenodd_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_clipperd_union_evenodd_p6",
+      "expected": "testdata/decimal/expected/decimal_clipperd_union_evenodd_p6.json",
+      "input": "testdata/decimal/inputs/decimal_clipperd_union_evenodd_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_clipperd_union_nonzero_p0",
+      "expected": "testdata/decimal/expected/decimal_clipperd_union_nonzero_p0.json",
+      "input": "testdata/decimal/inputs/decimal_clipperd_union_nonzero_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_clipperd_union_nonzero_p3",
+      "expected": "testdata/decimal/expected/decimal_clipperd_union_nonzero_p3.json",
+      "input": "testdata/decimal/inputs/decimal_clipperd_union_nonzero_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_clipperd_union_nonzero_p6",
+      "expected": "testdata/decimal/expected/decimal_clipperd_union_nonzero_p6.json",
+      "input": "testdata/decimal/inputs/decimal_clipperd_union_nonzero_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_clipperd_xor_evenodd_p0",
+      "expected": "testdata/decimal/expected/decimal_clipperd_xor_evenodd_p0.json",
+      "input": "testdata/decimal/inputs/decimal_clipperd_xor_evenodd_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_clipperd_xor_evenodd_p3",
+      "expected": "testdata/decimal/expected/decimal_clipperd_xor_evenodd_p3.json",
+      "input": "testdata/decimal/inputs/decimal_clipperd_xor_evenodd_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_clipperd_xor_evenodd_p6",
+      "expected": "testdata/decimal/expected/decimal_clipperd_xor_evenodd_p6.json",
+      "input": "testdata/decimal/inputs/decimal_clipperd_xor_evenodd_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_clipperd_xor_nonzero_p0",
+      "expected": "testdata/decimal/expected/decimal_clipperd_xor_nonzero_p0.json",
+      "input": "testdata/decimal/inputs/decimal_clipperd_xor_nonzero_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_clipperd_xor_nonzero_p3",
+      "expected": "testdata/decimal/expected/decimal_clipperd_xor_nonzero_p3.json",
+      "input": "testdata/decimal/inputs/decimal_clipperd_xor_nonzero_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_clipperd_xor_nonzero_p6",
+      "expected": "testdata/decimal/expected/decimal_clipperd_xor_nonzero_p6.json",
+      "input": "testdata/decimal/inputs/decimal_clipperd_xor_nonzero_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_bevel_in_evenodd_p0",
+      "expected": "testdata/decimal/expected/decimal_offset_bevel_in_evenodd_p0.json",
+      "input": "testdata/decimal/inputs/decimal_offset_bevel_in_evenodd_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_bevel_in_evenodd_p3",
+      "expected": "testdata/decimal/expected/decimal_offset_bevel_in_evenodd_p3.json",
+      "input": "testdata/decimal/inputs/decimal_offset_bevel_in_evenodd_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_bevel_in_evenodd_p6",
+      "expected": "testdata/decimal/expected/decimal_offset_bevel_in_evenodd_p6.json",
+      "input": "testdata/decimal/inputs/decimal_offset_bevel_in_evenodd_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_bevel_in_nonzero_p0",
+      "expected": "testdata/decimal/expected/decimal_offset_bevel_in_nonzero_p0.json",
+      "input": "testdata/decimal/inputs/decimal_offset_bevel_in_nonzero_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_bevel_in_nonzero_p3",
+      "expected": "testdata/decimal/expected/decimal_offset_bevel_in_nonzero_p3.json",
+      "input": "testdata/decimal/inputs/decimal_offset_bevel_in_nonzero_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_bevel_in_nonzero_p6",
+      "expected": "testdata/decimal/expected/decimal_offset_bevel_in_nonzero_p6.json",
+      "input": "testdata/decimal/inputs/decimal_offset_bevel_in_nonzero_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_bevel_out_evenodd_p0",
+      "expected": "testdata/decimal/expected/decimal_offset_bevel_out_evenodd_p0.json",
+      "input": "testdata/decimal/inputs/decimal_offset_bevel_out_evenodd_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_bevel_out_evenodd_p3",
+      "expected": "testdata/decimal/expected/decimal_offset_bevel_out_evenodd_p3.json",
+      "input": "testdata/decimal/inputs/decimal_offset_bevel_out_evenodd_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_bevel_out_evenodd_p6",
+      "expected": "testdata/decimal/expected/decimal_offset_bevel_out_evenodd_p6.json",
+      "input": "testdata/decimal/inputs/decimal_offset_bevel_out_evenodd_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_bevel_out_nonzero_p0",
+      "expected": "testdata/decimal/expected/decimal_offset_bevel_out_nonzero_p0.json",
+      "input": "testdata/decimal/inputs/decimal_offset_bevel_out_nonzero_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_bevel_out_nonzero_p3",
+      "expected": "testdata/decimal/expected/decimal_offset_bevel_out_nonzero_p3.json",
+      "input": "testdata/decimal/inputs/decimal_offset_bevel_out_nonzero_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_bevel_out_nonzero_p6",
+      "expected": "testdata/decimal/expected/decimal_offset_bevel_out_nonzero_p6.json",
+      "input": "testdata/decimal/inputs/decimal_offset_bevel_out_nonzero_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_miter_in_evenodd_p0",
+      "expected": "testdata/decimal/expected/decimal_offset_miter_in_evenodd_p0.json",
+      "input": "testdata/decimal/inputs/decimal_offset_miter_in_evenodd_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_miter_in_evenodd_p3",
+      "expected": "testdata/decimal/expected/decimal_offset_miter_in_evenodd_p3.json",
+      "input": "testdata/decimal/inputs/decimal_offset_miter_in_evenodd_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_miter_in_evenodd_p6",
+      "expected": "testdata/decimal/expected/decimal_offset_miter_in_evenodd_p6.json",
+      "input": "testdata/decimal/inputs/decimal_offset_miter_in_evenodd_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_miter_in_nonzero_p0",
+      "expected": "testdata/decimal/expected/decimal_offset_miter_in_nonzero_p0.json",
+      "input": "testdata/decimal/inputs/decimal_offset_miter_in_nonzero_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_miter_in_nonzero_p3",
+      "expected": "testdata/decimal/expected/decimal_offset_miter_in_nonzero_p3.json",
+      "input": "testdata/decimal/inputs/decimal_offset_miter_in_nonzero_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_miter_in_nonzero_p6",
+      "expected": "testdata/decimal/expected/decimal_offset_miter_in_nonzero_p6.json",
+      "input": "testdata/decimal/inputs/decimal_offset_miter_in_nonzero_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_miter_out_evenodd_p0",
+      "expected": "testdata/decimal/expected/decimal_offset_miter_out_evenodd_p0.json",
+      "input": "testdata/decimal/inputs/decimal_offset_miter_out_evenodd_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_miter_out_evenodd_p3",
+      "expected": "testdata/decimal/expected/decimal_offset_miter_out_evenodd_p3.json",
+      "input": "testdata/decimal/inputs/decimal_offset_miter_out_evenodd_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_miter_out_evenodd_p6",
+      "expected": "testdata/decimal/expected/decimal_offset_miter_out_evenodd_p6.json",
+      "input": "testdata/decimal/inputs/decimal_offset_miter_out_evenodd_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_miter_out_nonzero_p0",
+      "expected": "testdata/decimal/expected/decimal_offset_miter_out_nonzero_p0.json",
+      "input": "testdata/decimal/inputs/decimal_offset_miter_out_nonzero_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_miter_out_nonzero_p3",
+      "expected": "testdata/decimal/expected/decimal_offset_miter_out_nonzero_p3.json",
+      "input": "testdata/decimal/inputs/decimal_offset_miter_out_nonzero_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_miter_out_nonzero_p6",
+      "expected": "testdata/decimal/expected/decimal_offset_miter_out_nonzero_p6.json",
+      "input": "testdata/decimal/inputs/decimal_offset_miter_out_nonzero_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_round_in_evenodd_p0",
+      "expected": "testdata/decimal/expected/decimal_offset_round_in_evenodd_p0.json",
+      "input": "testdata/decimal/inputs/decimal_offset_round_in_evenodd_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_round_in_evenodd_p3",
+      "expected": "testdata/decimal/expected/decimal_offset_round_in_evenodd_p3.json",
+      "input": "testdata/decimal/inputs/decimal_offset_round_in_evenodd_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_round_in_evenodd_p6",
+      "expected": "testdata/decimal/expected/decimal_offset_round_in_evenodd_p6.json",
+      "input": "testdata/decimal/inputs/decimal_offset_round_in_evenodd_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_round_in_nonzero_p0",
+      "expected": "testdata/decimal/expected/decimal_offset_round_in_nonzero_p0.json",
+      "input": "testdata/decimal/inputs/decimal_offset_round_in_nonzero_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_round_in_nonzero_p3",
+      "expected": "testdata/decimal/expected/decimal_offset_round_in_nonzero_p3.json",
+      "input": "testdata/decimal/inputs/decimal_offset_round_in_nonzero_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_round_in_nonzero_p6",
+      "expected": "testdata/decimal/expected/decimal_offset_round_in_nonzero_p6.json",
+      "input": "testdata/decimal/inputs/decimal_offset_round_in_nonzero_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_round_out_evenodd_p0",
+      "expected": "testdata/decimal/expected/decimal_offset_round_out_evenodd_p0.json",
+      "input": "testdata/decimal/inputs/decimal_offset_round_out_evenodd_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_round_out_evenodd_p3",
+      "expected": "testdata/decimal/expected/decimal_offset_round_out_evenodd_p3.json",
+      "input": "testdata/decimal/inputs/decimal_offset_round_out_evenodd_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_round_out_evenodd_p6",
+      "expected": "testdata/decimal/expected/decimal_offset_round_out_evenodd_p6.json",
+      "input": "testdata/decimal/inputs/decimal_offset_round_out_evenodd_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_round_out_nonzero_p0",
+      "expected": "testdata/decimal/expected/decimal_offset_round_out_nonzero_p0.json",
+      "input": "testdata/decimal/inputs/decimal_offset_round_out_nonzero_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_round_out_nonzero_p3",
+      "expected": "testdata/decimal/expected/decimal_offset_round_out_nonzero_p3.json",
+      "input": "testdata/decimal/inputs/decimal_offset_round_out_nonzero_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_round_out_nonzero_p6",
+      "expected": "testdata/decimal/expected/decimal_offset_round_out_nonzero_p6.json",
+      "input": "testdata/decimal/inputs/decimal_offset_round_out_nonzero_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_square_in_evenodd_p0",
+      "expected": "testdata/decimal/expected/decimal_offset_square_in_evenodd_p0.json",
+      "input": "testdata/decimal/inputs/decimal_offset_square_in_evenodd_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_square_in_evenodd_p3",
+      "expected": "testdata/decimal/expected/decimal_offset_square_in_evenodd_p3.json",
+      "input": "testdata/decimal/inputs/decimal_offset_square_in_evenodd_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_square_in_evenodd_p6",
+      "expected": "testdata/decimal/expected/decimal_offset_square_in_evenodd_p6.json",
+      "input": "testdata/decimal/inputs/decimal_offset_square_in_evenodd_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_square_in_nonzero_p0",
+      "expected": "testdata/decimal/expected/decimal_offset_square_in_nonzero_p0.json",
+      "input": "testdata/decimal/inputs/decimal_offset_square_in_nonzero_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_square_in_nonzero_p3",
+      "expected": "testdata/decimal/expected/decimal_offset_square_in_nonzero_p3.json",
+      "input": "testdata/decimal/inputs/decimal_offset_square_in_nonzero_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_square_in_nonzero_p6",
+      "expected": "testdata/decimal/expected/decimal_offset_square_in_nonzero_p6.json",
+      "input": "testdata/decimal/inputs/decimal_offset_square_in_nonzero_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_square_out_evenodd_p0",
+      "expected": "testdata/decimal/expected/decimal_offset_square_out_evenodd_p0.json",
+      "input": "testdata/decimal/inputs/decimal_offset_square_out_evenodd_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_square_out_evenodd_p3",
+      "expected": "testdata/decimal/expected/decimal_offset_square_out_evenodd_p3.json",
+      "input": "testdata/decimal/inputs/decimal_offset_square_out_evenodd_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_square_out_evenodd_p6",
+      "expected": "testdata/decimal/expected/decimal_offset_square_out_evenodd_p6.json",
+      "input": "testdata/decimal/inputs/decimal_offset_square_out_evenodd_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_square_out_nonzero_p0",
+      "expected": "testdata/decimal/expected/decimal_offset_square_out_nonzero_p0.json",
+      "input": "testdata/decimal/inputs/decimal_offset_square_out_nonzero_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_square_out_nonzero_p3",
+      "expected": "testdata/decimal/expected/decimal_offset_square_out_nonzero_p3.json",
+      "input": "testdata/decimal/inputs/decimal_offset_square_out_nonzero_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_offset_square_out_nonzero_p6",
+      "expected": "testdata/decimal/expected/decimal_offset_square_out_nonzero_p6.json",
+      "input": "testdata/decimal/inputs/decimal_offset_square_out_nonzero_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_stroke_bevel_butt_p0",
+      "expected": "testdata/decimal/expected/decimal_stroke_bevel_butt_p0.json",
+      "input": "testdata/decimal/inputs/decimal_stroke_bevel_butt_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_stroke_bevel_butt_p3",
+      "expected": "testdata/decimal/expected/decimal_stroke_bevel_butt_p3.json",
+      "input": "testdata/decimal/inputs/decimal_stroke_bevel_butt_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_stroke_bevel_butt_p6",
+      "expected": "testdata/decimal/expected/decimal_stroke_bevel_butt_p6.json",
+      "input": "testdata/decimal/inputs/decimal_stroke_bevel_butt_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_stroke_bevel_round_p0",
+      "expected": "testdata/decimal/expected/decimal_stroke_bevel_round_p0.json",
+      "input": "testdata/decimal/inputs/decimal_stroke_bevel_round_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_stroke_bevel_round_p3",
+      "expected": "testdata/decimal/expected/decimal_stroke_bevel_round_p3.json",
+      "input": "testdata/decimal/inputs/decimal_stroke_bevel_round_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_stroke_bevel_round_p6",
+      "expected": "testdata/decimal/expected/decimal_stroke_bevel_round_p6.json",
+      "input": "testdata/decimal/inputs/decimal_stroke_bevel_round_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_stroke_bevel_square_p0",
+      "expected": "testdata/decimal/expected/decimal_stroke_bevel_square_p0.json",
+      "input": "testdata/decimal/inputs/decimal_stroke_bevel_square_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_stroke_bevel_square_p3",
+      "expected": "testdata/decimal/expected/decimal_stroke_bevel_square_p3.json",
+      "input": "testdata/decimal/inputs/decimal_stroke_bevel_square_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_stroke_bevel_square_p6",
+      "expected": "testdata/decimal/expected/decimal_stroke_bevel_square_p6.json",
+      "input": "testdata/decimal/inputs/decimal_stroke_bevel_square_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_stroke_miter_butt_p0",
+      "expected": "testdata/decimal/expected/decimal_stroke_miter_butt_p0.json",
+      "input": "testdata/decimal/inputs/decimal_stroke_miter_butt_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_stroke_miter_butt_p3",
+      "expected": "testdata/decimal/expected/decimal_stroke_miter_butt_p3.json",
+      "input": "testdata/decimal/inputs/decimal_stroke_miter_butt_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_stroke_miter_butt_p6",
+      "expected": "testdata/decimal/expected/decimal_stroke_miter_butt_p6.json",
+      "input": "testdata/decimal/inputs/decimal_stroke_miter_butt_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_stroke_miter_round_p0",
+      "expected": "testdata/decimal/expected/decimal_stroke_miter_round_p0.json",
+      "input": "testdata/decimal/inputs/decimal_stroke_miter_round_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_stroke_miter_round_p3",
+      "expected": "testdata/decimal/expected/decimal_stroke_miter_round_p3.json",
+      "input": "testdata/decimal/inputs/decimal_stroke_miter_round_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_stroke_miter_round_p6",
+      "expected": "testdata/decimal/expected/decimal_stroke_miter_round_p6.json",
+      "input": "testdata/decimal/inputs/decimal_stroke_miter_round_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_stroke_miter_square_p0",
+      "expected": "testdata/decimal/expected/decimal_stroke_miter_square_p0.json",
+      "input": "testdata/decimal/inputs/decimal_stroke_miter_square_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_stroke_miter_square_p3",
+      "expected": "testdata/decimal/expected/decimal_stroke_miter_square_p3.json",
+      "input": "testdata/decimal/inputs/decimal_stroke_miter_square_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_stroke_miter_square_p6",
+      "expected": "testdata/decimal/expected/decimal_stroke_miter_square_p6.json",
+      "input": "testdata/decimal/inputs/decimal_stroke_miter_square_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_stroke_round_butt_p0",
+      "expected": "testdata/decimal/expected/decimal_stroke_round_butt_p0.json",
+      "input": "testdata/decimal/inputs/decimal_stroke_round_butt_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_stroke_round_butt_p3",
+      "expected": "testdata/decimal/expected/decimal_stroke_round_butt_p3.json",
+      "input": "testdata/decimal/inputs/decimal_stroke_round_butt_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_stroke_round_butt_p6",
+      "expected": "testdata/decimal/expected/decimal_stroke_round_butt_p6.json",
+      "input": "testdata/decimal/inputs/decimal_stroke_round_butt_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_stroke_round_round_p0",
+      "expected": "testdata/decimal/expected/decimal_stroke_round_round_p0.json",
+      "input": "testdata/decimal/inputs/decimal_stroke_round_round_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_stroke_round_round_p3",
+      "expected": "testdata/decimal/expected/decimal_stroke_round_round_p3.json",
+      "input": "testdata/decimal/inputs/decimal_stroke_round_round_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_stroke_round_round_p6",
+      "expected": "testdata/decimal/expected/decimal_stroke_round_round_p6.json",
+      "input": "testdata/decimal/inputs/decimal_stroke_round_round_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_stroke_round_square_p0",
+      "expected": "testdata/decimal/expected/decimal_stroke_round_square_p0.json",
+      "input": "testdata/decimal/inputs/decimal_stroke_round_square_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_stroke_round_square_p3",
+      "expected": "testdata/decimal/expected/decimal_stroke_round_square_p3.json",
+      "input": "testdata/decimal/inputs/decimal_stroke_round_square_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_stroke_round_square_p6",
+      "expected": "testdata/decimal/expected/decimal_stroke_round_square_p6.json",
+      "input": "testdata/decimal/inputs/decimal_stroke_round_square_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_stroke_square_butt_p0",
+      "expected": "testdata/decimal/expected/decimal_stroke_square_butt_p0.json",
+      "input": "testdata/decimal/inputs/decimal_stroke_square_butt_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_stroke_square_butt_p3",
+      "expected": "testdata/decimal/expected/decimal_stroke_square_butt_p3.json",
+      "input": "testdata/decimal/inputs/decimal_stroke_square_butt_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_stroke_square_butt_p6",
+      "expected": "testdata/decimal/expected/decimal_stroke_square_butt_p6.json",
+      "input": "testdata/decimal/inputs/decimal_stroke_square_butt_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_stroke_square_round_p0",
+      "expected": "testdata/decimal/expected/decimal_stroke_square_round_p0.json",
+      "input": "testdata/decimal/inputs/decimal_stroke_square_round_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_stroke_square_round_p3",
+      "expected": "testdata/decimal/expected/decimal_stroke_square_round_p3.json",
+      "input": "testdata/decimal/inputs/decimal_stroke_square_round_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_stroke_square_round_p6",
+      "expected": "testdata/decimal/expected/decimal_stroke_square_round_p6.json",
+      "input": "testdata/decimal/inputs/decimal_stroke_square_round_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_stroke_square_square_p0",
+      "expected": "testdata/decimal/expected/decimal_stroke_square_square_p0.json",
+      "input": "testdata/decimal/inputs/decimal_stroke_square_square_p0.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_stroke_square_square_p3",
+      "expected": "testdata/decimal/expected/decimal_stroke_square_square_p3.json",
+      "input": "testdata/decimal/inputs/decimal_stroke_square_square_p3.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "decimal_stroke_square_square_p6",
+      "expected": "testdata/decimal/expected/decimal_stroke_square_square_p6.json",
+      "input": "testdata/decimal/inputs/decimal_stroke_square_square_p6.json",
+      "status": "validate",
+      "validation": {
+        "grid_paths": "validate",
+        "paths": "validate"
+      }
+    }
+  ],
+  "format_version": 5,
+  "kind": "decimal",
+  "oracle_lock": "tools/oracle/upstream-lock.json"
+}

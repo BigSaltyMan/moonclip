@@ -13,13 +13,19 @@ pub fn area2(Array[Point64], limits? : Limits) -> Result[@bigint.BigInt, ClipErr
 
 pub fn boolean_op(Array[Array[Point64]], Array[Array[Point64]], ClipType, fill_rule? : FillRule, limits? : Limits) -> Result[Array[Array[Point64]], ClipError]
 
+pub fn boolean_op_d(Array[Array[PointD]], Array[Array[PointD]], ClipType, precision? : Precision, fill_rule? : FillRule, limits? : Limits) -> Result[Array[Array[PointD]], ClipError]
+
 pub fn boolean_tree(Array[Array[Point64]], Array[Array[Point64]], ClipType, fill_rule? : FillRule, limits? : Limits) -> Result[PolyTree64, ClipError]
 
 pub fn bounds(Array[Point64], limits? : Limits) -> Result[Bounds64?, ClipError]
 
 pub fn copy_path(Array[Point64]) -> Array[Point64]
 
+pub fn copy_path_d(Array[PointD]) -> Array[PointD]
+
 pub fn copy_paths(Array[Array[Point64]]) -> Array[Array[Point64]]
+
+pub fn copy_paths_d(Array[Array[PointD]]) -> Array[Array[PointD]]
 
 pub fn cross(Point64, Point64, Point64, limits? : Limits) -> Result[Int64, ClipError]
 
@@ -29,6 +35,8 @@ pub fn normalize_paths(Array[Array[Point64]], PathMode, limits? : Limits) -> Res
 
 pub fn offset_polygons(Array[Array[Point64]], Double, fill_rule? : FillRule, options? : OffsetOptions, limits? : Limits) -> Result[Array[Array[Point64]], ClipError]
 
+pub fn offset_polygons_d(Array[Array[PointD]], Double, precision? : Precision, fill_rule? : FillRule, options? : OffsetOptions, limits? : Limits) -> Result[Array[Array[PointD]], ClipError]
+
 pub fn orientation(Point64, Point64, Point64, limits? : Limits) -> Result[Orientation, ClipError]
 
 pub fn point_in_polygon(Point64, Array[Point64], limits? : Limits) -> Result[PointLocation, ClipError]
@@ -36,6 +44,8 @@ pub fn point_in_polygon(Point64, Array[Point64], limits? : Limits) -> Result[Poi
 pub fn point_on_segment(Point64, Point64, Point64, limits? : Limits) -> Result[Bool, ClipError]
 
 pub fn stroke_polyline(Array[Point64], Double, cap? : CapType, options? : OffsetOptions, limits? : Limits) -> Result[Array[Array[Point64]], ClipError]
+
+pub fn stroke_polyline_d(Array[PointD], Double, precision? : Precision, cap? : CapType, options? : OffsetOptions, limits? : Limits) -> Result[Array[Array[PointD]], ClipError]
 
 pub fn validate_paths(Array[Array[Point64]], limits? : Limits) -> Result[Unit, ClipError]
 
@@ -66,6 +76,8 @@ pub(all) enum ClipError {
   ExecutionFailure(ErrorLocation, String)
   NumericFailure(ErrorLocation, String)
   ResourceLimitExceeded(ErrorLocation, ResourceKind, Int)
+  QuantizationFailure(ErrorLocation, Axis?, ErrorLocation?, String)
+  DecimalCoordinateOutOfRange(ErrorLocation, Axis, Double, Int)
 } derive(Eq, @debug.Debug)
 pub fn ClipError::message(Self) -> String
 
@@ -125,6 +137,12 @@ pub(all) struct Point64 {
 } derive(Eq, @debug.Debug)
 pub fn Point64::new(Int64, Int64) -> Self
 
+pub(all) struct PointD {
+  x : Double
+  y : Double
+} derive(Eq, @debug.Debug)
+pub fn PointD::new(Double, Double) -> Self
+
 pub(all) enum PointLocation {
   Outside
   Inside
@@ -144,6 +162,13 @@ pub struct PolyTree64 {
 }
 pub fn PolyTree64::roots(Self) -> Array[PolyNode64]
 pub fn PolyTree64::to_paths(Self) -> Array[Array[Point64]]
+
+pub struct Precision {
+  // private fields
+} derive(Eq, @debug.Debug)
+pub fn Precision::digits(Self) -> Int
+pub fn Precision::new(Int) -> Result[Self, ClipError]
+pub impl Default for Precision
 
 pub(all) enum ResourceKind {
   InputPaths
@@ -178,11 +203,18 @@ pub(all) enum Stage {
   StrokeParameters
   StrokeGenerate
   StrokeCleanup
+  DecimalParameters
+  DecimalQuantize
+  DecimalOutput
 } derive(Eq, @debug.Debug)
 
 // Type aliases
 pub type Path64 = Array[Point64]
 
+pub type PathD = Array[PointD]
+
 pub type Paths64 = Array[Array[Point64]]
+
+pub type PathsD = Array[Array[PointD]]
 
 // Traits

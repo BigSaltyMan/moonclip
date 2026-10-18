@@ -1,0 +1,59 @@
+{
+  "case_id": "decimal_boolean_overlap_union_evenodd_p3",
+  "clip": [
+    [
+      [
+        0.25,
+        -5.25
+      ],
+      [
+        20.25,
+        -5.25
+      ],
+      [
+        20.25,
+        4.75
+      ],
+      [
+        0.25,
+        4.75
+      ]
+    ]
+  ],
+  "clip_type": "Union",
+  "fill_rule": "EvenOdd",
+  "format_version": 5,
+  "grid": "DecimalHalfAwayFromZero",
+  "operation": "BooleanD",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "precision": 3,
+  "reference_route": "DecimalGrid",
+  "source": {
+    "group": "BooleanD_DecimalGrid",
+    "intent": "Fixed decimal grid; decimal_boolean_overlap_union_evenodd_p3",
+    "kind": "moonclip_constructed"
+  },
+  "subject": [
+    [
+      [
+        -10.25,
+        -5.25
+      ],
+      [
+        9.75,
+        -5.25
+      ],
+      [
+        9.75,
+        4.75
+      ],
+      [
+        -10.25,
+        4.75
+      ]
+    ]
+  ]
+}

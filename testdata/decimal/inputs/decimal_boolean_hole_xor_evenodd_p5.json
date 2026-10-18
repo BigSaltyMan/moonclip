@@ -1,0 +1,77 @@
+{
+  "case_id": "decimal_boolean_hole_xor_evenodd_p5",
+  "clip": [
+    [
+      [
+        20.125,
+        -5.875
+      ],
+      [
+        50.125,
+        -5.875
+      ],
+      [
+        50.125,
+        44.125
+      ],
+      [
+        20.125,
+        44.125
+      ]
+    ]
+  ],
+  "clip_type": "Xor",
+  "fill_rule": "EvenOdd",
+  "format_version": 5,
+  "grid": "DecimalHalfAwayFromZero",
+  "operation": "BooleanD",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "precision": 5,
+  "reference_route": "DecimalGrid",
+  "source": {
+    "group": "BooleanD_DecimalGrid",
+    "intent": "Fixed decimal grid; decimal_boolean_hole_xor_evenodd_p5",
+    "kind": "moonclip_constructed"
+  },
+  "subject": [
+    [
+      [
+        0.125,
+        0.125
+      ],
+      [
+        40.125,
+        0.125
+      ],
+      [
+        40.125,
+        40.125
+      ],
+      [
+        0.125,
+        40.125
+      ]
+    ],
+    [
+      [
+        10.125,
+        30.125
+      ],
+      [
+        30.125,
+        30.125
+      ],
+      [
+        30.125,
+        10.125
+      ],
+      [
+        10.125,
+        10.125
+      ]
+    ]
+  ]
+}

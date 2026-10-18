@@ -1,0 +1,101 @@
+{
+  "adapter_protocol_version": 5,
+  "case_id": "decimal_boolean_hole_difference_evenodd_p5",
+  "format_version": 5,
+  "grid_paths": [
+    [
+      [
+        2012500,
+        1012500
+      ],
+      [
+        1012500,
+        1012500
+      ],
+      [
+        1012500,
+        3012500
+      ],
+      [
+        2012500,
+        3012500
+      ],
+      [
+        2012500,
+        4012500
+      ],
+      [
+        12500,
+        4012500
+      ],
+      [
+        12500,
+        12500
+      ],
+      [
+        2012500,
+        12500
+      ]
+    ]
+  ],
+  "input_sha256": "67ebb422ebcae67dd49336ca00a54ad83f1c16c14b0719d12c3c91cbde344311",
+  "metrics": {
+    "grid": {
+      "path_count": 1,
+      "paths": [
+        {
+          "area2": "12000000000000",
+          "bounds": [
+            12500,
+            12500,
+            2012500,
+            4012500
+          ],
+          "vertices": 8
+        }
+      ],
+      "vertex_count": 8
+    }
+  },
+  "operation": "BooleanD",
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        20.125,
+        10.125
+      ],
+      [
+        10.125,
+        10.125
+      ],
+      [
+        10.125,
+        30.125
+      ],
+      [
+        20.125,
+        30.125
+      ],
+      [
+        20.125,
+        40.125
+      ],
+      [
+        0.125,
+        40.125
+      ],
+      [
+        0.125,
+        0.125
+      ],
+      [
+        20.125,
+        0.125
+      ]
+    ]
+  ],
+  "precision": 5,
+  "reference_route": "DecimalGrid",
+  "status": "success"
+}
