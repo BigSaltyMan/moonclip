@@ -1,5 +1,5 @@
 ///|
-fn main raise {
+fn run_foundation_example() -> Unit raise {
   let path : @moonclip.Path64 = [
     @moonclip.Point64::new(-10L, 0L),
     @moonclip.Point64::new(10L, 0L),
@@ -81,13 +81,22 @@ fn main raise {
     @moonclip.normalize_paths([contour, []], @moonclip.Closed, limits~)
     is Err(ResourceLimitExceeded(_, InputPaths, 1)),
   )
+}
+
+///|
+// Standalone public-library examples, grouped like the browser demo.
+fn main raise {
+  run_foundation_example()
+  // Region operations and holed offsets.
   run_boolean_example()
   run_winding_example()
   run_tree_example()
   run_offset_example()
   run_join_example()
+  // Open-route widening.
   run_stroke_example()
   run_composition_example()
+  // Decimal units, explicit simplification and integer pattern sweeps.
   run_decimal_example()
   run_simplify_example()
   run_minkowski_example()

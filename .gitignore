@@ -5,3 +5,7 @@ _build/
 *.log
 __pycache__/
 *.pyc
+demo/generated/
+demo/dist/
+demo/node_modules/
+demo/.qa/

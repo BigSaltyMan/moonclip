@@ -41,3 +41,9 @@ jobs:
           echo "$MOON_HOME/bin" >> "$GITHUB_PATH"
       - name: Check native, JS and eight reference catalogs (random included in full tests)
         run: bash scripts/check.sh
+      - name: Build static MoonBit demo
+        working-directory: demo
+        run: npm run build
+      - name: Smoke test the real JS geometry bridge
+        working-directory: demo
+        run: npm test
