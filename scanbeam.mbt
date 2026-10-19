@@ -470,6 +470,7 @@ fn prepare_scan(
   source_extrema? : Bool = false,
   budget? : CallBudget,
   internal_input? : Bool = false,
+  preserve_collinear? : Bool = false,
 ) -> Result[ScanState, ClipError] {
   let budget = match budget {
     Some(value) => value
@@ -489,6 +490,7 @@ fn prepare_scan(
     Ok(work) => work
   }
   let state = new_scan_state(limits, budget~, internal_input~)
+  state.preserve_collinear = preserve_collinear
   try {
     scan_spend(state, 0, preflight_work, location(EnginePrepare, None, None))
     for i = 0; i < subject.length(); i = i + 1 {
@@ -522,10 +524,14 @@ fn prepare_scan(
       } else if b.y == bot.y {
         b.x > bot.x
       } else {
-        cross_validated(bot, a, b) > 0L
+        cross_validated(bot, a, b) > 0L ||
+        (preserve_collinear && cross_validated(bot, a, b) == 0L)
       }
       state.chains[backward].left_bound = backward_left
       state.chains[forward].left_bound = !backward_left
+    }
+    if preserve_collinear {
+      fixed_minima_order(state)
     }
     Ok(state)
   } catch {
@@ -569,6 +575,7 @@ fn edge_position_compare(
 }
 
 ///|
+#warnings("-unused_value")
 fn chain_lookahead(
   state : ScanState,
   edge : ActiveEdge,
@@ -596,6 +603,7 @@ fn chain_lookahead(
 }
 
 ///|
+#warnings("-unused_value")
 fn stable_chain_before(
   state : ScanState,
   a : ActiveEdge,
@@ -622,6 +630,9 @@ fn resident_before_new(
   resident : ActiveEdge,
   newcomer : ActiveEdge,
 ) -> Bool raise ScanAbort {
+  if state.preserve_collinear {
+    return resident_before_new_fixed(state, resident, newcomer)
+  }
   scan_spend(state, 0, 1, scan_location(state, Some(newcomer.bot), ActiveEdges))
   state.stats.comparisons += 1
   if newcomer.current_x != resident.current_x {
@@ -676,6 +687,71 @@ fn resident_before_new(
 }
 
 ///|
+fn resident_before_new_fixed(
+  state : ScanState,
+  resident : ActiveEdge,
+  newcomer : ActiveEdge,
+) -> Bool raise ScanAbort {
+  scan_spend(state, 0, 1, scan_location(state, Some(newcomer.bot), ActiveEdges))
+  state.stats.comparisons += 1
+  if newcomer.current_x != resident.current_x {
+    return newcomer.current_x > resident.current_x
+  }
+  let rt = state.vertices[resident.top].point
+  let nb = state.vertices[newcomer.bot].point
+  let nt = state.vertices[newcomer.top].point
+  let turn = cross_validated(rt, nb, nt)
+  if turn != 0L {
+    return turn < 0L
+  }
+  let resident_chain = state.chains[resident.chain]
+  let newcomer_chain = state.chains[newcomer.chain]
+  if resident.cursor + 2 < resident_chain.vertices.length() && rt.y > nt.y {
+    return cross_validated(
+        nb,
+        rt,
+        state.vertices[resident_chain.vertices[resident.cursor + 2]].point,
+      ) <=
+      0L
+  } else if newcomer.cursor + 2 < newcomer_chain.vertices.length() &&
+    nt.y > rt.y {
+    return cross_validated(
+        nb,
+        nt,
+        state.vertices[newcomer_chain.vertices[newcomer.cursor + 2]].point,
+      ) >=
+      0L
+  }
+  let rc = state.chains[resident.chain]
+  let nc = state.chains[newcomer.chain]
+  let rb = state.vertices[resident.bot].point
+  let rm = state.minima[rc.minima]
+  if rb.y != nb.y || state.vertices[rm.vertex].point.y != nb.y {
+    return nc.left_bound
+  }
+  if rc.left_bound != nc.left_bound {
+    return nc.left_bound
+  }
+  let r_alt = if rc.direction > 0 {
+    rm.backward.unwrap()
+  } else {
+    rm.forward.unwrap()
+  }
+  let nm = state.minima[nc.minima]
+  let n_alt = if nc.direction > 0 {
+    nm.backward.unwrap()
+  } else {
+    nm.forward.unwrap()
+  }
+  let rp = state.vertices[state.chains[r_alt].vertices[1]].point
+  let np = state.vertices[state.chains[n_alt].vertices[1]].point
+  if cross_validated(rp, rb, rt) == 0L {
+    return true
+  }
+  (cross_validated(rp, nb, np) > 0L) == nc.left_bound
+}
+
+///|
 fn ael_insert(state : ScanState, id : EdgeId) -> Unit raise ScanAbort {
   let edge = edge_get(state, id)
   let loc = scan_location(state, Some(edge.bot), ActiveEdges)
@@ -692,6 +768,14 @@ fn ael_insert(state : ScanState, id : EdgeId) -> Unit raise ScanAbort {
     }
     before = after
     after = edge_get(state, resident).next_ael
+  }
+  // A joined pair remains adjacent; fixed InsertLeftEdge inserts after its right side.
+  if state.preserve_collinear &&
+    before is Some(prev) &&
+    edge_get(state, prev).joined is Some(partner) &&
+    edge_get(state, prev).next_ael == Some(partner) {
+    before = Some(partner)
+    after = edge_get(state, partner).next_ael
   }
   edge.prev_ael = before
   edge.next_ael = after
@@ -744,6 +828,7 @@ fn horizontal_pop(state : ScanState) -> EdgeId? raise ScanAbort {
   if result is Some(id) {
     edge_get(state, id).queued_horizontal = false
     state.held_horizontal = Some(id)
+    state.horizontal_started = false
   }
   result
 }
@@ -1161,5 +1246,51 @@ fn scan_step(state : ScanState) -> Result[ScanPhase, ClipError] {
     Ok(state.phase)
   } catch {
     ScanAbort(error) => Err(error)
+  }
+}
+
+///|
+// Fixed Reset uses stable y-descending / x-ascending minima. Height buckets
+// already encode y; retain original path order for equal x within each bucket.
+fn fixed_minima_order(state : ScanState) -> Unit raise ScanAbort {
+  for _, events in state.entries {
+    scan_spend(state, 0, 1, location(EnginePrepare, None, None))
+    let n = events.length()
+    if n < 2 {
+      continue
+    }
+    scan_spend(state, n + 1, 0, location(EnginePrepare, None, None))
+    let buffer = events.copy()
+    let mut width = 1
+    while width < n {
+      let mut base = 0
+      while base < n {
+        let middle = if width < n - base { base + width } else { n }
+        let end = if width < n - middle { middle + width } else { n }
+        let mut left = base
+        let mut right = middle
+        for dest = base; dest < end; dest = dest + 1 {
+          scan_spend(state, 0, 1, location(EnginePrepare, None, None))
+          if left < middle &&
+            (
+              right >= end ||
+              state.vertices[state.minima[events[left]].vertex].point.x <=
+              state.vertices[state.minima[events[right]].vertex].point.x
+            ) {
+            buffer[dest] = events[left]
+            left += 1
+          } else {
+            buffer[dest] = events[right]
+            right += 1
+          }
+        }
+        base = end
+      }
+      for i = 0; i < n; i = i + 1 {
+        scan_spend(state, 0, 1, location(EnginePrepare, None, None))
+        events[i] = buffer[i]
+      }
+      width = if width > n / 2 { n } else { width * 2 }
+    }
   }
 }

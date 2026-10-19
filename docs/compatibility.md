@@ -1,6 +1,6 @@
 # Boolean compatibility
 
-Pinned Clipper2 2.0.1, commit `21ebba05db8894f0c7217ad35ea518080f324946`; ordinary precision, preserve_collinear=false, reverse_solution=false.
+Pinned Clipper2 2.0.1, commit `21ebba05db8894f0c7217ad35ea518080f324946`; ordinary precision. Boolean/Offset/Stroke: preserve_collinear=false; MinkowskiSum: preserve_collinear=true; reverse_solution=false. Simplification has its own ordered-output contract.
 
 Public cases: 152; both passed=152, differences=0, execution_errors=0. Reference catalog: 200.
 
@@ -1308,3 +1308,168 @@ Pinned C++ SimplifyPaths after agreed normalization; the adapter independently c
 | simplify_integer_saw_open_e0_5 | passed | passed | passed | passed |
 | simplify_integer_saw_open_e1 | passed | passed | passed | passed |
 | simplify_integer_saw_open_e4 | passed | passed | passed | passed |
+
+# Minkowski Sum compatibility
+
+MinkowskiSum public paths: 144/144; required=144; differences=0; execution_errors=0. Independent total: 1216 +144 =1360.
+
+Real pinned MinkowskiSum, internal NonZero, preserve_collinear=true, reverse_solution=false. Complete contours preserve collinear vertices, winding and multiplicity; only sibling order and cyclic starts are normalized. No endpoint pattern fill, no automatic input normalization, and closed routes may retain holes.
+
+| Coverage | Cases |
+| --- | --- |
+| patterns | circle: 36, concave: 36, offcenter: 36, rectangle: 36 |
+| routes | acute: 16, diagonal: 16, long_horizontal: 16, rectangle: 16, repeats: 16, retrace: 16, right_angle: 16, selfcross: 16, short_horizontal: 16 |
+| directions | forward: 72, reverse: 72 |
+| modes | Closed: 72, Open: 72 |
+
+| Target | Minkowski filtered paths |
+| --- | --- |
+| native | 144/144 |
+| js | 144/144 |
+
+| Minkowski case | Native complete contours |
+| --- | --- |
+| minkowski_circle_acute_closed_forward | passed |
+| minkowski_circle_acute_closed_reverse | passed |
+| minkowski_circle_acute_open_forward | passed |
+| minkowski_circle_acute_open_reverse | passed |
+| minkowski_circle_diagonal_closed_forward | passed |
+| minkowski_circle_diagonal_closed_reverse | passed |
+| minkowski_circle_diagonal_open_forward | passed |
+| minkowski_circle_diagonal_open_reverse | passed |
+| minkowski_circle_long_horizontal_closed_forward | passed |
+| minkowski_circle_long_horizontal_closed_reverse | passed |
+| minkowski_circle_long_horizontal_open_forward | passed |
+| minkowski_circle_long_horizontal_open_reverse | passed |
+| minkowski_circle_rectangle_closed_forward | passed |
+| minkowski_circle_rectangle_closed_reverse | passed |
+| minkowski_circle_rectangle_open_forward | passed |
+| minkowski_circle_rectangle_open_reverse | passed |
+| minkowski_circle_repeats_closed_forward | passed |
+| minkowski_circle_repeats_closed_reverse | passed |
+| minkowski_circle_repeats_open_forward | passed |
+| minkowski_circle_repeats_open_reverse | passed |
+| minkowski_circle_retrace_closed_forward | passed |
+| minkowski_circle_retrace_closed_reverse | passed |
+| minkowski_circle_retrace_open_forward | passed |
+| minkowski_circle_retrace_open_reverse | passed |
+| minkowski_circle_right_angle_closed_forward | passed |
+| minkowski_circle_right_angle_closed_reverse | passed |
+| minkowski_circle_right_angle_open_forward | passed |
+| minkowski_circle_right_angle_open_reverse | passed |
+| minkowski_circle_selfcross_closed_forward | passed |
+| minkowski_circle_selfcross_closed_reverse | passed |
+| minkowski_circle_selfcross_open_forward | passed |
+| minkowski_circle_selfcross_open_reverse | passed |
+| minkowski_circle_short_horizontal_closed_forward | passed |
+| minkowski_circle_short_horizontal_closed_reverse | passed |
+| minkowski_circle_short_horizontal_open_forward | passed |
+| minkowski_circle_short_horizontal_open_reverse | passed |
+| minkowski_concave_acute_closed_forward | passed |
+| minkowski_concave_acute_closed_reverse | passed |
+| minkowski_concave_acute_open_forward | passed |
+| minkowski_concave_acute_open_reverse | passed |
+| minkowski_concave_diagonal_closed_forward | passed |
+| minkowski_concave_diagonal_closed_reverse | passed |
+| minkowski_concave_diagonal_open_forward | passed |
+| minkowski_concave_diagonal_open_reverse | passed |
+| minkowski_concave_long_horizontal_closed_forward | passed |
+| minkowski_concave_long_horizontal_closed_reverse | passed |
+| minkowski_concave_long_horizontal_open_forward | passed |
+| minkowski_concave_long_horizontal_open_reverse | passed |
+| minkowski_concave_rectangle_closed_forward | passed |
+| minkowski_concave_rectangle_closed_reverse | passed |
+| minkowski_concave_rectangle_open_forward | passed |
+| minkowski_concave_rectangle_open_reverse | passed |
+| minkowski_concave_repeats_closed_forward | passed |
+| minkowski_concave_repeats_closed_reverse | passed |
+| minkowski_concave_repeats_open_forward | passed |
+| minkowski_concave_repeats_open_reverse | passed |
+| minkowski_concave_retrace_closed_forward | passed |
+| minkowski_concave_retrace_closed_reverse | passed |
+| minkowski_concave_retrace_open_forward | passed |
+| minkowski_concave_retrace_open_reverse | passed |
+| minkowski_concave_right_angle_closed_forward | passed |
+| minkowski_concave_right_angle_closed_reverse | passed |
+| minkowski_concave_right_angle_open_forward | passed |
+| minkowski_concave_right_angle_open_reverse | passed |
+| minkowski_concave_selfcross_closed_forward | passed |
+| minkowski_concave_selfcross_closed_reverse | passed |
+| minkowski_concave_selfcross_open_forward | passed |
+| minkowski_concave_selfcross_open_reverse | passed |
+| minkowski_concave_short_horizontal_closed_forward | passed |
+| minkowski_concave_short_horizontal_closed_reverse | passed |
+| minkowski_concave_short_horizontal_open_forward | passed |
+| minkowski_concave_short_horizontal_open_reverse | passed |
+| minkowski_offcenter_acute_closed_forward | passed |
+| minkowski_offcenter_acute_closed_reverse | passed |
+| minkowski_offcenter_acute_open_forward | passed |
+| minkowski_offcenter_acute_open_reverse | passed |
+| minkowski_offcenter_diagonal_closed_forward | passed |
+| minkowski_offcenter_diagonal_closed_reverse | passed |
+| minkowski_offcenter_diagonal_open_forward | passed |
+| minkowski_offcenter_diagonal_open_reverse | passed |
+| minkowski_offcenter_long_horizontal_closed_forward | passed |
+| minkowski_offcenter_long_horizontal_closed_reverse | passed |
+| minkowski_offcenter_long_horizontal_open_forward | passed |
+| minkowski_offcenter_long_horizontal_open_reverse | passed |
+| minkowski_offcenter_rectangle_closed_forward | passed |
+| minkowski_offcenter_rectangle_closed_reverse | passed |
+| minkowski_offcenter_rectangle_open_forward | passed |
+| minkowski_offcenter_rectangle_open_reverse | passed |
+| minkowski_offcenter_repeats_closed_forward | passed |
+| minkowski_offcenter_repeats_closed_reverse | passed |
+| minkowski_offcenter_repeats_open_forward | passed |
+| minkowski_offcenter_repeats_open_reverse | passed |
+| minkowski_offcenter_retrace_closed_forward | passed |
+| minkowski_offcenter_retrace_closed_reverse | passed |
+| minkowski_offcenter_retrace_open_forward | passed |
+| minkowski_offcenter_retrace_open_reverse | passed |
+| minkowski_offcenter_right_angle_closed_forward | passed |
+| minkowski_offcenter_right_angle_closed_reverse | passed |
+| minkowski_offcenter_right_angle_open_forward | passed |
+| minkowski_offcenter_right_angle_open_reverse | passed |
+| minkowski_offcenter_selfcross_closed_forward | passed |
+| minkowski_offcenter_selfcross_closed_reverse | passed |
+| minkowski_offcenter_selfcross_open_forward | passed |
+| minkowski_offcenter_selfcross_open_reverse | passed |
+| minkowski_offcenter_short_horizontal_closed_forward | passed |
+| minkowski_offcenter_short_horizontal_closed_reverse | passed |
+| minkowski_offcenter_short_horizontal_open_forward | passed |
+| minkowski_offcenter_short_horizontal_open_reverse | passed |
+| minkowski_rectangle_acute_closed_forward | passed |
+| minkowski_rectangle_acute_closed_reverse | passed |
+| minkowski_rectangle_acute_open_forward | passed |
+| minkowski_rectangle_acute_open_reverse | passed |
+| minkowski_rectangle_diagonal_closed_forward | passed |
+| minkowski_rectangle_diagonal_closed_reverse | passed |
+| minkowski_rectangle_diagonal_open_forward | passed |
+| minkowski_rectangle_diagonal_open_reverse | passed |
+| minkowski_rectangle_long_horizontal_closed_forward | passed |
+| minkowski_rectangle_long_horizontal_closed_reverse | passed |
+| minkowski_rectangle_long_horizontal_open_forward | passed |
+| minkowski_rectangle_long_horizontal_open_reverse | passed |
+| minkowski_rectangle_rectangle_closed_forward | passed |
+| minkowski_rectangle_rectangle_closed_reverse | passed |
+| minkowski_rectangle_rectangle_open_forward | passed |
+| minkowski_rectangle_rectangle_open_reverse | passed |
+| minkowski_rectangle_repeats_closed_forward | passed |
+| minkowski_rectangle_repeats_closed_reverse | passed |
+| minkowski_rectangle_repeats_open_forward | passed |
+| minkowski_rectangle_repeats_open_reverse | passed |
+| minkowski_rectangle_retrace_closed_forward | passed |
+| minkowski_rectangle_retrace_closed_reverse | passed |
+| minkowski_rectangle_retrace_open_forward | passed |
+| minkowski_rectangle_retrace_open_reverse | passed |
+| minkowski_rectangle_right_angle_closed_forward | passed |
+| minkowski_rectangle_right_angle_closed_reverse | passed |
+| minkowski_rectangle_right_angle_open_forward | passed |
+| minkowski_rectangle_right_angle_open_reverse | passed |
+| minkowski_rectangle_selfcross_closed_forward | passed |
+| minkowski_rectangle_selfcross_closed_reverse | passed |
+| minkowski_rectangle_selfcross_open_forward | passed |
+| minkowski_rectangle_selfcross_open_reverse | passed |
+| minkowski_rectangle_short_horizontal_closed_forward | passed |
+| minkowski_rectangle_short_horizontal_closed_reverse | passed |
+| minkowski_rectangle_short_horizontal_open_forward | passed |
+| minkowski_rectangle_short_horizontal_open_reverse | passed |

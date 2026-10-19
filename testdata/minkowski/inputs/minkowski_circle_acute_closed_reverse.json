@@ -1,0 +1,63 @@
+{
+  "case_id": "minkowski_circle_acute_closed_reverse",
+  "format_version": 7,
+  "operation": "MinkowskiSum",
+  "options": {
+    "preserve_collinear": true,
+    "reverse_solution": false
+  },
+  "path": [
+    [
+      4,
+      6
+    ],
+    [
+      25,
+      0
+    ],
+    [
+      0,
+      0
+    ]
+  ],
+  "path_is_closed": true,
+  "pattern": [
+    [
+      3,
+      0
+    ],
+    [
+      2,
+      2
+    ],
+    [
+      0,
+      3
+    ],
+    [
+      -2,
+      2
+    ],
+    [
+      -3,
+      0
+    ],
+    [
+      -2,
+      -2
+    ],
+    [
+      0,
+      -3
+    ],
+    [
+      2,
+      -2
+    ]
+  ],
+  "source": {
+    "group": "circle:acute:reverse",
+    "intent": "Fixed connection quadrilaterals; no complete endpoint patterns",
+    "kind": "moonclip_constructed"
+  }
+}

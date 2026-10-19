@@ -22,17 +22,19 @@ printf 'Checking native target\n'
 moon check --target native --deny-warn
 mkdir -p _build/conformance
 moon test --target native | tee _build/conformance/all-native.log
-grep -Fxq "Total tests: 2010, passed: 2010, failed: 0." _build/conformance/all-native.log
+grep -Fxq "Total tests: 2210, passed: 2210, failed: 0." _build/conformance/all-native.log
 moon build --target native
 moon run --target native cmd/example
 printf 'Checking JS target\n'
 node --version
 moon check --target js --deny-warn
 moon test --target js | tee _build/conformance/all-js.log
-grep -Fxq "Total tests: 2010, passed: 2010, failed: 0." _build/conformance/all-js.log
+grep -Fxq "Total tests: 2210, passed: 2210, failed: 0." _build/conformance/all-js.log
 moon fmt --check
 mkdir -p _build/conformance
 for target in native js; do
+  { printf 'Selection: reference minkowski paths: *\n'; moon test --target "$target" --filter "reference minkowski paths: *"; } | tee "_build/conformance/minkowski-$target.log"
+  grep -Fxq 'Total tests: 144, passed: 144, failed: 0.' "_build/conformance/minkowski-$target.log"
   { printf 'Selection: reference simplify paths: *\n'; moon test --target "$target" --filter "reference simplify paths: *"; } | tee "_build/conformance/simplify-$target.log"
   grep -Fxq 'Total tests: 224, passed: 224, failed: 0.' "_build/conformance/simplify-$target.log"
   { printf 'Selection: reference decimal paths: *\n'; moon test --target "$target" --filter "reference decimal paths: *"; } | tee "_build/conformance/decimal-$target.log"
@@ -72,6 +74,8 @@ python scripts/check_reference.py --manifest testdata/decimal-manifest.json --st
 python tools/conformance/generate_decimal.py --check
 python scripts/check_reference.py --manifest testdata/simplify-manifest.json --strict
 python tools/conformance/generate_simplify.py --check
-moon run --target native cmd/conformance -- --manifest testdata/manifest.json --offset-manifest testdata/offset-manifest.json --stroke-manifest testdata/stroke-manifest.json --composition-manifest testdata/composition-manifest.json --decimal-manifest testdata/decimal-manifest.json --simplify-manifest testdata/simplify-manifest.json --report-json _build/conformance/report.json --report-md docs/compatibility.md --strict
+python scripts/check_reference.py --manifest testdata/minkowski-manifest.json --strict
+python tools/conformance/generate_minkowski.py --check
+moon run --target native cmd/conformance -- --manifest testdata/manifest.json --offset-manifest testdata/offset-manifest.json --stroke-manifest testdata/stroke-manifest.json --composition-manifest testdata/composition-manifest.json --decimal-manifest testdata/decimal-manifest.json --simplify-manifest testdata/simplify-manifest.json --minkowski-manifest testdata/minkowski-manifest.json --report-json _build/conformance/report.json --report-md docs/compatibility.md --strict
 git diff --exit-code -- docs/compatibility.md
 git diff --check

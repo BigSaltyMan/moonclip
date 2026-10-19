@@ -192,3 +192,9 @@ v6明确 normalization=ConsecutiveDuplicatesAndClosedSeam、模式、路线、�
 运行器只链接输入/参数/哈希，公开调用及结果访问器产生实际输出；预期只链接对照测试。--simplify-manifest 分列Integer80/DecimalGrid144、有序路径、删除数、退化分类与执行错误，合法退化为成功。过滤224要求独立选择标记。旧992条输入/预期/清单/选择逐字节保留；总参考1216，独立重建CI多第六目录，混合类别不得覆盖任何旧目录。
 
 新增同一批72项功能和224项对照，库全量2010=1714+72+224，native与JS各自执行，不相加当成用例数。简化失败与预算属于 MoonClip 契约证据，不宣称 Clipper2 有同样资源上限。固定工具链和原规划保持不变。
+
+## Commit 15：144条Minkowski独立参考
+
+v7严格接收MinkowskiSum、pattern、path及布尔path_is_closed，固定preserve_collinear=true/reverse_solution=false，结果NonZero。4图案（矩形、整数近圆、凹L、偏置不对称）×9路线（长/短水平、斜线、直角、锐角、折返、自交、矩形、重复点）×Open/Closed×正反路线，首次运行MoonClip前锁定。
+
+真实固定C++MinkowskiSum生成期望，完整轮廓仅旋转环起点/排列兄弟，不反向、不删共线点、不忽略重数。缺失/重复/多余ID、哈希、选项、类型错误失败；适配器预检原始及生成坐标、保守乘积规模，保留子进程超时。独立目录和manifest/selection记录全部144条。运行器只编译输入和哈希，真实调用公开入口；报告独立读取期望，单列覆盖和两目标筛选，明确旧六类与本类设置不同。旧1216参考、清单与选择字节不变，总独立参考1360；七类均支持--check逐字节重建。

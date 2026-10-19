@@ -1,0 +1,43 @@
+{
+  "case_id": "minkowski_offcenter_short_horizontal_closed_reverse",
+  "format_version": 7,
+  "operation": "MinkowskiSum",
+  "options": {
+    "preserve_collinear": true,
+    "reverse_solution": false
+  },
+  "path": [
+    [
+      1,
+      0
+    ],
+    [
+      0,
+      0
+    ]
+  ],
+  "path_is_closed": true,
+  "pattern": [
+    [
+      2,
+      1
+    ],
+    [
+      6,
+      1
+    ],
+    [
+      5,
+      4
+    ],
+    [
+      2,
+      3
+    ]
+  ],
+  "source": {
+    "group": "offcenter:short_horizontal:reverse",
+    "intent": "Fixed connection quadrilaterals; no complete endpoint patterns",
+    "kind": "moonclip_constructed"
+  }
+}

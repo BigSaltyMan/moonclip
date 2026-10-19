@@ -49,3 +49,7 @@ jobs:
         run: bash scripts/generate_reference.sh --manifest testdata/simplify-manifest.json --check
       - name: Check offline simplification catalog and reports
         run: python scripts/check_reference.py --manifest testdata/simplify-manifest.json --strict
+      - name: Rebuild fixed MinkowskiSum complete-contour references
+        run: bash scripts/generate_reference.sh --manifest testdata/minkowski-manifest.json --check
+      - name: Check offline Minkowski catalog and coverage
+        run: python scripts/check_reference.py --manifest testdata/minkowski-manifest.json --strict

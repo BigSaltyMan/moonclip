@@ -1,0 +1,58 @@
+{
+  "adapter_protocol_version": 7,
+  "case_id": "minkowski_offcenter_diagonal_open_forward",
+  "fill_rule": "NonZero",
+  "format_version": 7,
+  "input_sha256": "77ad5ab6562a049aeb78fe81f931b9be37956d83e96fbd2944470c6b4e237a33",
+  "metrics": {
+    "path_count": 1,
+    "paths": [
+      {
+        "area2": "298",
+        "bounds": [
+          -8,
+          -4,
+          26,
+          19
+        ],
+        "vertices": 6
+      }
+    ],
+    "vertex_count": 6
+  },
+  "operation": "MinkowskiSum",
+  "options": {
+    "preserve_collinear": true,
+    "reverse_solution": false
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        -4,
+        -4
+      ],
+      [
+        26,
+        16
+      ],
+      [
+        25,
+        19
+      ],
+      [
+        22,
+        18
+      ],
+      [
+        -8,
+        -2
+      ],
+      [
+        -8,
+        -4
+      ]
+    ]
+  ],
+  "status": "success"
+}

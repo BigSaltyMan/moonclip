@@ -1,0 +1,178 @@
+{
+  "adapter_protocol_version": 7,
+  "case_id": "minkowski_rectangle_selfcross_closed_reverse",
+  "fill_rule": "NonZero",
+  "format_version": 7,
+  "input_sha256": "fe2b449e99a70c808f0bcc330540e6d7807d86bee96dc81dd5bbbf7260db0744",
+  "metrics": {
+    "path_count": 4,
+    "paths": [
+      {
+        "area2": "844",
+        "bounds": [
+          -2,
+          -1,
+          32,
+          21
+        ],
+        "vertices": 18
+      },
+      {
+        "area2": "-72",
+        "bounds": [
+          4,
+          13,
+          16,
+          19
+        ],
+        "vertices": 3
+      },
+      {
+        "area2": "-9",
+        "bounds": [
+          7,
+          4,
+          11,
+          7
+        ],
+        "vertices": 3
+      },
+      {
+        "area2": "-9",
+        "bounds": [
+          18,
+          3,
+          23,
+          6
+        ],
+        "vertices": 3
+      }
+    ],
+    "vertex_count": 27
+  },
+  "operation": "MinkowskiSum",
+  "options": {
+    "preserve_collinear": true,
+    "reverse_solution": false
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        2,
+        -1
+      ],
+      [
+        14,
+        3
+      ],
+      [
+        18,
+        -1
+      ],
+      [
+        22,
+        -1
+      ],
+      [
+        32,
+        9
+      ],
+      [
+        32,
+        11
+      ],
+      [
+        28,
+        11
+      ],
+      [
+        16,
+        7
+      ],
+      [
+        13,
+        10
+      ],
+      [
+        22,
+        19
+      ],
+      [
+        22,
+        21
+      ],
+      [
+        18,
+        21
+      ],
+      [
+        2,
+        21
+      ],
+      [
+        -2,
+        21
+      ],
+      [
+        -2,
+        19
+      ],
+      [
+        7,
+        10
+      ],
+      [
+        -2,
+        1
+      ],
+      [
+        -2,
+        -1
+      ]
+    ],
+    [
+      [
+        4,
+        19
+      ],
+      [
+        16,
+        19
+      ],
+      [
+        10,
+        13
+      ]
+    ],
+    [
+      [
+        10,
+        7
+      ],
+      [
+        11,
+        5
+      ],
+      [
+        7,
+        4
+      ]
+    ],
+    [
+      [
+        18,
+        4
+      ],
+      [
+        23,
+        6
+      ],
+      [
+        20,
+        3
+      ]
+    ]
+  ],
+  "status": "success"
+}

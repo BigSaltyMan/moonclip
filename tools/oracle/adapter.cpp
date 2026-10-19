@@ -211,7 +211,9 @@ struct CompositionFailure : std::runtime_error {
 json execute_composition(const json& request);
 json execute_decimal(const json& request);
 json execute_simplify(const json& request);
+json execute_minkowski(const json& request);
 json execute(const json& request) {
+  if(request.is_object() && request.value("operation",json())=="MinkowskiSum") return execute_minkowski(request);
   if (request.is_object() && (request.value("operation",json())=="Simplify64" || request.value("operation",json())=="SimplifyD")) return execute_simplify(request);
   if (request.is_object() && (request.value("operation",json())=="BooleanD" || request.value("operation",json())=="OffsetD" || request.value("operation",json())=="StrokeD")) return execute_decimal(request);
   if (request.is_object() && request.value("operation",json())=="Composition") return execute_composition(request);
@@ -507,4 +509,30 @@ json execute_simplify(const json& request) {
   json response={{"format_version",6},{"adapter_protocol_version",6},{"case_id",id},{"oracle_commit",kCommit},{"status","success"},{"operation",request["operation"]},{"mode",request["mode"]},{"reference_route",request["reference_route"]},{"paths",output},{"removed_vertices",removed},{"removed_per_path",counts},{"input_degenerate_indices",before},{"degenerate_indices",after},{"collapsed_indices",collapsed}};
   if(decimal) {response["precision"]=precision;response["paths_d"]=decoded;}
   return response;
+}
+
+// v7: real locked MinkowskiSum. Only preflight is adapter code.
+json execute_minkowski(const json& request) {
+  keys(request,{"format_version","case_id","source","operation","options","pattern","path","path_is_closed"},"Minkowski");
+  integer(request["format_version"],"Minkowski version",7,7);
+  require(request["operation"]=="MinkowskiSum" && request["path_is_closed"].is_boolean(),"invalid Minkowski operation/mode");
+  keys(request["options"],{"preserve_collinear","reverse_solution"},"Minkowski options");
+  require(request["options"]["preserve_collinear"].is_boolean() && request["options"]["preserve_collinear"]==true && request["options"]["reverse_solution"].is_boolean() && request["options"]["reverse_solution"]==false,"Minkowski output settings");
+  auto metadata=request;metadata["options"]["preserve_collinear"]=false;auto id=request_metadata(metadata);
+  size_t pc=0,vc=0;auto input=paths(json::array({request["pattern"],request["path"]}),"Minkowski input",pc,vc);
+  const auto& pattern=input[0];const auto& path=input[1];bool closed=request["path_is_closed"].get<bool>();
+  const size_t m=pattern.size(),n=path.size();
+  if(m && n) {
+    size_t edges=closed?n:n-1;
+    require(m<=2147483647/n && (edges==0 || m<=2147483647/edges),"Minkowski product overflow");
+    size_t p=m*n,q=m*edges;require(q<=2147483647/4,"Minkowski quad slots overflow");
+    require(2+2*n+2*p+6*q<=500000 && n+p+2*q<=5000000,"Minkowski generation limit");
+    for(auto a:path) for(auto b:pattern) {
+      auto x=a.x+b.x,y=a.y+b.y;require(x>=-1000000000 && x<=1000000000 && y>=-1000000000 && y<=1000000000,"Minkowski translated coordinate range");
+    }
+  }
+  auto result=MinkowskiSum(pattern,path,closed);
+  json output=json::array();for(const auto& p:result) output.push_back(output_path(p));
+  pc=0;vc=0;paths(output,"Minkowski output",pc,vc);
+  return {{"format_version",7},{"adapter_protocol_version",7},{"case_id",id},{"oracle_commit",kCommit},{"status","success"},{"operation","MinkowskiSum"},{"fill_rule","NonZero"},{"options",request["options"]},{"paths",output}};
 }

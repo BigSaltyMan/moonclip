@@ -253,8 +253,39 @@ def evaluate_simplify(manifest,results):
     return report
 
 
+def evaluate_minkowski(manifest,results):
+    from minkowski_compare import minkowski_selection,validate_minkowski_geometry,OPTIONS
+    from compare import read_manifest,keys
+    from collections import Counter
+    _,records=read_manifest(ROOT,manifest,strict=True);_,selected=minkowski_selection(ROOT)
+    require(records==selected,'minkowski','manifest differs from locked selection')
+    require(type(results) is list,'minkowski actual','expected array');actual={}
+    for r in results:
+        require(type(r) is dict and type(r.get('case_id')) is str,'minkowski actual','missing ID')
+        require(r['case_id'] not in actual,r['case_id'],'duplicate result');actual[r['case_id']]=r
+    require(set(actual)=={e['case_id'] for e,_,_,_ in records},'minkowski actual','missing/extra results')
+    details=[]
+    for e,c,d,v in records:
+        cid=c['case_id'];r=actual[cid];require(r.get('input_sha256')==d,cid,'compiled input hash mismatch');detail=dict(case_id=cid)
+        if r.get('status')=='error':
+            keys(r,{'case_id','input_sha256','status','error'},cid);require(type(r['error']) is str,cid,'invalid execution error')
+            detail.update(status='execution_error',message=r['error'])
+        else:
+            keys(r,{'case_id','input_sha256','status','format_version','operation','fill_rule','options','paths'},cid)
+            validate_minkowski_geometry(r,cid)
+            try:compare_paths(v['paths'],r['paths'],cid)
+            except Invalid as error:detail.update(status='difference',message=str(error))
+            else:detail['status']='passed'
+        details.append(detail)
+    return {**summary(details),'required':144,'reference_cases':144,'cases':details,'fill_rule':'NonZero','options':OPTIONS,
+      'coverage':{'patterns':dict(sorted(Counter(c['source']['group'].split(':')[0] for _,c,_,_ in records).items())),
+                  'routes':dict(sorted(Counter(c['source']['group'].split(':')[1] for _,c,_,_ in records).items())),
+                  'directions':dict(sorted(Counter(c['source']['group'].split(':')[2] for _,c,_,_ in records).items())),
+                  'modes':dict(sorted(Counter('Closed' if c['path_is_closed'] else 'Open' for _,c,_,_ in records).items()))}}
+
+
 def markdown(report):
-    lines=['# Boolean compatibility','','Pinned Clipper2 2.0.1, commit `21ebba05db8894f0c7217ad35ea518080f324946`; ordinary precision, preserve_collinear=false, reverse_solution=false.','',
+    lines=['# Boolean compatibility','','Pinned Clipper2 2.0.1, commit `21ebba05db8894f0c7217ad35ea518080f324946`; ordinary precision. Boolean/Offset/Stroke: preserve_collinear=false; MinkowskiSum: preserve_collinear=true; reverse_solution=false. Simplification has its own ordered-output contract.','',
       f"Public cases: {report['required']}; both passed={report['passed']}, differences={report['differences']}, execution_errors={report['execution_errors']}. Reference catalog: {report['reference_cases']}.",'',
       '| Native capability | Required | Executed | Passed | Differences | Execution errors |','| --- | ---: | ---: | ---: | ---: | ---: |']
     for capability in ('paths','tree'):
@@ -334,6 +365,19 @@ def markdown(report):
             lines.append('| '+target+' | '+value+' |')
         lines+=['','| Case | Ordered paths and decoding | Removed counts | Degeneracy | Status |','| --- | --- | --- | --- | --- |']
         lines += [f"| {c['case_id']} | {c['ordered_paths']} | {c['removed_counts']} | {c['degeneracy']} | {c['status']} |" for c in r['cases']]
+    if 'minkowski' in report:
+        r=report['minkowski']
+        lines+=['','# Minkowski Sum compatibility','',f"MinkowskiSum public paths: {r['passed']}/{r['executed']}; required=144; differences={r['differences']}; execution_errors={r['execution_errors']}. Independent total: 1216 +144 =1360.",'',
+          'Real pinned MinkowskiSum, internal NonZero, preserve_collinear=true, reverse_solution=false. Complete contours preserve collinear vertices, winding and multiplicity; only sibling order and cyclic starts are normalized. No endpoint pattern fill, no automatic input normalization, and closed routes may retain holes.','',
+          '| Coverage | Cases |','| --- | --- |']
+        for field,values in r['coverage'].items():lines.append('| '+field+' | '+', '.join(k+': '+str(v) for k,v in values.items())+' |')
+        lines+=['','| Target | Minkowski filtered paths |','| --- | --- |']
+        for target in ('native','js'):
+            e=report.get('minkowski_evidence',{}).get(target,{})
+            value=str(e['passed'])+'/'+str(e['executed']) if e.get('status')=='passed' else 'not recorded'
+            lines.append('| '+target+' | '+value+' |')
+        lines+=['','| Minkowski case | Native complete contours |','| --- | --- |']
+        lines += [f"| {c['case_id']} | {c['status']} |" for c in r['cases']]
     return '\n'.join(lines)+'\n'
 
 def main():
@@ -342,6 +386,7 @@ def main():
     parser.add_argument('--offset-manifest',type=Path,help='Include independently executed offset protocol v2 cases')
     parser.add_argument('--stroke-manifest',type=Path,help='Include independent open stroke protocol v3 cases')
     parser.add_argument('--composition-manifest',type=Path,help='Include fixed two-step protocol v4 recipes')
+    parser.add_argument('--minkowski-manifest',type=Path,help='Include 144 fixed MinkowskiSum complete contours')
     parser.add_argument('--simplify-manifest',type=Path,help='Include 80 integer and 144 decimal-grid ordered simplify inputs')
     parser.add_argument('--decimal-manifest',type=Path,help='Include 196 decimal-grid and 24 actual ClipperD common-grid inputs')
     parser.add_argument('--report-json',type=Path,default=ROOT/'_build/conformance/report.json')
@@ -360,6 +405,10 @@ def main():
         if args.composition_manifest:
             report['composition']=evaluate_composition(args.composition_manifest.resolve(),envelope.get('composition_results'))
             report['composition_evidence']=composition_evidence(ROOT/'_build/conformance')
+        if args.minkowski_manifest:
+            from evidence import minkowski_evidence
+            report['minkowski']=evaluate_minkowski(args.minkowski_manifest.resolve(),envelope.get('minkowski_results'))
+            report['minkowski_evidence']=minkowski_evidence(ROOT/'_build/conformance')
         if args.simplify_manifest:
             from evidence import simplify_evidence
             report['simplify']=evaluate_simplify(args.simplify_manifest.resolve(),envelope.get('simplify_results'))
@@ -387,7 +436,10 @@ def main():
         simplify=report.get('simplify',{})
         if simplify:
             print(f"Native simplify conformance: cases=224, Integer={simplify['routes']['Integer']['passed']}/80, DecimalGrid={simplify['routes']['DecimalGrid']['passed']}/144, ordered_paths={simplify['ordered_paths']['passed']}/224, removed_counts={simplify['removed_counts']['passed']}/224, degeneracy={simplify['degeneracy']['passed']}/224, differences={simplify['differences']}, execution_errors={simplify['execution_errors']}")
-        return 2 if any(r.get('execution_errors') for r in (report,offset,stroke,composition,decimal,simplify)) else 1 if any(r.get('differences') for r in (report,offset,stroke,composition,decimal,simplify)) else 0
+        minkowski=report.get('minkowski',{})
+        if minkowski:
+            print(f"Native minkowski conformance: cases=144, paths={minkowski['passed']}/144, NonZero, preserve_collinear=true, differences={minkowski['differences']}, execution_errors={minkowski['execution_errors']}")
+        return 2 if any(r.get('execution_errors') for r in (report,offset,stroke,composition,decimal,simplify,minkowski)) else 1 if any(r.get('differences') for r in (report,offset,stroke,composition,decimal,simplify,minkowski)) else 0
     except (Invalid,OSError,ValueError,KeyError,TypeError) as error:
         print(f'Conformance error: {error}',file=sys.stderr);return 2
 if __name__=='__main__':sys.exit(main())

@@ -456,6 +456,15 @@ fn process_intersection(
   }
   edge_get(state, left).current_x = event.point.x
   edge_get(state, right).current_x = event.point.x
+  if state.preserve_collinear && event.reverses {
+    // Fixed ProcessIntersectList joins the two outside neighbors after swapping.
+    if edge_get(state, right).prev_ael is Some(previous) {
+      boolean_check_join(state, previous, right, event.point, neighbor_check=1)
+    }
+    if edge_get(state, left).next_ael is Some(next) {
+      boolean_check_join(state, left, next, event.point, neighbor_check=2)
+    }
+  }
   state.intersection_cursor += 1
   true
 }

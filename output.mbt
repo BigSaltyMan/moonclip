@@ -375,10 +375,15 @@ fn output_close_or_merge(
   }
   let ar = output_resolve(state, ae.record)
   let br = output_resolve(state, be.record)
-  ignore(output_add_edge(state, a, point))
-  ignore(output_add_edge(state, b, point))
+  let maximum = output_add_edge(state, a, point)
+  if !state.preserve_collinear {
+    ignore(output_add_edge(state, b, point))
+  }
   if ar == br {
     output_close(state, ar)
+    if state.preserve_collinear && maximum is Some(op) {
+      state.output.records[ar].anchor = Some(op)
+    }
     return
   }
   let ac = state.output.records[ar]

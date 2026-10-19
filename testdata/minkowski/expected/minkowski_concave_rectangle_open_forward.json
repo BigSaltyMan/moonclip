@@ -1,0 +1,94 @@
+{
+  "adapter_protocol_version": 7,
+  "case_id": "minkowski_concave_rectangle_open_forward",
+  "fill_rule": "NonZero",
+  "format_version": 7,
+  "input_sha256": "a86d3f7896ba9f3f01e0d5eeb612f7775610b906b75bdd0055da20eebab6c3ea",
+  "metrics": {
+    "path_count": 1,
+    "paths": [
+      {
+        "area2": "654",
+        "bounds": [
+          0,
+          0,
+          34,
+          24
+        ],
+        "vertices": 15
+      }
+    ],
+    "vertex_count": 15
+  },
+  "operation": "MinkowskiSum",
+  "options": {
+    "preserve_collinear": true,
+    "reverse_solution": false
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        30,
+        0
+      ],
+      [
+        34,
+        0
+      ],
+      [
+        34,
+        1
+      ],
+      [
+        34,
+        21
+      ],
+      [
+        31,
+        21
+      ],
+      [
+        31,
+        24
+      ],
+      [
+        30,
+        24
+      ],
+      [
+        1,
+        24
+      ],
+      [
+        0,
+        24
+      ],
+      [
+        0,
+        20
+      ],
+      [
+        30,
+        20
+      ],
+      [
+        30,
+        4
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        0
+      ]
+    ]
+  ],
+  "status": "success"
+}

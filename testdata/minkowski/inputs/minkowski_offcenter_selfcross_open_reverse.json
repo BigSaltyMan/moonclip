@@ -1,0 +1,55 @@
+{
+  "case_id": "minkowski_offcenter_selfcross_open_reverse",
+  "format_version": 7,
+  "operation": "MinkowskiSum",
+  "options": {
+    "preserve_collinear": true,
+    "reverse_solution": false
+  },
+  "path": [
+    [
+      30,
+      10
+    ],
+    [
+      20,
+      0
+    ],
+    [
+      0,
+      20
+    ],
+    [
+      20,
+      20
+    ],
+    [
+      0,
+      0
+    ]
+  ],
+  "path_is_closed": false,
+  "pattern": [
+    [
+      2,
+      1
+    ],
+    [
+      6,
+      1
+    ],
+    [
+      5,
+      4
+    ],
+    [
+      2,
+      3
+    ]
+  ],
+  "source": {
+    "group": "offcenter:selfcross:reverse",
+    "intent": "Fixed connection quadrilaterals; no complete endpoint patterns",
+    "kind": "moonclip_constructed"
+  }
+}

@@ -90,8 +90,9 @@ fn main raise {
   run_composition_example()
   run_decimal_example()
   run_simplify_example()
+  run_minkowski_example()
   println(
-    "MoonClip geometry, Boolean, PolyTree, offset, stroke, composition, decimal and simplify OK",
+    "MoonClip geometry, Boolean, PolyTree, offset, stroke, composition, decimal, simplify and Minkowski OK",
   )
 }
 
@@ -701,5 +702,117 @@ fn run_simplify_example() -> Unit raise {
   assert_eq(tree.roots()[0].children()[0].is_hole(), true)
   println(
     "Simplify vertices: 9 -> 8; input_degenerate=[2]; degenerate=[2]; collapsed=[]; offset/tree OK",
+  )
+}
+
+///|
+fn run_minkowski_example() -> Unit raise {
+  guard @moonclip.minkowski_sum(
+      [
+        @moonclip.Point64::new(-2L, -1L),
+        @moonclip.Point64::new(2L, -1L),
+        @moonclip.Point64::new(2L, 1L),
+        @moonclip.Point64::new(-2L, 1L),
+      ],
+      [
+        @moonclip.Point64::new(0L, 0L),
+        @moonclip.Point64::new(20L, 0L),
+        @moonclip.Point64::new(20L, 20L),
+      ],
+      false,
+    )
+    is Ok(sweep0) else {
+    fail("Minkowski sweep failed")
+  }
+  example_result(sweep0, [
+    [
+      @moonclip.Point64::new(18L, -1L),
+      @moonclip.Point64::new(22L, -1L),
+      @moonclip.Point64::new(22L, 1L),
+      @moonclip.Point64::new(22L, 21L),
+      @moonclip.Point64::new(18L, 21L),
+      @moonclip.Point64::new(18L, 19L),
+      @moonclip.Point64::new(18L, 1L),
+      @moonclip.Point64::new(2L, 1L),
+      @moonclip.Point64::new(-2L, 1L),
+      @moonclip.Point64::new(-2L, -1L),
+    ],
+  ])
+  guard @moonclip.minkowski_sum(
+      [
+        @moonclip.Point64::new(2L, 1L),
+        @moonclip.Point64::new(6L, 1L),
+        @moonclip.Point64::new(5L, 4L),
+        @moonclip.Point64::new(2L, 3L),
+      ],
+      [@moonclip.Point64::new(-10L, -5L), @moonclip.Point64::new(20L, 15L)],
+      false,
+    )
+    is Ok(sweep1) else {
+    fail("Minkowski sweep failed")
+  }
+  example_result(sweep1, [
+    [
+      @moonclip.Point64::new(-4L, -4L),
+      @moonclip.Point64::new(26L, 16L),
+      @moonclip.Point64::new(25L, 19L),
+      @moonclip.Point64::new(22L, 18L),
+      @moonclip.Point64::new(-8L, -2L),
+      @moonclip.Point64::new(-8L, -4L),
+    ],
+  ])
+  guard @moonclip.minkowski_sum(
+      [
+        @moonclip.Point64::new(-2L, -1L),
+        @moonclip.Point64::new(2L, -1L),
+        @moonclip.Point64::new(2L, 1L),
+        @moonclip.Point64::new(-2L, 1L),
+      ],
+      [
+        @moonclip.Point64::new(0L, 0L),
+        @moonclip.Point64::new(30L, 0L),
+        @moonclip.Point64::new(30L, 20L),
+        @moonclip.Point64::new(0L, 20L),
+      ],
+      true,
+    )
+    is Ok(sweep2) else {
+    fail("Minkowski sweep failed")
+  }
+  example_result(sweep2, [
+    [
+      @moonclip.Point64::new(2L, -1L),
+      @moonclip.Point64::new(28L, -1L),
+      @moonclip.Point64::new(32L, -1L),
+      @moonclip.Point64::new(32L, 1L),
+      @moonclip.Point64::new(32L, 21L),
+      @moonclip.Point64::new(28L, 21L),
+      @moonclip.Point64::new(2L, 21L),
+      @moonclip.Point64::new(-2L, 21L),
+      @moonclip.Point64::new(-2L, 19L),
+      @moonclip.Point64::new(-2L, 1L),
+      @moonclip.Point64::new(-2L, -1L),
+    ],
+    [
+      @moonclip.Point64::new(2L, 19L),
+      @moonclip.Point64::new(28L, 19L),
+      @moonclip.Point64::new(28L, 1L),
+      @moonclip.Point64::new(2L, 1L),
+    ],
+  ])
+  guard @moonclip.boolean_tree(
+      sweep2,
+      [],
+      @moonclip.Union,
+      fill_rule=@moonclip.NonZero,
+    )
+    is Ok(tree) else {
+    fail("Minkowski tree failed")
+  }
+  assert_eq(tree.roots().length(), 1)
+  assert_eq(tree.roots()[0].children().length(), 1)
+  assert_true(tree.roots()[0].children()[0].is_hole())
+  println(
+    "Minkowski: rectangle/polyline, offcenter/diagonal and closed route/hole OK",
   )
 }

@@ -1,0 +1,102 @@
+{
+  "adapter_protocol_version": 7,
+  "case_id": "minkowski_circle_right_angle_closed_reverse",
+  "fill_rule": "NonZero",
+  "format_version": 7,
+  "input_sha256": "da515aaffa30c988ea77d8b3d35c8e9d7d40fd19bb5cbf5fe687c897c31b26df",
+  "metrics": {
+    "path_count": 2,
+    "paths": [
+      {
+        "area2": "848",
+        "bounds": [
+          -3,
+          -3,
+          23,
+          23
+        ],
+        "vertices": 11
+      },
+      {
+        "area2": "-100",
+        "bounds": [
+          7,
+          3,
+          17,
+          13
+        ],
+        "vertices": 3
+      }
+    ],
+    "vertex_count": 14
+  },
+  "operation": "MinkowskiSum",
+  "options": {
+    "preserve_collinear": true,
+    "reverse_solution": false
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        20,
+        -3
+      ],
+      [
+        22,
+        -2
+      ],
+      [
+        23,
+        0
+      ],
+      [
+        23,
+        20
+      ],
+      [
+        22,
+        22
+      ],
+      [
+        20,
+        23
+      ],
+      [
+        18,
+        22
+      ],
+      [
+        -2,
+        2
+      ],
+      [
+        -3,
+        0
+      ],
+      [
+        -2,
+        -2
+      ],
+      [
+        0,
+        -3
+      ]
+    ],
+    [
+      [
+        7,
+        3
+      ],
+      [
+        17,
+        13
+      ],
+      [
+        17,
+        3
+      ]
+    ]
+  ],
+  "status": "success"
+}

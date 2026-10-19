@@ -511,6 +511,56 @@ class AdapterTests(unittest.TestCase):
         c=self.simplify_case();c.update(paths=[[[0,0],[10,10],[0,10],[10,0]]],mode='Closed',epsilon=.25)
         r=decode(self.call(c).stdout);self.assertEqual(r['paths'],c['paths']);self.assertEqual(r['degenerate_indices'],[])
 
+    def minkowski_case(self):
+        return copy.deepcopy(next(iter(read_manifest(ROOT,ROOT/'testdata/minkowski-manifest.json')[1]))[1])
+
+    def test_minkowski_actual_144_fixed_results(self):
+        _,records=read_manifest(ROOT,ROOT/'testdata/minkowski-manifest.json')
+        for _,c,d,v in records:compare(v,decode(self.call(c).stdout),c['case_id'])
+
+    def test_minkowski_missing_extra_fields(self):
+        c=self.minkowski_case()
+        for k in c:
+            bad=copy.deepcopy(c);del bad[k];self.rejected(bad)
+        c['extra']=True;self.rejected(c)
+
+    def test_minkowski_mode_boolean_required(self):
+        for value in (0,1,'true',None):
+            c=self.minkowski_case();c['path_is_closed']=value;self.rejected(c)
+
+    def test_minkowski_fixed_output_settings(self):
+        for options in ({},{'preserve_collinear':False,'reverse_solution':False},{'preserve_collinear':1,'reverse_solution':False},{'preserve_collinear':True,'reverse_solution':True}):
+            c=self.minkowski_case();c['options']=options;self.rejected(c)
+
+    def test_minkowski_raw_coordinate_types(self):
+        for x in (True,1.0,'1',1000000001,-1000000001,-9223372036854775808):
+            c=self.minkowski_case();c['pattern']=[[x,0]];self.rejected(c)
+
+    def test_minkowski_generated_range_rejected(self):
+        c=self.minkowski_case();c.update(pattern=[[1,0]],path=[[1000000000,0]]);self.rejected(c)
+
+    def test_minkowski_generation_product_guard(self):
+        c=self.minkowski_case();c.update(pattern=[[0,0]]*1000,path=[[0,0]]*1000);self.rejected(c)
+
+    def test_minkowski_combined_raw_count(self):
+        c=self.minkowski_case();c.update(pattern=[[0,0]]*60000,path=[[0,0]]*40001);self.rejected(c)
+
+    def test_minkowski_empty_validates_second_input(self):
+        c=self.minkowski_case();c.update(pattern=[],path=[[1000000001,0]]);self.rejected(c)
+        c['path']=[];self.assertEqual(decode(self.call(c).stdout)['paths'],[])
+
+    def test_minkowski_short_route_not_endpoint_fill(self):
+        c=self.minkowski_case();c.update(pattern=[[-1,-1],[1,-1],[1,1],[-1,1]],path=[[0,0],[1,0]],path_is_closed=False)
+        self.assertEqual(len(decode(self.call(c).stdout)['paths']),2)
+
+    def test_minkowski_closed_boundary_preserves_hole(self):
+        c=self.minkowski_case();c.update(pattern=[[-1,-1],[1,-1],[1,1],[-1,1]],path=[[0,0],[20,0],[20,20],[0,20]],path_is_closed=True)
+        v=decode(self.call(c).stdout);self.assertEqual(len(v['paths']),2);self.assertEqual(sorted(1 if area2(p)>0 else -1 for p in v['paths']),[-1,1])
+
+    def test_minkowski_two_point_pattern_not_filtered(self):
+        c=self.minkowski_case();c.update(pattern=[[0,-1],[0,1]],path=[[0,0],[10,0]],path_is_closed=False)
+        self.assertEqual(normalize_paths(decode(self.call(c).stdout)['paths']),normalize_paths([[[0,-1],[10,-1],[10,1],[0,1]]]))
+
     def case_commit(self):
         return load(ROOT/'tools/oracle/upstream-lock.json',True)['commit']
 

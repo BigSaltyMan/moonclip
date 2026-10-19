@@ -1,0 +1,130 @@
+{
+  "adapter_protocol_version": 7,
+  "case_id": "minkowski_rectangle_selfcross_open_reverse",
+  "fill_rule": "NonZero",
+  "format_version": 7,
+  "input_sha256": "2fc0facda031d10be0c97492f7e9437b80e9b0cd81e8d52114d9f9b801af842d",
+  "metrics": {
+    "path_count": 2,
+    "paths": [
+      {
+        "area2": "716",
+        "bounds": [
+          -2,
+          -1,
+          32,
+          21
+        ],
+        "vertices": 18
+      },
+      {
+        "area2": "-72",
+        "bounds": [
+          4,
+          13,
+          16,
+          19
+        ],
+        "vertices": 3
+      }
+    ],
+    "vertex_count": 21
+  },
+  "operation": "MinkowskiSum",
+  "options": {
+    "preserve_collinear": true,
+    "reverse_solution": false
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        2,
+        -1
+      ],
+      [
+        10,
+        7
+      ],
+      [
+        18,
+        -1
+      ],
+      [
+        22,
+        -1
+      ],
+      [
+        32,
+        9
+      ],
+      [
+        32,
+        11
+      ],
+      [
+        28,
+        11
+      ],
+      [
+        20,
+        3
+      ],
+      [
+        13,
+        10
+      ],
+      [
+        22,
+        19
+      ],
+      [
+        22,
+        21
+      ],
+      [
+        18,
+        21
+      ],
+      [
+        2,
+        21
+      ],
+      [
+        -2,
+        21
+      ],
+      [
+        -2,
+        19
+      ],
+      [
+        7,
+        10
+      ],
+      [
+        -2,
+        1
+      ],
+      [
+        -2,
+        -1
+      ]
+    ],
+    [
+      [
+        4,
+        19
+      ],
+      [
+        16,
+        19
+      ],
+      [
+        10,
+        13
+      ]
+    ]
+  ],
+  "status": "success"
+}

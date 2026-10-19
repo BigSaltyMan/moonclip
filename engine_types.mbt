@@ -178,6 +178,7 @@ priv struct ScanState {
   free_slots : Array[Int]
   horizontal_queue : Array[EdgeId]
   exits : Array[ExitEvent]
+  mut preserve_collinear : Bool
   mut boolean_rule : WindingRule
   mut boolean_operation : ClipType?
   output : OutputState
@@ -187,6 +188,7 @@ priv struct ScanState {
   pending_connections : Array[EngineEvent]
   mut connection_cursor : Int
   mut entry_contact : (VertexId, EdgeId, EdgeId)?
+  mut horizontal_started : Bool
   mut held_horizontal : EdgeId?
   mut ael_head : EdgeId?
   mut sel_head : EdgeId?
@@ -256,6 +258,7 @@ fn new_scan_state(
     free_slots: [],
     horizontal_queue: [],
     exits: [],
+    preserve_collinear: false,
     boolean_rule: Parity,
     boolean_operation: None,
     output: new_output_state(),
@@ -265,6 +268,7 @@ fn new_scan_state(
     pending_connections: [],
     connection_cursor: 0,
     entry_contact: None,
+    horizontal_started: false,
     held_horizontal: None,
     ael_head: None,
     sel_head: None,

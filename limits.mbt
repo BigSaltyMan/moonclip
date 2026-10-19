@@ -38,6 +38,9 @@ pub(all) enum Stage {
   SimplifyEvaluate
   SimplifyReport
   SimplifyOutput
+  MinkowskiParameters
+  MinkowskiGenerate
+  MinkowskiCleanup
 } derive(Eq, Debug)
 
 ///|

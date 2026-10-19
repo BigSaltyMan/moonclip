@@ -29,6 +29,8 @@ pub fn copy_paths_d(Array[Array[PointD]]) -> Array[Array[PointD]]
 
 pub fn cross(Point64, Point64, Point64, limits? : Limits) -> Result[Int64, ClipError]
 
+pub fn minkowski_sum(Array[Point64], Array[Point64], Bool, limits? : Limits) -> Result[Array[Array[Point64]], ClipError]
+
 pub fn normalize_path(Array[Point64], PathMode, limits? : Limits) -> Result[Array[Point64], ClipError]
 
 pub fn normalize_paths(Array[Array[Point64]], PathMode, limits? : Limits) -> Result[Array[Array[Point64]], ClipError]
@@ -241,6 +243,9 @@ pub(all) enum Stage {
   SimplifyEvaluate
   SimplifyReport
   SimplifyOutput
+  MinkowskiParameters
+  MinkowskiGenerate
+  MinkowskiCleanup
 } derive(Eq, @debug.Debug)
 
 // Type aliases

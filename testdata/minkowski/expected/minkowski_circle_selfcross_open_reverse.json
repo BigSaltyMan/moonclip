@@ -1,0 +1,158 @@
+{
+  "adapter_protocol_version": 7,
+  "case_id": "minkowski_circle_selfcross_open_reverse",
+  "fill_rule": "NonZero",
+  "format_version": 7,
+  "input_sha256": "2d20aa4bceecb5639b960a4e16f5029535dbb9a2d5959d9cf4ed2be7063c8adc",
+  "metrics": {
+    "path_count": 2,
+    "paths": [
+      {
+        "area2": "992",
+        "bounds": [
+          -3,
+          -3,
+          33,
+          23
+        ],
+        "vertices": 25
+      },
+      {
+        "area2": "-18",
+        "bounds": [
+          7,
+          14,
+          13,
+          17
+        ],
+        "vertices": 3
+      }
+    ],
+    "vertex_count": 28
+  },
+  "operation": "MinkowskiSum",
+  "options": {
+    "preserve_collinear": true,
+    "reverse_solution": false
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        22,
+        -2
+      ],
+      [
+        32,
+        8
+      ],
+      [
+        33,
+        10
+      ],
+      [
+        32,
+        12
+      ],
+      [
+        30,
+        13
+      ],
+      [
+        28,
+        12
+      ],
+      [
+        20,
+        4
+      ],
+      [
+        14,
+        10
+      ],
+      [
+        22,
+        18
+      ],
+      [
+        23,
+        20
+      ],
+      [
+        22,
+        22
+      ],
+      [
+        20,
+        23
+      ],
+      [
+        0,
+        23
+      ],
+      [
+        -2,
+        22
+      ],
+      [
+        -3,
+        20
+      ],
+      [
+        -2,
+        18
+      ],
+      [
+        6,
+        10
+      ],
+      [
+        -2,
+        2
+      ],
+      [
+        -3,
+        0
+      ],
+      [
+        -2,
+        -2
+      ],
+      [
+        0,
+        -3
+      ],
+      [
+        2,
+        -2
+      ],
+      [
+        10,
+        6
+      ],
+      [
+        18,
+        -2
+      ],
+      [
+        20,
+        -3
+      ]
+    ],
+    [
+      [
+        7,
+        17
+      ],
+      [
+        13,
+        17
+      ],
+      [
+        10,
+        14
+      ]
+    ]
+  ],
+  "status": "success"
+}

@@ -207,3 +207,16 @@ C# 源码作为主要阅读与后续移植参考；固定版本的 C++ 实现作
 | MoonClip 自有 | simplify_compare/construct/generate、test_simplify、report | 协议v6、有序逐点与精确解码比较、224条锁定输入，不复用面域有效性校验。 |
 
 移植块保留 Angus Johnson 2010–2025 / BSL-1.0，自有辅助为 BigSaltyMan 2026 / BSL-1.0。运行库仍纯 MoonBit，没有新增依赖；C++仅用于独立测试参考。锁只增加 simplify_protocol_version=6，上游归档、依赖及编译输入保持原样。
+
+## Commit 15 实际扫掠移植（2026-10-19）
+
+固定标签Clipper2_2.0.1、SHA 21ebba05db8894f0c7217ad35ea518080f324946、归档校验和及BSL-1.0不变。核对固定CPP头clipper.minkowski.h的Minkowski/MinkowskiSum及clipper.engine.cpp的局部极值排序、IsValidAelOrder、DoHorizontal、DoMaxima、水平转换和相邻连接。
+
+| 上游/来源 | MoonBit/工具文件 | 修改说明 |
+| --- | --- | --- |
+| clipper.minkowski.h Minkowski/MinkowskiSum | minkowski.mbt | 直接改写平移及连接面遍历；保留Angus Johnson 2010–2023，精确叉积替代浮点面积绕向。 |
+| clipper.engine.cpp 扫描及连接 | scanbeam.mbt、engine.mbt、boolean.mbt、intersections.mbt、horizontals.mbt、output.mbt | 对齐保留共线点时的事件/节点顺序，保留Angus Johnson 2010–2025，预算与暂停状态自行适配。 |
+| 固定MinkowskiSum | tools/oracle/adapter.cpp | 真实调用，仅独立测试工具。 |
+| MoonClip自有 | minkowski.mbt、limits.mbt及v7构造/比较/报告 | 乘积预检、生成坐标诊断、累计账本、Result及完整轮廓证据。 |
+
+自有代码版权BigSaltyMan2026、BSL-1.0。运行库纯MoonBit，无新增依赖；C++仅独立参考。锁只增加minkowski_protocol_version=7；未实现MinkowskiDiff、小数扫掠或带孔图案集合。

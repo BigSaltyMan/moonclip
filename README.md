@@ -2,7 +2,7 @@
 
 MoonClip 是用 MoonBit 实现的整数多边形几何库，目前处于开发初期。目标版本为 `0.1.0`，尚未发布到 Mooncakes，模块名称的可用性将在发布前确认。
 
-目前已实现：不可变 `Int64` 点、有序路径与轮廓集合、结构比较、独立复制，以及精确叉积与方向、边界框、精确两倍有向面积、EvenOdd 点包含判断和开放/闭合模式的重复点整理。另已建立内部扫描线、活动边、交点事件、水平交互及输出环连接原语，采用节点复用和共享工作量预算；公开支持 EvenOdd 与 NonZero 下的 Intersection、Union、Difference、Xor。孔洞树由 boolean_tree 提供；闭合区域偏移已公开 Miter、Bevel、Square、Round，以及 MiterLimit / ArcTolerance。开放描边已由 stroke_polyline 提供；小数 Boolean、Offset、Stroke 已接入统一十进制精度，显式整数/小数简化及删点、退化报告已由 simplify_paths / simplify_paths_d 提供，详见 [简化契约](docs/simplify.md)。
+目前已实现：不可变 `Int64` 点、有序路径与轮廓集合、结构比较、独立复制，以及精确叉积与方向、边界框、精确两倍有向面积、EvenOdd 点包含判断和开放/闭合模式的重复点整理。另已建立内部扫描线、活动边、交点事件、水平交互及输出环连接原语，采用节点复用和共享工作量预算；公开支持 EvenOdd 与 NonZero 下的 Intersection、Union、Difference、Xor。孔洞树由 boolean_tree 提供；闭合区域偏移已公开 Miter、Bevel、Square、Round，以及 MiterLimit / ArcTolerance。开放描边已由 stroke_polyline 提供；小数 Boolean、Offset、Stroke 已接入统一十进制精度，显式整数/小数简化及删点、退化报告已由 simplify_paths / simplify_paths_d 提供，详见 [简化契约](docs/simplify.md)。整数单图案路线扫掠已由 `minkowski_sum` 提供，详见 [Minkowski 契约](docs/minkowski.md)。
 
 ## 数据契约
 
@@ -44,7 +44,8 @@ moon run --target native cmd/example
 
 ```text
 Simplify vertices: 9 -> 8; input_degenerate=[2]; degenerate=[2]; collapsed=[]; offset/tree OK
-MoonClip geometry, Boolean, PolyTree, offset, stroke, composition, decimal and simplify OK
+Minkowski: rectangle/polyline, offcenter/diagonal and closed route/hole OK
+MoonClip geometry, Boolean, PolyTree, offset, stroke, composition, decimal, simplify and Minkowski OK
 ```
 
 对应示例包导入根库后，可直接调用公开接口：
@@ -307,3 +308,9 @@ Commit 12 验收为 native、JS 同一批各 **1414 项**（1330 回归＋24 组
 epsilon=0 仅整理连续重复点及闭合重复首点，保留普通共线点；正阈值采用固定局部直线距离算法，保留候选顺序和 Open 端点。结果不自动丢弃退化路径，三类索引区分原有退化、最终退化与新塌缩。小数分类基于选定网格，原有闭合退化仅在简化入口报告，其他小数运算仍严格检查。详见 [参数、顺序、统计与预算](docs/simplify.md)。
 
 简化可能改变孔洞、窄通道及自交关系；epsilon 不是全局 Hausdorff 距离或面积变化上限，不保证全局最优。Boolean/Offset/Stroke 不会自动简化。独立简化参考224条，Integer80、DecimalGrid144；运行器逐点比较有序结果和报告，小数同时精确检查网格解码。
+
+## 整数图案扫掠
+
+`minkowski_sum(pattern, path, path_is_closed, limits=...)` 显式指定开放或闭合路线，图案始终按闭合循环解释。图案坐标直接与路线相加，不自动居中；原始重复点保留并计入两条输入路径的共同额度。生成面使用同一累计预算进行 NonZero Union，输出保留共线顶点；已有 Boolean、Offset、Stroke 的默认整理策略不变。
+
+本入口不额外填充完整端点图案：短路线可能留下空隙，闭合边界扫掠可能留下孔洞。它不提供 MinkowskiDiff、小数扫掠或带孔图案集合。示例实际检查矩形折线、偏置图案及闭合路线孔洞。新增144条固定参考和56项功能测试，两目标使用同一批2210项测试；独立参考共1360条，执行证据见[兼容性报告](docs/compatibility.md)。

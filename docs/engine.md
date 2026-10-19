@@ -255,3 +255,9 @@ PointD保留原始Double，Precision只保存已验证的0—6位数。decimal_e
 独立 simplify.mbt 改写固定 SimplifyPath / GetNext / GetPrior 与距离辅助，不接入任何旧 Boolean/Offset/Stroke 默认流程。私有 simplify_validated 在同一账本下整理、分类、固定候选遍历、按原索引收集、Closed 接缝清理、再次分类、汇总报告；标记和距离数组预收费，每次跳过删除标记、候选判断及重算均扣工作量。未使用的索引工作数组不创建。结果快照和报告最后一笔收费可失败，Err 无部分结果。
 
 decimal_simplify_execute 复用原十进制预检和全局位置索引，只跳过闭合面域有效性拒绝，再调用私有简化及原单位输出，始终传同一 CallBudget。分类不是拓扑证明；公开结果私有存储，所有数组访问器复制。完整实现边界与收费见 [simplify.md](simplify.md)。原有默认内部预算、工具链、整数签名和旧小数入口未变。
+
+## Commit 15 保留共线点的内部清理
+
+Minkowski调用私有boolean_compute，同一CallBudget、internal_input=true、NonZero、preserve_collinear=true。新策略对应固定C++的稳定局部极值顺序、相等斜率默认边顺序、活动边插入、即时最大点闭合和水平转换。可暂停水平事件只在开始插入初始输出点；相邻连接在实际交换后检查。候选保留真实端点节点，完成后显式拼接，不插入算术重叠位置。
+
+私有状态开关启用这些保留共线点的规则，旧公开Boolean/Offset/Stroke沿用原策略和preserve_collinear=false；最大点间真实交点按事件消费。新增存储与循环纳入账本。新增144严格参考不删共线点，56功能包含阶段耗尽和隔离；根接口只增加函数及三个阶段。

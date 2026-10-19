@@ -1,0 +1,47 @@
+{
+  "case_id": "minkowski_offcenter_acute_open_forward",
+  "format_version": 7,
+  "operation": "MinkowskiSum",
+  "options": {
+    "preserve_collinear": true,
+    "reverse_solution": false
+  },
+  "path": [
+    [
+      0,
+      0
+    ],
+    [
+      25,
+      0
+    ],
+    [
+      4,
+      6
+    ]
+  ],
+  "path_is_closed": false,
+  "pattern": [
+    [
+      2,
+      1
+    ],
+    [
+      6,
+      1
+    ],
+    [
+      5,
+      4
+    ],
+    [
+      2,
+      3
+    ]
+  ],
+  "source": {
+    "group": "offcenter:acute:forward",
+    "intent": "Fixed connection quadrilaterals; no complete endpoint patterns",
+    "kind": "moonclip_constructed"
+  }
+}

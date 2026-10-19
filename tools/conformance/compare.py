@@ -139,6 +139,10 @@ def normalize_tree(tree):
     return tuple(sorted(visit(child) for child in tree["children"]))
 
 def validate_geometry(value, where="result"):
+    if type(value) is dict and value.get("format_version")==7:
+        from minkowski_compare import validate_minkowski_geometry
+        return validate_minkowski_geometry(value,where)
+
     if type(value) is dict and value.get("format_version") == 6:
         from simplify_compare import validate_simplify_geometry
         return validate_simplify_geometry(value, where)
@@ -165,6 +169,10 @@ def area2(path):
     return sum(a[0]*b[1] - a[1]*b[0] for a, b in zip(path, path[1:] + path[:1]))
 
 def metrics(value):
+    if type(value) is dict and value.get("format_version")==7:
+        from offset_compare import offset_metrics
+        return offset_metrics(value)
+
     if type(value) is dict and value.get("format_version") == 6:
         from simplify_compare import simplify_metrics
         return simplify_metrics(value)
@@ -190,6 +198,10 @@ def metrics(value):
     }
 
 def compare(left, right, case_id="comparison"):
+    if left.get("format_version")==7 or right.get("format_version")==7:
+        from minkowski_compare import compare_minkowski
+        return compare_minkowski(left,right,case_id)
+
     if left.get("format_version")==6 or right.get("format_version")==6:
         from simplify_compare import compare_simplify
         return compare_simplify(left,right,case_id)
@@ -208,6 +220,10 @@ def compare(left, right, case_id="comparison"):
     require(normalize_tree(left["tree"]) == normalize_tree(right["tree"]), case_id + ".tree", "parentage, depth or node contours differ")
 
 def validate_input(value, where):
+    if type(value) is dict and value.get("operation")=="MinkowskiSum":
+        from minkowski_compare import validate_minkowski_input
+        return validate_minkowski_input(value,where)
+
     if type(value) is dict and value.get("operation") in ("Simplify64","SimplifyD"):
         from simplify_compare import validate_simplify_input
         return validate_simplify_input(value,where)
@@ -250,6 +266,10 @@ def validate_input(value, where):
     require(count <= MAX_VERTICES and len(value["subject"]) + len(value["clip"]) <= MAX_PATHS, where, "combined input budget exceeded")
 
 def validate_result(value, case, digest, lock, where):
+    if case.get("operation")=="MinkowskiSum":
+        from minkowski_compare import validate_minkowski_result
+        return validate_minkowski_result(value,case,digest,lock,where)
+
     if case.get("operation") in ("Simplify64","SimplifyD"):
         from simplify_compare import validate_simplify_result
         return validate_simplify_result(value,case,digest,lock,where)
@@ -285,8 +305,9 @@ def confined(root, name):
     return result
 
 def validate_lock(lock):
+    require(type(lock.get("minkowski_protocol_version")) is int and lock["minkowski_protocol_version"]==7,"lock","unknown Minkowski protocol")
     require(type(lock.get("simplify_protocol_version")) is int and lock["simplify_protocol_version"]==6,"lock","unknown simplify protocol")
-    keys(lock, {"repository", "tag", "commit", "license", "adapter_protocol_version", "offset_protocol_version", "stroke_protocol_version", "composition_protocol_version", "decimal_protocol_version", "simplify_protocol_version", "archive", "compile_inputs", "dependencies"}, "lock")
+    keys(lock, {"repository", "tag", "commit", "license", "adapter_protocol_version", "offset_protocol_version", "stroke_protocol_version", "composition_protocol_version", "decimal_protocol_version", "simplify_protocol_version", "minkowski_protocol_version", "archive", "compile_inputs", "dependencies"}, "lock")
     require(type(lock['composition_protocol_version']) is int and lock['composition_protocol_version']==4,'lock','unknown composition protocol')
     require(type(lock['decimal_protocol_version']) is int and lock['decimal_protocol_version']==5,'lock','unknown decimal protocol')
     require(lock["repository"] == "https://github.com/AngusJohnson/Clipper2" and lock["tag"] == "Clipper2_2.0.1" and lock["commit"] == "21ebba05db8894f0c7217ad35ea518080f324946", "lock", "unexpected fixed upstream identity")
@@ -307,6 +328,9 @@ def validate_lock(lock):
 
 def read_manifest(root, manifest, require_expected=True, strict=True):
     value = load(manifest, strict)
+    if type(value) is dict and value.get("kind")=="minkowski":
+        from minkowski_compare import read_minkowski_manifest
+        return read_minkowski_manifest(root,manifest,require_expected,strict)
     if type(value) is dict and value.get("kind")=="simplify":
         from simplify_compare import read_simplify_manifest
         return read_simplify_manifest(root,manifest,require_expected,strict)

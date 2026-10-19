@@ -1,0 +1,1303 @@
+{
+  "cases": [
+    {
+      "case_id": "minkowski_circle_acute_closed_forward",
+      "expected": "testdata/minkowski/expected/minkowski_circle_acute_closed_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_circle_acute_closed_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_circle_acute_closed_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_circle_acute_closed_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_circle_acute_closed_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_circle_acute_open_forward",
+      "expected": "testdata/minkowski/expected/minkowski_circle_acute_open_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_circle_acute_open_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_circle_acute_open_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_circle_acute_open_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_circle_acute_open_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_circle_diagonal_closed_forward",
+      "expected": "testdata/minkowski/expected/minkowski_circle_diagonal_closed_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_circle_diagonal_closed_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_circle_diagonal_closed_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_circle_diagonal_closed_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_circle_diagonal_closed_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_circle_diagonal_open_forward",
+      "expected": "testdata/minkowski/expected/minkowski_circle_diagonal_open_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_circle_diagonal_open_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_circle_diagonal_open_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_circle_diagonal_open_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_circle_diagonal_open_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_circle_long_horizontal_closed_forward",
+      "expected": "testdata/minkowski/expected/minkowski_circle_long_horizontal_closed_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_circle_long_horizontal_closed_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_circle_long_horizontal_closed_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_circle_long_horizontal_closed_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_circle_long_horizontal_closed_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_circle_long_horizontal_open_forward",
+      "expected": "testdata/minkowski/expected/minkowski_circle_long_horizontal_open_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_circle_long_horizontal_open_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_circle_long_horizontal_open_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_circle_long_horizontal_open_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_circle_long_horizontal_open_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_circle_rectangle_closed_forward",
+      "expected": "testdata/minkowski/expected/minkowski_circle_rectangle_closed_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_circle_rectangle_closed_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_circle_rectangle_closed_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_circle_rectangle_closed_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_circle_rectangle_closed_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_circle_rectangle_open_forward",
+      "expected": "testdata/minkowski/expected/minkowski_circle_rectangle_open_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_circle_rectangle_open_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_circle_rectangle_open_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_circle_rectangle_open_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_circle_rectangle_open_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_circle_repeats_closed_forward",
+      "expected": "testdata/minkowski/expected/minkowski_circle_repeats_closed_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_circle_repeats_closed_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_circle_repeats_closed_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_circle_repeats_closed_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_circle_repeats_closed_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_circle_repeats_open_forward",
+      "expected": "testdata/minkowski/expected/minkowski_circle_repeats_open_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_circle_repeats_open_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_circle_repeats_open_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_circle_repeats_open_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_circle_repeats_open_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_circle_retrace_closed_forward",
+      "expected": "testdata/minkowski/expected/minkowski_circle_retrace_closed_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_circle_retrace_closed_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_circle_retrace_closed_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_circle_retrace_closed_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_circle_retrace_closed_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_circle_retrace_open_forward",
+      "expected": "testdata/minkowski/expected/minkowski_circle_retrace_open_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_circle_retrace_open_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_circle_retrace_open_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_circle_retrace_open_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_circle_retrace_open_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_circle_right_angle_closed_forward",
+      "expected": "testdata/minkowski/expected/minkowski_circle_right_angle_closed_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_circle_right_angle_closed_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_circle_right_angle_closed_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_circle_right_angle_closed_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_circle_right_angle_closed_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_circle_right_angle_open_forward",
+      "expected": "testdata/minkowski/expected/minkowski_circle_right_angle_open_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_circle_right_angle_open_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_circle_right_angle_open_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_circle_right_angle_open_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_circle_right_angle_open_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_circle_selfcross_closed_forward",
+      "expected": "testdata/minkowski/expected/minkowski_circle_selfcross_closed_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_circle_selfcross_closed_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_circle_selfcross_closed_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_circle_selfcross_closed_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_circle_selfcross_closed_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_circle_selfcross_open_forward",
+      "expected": "testdata/minkowski/expected/minkowski_circle_selfcross_open_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_circle_selfcross_open_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_circle_selfcross_open_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_circle_selfcross_open_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_circle_selfcross_open_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_circle_short_horizontal_closed_forward",
+      "expected": "testdata/minkowski/expected/minkowski_circle_short_horizontal_closed_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_circle_short_horizontal_closed_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_circle_short_horizontal_closed_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_circle_short_horizontal_closed_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_circle_short_horizontal_closed_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_circle_short_horizontal_open_forward",
+      "expected": "testdata/minkowski/expected/minkowski_circle_short_horizontal_open_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_circle_short_horizontal_open_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_circle_short_horizontal_open_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_circle_short_horizontal_open_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_circle_short_horizontal_open_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_concave_acute_closed_forward",
+      "expected": "testdata/minkowski/expected/minkowski_concave_acute_closed_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_concave_acute_closed_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_concave_acute_closed_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_concave_acute_closed_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_concave_acute_closed_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_concave_acute_open_forward",
+      "expected": "testdata/minkowski/expected/minkowski_concave_acute_open_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_concave_acute_open_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_concave_acute_open_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_concave_acute_open_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_concave_acute_open_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_concave_diagonal_closed_forward",
+      "expected": "testdata/minkowski/expected/minkowski_concave_diagonal_closed_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_concave_diagonal_closed_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_concave_diagonal_closed_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_concave_diagonal_closed_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_concave_diagonal_closed_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_concave_diagonal_open_forward",
+      "expected": "testdata/minkowski/expected/minkowski_concave_diagonal_open_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_concave_diagonal_open_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_concave_diagonal_open_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_concave_diagonal_open_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_concave_diagonal_open_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_concave_long_horizontal_closed_forward",
+      "expected": "testdata/minkowski/expected/minkowski_concave_long_horizontal_closed_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_concave_long_horizontal_closed_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_concave_long_horizontal_closed_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_concave_long_horizontal_closed_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_concave_long_horizontal_closed_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_concave_long_horizontal_open_forward",
+      "expected": "testdata/minkowski/expected/minkowski_concave_long_horizontal_open_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_concave_long_horizontal_open_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_concave_long_horizontal_open_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_concave_long_horizontal_open_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_concave_long_horizontal_open_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_concave_rectangle_closed_forward",
+      "expected": "testdata/minkowski/expected/minkowski_concave_rectangle_closed_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_concave_rectangle_closed_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_concave_rectangle_closed_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_concave_rectangle_closed_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_concave_rectangle_closed_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_concave_rectangle_open_forward",
+      "expected": "testdata/minkowski/expected/minkowski_concave_rectangle_open_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_concave_rectangle_open_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_concave_rectangle_open_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_concave_rectangle_open_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_concave_rectangle_open_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_concave_repeats_closed_forward",
+      "expected": "testdata/minkowski/expected/minkowski_concave_repeats_closed_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_concave_repeats_closed_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_concave_repeats_closed_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_concave_repeats_closed_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_concave_repeats_closed_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_concave_repeats_open_forward",
+      "expected": "testdata/minkowski/expected/minkowski_concave_repeats_open_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_concave_repeats_open_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_concave_repeats_open_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_concave_repeats_open_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_concave_repeats_open_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_concave_retrace_closed_forward",
+      "expected": "testdata/minkowski/expected/minkowski_concave_retrace_closed_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_concave_retrace_closed_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_concave_retrace_closed_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_concave_retrace_closed_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_concave_retrace_closed_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_concave_retrace_open_forward",
+      "expected": "testdata/minkowski/expected/minkowski_concave_retrace_open_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_concave_retrace_open_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_concave_retrace_open_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_concave_retrace_open_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_concave_retrace_open_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_concave_right_angle_closed_forward",
+      "expected": "testdata/minkowski/expected/minkowski_concave_right_angle_closed_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_concave_right_angle_closed_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_concave_right_angle_closed_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_concave_right_angle_closed_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_concave_right_angle_closed_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_concave_right_angle_open_forward",
+      "expected": "testdata/minkowski/expected/minkowski_concave_right_angle_open_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_concave_right_angle_open_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_concave_right_angle_open_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_concave_right_angle_open_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_concave_right_angle_open_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_concave_selfcross_closed_forward",
+      "expected": "testdata/minkowski/expected/minkowski_concave_selfcross_closed_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_concave_selfcross_closed_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_concave_selfcross_closed_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_concave_selfcross_closed_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_concave_selfcross_closed_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_concave_selfcross_open_forward",
+      "expected": "testdata/minkowski/expected/minkowski_concave_selfcross_open_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_concave_selfcross_open_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_concave_selfcross_open_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_concave_selfcross_open_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_concave_selfcross_open_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_concave_short_horizontal_closed_forward",
+      "expected": "testdata/minkowski/expected/minkowski_concave_short_horizontal_closed_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_concave_short_horizontal_closed_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_concave_short_horizontal_closed_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_concave_short_horizontal_closed_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_concave_short_horizontal_closed_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_concave_short_horizontal_open_forward",
+      "expected": "testdata/minkowski/expected/minkowski_concave_short_horizontal_open_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_concave_short_horizontal_open_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_concave_short_horizontal_open_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_concave_short_horizontal_open_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_concave_short_horizontal_open_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_offcenter_acute_closed_forward",
+      "expected": "testdata/minkowski/expected/minkowski_offcenter_acute_closed_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_offcenter_acute_closed_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_offcenter_acute_closed_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_offcenter_acute_closed_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_offcenter_acute_closed_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_offcenter_acute_open_forward",
+      "expected": "testdata/minkowski/expected/minkowski_offcenter_acute_open_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_offcenter_acute_open_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_offcenter_acute_open_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_offcenter_acute_open_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_offcenter_acute_open_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_offcenter_diagonal_closed_forward",
+      "expected": "testdata/minkowski/expected/minkowski_offcenter_diagonal_closed_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_offcenter_diagonal_closed_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_offcenter_diagonal_closed_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_offcenter_diagonal_closed_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_offcenter_diagonal_closed_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_offcenter_diagonal_open_forward",
+      "expected": "testdata/minkowski/expected/minkowski_offcenter_diagonal_open_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_offcenter_diagonal_open_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_offcenter_diagonal_open_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_offcenter_diagonal_open_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_offcenter_diagonal_open_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_offcenter_long_horizontal_closed_forward",
+      "expected": "testdata/minkowski/expected/minkowski_offcenter_long_horizontal_closed_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_offcenter_long_horizontal_closed_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_offcenter_long_horizontal_closed_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_offcenter_long_horizontal_closed_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_offcenter_long_horizontal_closed_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_offcenter_long_horizontal_open_forward",
+      "expected": "testdata/minkowski/expected/minkowski_offcenter_long_horizontal_open_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_offcenter_long_horizontal_open_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_offcenter_long_horizontal_open_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_offcenter_long_horizontal_open_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_offcenter_long_horizontal_open_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_offcenter_rectangle_closed_forward",
+      "expected": "testdata/minkowski/expected/minkowski_offcenter_rectangle_closed_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_offcenter_rectangle_closed_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_offcenter_rectangle_closed_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_offcenter_rectangle_closed_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_offcenter_rectangle_closed_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_offcenter_rectangle_open_forward",
+      "expected": "testdata/minkowski/expected/minkowski_offcenter_rectangle_open_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_offcenter_rectangle_open_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_offcenter_rectangle_open_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_offcenter_rectangle_open_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_offcenter_rectangle_open_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_offcenter_repeats_closed_forward",
+      "expected": "testdata/minkowski/expected/minkowski_offcenter_repeats_closed_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_offcenter_repeats_closed_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_offcenter_repeats_closed_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_offcenter_repeats_closed_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_offcenter_repeats_closed_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_offcenter_repeats_open_forward",
+      "expected": "testdata/minkowski/expected/minkowski_offcenter_repeats_open_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_offcenter_repeats_open_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_offcenter_repeats_open_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_offcenter_repeats_open_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_offcenter_repeats_open_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_offcenter_retrace_closed_forward",
+      "expected": "testdata/minkowski/expected/minkowski_offcenter_retrace_closed_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_offcenter_retrace_closed_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_offcenter_retrace_closed_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_offcenter_retrace_closed_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_offcenter_retrace_closed_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_offcenter_retrace_open_forward",
+      "expected": "testdata/minkowski/expected/minkowski_offcenter_retrace_open_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_offcenter_retrace_open_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_offcenter_retrace_open_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_offcenter_retrace_open_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_offcenter_retrace_open_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_offcenter_right_angle_closed_forward",
+      "expected": "testdata/minkowski/expected/minkowski_offcenter_right_angle_closed_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_offcenter_right_angle_closed_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_offcenter_right_angle_closed_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_offcenter_right_angle_closed_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_offcenter_right_angle_closed_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_offcenter_right_angle_open_forward",
+      "expected": "testdata/minkowski/expected/minkowski_offcenter_right_angle_open_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_offcenter_right_angle_open_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_offcenter_right_angle_open_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_offcenter_right_angle_open_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_offcenter_right_angle_open_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_offcenter_selfcross_closed_forward",
+      "expected": "testdata/minkowski/expected/minkowski_offcenter_selfcross_closed_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_offcenter_selfcross_closed_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_offcenter_selfcross_closed_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_offcenter_selfcross_closed_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_offcenter_selfcross_closed_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_offcenter_selfcross_open_forward",
+      "expected": "testdata/minkowski/expected/minkowski_offcenter_selfcross_open_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_offcenter_selfcross_open_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_offcenter_selfcross_open_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_offcenter_selfcross_open_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_offcenter_selfcross_open_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_offcenter_short_horizontal_closed_forward",
+      "expected": "testdata/minkowski/expected/minkowski_offcenter_short_horizontal_closed_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_offcenter_short_horizontal_closed_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_offcenter_short_horizontal_closed_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_offcenter_short_horizontal_closed_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_offcenter_short_horizontal_closed_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_offcenter_short_horizontal_open_forward",
+      "expected": "testdata/minkowski/expected/minkowski_offcenter_short_horizontal_open_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_offcenter_short_horizontal_open_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_offcenter_short_horizontal_open_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_offcenter_short_horizontal_open_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_offcenter_short_horizontal_open_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_rectangle_acute_closed_forward",
+      "expected": "testdata/minkowski/expected/minkowski_rectangle_acute_closed_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_rectangle_acute_closed_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_rectangle_acute_closed_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_rectangle_acute_closed_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_rectangle_acute_closed_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_rectangle_acute_open_forward",
+      "expected": "testdata/minkowski/expected/minkowski_rectangle_acute_open_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_rectangle_acute_open_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_rectangle_acute_open_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_rectangle_acute_open_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_rectangle_acute_open_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_rectangle_diagonal_closed_forward",
+      "expected": "testdata/minkowski/expected/minkowski_rectangle_diagonal_closed_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_rectangle_diagonal_closed_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_rectangle_diagonal_closed_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_rectangle_diagonal_closed_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_rectangle_diagonal_closed_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_rectangle_diagonal_open_forward",
+      "expected": "testdata/minkowski/expected/minkowski_rectangle_diagonal_open_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_rectangle_diagonal_open_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_rectangle_diagonal_open_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_rectangle_diagonal_open_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_rectangle_diagonal_open_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_rectangle_long_horizontal_closed_forward",
+      "expected": "testdata/minkowski/expected/minkowski_rectangle_long_horizontal_closed_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_rectangle_long_horizontal_closed_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_rectangle_long_horizontal_closed_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_rectangle_long_horizontal_closed_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_rectangle_long_horizontal_closed_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_rectangle_long_horizontal_open_forward",
+      "expected": "testdata/minkowski/expected/minkowski_rectangle_long_horizontal_open_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_rectangle_long_horizontal_open_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_rectangle_long_horizontal_open_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_rectangle_long_horizontal_open_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_rectangle_long_horizontal_open_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_rectangle_rectangle_closed_forward",
+      "expected": "testdata/minkowski/expected/minkowski_rectangle_rectangle_closed_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_rectangle_rectangle_closed_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_rectangle_rectangle_closed_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_rectangle_rectangle_closed_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_rectangle_rectangle_closed_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_rectangle_rectangle_open_forward",
+      "expected": "testdata/minkowski/expected/minkowski_rectangle_rectangle_open_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_rectangle_rectangle_open_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_rectangle_rectangle_open_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_rectangle_rectangle_open_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_rectangle_rectangle_open_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_rectangle_repeats_closed_forward",
+      "expected": "testdata/minkowski/expected/minkowski_rectangle_repeats_closed_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_rectangle_repeats_closed_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_rectangle_repeats_closed_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_rectangle_repeats_closed_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_rectangle_repeats_closed_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_rectangle_repeats_open_forward",
+      "expected": "testdata/minkowski/expected/minkowski_rectangle_repeats_open_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_rectangle_repeats_open_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_rectangle_repeats_open_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_rectangle_repeats_open_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_rectangle_repeats_open_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_rectangle_retrace_closed_forward",
+      "expected": "testdata/minkowski/expected/minkowski_rectangle_retrace_closed_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_rectangle_retrace_closed_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_rectangle_retrace_closed_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_rectangle_retrace_closed_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_rectangle_retrace_closed_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_rectangle_retrace_open_forward",
+      "expected": "testdata/minkowski/expected/minkowski_rectangle_retrace_open_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_rectangle_retrace_open_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_rectangle_retrace_open_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_rectangle_retrace_open_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_rectangle_retrace_open_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_rectangle_right_angle_closed_forward",
+      "expected": "testdata/minkowski/expected/minkowski_rectangle_right_angle_closed_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_rectangle_right_angle_closed_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_rectangle_right_angle_closed_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_rectangle_right_angle_closed_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_rectangle_right_angle_closed_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_rectangle_right_angle_open_forward",
+      "expected": "testdata/minkowski/expected/minkowski_rectangle_right_angle_open_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_rectangle_right_angle_open_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_rectangle_right_angle_open_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_rectangle_right_angle_open_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_rectangle_right_angle_open_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_rectangle_selfcross_closed_forward",
+      "expected": "testdata/minkowski/expected/minkowski_rectangle_selfcross_closed_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_rectangle_selfcross_closed_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_rectangle_selfcross_closed_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_rectangle_selfcross_closed_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_rectangle_selfcross_closed_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_rectangle_selfcross_open_forward",
+      "expected": "testdata/minkowski/expected/minkowski_rectangle_selfcross_open_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_rectangle_selfcross_open_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_rectangle_selfcross_open_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_rectangle_selfcross_open_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_rectangle_selfcross_open_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_rectangle_short_horizontal_closed_forward",
+      "expected": "testdata/minkowski/expected/minkowski_rectangle_short_horizontal_closed_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_rectangle_short_horizontal_closed_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_rectangle_short_horizontal_closed_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_rectangle_short_horizontal_closed_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_rectangle_short_horizontal_closed_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_rectangle_short_horizontal_open_forward",
+      "expected": "testdata/minkowski/expected/minkowski_rectangle_short_horizontal_open_forward.json",
+      "input": "testdata/minkowski/inputs/minkowski_rectangle_short_horizontal_open_forward.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    },
+    {
+      "case_id": "minkowski_rectangle_short_horizontal_open_reverse",
+      "expected": "testdata/minkowski/expected/minkowski_rectangle_short_horizontal_open_reverse.json",
+      "input": "testdata/minkowski/inputs/minkowski_rectangle_short_horizontal_open_reverse.json",
+      "status": "validate",
+      "validation": {
+        "paths": "validate"
+      }
+    }
+  ],
+  "format_version": 7,
+  "kind": "minkowski",
+  "oracle_lock": "tools/oracle/upstream-lock.json"
+}

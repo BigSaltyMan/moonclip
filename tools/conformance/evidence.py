@@ -100,3 +100,17 @@ def simplify_evidence(directory):
         require(summaries==[('224','224','0')],str(path),'expected exactly 224 successful simplify cases')
         result[target]={'status':'passed','executed':224,'passed':224,'failed':0}
     return result
+
+
+def minkowski_evidence(directory):
+    result={}
+    for target in ('native','js'):
+        path=directory/('minkowski-'+target+'.log')
+        if not path.exists():
+            result[target]={'status':'not_recorded'};continue
+        text=path.read_text(encoding='utf-8')
+        require(text.splitlines().count('Selection: reference minkowski paths: *')==1,str(path),'missing minkowski selection marker')
+        summaries=re.findall(r'Total tests: (\d+), passed: (\d+), failed: (\d+)\.',text)
+        require(summaries==[('144','144','0')],str(path),'expected exactly 144 successful minkowski cases')
+        result[target]={'status':'passed','executed':144,'passed':144,'failed':0}
+    return result

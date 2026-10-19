@@ -248,6 +248,7 @@ fn boolean_check_join(
   left : EdgeId,
   right : EdgeId,
   point : Point64,
+  neighbor_check? : Int = 0,
 ) -> Unit raise ScanAbort {
   scan_spend(state, 0, 1, location(BooleanOp, None, None))
   let a = edge_get(state, left)
@@ -269,8 +270,34 @@ fn boolean_check_join(
     ) {
     return
   }
-  if !point_on_segment_validated(point, state.vertices[a.bot].point, at) ||
-    !point_on_segment_validated(point, state.vertices[b.bot].point, bt) ||
+  if state.preserve_collinear {
+    if neighbor_check == 0 {
+      if a.current_x != b.current_x {
+        return
+      }
+    } else {
+      let neighbor = if neighbor_check == 1 { a } else { b }
+      let line1 = state.vertices[neighbor.bot].point
+      let line2 = state.vertices[neighbor.top].point
+      let dx = (line2.x - line1.x).to_double()
+      let dy = (line2.y - line1.y).to_double()
+      if dx != 0.0 || dy != 0.0 {
+        let determinant = (point.x - line1.x).to_double() * dy -
+          dx * (point.y - line1.y).to_double()
+        if determinant * determinant / (dx * dx + dy * dy) >
+          (if neighbor_check == 1 { 0.25 } else { 0.35 }) {
+          return
+        }
+      }
+    }
+  }
+  if (
+      !state.preserve_collinear &&
+      (
+        !point_on_segment_validated(point, state.vertices[a.bot].point, at) ||
+        !point_on_segment_validated(point, state.vertices[b.bot].point, bt)
+      )
+    ) ||
     cross_validated(at, point, bt) != 0L {
     return
   }
@@ -293,7 +320,13 @@ fn boolean_check_neighbors(
     boolean_check_join(state, prev, id, point)
   }
   if edge.next_ael is Some(next) {
-    boolean_check_join(state, id, next, point)
+    boolean_check_join(
+      state,
+      id,
+      next,
+      point,
+      neighbor_check=if state.preserve_collinear { 2 } else { 0 },
+    )
   }
 }
 
@@ -427,6 +460,7 @@ fn[T] boolean_compute(
   extract : (ScanState) -> T raise ScanAbort,
   budget? : CallBudget,
   internal_input? : Bool = false,
+  preserve_collinear? : Bool = false,
 ) -> Result[T, ClipError] {
   let state = match
     prepare_scan(
@@ -436,10 +470,12 @@ fn[T] boolean_compute(
       source_extrema=true,
       budget?,
       internal_input~,
+      preserve_collinear~,
     ) {
     Ok(s) => s
     Err(e) => return Err(e)
   }
+  state.preserve_collinear = preserve_collinear
   state.boolean_rule = rule
   state.boolean_operation = Some(operation)
   try {
@@ -450,7 +486,11 @@ fn[T] boolean_compute(
       }
     }
     for i = 0; i < state.output.joins.length(); i = i + 1 {
-      execute_horizontal_join(state, i, state.output.joins[i].opposed)
+      if preserve_collinear {
+        fixed_horizontal_join(state, i)
+      } else {
+        execute_horizontal_join(state, i, state.output.joins[i].opposed)
+      }
     }
     match engine_invariants(state, metered=true) {
       Ok(_) => ()
@@ -464,7 +504,9 @@ fn[T] boolean_compute(
         )
       }
     }
-    boolean_join_seams(state)
+    if !preserve_collinear {
+      boolean_join_seams(state)
+    }
     let result = extract(state)
     scan_cleanup(state)
     Ok(result)
@@ -593,6 +635,13 @@ fn boolean_enter_height(
           boolean_decision(state, operation, event),
         ),
       )
+      if state.preserve_collinear &&
+        a.horizontal == NonHorizontal &&
+        a.output_end is Some(_) {
+        if a.prev_ael is Some(prev) {
+          boolean_check_join(state, prev, left, event.point)
+        }
+      }
       while b.next_ael is Some(next) {
         scan_spend(
           state,
@@ -618,8 +667,14 @@ fn boolean_enter_height(
         )
         ael_swap(state, right, next)
       }
-      boolean_check_neighbors(state, left, event.point)
-      boolean_check_neighbors(state, right, event.point)
+      if state.preserve_collinear {
+        if b.horizontal == NonHorizontal && b.next_ael is Some(next) {
+          boolean_check_join(state, right, next, event.point)
+        }
+      } else {
+        boolean_check_neighbors(state, left, event.point)
+        boolean_check_neighbors(state, right, event.point)
+      }
       schedule_edge(state, left)
       schedule_edge(state, right)
     }

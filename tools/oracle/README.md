@@ -116,3 +116,18 @@ bash scripts/generate_reference.sh --manifest testdata/manifest.json --check
 bash scripts/generate_reference.sh --manifest testdata/offset-manifest.json --check
 bash scripts/generate_reference.sh --manifest testdata/stroke-manifest.json --check
 ```
+
+
+## Minkowski protocol v7
+
+`MinkowskiSum` requires version7, one `pattern`, one `path`, a strict boolean `path_is_closed`, source/ID metadata and fixed `preserve_collinear=true`, `reverse_solution=false`. The real pinned `MinkowskiSum` is called directly; it internally uses NonZero. Raw and translated coordinates and conservative matrix/quad products are checked before upstream generation. No endpoint fill or surrogate Stroke/rectangle operation generates expectations.
+
+The independent144-case matrix covers4 patterns,9 routes,2 closure modes and2 distinct route directions. Complete contours retain collinear points, winding and multiplicity. Generator publication is isolated to `testdata/minkowski/expected`; mixed/unknown categories fail before execution. Seven catalogs total1360 byte-checked cases, retaining all old1216 bytes. Actual real-adapter tests89 (old77 +12), offline tools264 (old240 +24); library conformance execution is reported separately.
+
+```bash
+python tools/oracle/construct_minkowski.py
+bash scripts/build_oracle.sh
+python tools/oracle/test_adapter.py
+bash scripts/generate_reference.sh --manifest testdata/minkowski-manifest.json --check
+python tools/conformance/generate_minkowski.py --check
+```

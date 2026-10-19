@@ -1,0 +1,59 @@
+{
+  "case_id": "minkowski_concave_retrace_open_forward",
+  "format_version": 7,
+  "operation": "MinkowskiSum",
+  "options": {
+    "preserve_collinear": true,
+    "reverse_solution": false
+  },
+  "path": [
+    [
+      0,
+      0
+    ],
+    [
+      20,
+      0
+    ],
+    [
+      5,
+      0
+    ],
+    [
+      5,
+      20
+    ]
+  ],
+  "path_is_closed": false,
+  "pattern": [
+    [
+      0,
+      0
+    ],
+    [
+      4,
+      0
+    ],
+    [
+      4,
+      1
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      1,
+      4
+    ],
+    [
+      0,
+      4
+    ]
+  ],
+  "source": {
+    "group": "concave:retrace:forward",
+    "intent": "Fixed connection quadrilaterals; no complete endpoint patterns",
+    "kind": "moonclip_constructed"
+  }
+}

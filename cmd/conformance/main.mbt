@@ -53,6 +53,7 @@ fn main {
     "composition_results": run_composition_cases().to_json(),
     "decimal_results": run_decimal_cases().to_json(),
     "simplify_results": run_simplify_cases().to_json(),
+    "minkowski_results": run_minkowski_cases().to_json(),
   })
   exit_code(report(@utf8.encode(envelope.stringify())))
 }
@@ -305,6 +306,36 @@ fn actual_simplify_case(
       if operation == "SimplifyD" {
         fields["precision"] = precision.to_json()
       }
+    }
+  }
+  Json::object(fields)
+}
+
+///|
+fn actual_minkowski_case(
+  id : String,
+  digest : String,
+  result : Result[@moonclip.Paths64, @moonclip.ClipError],
+) -> Json {
+  let fields : Map[String, Json] = {
+    "case_id": id.to_json(),
+    "input_sha256": digest.to_json(),
+  }
+  match result {
+    Err(error) => {
+      fields["status"] = "error".to_json()
+      fields["error"] = error.message().to_json()
+    }
+    Ok(paths) => {
+      fields["status"] = "success".to_json()
+      fields["format_version"] = (7).to_json()
+      fields["operation"] = "MinkowskiSum".to_json()
+      fields["fill_rule"] = "NonZero".to_json()
+      fields["options"] = Json::object({
+        "preserve_collinear": true.to_json(),
+        "reverse_solution": false.to_json(),
+      })
+      fields["paths"] = composition_paths(paths)
     }
   }
   Json::object(fields)

@@ -160,6 +160,9 @@ fn engine_step(
                   state.needs_entries = false
                   state.phase = EnterMinima
                 } else {
+                  if state.preserve_collinear {
+                    fixed_horizontal_convert(state)
+                  }
                   state.phase = PrepareBand
                 }
             }
@@ -175,6 +178,25 @@ fn engine_step(
         }
       }
       AwaitMaxima(v, a, b) => {
+        if state.preserve_collinear {
+          // Clipper2 DoMaxima consumes every real crossing between the pair before
+          // their maximum connection. Equal-height overlapping quads need this too.
+          let point = state.vertices[v].point
+          boolean_split_join(state, a, point)
+          boolean_split_join(state, b, point)
+          while edge_get(state, a).next_ael is Some(next) && next != b {
+            let crossing : EngineEvent = {
+              kind: Crossing,
+              first: a,
+              second: next,
+              point,
+            }
+            if !apply_connection(state, crossing, decide(crossing)) {
+              return Ok(state.phase)
+            }
+            ael_swap(state, a, next)
+          }
+        }
         let event : EngineEvent = {
           kind: Maximum,
           first: a,
@@ -195,7 +217,53 @@ fn engine_step(
           let edge = edge_get(state, id)
           scan_spend(state, 0, 1, scan_location(state, Some(edge.top), ScanTop))
           cursor = edge.next_ael
-          if state.vertices[edge.top].point.y == state.current_y.unwrap() {
+          if state.preserve_collinear &&
+            !edge.at_exit &&
+            state.vertices[edge.top].point.y == state.current_y.unwrap() &&
+            edge.cursor + 2 == state.chains[edge.chain].vertices.length() {
+            let mut partner : EdgeId? = None
+            let mut candidate = edge.next_ael
+            while candidate is Some(other) {
+              scan_spend(
+                state,
+                0,
+                1,
+                scan_location(state, Some(edge.top), ScanTop),
+              )
+              let other_edge = edge_get(state, other)
+              if other_edge.top == edge.top &&
+                other_edge.horizontal == NonHorizontal &&
+                other_edge.cursor + 2 ==
+                state.chains[other_edge.chain].vertices.length() {
+                partner = Some(other)
+                break
+              }
+              candidate = other_edge.next_ael
+            }
+            if partner is Some(other) {
+              let previous = edge.prev_ael
+              edge_advance(state, id)
+              if !edge_get(state, other).at_exit {
+                edge_advance(state, other)
+              }
+              state.phase = AwaitMaxima(edge.top, id, other)
+              match engine_step(state, decide) {
+                Ok(_) => ()
+                Err(error) => raise ScanAbort(error)
+              }
+              cursor = match previous {
+                Some(p) => edge_get(state, p).next_ael
+                None => state.ael_head
+              }
+              continue
+            }
+            // Fixed DoMaxima leaves output untouched while its partner is
+            // horizontal. That horizontal may exchange contribution before close.
+            edge_advance(state, id)
+            continue
+          }
+          if (!state.preserve_collinear || !edge.at_exit) &&
+            state.vertices[edge.top].point.y == state.current_y.unwrap() {
             ignore(output_add_edge(state, id, state.vertices[edge.top].point))
             boolean_split_join(state, id, state.vertices[edge.top].point)
             edge_advance(state, id)
