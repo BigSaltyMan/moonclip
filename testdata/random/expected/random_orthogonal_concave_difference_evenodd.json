@@ -1,0 +1,87 @@
+{
+  "adapter_protocol_version": 1,
+  "case_id": "random_orthogonal_concave_difference_evenodd",
+  "format_version": 1,
+  "input_sha256": "88cadb3754a5925cb387ee98d3554979f42ea80b8a8c542c0c99c303aee084fb",
+  "metrics": {
+    "hole_count": 0,
+    "path_count": 1,
+    "paths": [
+      {
+        "area2": "184",
+        "bounds": [
+          -15,
+          -14,
+          -3,
+          5
+        ],
+        "vertices": 6
+      }
+    ],
+    "tree_depth": 1,
+    "vertex_count": 6
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        -3,
+        -12
+      ],
+      [
+        -11,
+        -12
+      ],
+      [
+        -11,
+        5
+      ],
+      [
+        -15,
+        5
+      ],
+      [
+        -15,
+        -14
+      ],
+      [
+        -3,
+        -14
+      ]
+    ]
+  ],
+  "status": "success",
+  "tree": {
+    "children": [
+      {
+        "children": [],
+        "path": [
+          [
+            -3,
+            -12
+          ],
+          [
+            -11,
+            -12
+          ],
+          [
+            -11,
+            5
+          ],
+          [
+            -15,
+            5
+          ],
+          [
+            -15,
+            -14
+          ],
+          [
+            -3,
+            -14
+          ]
+        ]
+      }
+    ]
+  }
+}

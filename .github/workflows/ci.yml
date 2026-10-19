@@ -39,5 +39,5 @@ jobs:
           moon -C "$MOON_HOME/lib/core" bundle --target js --warn-list -a
           echo "MOON_HOME=$MOON_HOME" >> "$GITHUB_ENV"
           echo "$MOON_HOME/bin" >> "$GITHUB_PATH"
-      - name: Check native, JS and all seven reference catalogs
+      - name: Check native, JS and eight reference catalogs (random included in full tests)
         run: bash scripts/check.sh

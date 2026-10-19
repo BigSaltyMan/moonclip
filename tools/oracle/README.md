@@ -131,3 +131,8 @@ python tools/oracle/test_adapter.py
 bash scripts/generate_reference.sh --manifest testdata/minkowski-manifest.json --check
 python tools/conformance/generate_minkowski.py --check
 ```
+
+
+## Commit16 random v1 catalog
+
+The24 locked random requests reuse Boolean v1, with only public flat capability selected. Seed20261019 and xorshift32-small-polygons-v1, configuration, exact order and input hash are recorded independently. Publication goes only to testdata/random/expected; a mixed old Boolean/random batch is rejected before either execution or publication. The old1360 reference bytes and the lock are unchanged; the new catalog total is1384. Local C16 work regenerates/checks only24 new cases. The reference workflow now selects catalog=random (default) or all; this commit dispatches random, reserving all for final acceptance.

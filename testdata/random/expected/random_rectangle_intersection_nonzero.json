@@ -1,0 +1,71 @@
+{
+  "adapter_protocol_version": 1,
+  "case_id": "random_rectangle_intersection_nonzero",
+  "format_version": 1,
+  "input_sha256": "a1d5081220b66841d04003158af2d676e72bb1d9fb5aadb1e3cf6db9d7a0b13f",
+  "metrics": {
+    "hole_count": 0,
+    "path_count": 1,
+    "paths": [
+      {
+        "area2": "144",
+        "bounds": [
+          -6,
+          -16,
+          0,
+          -4
+        ],
+        "vertices": 4
+      }
+    ],
+    "tree_depth": 1,
+    "vertex_count": 4
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        0,
+        -4
+      ],
+      [
+        -6,
+        -4
+      ],
+      [
+        -6,
+        -16
+      ],
+      [
+        0,
+        -16
+      ]
+    ]
+  ],
+  "status": "success",
+  "tree": {
+    "children": [
+      {
+        "children": [],
+        "path": [
+          [
+            0,
+            -4
+          ],
+          [
+            -6,
+            -4
+          ],
+          [
+            -6,
+            -16
+          ],
+          [
+            0,
+            -16
+          ]
+        ]
+      }
+    ]
+  }
+}

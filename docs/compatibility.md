@@ -471,11 +471,11 @@ Independent inputs: Boolean200 + Offset272 + Stroke276 =748. Strokes have no inp
 
 | Parameter | Actual case coverage |
 | --- | --- |
-| join_type | Bevel: 63, Miter: 81, Round: 69, Square: 63 |
-| cap_type | Butt: 94, Round: 94, Square: 88 |
-| width | 1.0: 12, 1.01: 12, 1.99: 12, 10.0: 108, 2.0: 12, 20.0: 12, 3.0: 12, 4.0: 96 |
-| miter_limit | 10.0: 6, 2.0: 264, 4.0: 6 |
 | arc_tolerance | 0.0: 264, 0.05: 4, 0.25: 4, 1.0: 4 |
+| cap_type | Butt: 94, Round: 94, Square: 88 |
+| join_type | Bevel: 63, Miter: 81, Round: 69, Square: 63 |
+| miter_limit | 10.0: 6, 2.0: 264, 4.0: 6 |
+| width | 1.0: 12, 1.01: 12, 1.99: 12, 10.0: 108, 2.0: 12, 20.0: 12, 3.0: 12, 4.0: 96 |
 
 | Target | Stroke filtered paths |
 | --- | --- |
@@ -815,8 +815,8 @@ Comparison checks full integer contours AND exact coordinate64 / scale decoding,
 
 | Reference route | Required | Executed | Passed | Differences | Execution errors |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| DecimalGrid | 196 | 196 | 196 | 0 | 0 |
 | ClipperDCommonGrid | 24 | 24 | 24 | 0 | 0 |
+| DecimalGrid | 196 | 196 | 196 | 0 | 0 |
 
 | Operation | Cases | Precision coverage |
 | --- | ---: | --- |
@@ -826,14 +826,14 @@ Comparison checks full integer contours AND exact coordinate64 / scale decoding,
 
 | Parameter | Actual case coverage |
 | --- | --- |
+| arc_tolerance | 0.025: 84 |
+| cap_type | Butt: 12, Round: 12, Square: 12 |
 | clip_type | Difference: 34, Intersection: 34, Union: 34, Xor: 34 |
+| delta | -0.2: 24, 0.2: 24 |
 | fill_rule | EvenOdd: 92, NonZero: 92 |
 | join_type | Bevel: 21, Miter: 21, Round: 21, Square: 21 |
-| cap_type | Butt: 12, Round: 12, Square: 12 |
-| delta | -0.2: 24, 0.2: 24 |
-| width | 0.4: 36 |
 | miter_limit | 2.0: 84 |
-| arc_tolerance | 0.025: 84 |
+| width | 0.4: 36 |
 
 | Target | Decimal filtered paths |
 | --- | --- |
@@ -1071,8 +1071,8 @@ Pinned C++ SimplifyPaths after agreed normalization; the adapter independently c
 
 | Route / capability | Required | Executed | Passed | Differences | Execution errors |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| Integer | 80 | 80 | 80 | 0 | 0 |
 | DecimalGrid | 144 | 144 | 144 | 0 | 0 |
+| Integer | 80 | 80 | 80 | 0 | 0 |
 | ordered_paths | 224 | 224 | 224 | 0 | 0 |
 | removed_counts | 224 | 224 | 224 | 0 | 0 |
 | degeneracy | 224 | 224 | 224 | 0 | 0 |
@@ -1311,16 +1311,16 @@ Pinned C++ SimplifyPaths after agreed normalization; the adapter independently c
 
 # Minkowski Sum compatibility
 
-MinkowskiSum public paths: 144/144; required=144; differences=0; execution_errors=0. Independent total: 1216 +144 =1360.
+MinkowskiSum public paths: 144/144; required=144; differences=0; execution_errors=0. Seven-catalog baseline subtotal: 1216 +144 =1360; random additions are counted separately.
 
 Real pinned MinkowskiSum, internal NonZero, preserve_collinear=true, reverse_solution=false. Complete contours preserve collinear vertices, winding and multiplicity; only sibling order and cyclic starts are normalized. No endpoint pattern fill, no automatic input normalization, and closed routes may retain holes.
 
 | Coverage | Cases |
 | --- | --- |
-| patterns | circle: 36, concave: 36, offcenter: 36, rectangle: 36 |
-| routes | acute: 16, diagonal: 16, long_horizontal: 16, rectangle: 16, repeats: 16, retrace: 16, right_angle: 16, selfcross: 16, short_horizontal: 16 |
 | directions | forward: 72, reverse: 72 |
 | modes | Closed: 72, Open: 72 |
+| patterns | circle: 36, concave: 36, offcenter: 36, rectangle: 36 |
+| routes | acute: 16, diagonal: 16, long_horizontal: 16, rectangle: 16, repeats: 16, retrace: 16, right_angle: 16, selfcross: 16, short_horizontal: 16 |
 
 | Target | Minkowski filtered paths |
 | --- | --- |
@@ -1473,3 +1473,166 @@ Real pinned MinkowskiSum, internal NonZero, preserve_collinear=true, reverse_sol
 | minkowski_rectangle_short_horizontal_closed_reverse | passed |
 | minkowski_rectangle_short_horizontal_open_forward | passed |
 | minkowski_rectangle_short_horizontal_open_reverse | passed |
+
+# Manifest coverage matrix
+
+Unique catalog cases: 1384; selected capability checks: 2276. A case with flat/tree or intermediate/final results is counted once as a case.
+
+Each field value counts distinct cases containing that value (including composition steps). Counts across capabilities or fields must not be added as independent cases.
+
+| Catalog | Cases | Selected checks | Capability selections |
+| --- | ---: | ---: | --- |
+| boolean | 200 | 400 | paths:validate=152, paths:validate_internal=48, tree:validate=152, tree:validate_internal=48 |
+| offset | 272 | 272 | paths:validate=272 |
+| stroke | 276 | 276 | paths:validate=276 |
+| composition | 24 | 48 | final:validate=24, intermediate:validate=24 |
+| decimal | 220 | 440 | grid_paths:validate=220, paths:validate=220 |
+| simplify | 224 | 672 | degeneracy:validate=224, ordered_paths:validate=224, statistics:validate=224 |
+| minkowski | 144 | 144 | paths:validate=144 |
+| random | 24 | 24 | paths:validate=24 |
+
+## boolean field coverage
+
+| Field | Case incidence |
+| --- | --- |
+| fill_rule | "EvenOdd": 76, "Negative": 24, "NonZero": 76, "Positive": 24 |
+| operation | "Difference": 50, "Intersection": 50, "Union": 50, "Xor": 50 |
+| preserve_collinear | false: 200 |
+| reverse_solution | false: 200 |
+
+Absent / not applicable fields: clip_type, join_type, cap_type, precision, reference_route, mode, epsilon, path_is_closed.
+
+## offset field coverage
+
+| Field | Case incidence |
+| --- | --- |
+| fill_rule | "EvenOdd": 136, "NonZero": 136 |
+| join_type | "Bevel": 54, "Miter": 62, "Round": 102, "Square": 54 |
+| operation | "OffsetPolygons": 272 |
+| preserve_collinear | false: 272 |
+| reverse_solution | false: 272 |
+
+Absent / not applicable fields: clip_type, cap_type, precision, reference_route, mode, epsilon, path_is_closed.
+
+## stroke field coverage
+
+| Field | Case incidence |
+| --- | --- |
+| cap_type | "Butt": 94, "Round": 94, "Square": 88 |
+| join_type | "Bevel": 63, "Miter": 81, "Round": 69, "Square": 63 |
+| operation | "StrokePolyline": 276 |
+| preserve_collinear | false: 276 |
+| reverse_solution | false: 276 |
+
+Absent / not applicable fields: clip_type, fill_rule, precision, reference_route, mode, epsilon, path_is_closed.
+
+## composition field coverage
+
+| Field | Case incidence |
+| --- | --- |
+| cap_type | "Butt": 4, "Round": 4 |
+| fill_rule | "NonZero": 24 |
+| join_type | "Miter": 24 |
+| operation | "Composition": 24, "Difference": 4, "Intersection": 8, "OffsetPolygons": 16, "StrokePolyline": 8, "Union": 12 |
+| preserve_collinear | false: 24 |
+| reverse_solution | false: 24 |
+
+Absent / not applicable fields: clip_type, precision, reference_route, mode, epsilon, path_is_closed.
+
+## decimal field coverage
+
+| Field | Case incidence |
+| --- | --- |
+| cap_type | "Butt": 12, "Round": 12, "Square": 12 |
+| clip_type | "Difference": 34, "Intersection": 34, "Union": 34, "Xor": 34 |
+| fill_rule | "EvenOdd": 92, "NonZero": 92 |
+| join_type | "Bevel": 21, "Miter": 21, "Round": 21, "Square": 21 |
+| operation | "BooleanD": 136, "OffsetD": 48, "StrokeD": 36 |
+| precision | 0: 52, 1: 16, 2: 16, 3: 52, 4: 16, 5: 16, 6: 52 |
+| preserve_collinear | false: 220 |
+| reference_route | "ClipperDCommonGrid": 24, "DecimalGrid": 196 |
+| reverse_solution | false: 220 |
+
+Absent / not applicable fields: mode, epsilon, path_is_closed.
+
+## simplify field coverage
+
+| Field | Case incidence |
+| --- | --- |
+| epsilon | 0.25: 68, 0.5: 68, 1: 20, 2: 48, 4: 20 |
+| mode | "Closed": 112, "Open": 112 |
+| operation | "Simplify64": 80, "SimplifyD": 144 |
+| precision | 0: 48, 3: 48, 6: 48 |
+| preserve_collinear | false: 224 |
+| reference_route | "DecimalGrid": 144, "Integer": 80 |
+| reverse_solution | false: 224 |
+
+Absent / not applicable fields: clip_type, fill_rule, join_type, cap_type, path_is_closed.
+
+## minkowski field coverage
+
+| Field | Case incidence |
+| --- | --- |
+| operation | "MinkowskiSum": 144 |
+| path_is_closed | false: 72, true: 72 |
+| preserve_collinear | true: 144 |
+| reverse_solution | false: 144 |
+
+Absent / not applicable fields: clip_type, fill_rule, join_type, cap_type, precision, reference_route, mode, epsilon.
+
+## random field coverage
+
+| Field | Case incidence |
+| --- | --- |
+| fill_rule | "EvenOdd": 12, "NonZero": 12 |
+| operation | "Difference": 6, "Intersection": 6, "Union": 6, "Xor": 6 |
+| preserve_collinear | false: 24 |
+| reverse_solution | false: 24 |
+
+Absent / not applicable fields: clip_type, join_type, cap_type, precision, reference_route, mode, epsilon, path_is_closed.
+
+## Limits of this evidence
+
+- Manifest selections are coverage, not fresh execution evidence.
+- Random v1 adds only public flat Boolean: three small configurations, four operations, two fill rules; no random trees, decimal, offset, stroke, simplification or Minkowski coverage.
+- Positive/Negative Boolean remain internal; no open-path Boolean, decimal tree, MinkowskiDiff, decimal Minkowski or multi-pattern holes API.
+- Simplification checks ordered vertices, statistics and degeneracy; it is not a general topology-preservation proof.
+- Individual field coverage does not imply the full Cartesian product is covered. Missing fields below mean absent/not applicable, not passed.
+
+# Fixed-seed random Boolean flat compatibility
+
+Random cases: 24/24; differences=0; execution_errors=0. Reference total: 1360 + 24 = 1384.
+
+Seed 20261019; xorshift32-small-polygons-v1. Three configurations x four operations x two fill rules. Inputs, order and hashes are locked; no random tree capability is claimed.
+
+| Target | Actual random tests |
+| --- | --- |
+| native | 24/24 |
+| js | 24/24 |
+
+| Case | Configuration | Native flat result |
+| --- | --- | --- |
+| random_rectangle_intersection_evenodd | rectangle | passed |
+| random_rectangle_intersection_nonzero | rectangle | passed |
+| random_rectangle_union_evenodd | rectangle | passed |
+| random_rectangle_union_nonzero | rectangle | passed |
+| random_rectangle_difference_evenodd | rectangle | passed |
+| random_rectangle_difference_nonzero | rectangle | passed |
+| random_rectangle_xor_evenodd | rectangle | passed |
+| random_rectangle_xor_nonzero | rectangle | passed |
+| random_orthogonal_concave_intersection_evenodd | orthogonal_concave | passed |
+| random_orthogonal_concave_intersection_nonzero | orthogonal_concave | passed |
+| random_orthogonal_concave_union_evenodd | orthogonal_concave | passed |
+| random_orthogonal_concave_union_nonzero | orthogonal_concave | passed |
+| random_orthogonal_concave_difference_evenodd | orthogonal_concave | passed |
+| random_orthogonal_concave_difference_nonzero | orthogonal_concave | passed |
+| random_orthogonal_concave_xor_evenodd | orthogonal_concave | passed |
+| random_orthogonal_concave_xor_nonzero | orthogonal_concave | passed |
+| random_small_convex_intersection_evenodd | small_convex | passed |
+| random_small_convex_intersection_nonzero | small_convex | passed |
+| random_small_convex_union_evenodd | small_convex | passed |
+| random_small_convex_union_nonzero | small_convex | passed |
+| random_small_convex_difference_evenodd | small_convex | passed |
+| random_small_convex_difference_nonzero | small_convex | passed |
+| random_small_convex_xor_evenodd | small_convex | passed |
+| random_small_convex_xor_nonzero | small_convex | passed |

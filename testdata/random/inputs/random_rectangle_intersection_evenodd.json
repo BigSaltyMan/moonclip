@@ -1,0 +1,55 @@
+{
+  "case_id": "random_rectangle_intersection_evenodd",
+  "clip": [
+    [
+      [
+        -6,
+        -16
+      ],
+      [
+        6,
+        -16
+      ],
+      [
+        6,
+        -2
+      ],
+      [
+        -6,
+        -2
+      ]
+    ]
+  ],
+  "fill_rule": "EvenOdd",
+  "format_version": 1,
+  "operation": "Intersection",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "source": {
+    "group": "random:xorshift32-small-polygons-v1:rectangle",
+    "intent": "Locked seed 20261019; small public Boolean flat regression",
+    "kind": "moonclip_constructed"
+  },
+  "subject": [
+    [
+      [
+        -12,
+        -18
+      ],
+      [
+        0,
+        -18
+      ],
+      [
+        0,
+        -4
+      ],
+      [
+        -12,
+        -4
+      ]
+    ]
+  ]
+}

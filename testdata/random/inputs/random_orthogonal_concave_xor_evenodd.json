@@ -1,0 +1,63 @@
+{
+  "case_id": "random_orthogonal_concave_xor_evenodd",
+  "clip": [
+    [
+      [
+        -11,
+        -12
+      ],
+      [
+        1,
+        -12
+      ],
+      [
+        1,
+        7
+      ],
+      [
+        -11,
+        7
+      ]
+    ]
+  ],
+  "fill_rule": "EvenOdd",
+  "format_version": 1,
+  "operation": "Xor",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "source": {
+    "group": "random:xorshift32-small-polygons-v1:orthogonal_concave",
+    "intent": "Locked seed 20261019; small public Boolean flat regression",
+    "kind": "moonclip_constructed"
+  },
+  "subject": [
+    [
+      [
+        -15,
+        -14
+      ],
+      [
+        -3,
+        -14
+      ],
+      [
+        -3,
+        -8
+      ],
+      [
+        -11,
+        -8
+      ],
+      [
+        -11,
+        5
+      ],
+      [
+        -15,
+        5
+      ]
+    ]
+  ]
+}

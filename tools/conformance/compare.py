@@ -328,6 +328,9 @@ def validate_lock(lock):
 
 def read_manifest(root, manifest, require_expected=True, strict=True):
     value = load(manifest, strict)
+    if type(value) is dict and value.get("kind")=="random":
+        from random_cases import read_random_manifest
+        return read_random_manifest(root,manifest,require_expected,strict)
     if type(value) is dict and value.get("kind")=="minkowski":
         from minkowski_compare import read_minkowski_manifest
         return read_minkowski_manifest(root,manifest,require_expected,strict)

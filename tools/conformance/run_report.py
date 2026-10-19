@@ -284,6 +284,108 @@ def evaluate_minkowski(manifest,results):
                   'modes':dict(sorted(Counter('Closed' if c['path_is_closed'] else 'Open' for _,c,_,_ in records).items()))}}
 
 
+
+def coverage_matrix(include_random=True):
+    """Counts catalog cases once; capability selections and field incidence are separate."""
+    from collections import Counter
+    from compare import read_manifest
+    catalogs=[('boolean','manifest'),('offset','offset-manifest'),('stroke','stroke-manifest'),
+              ('composition','composition-manifest'),('decimal','decimal-manifest'),
+              ('simplify','simplify-manifest'),('minkowski','minkowski-manifest')]
+    if include_random:catalogs.append(('random','random-manifest'))
+    fields=('operation','clip_type','fill_rule','join_type','cap_type','precision','reference_route','mode','epsilon','path_is_closed','preserve_collinear','reverse_solution')
+    rows=[];all_ids=set()
+    for name,stem in catalogs:
+        _,records=read_manifest(ROOT,ROOT/('testdata/'+stem+'.json'),strict=True)
+        capabilities=Counter();coverage={field:Counter() for field in fields}
+        for e,c,_,_ in records:
+            require(e['case_id'] not in all_ids,'matrix','duplicate case across catalogs');all_ids.add(e['case_id'])
+            for capability,status in e.get('validation',{}).items():capabilities[capability+':'+status]+=1
+            parts=[c]+c.get('steps',[])
+            for field in fields:
+                values=set()
+                for part in parts:
+                    source=part.get('options',{}) if field in ('preserve_collinear','reverse_solution') else part
+                    if field in source:values.add(__import__('json').dumps(source[field],sort_keys=True))
+                for value in values:coverage[field][value]+=1
+        rows.append(dict(catalog=name,cases=len(records),capability_checks=sum(capabilities.values()),
+                         capabilities=dict(sorted(capabilities.items())),
+                         fields={k:dict(sorted(v.items())) for k,v in coverage.items() if v},
+                         absent_fields=[k for k,v in coverage.items() if not v]))
+    return dict(cases=len(all_ids),capability_checks=sum(r['capability_checks'] for r in rows),catalogs=rows,
+        limitations=['Manifest selections are coverage, not fresh execution evidence.',
+          'Random v1 adds only public flat Boolean: three small configurations, four operations, two fill rules; no random trees, decimal, offset, stroke, simplification or Minkowski coverage.',
+          'Positive/Negative Boolean remain internal; no open-path Boolean, decimal tree, MinkowskiDiff, decimal Minkowski or multi-pattern holes API.',
+          'Simplification checks ordered vertices, statistics and degeneracy; it is not a general topology-preservation proof.',
+          'Individual field coverage does not imply the full Cartesian product is covered. Missing fields below mean absent/not applicable, not passed.'])
+
+
+def random_execution_evidence(directory):
+    import re
+    result={}
+    for target in ('native','js'):
+        path=directory/('random-'+target+'.log');full=False
+        if not path.exists():path=directory/('all-'+target+'.log');full=True
+        if not path.exists():result[target]={'status':'not_recorded'};continue
+        totals=re.findall(r'Total tests: (\d+), passed: (\d+), failed: (\d+)\.',path.read_text(encoding='utf-8-sig'))
+        count=2234 if full else 24
+        require(totals==[(str(count),str(count),'0')],str(path),'unexpected random/full execution count')
+        result[target]=dict(status='passed',executed=24,passed=24,source='full' if full else 'random-only')
+    return result
+
+
+def evaluate_random(manifest,results):
+    from compare import read_manifest,keys
+    _,records=read_manifest(ROOT,manifest,strict=True)
+    require(len(records)==24 and all(e['validation']=={'paths':'validate'} for e,_,_,_ in records),'random','expected24 flat cases')
+    require(type(results) is list,'random','expected result array');actual={}
+    for r in results:
+        require(type(r) is dict and type(r.get('case_id')) is str and r['case_id'] not in actual,'random','missing/duplicate ID')
+        actual[r['case_id']]=r
+    require(set(actual)=={e['case_id'] for e,_,_,_ in records},'random','missing/extra results')
+    details=[]
+    for e,c,d,v in records:
+        r=actual[e['case_id']];require(r.get('input_sha256')==d,e['case_id'],'compiled hash mismatch')
+        detail=dict(case_id=e['case_id'],seed=e['seed'],configuration=e['configuration'],input_sha256=d)
+        if r.get('status')=='error':
+            keys(r,{'case_id','input_sha256','status','error'},'random error')
+            require(type(r['error']) is str,'random','invalid error');detail.update(status='execution_error',message=r['error'])
+        else:
+            keys(r,{'case_id','input_sha256','status','paths'},'random success');require(r['status']=='success','random','invalid status')
+            validate_paths(r['paths'],'random output',output=True)
+            try:compare_paths(v['paths'],r['paths'],e['case_id'])
+            except Invalid as error:detail.update(status='difference',message=str(error))
+            else:detail['status']='passed'
+        details.append(detail)
+    return {**summary(details),'required':24,'reference_cases':24,'cases':details}
+
+
+def matrix_markdown(matrix):
+    lines=['','# Manifest coverage matrix','',f"Unique catalog cases: {matrix['cases']}; selected capability checks: {matrix['capability_checks']}. A case with flat/tree or intermediate/final results is counted once as a case.",'',
+           'Each field value counts distinct cases containing that value (including composition steps). Counts across capabilities or fields must not be added as independent cases.','',
+           '| Catalog | Cases | Selected checks | Capability selections |','| --- | ---: | ---: | --- |']
+    for row in matrix['catalogs']:
+        lines.append(f"| {row['catalog']} | {row['cases']} | {row['capability_checks']} | "+', '.join(k+'='+str(v) for k,v in sorted(row['capabilities'].items()))+' |')
+    for row in matrix['catalogs']:
+        lines+=['',"## "+row['catalog']+' field coverage','','| Field | Case incidence |','| --- | --- |']
+        for field,values in sorted(row['fields'].items()):lines.append('| '+field+' | '+', '.join(k+': '+str(v) for k,v in values.items())+' |')
+        lines+=['','Absent / not applicable fields: '+', '.join(row['absent_fields'])+'.']
+    lines+=['','## Limits of this evidence','']+['- '+item for item in matrix['limitations']]
+    return lines
+
+
+def random_markdown(result,evidence):
+    lines=['','# Fixed-seed random Boolean flat compatibility','',f"Random cases: {result['passed']}/24; differences={result['differences']}; execution_errors={result['execution_errors']}. Reference total: 1360 + 24 = 1384.",'',
+           'Seed 20261019; xorshift32-small-polygons-v1. Three configurations x four operations x two fill rules. Inputs, order and hashes are locked; no random tree capability is claimed.','',
+           '| Target | Actual random tests |','| --- | --- |']
+    for target in ('native','js'):
+        e=evidence.get(target,{})
+        lines.append('| '+target+' | '+('24/24' if e.get('status')=='passed' else 'not recorded')+' |')
+    lines+=['','| Case | Configuration | Native flat result |','| --- | --- | --- |']
+    lines += ['| '+r['case_id']+' | '+r['configuration']+' | '+r['status']+' |' for r in result['cases']]
+    return lines
+
+
 def markdown(report):
     lines=['# Boolean compatibility','','Pinned Clipper2 2.0.1, commit `21ebba05db8894f0c7217ad35ea518080f324946`; ordinary precision. Boolean/Offset/Stroke: preserve_collinear=false; MinkowskiSum: preserve_collinear=true; reverse_solution=false. Simplification has its own ordered-output contract.','',
       f"Public cases: {report['required']}; both passed={report['passed']}, differences={report['differences']}, execution_errors={report['execution_errors']}. Reference catalog: {report['reference_cases']}.",'',
@@ -313,7 +415,7 @@ def markdown(report):
         lines+=['','# Stroke compatibility','',f"Stroke public paths: {r['passed']}/{r['executed']}; required={r['required']}, differences={r['differences']}, execution_errors={r['execution_errors']}.",'',
           'Independent inputs: Boolean200 + Offset272 + Stroke276 =748. Strokes have no input fill rule or public tree interface; boolean_tree composition tests are separate evidence.','',
           '| Parameter | Actual case coverage |','| --- | --- |']
-        lines += ['| '+field+' | '+', '.join(k+': '+str(v) for k,v in values.items())+' |' for field,values in r['coverage'].items()]
+        lines += ['| '+field+' | '+', '.join(k+': '+str(v) for k,v in values.items())+' |' for field,values in sorted(r['coverage'].items())]
         lines+=['','| Target | Stroke filtered paths |','| --- | --- |']
         for target in ('native','js'):
             e=report.get('stroke_evidence',{}).get(target,{})
@@ -340,11 +442,11 @@ def markdown(report):
           'MoonClip always uses 10^precision. DecimalGrid invokes the pinned integer routes after independent std::round quantization; ClipperDCommonGrid really invokes ClipperD and verifies its raw output lies on the target grid before any integer conversion. These 24 common-grid cases do not establish general ClipperD equivalence.','',
           'Comparison checks full integer contours AND exact coordinate64 / scale decoding, finite output and positive zero; re-quantizing arbitrary decimal output is insufficient. Quantization rejection and budgets are MoonClip contract tests.','',
           '| Reference route | Required | Executed | Passed | Differences | Execution errors |','| --- | ---: | ---: | ---: | ---: | ---: |']
-        for route,v in r['routes'].items():lines.append(f"| {route} | {v['required']} | {v['executed']} | {v['passed']} | {v['differences']} | {v['execution_errors']} |")
+        for route,v in sorted(r['routes'].items()):lines.append(f"| {route} | {v['required']} | {v['executed']} | {v['passed']} | {v['differences']} | {v['execution_errors']} |")
         lines+=['','| Operation | Cases | Precision coverage |','| --- | ---: | --- |']
-        for op,v in r['operations'].items():lines.append('| '+op+' | '+str(v['count'])+' | '+', '.join(k+': '+str(n) for k,n in v['precisions'].items())+' |')
+        for op,v in sorted(r['operations'].items()):lines.append('| '+op+' | '+str(v['count'])+' | '+', '.join(k+': '+str(n) for k,n in v['precisions'].items())+' |')
         lines+=['','| Parameter | Actual case coverage |','| --- | --- |']
-        lines += ['| '+field+' | '+', '.join(k+': '+str(n) for k,n in counts.items())+' |' for field,counts in r['parameters'].items()]
+        lines += ['| '+field+' | '+', '.join(k+': '+str(n) for k,n in counts.items())+' |' for field,counts in sorted(r['parameters'].items())]
         lines+=['','| Target | Decimal filtered paths |','| --- | --- |']
         for target in ('native','js'):
             e=report.get('decimal_evidence',{}).get(target,{})
@@ -357,7 +459,7 @@ def markdown(report):
         lines+=['','# Simplification compatibility','',f"Ordered simplification: {r['passed']}/{r['executed']}; required=224; differences={r['differences']}; execution_errors={r['execution_errors']}. Independent total: 992 +224 =1216.",'',
           'Pinned C++ SimplifyPaths after agreed normalization; the adapter independently computes reports. DecimalGrid quantizes first and calls the integer template, not SimplifyPaths<PointD>. Zero threshold is a separate MoonClip contract. Empty and degenerate paths are successful results. No ring rotation or path sorting is permitted.','',
           '| Route / capability | Required | Executed | Passed | Differences | Execution errors |','| --- | ---: | ---: | ---: | ---: | ---: |']
-        for name,v in [*r['routes'].items(),*((k,r[k]) for k in ('ordered_paths','removed_counts','degeneracy'))]:lines.append(f"| {name} | {v['required']} | {v['executed']} | {v['passed']} | {v['differences']} | {v['execution_errors']} |")
+        for name,v in [*sorted(r['routes'].items()),*((k,r[k]) for k in ('ordered_paths','removed_counts','degeneracy'))]:lines.append(f"| {name} | {v['required']} | {v['executed']} | {v['passed']} | {v['differences']} | {v['execution_errors']} |")
         lines+=['','| Target | Simplify filtered cases |','| --- | --- |']
         for target in ('native','js'):
             e=report.get('simplify_evidence',{}).get(target,{})
@@ -367,10 +469,10 @@ def markdown(report):
         lines += [f"| {c['case_id']} | {c['ordered_paths']} | {c['removed_counts']} | {c['degeneracy']} | {c['status']} |" for c in r['cases']]
     if 'minkowski' in report:
         r=report['minkowski']
-        lines+=['','# Minkowski Sum compatibility','',f"MinkowskiSum public paths: {r['passed']}/{r['executed']}; required=144; differences={r['differences']}; execution_errors={r['execution_errors']}. Independent total: 1216 +144 =1360.",'',
+        lines+=['','# Minkowski Sum compatibility','',f"MinkowskiSum public paths: {r['passed']}/{r['executed']}; required=144; differences={r['differences']}; execution_errors={r['execution_errors']}. Seven-catalog baseline subtotal: 1216 +144 =1360; random additions are counted separately.",'',
           'Real pinned MinkowskiSum, internal NonZero, preserve_collinear=true, reverse_solution=false. Complete contours preserve collinear vertices, winding and multiplicity; only sibling order and cyclic starts are normalized. No endpoint pattern fill, no automatic input normalization, and closed routes may retain holes.','',
           '| Coverage | Cases |','| --- | --- |']
-        for field,values in r['coverage'].items():lines.append('| '+field+' | '+', '.join(k+': '+str(v) for k,v in values.items())+' |')
+        for field,values in sorted(r['coverage'].items()):lines.append('| '+field+' | '+', '.join(k+': '+str(v) for k,v in values.items())+' |')
         lines+=['','| Target | Minkowski filtered paths |','| --- | --- |']
         for target in ('native','js'):
             e=report.get('minkowski_evidence',{}).get(target,{})
@@ -378,10 +480,14 @@ def markdown(report):
             lines.append('| '+target+' | '+value+' |')
         lines+=['','| Minkowski case | Native complete contours |','| --- | --- |']
         lines += [f"| {c['case_id']} | {c['status']} |" for c in r['cases']]
+    if 'coverage_matrix' in report:lines+=matrix_markdown(report['coverage_matrix'])
+    if 'random' in report:lines+=random_markdown(report['random'],report.get('random_evidence',{}))
     return '\n'.join(lines)+'\n'
 
 def main():
     parser=argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,description='Execute independent MoonClip paths and tree comparisons. Exit codes: 0 success/help; 1 differences; 2 arguments, integrity or execution errors.')
+    parser.add_argument('--random-only',action='store_true',help='Execute/report only the24 new inputs locally; no old geometry execution')
+    parser.add_argument('--random-manifest',type=Path)
     parser.add_argument('--manifest',type=Path,default=ROOT/'testdata/manifest.json')
     parser.add_argument('--offset-manifest',type=Path,help='Include independently executed offset protocol v2 cases')
     parser.add_argument('--stroke-manifest',type=Path,help='Include independent open stroke protocol v3 cases')
@@ -394,7 +500,21 @@ def main():
     parser.add_argument('--strict',action='store_true',help='Require exactly 152 public cases with independent paths and tree results (also enforced by default)')
     try:
         envelope=json.load(sys.stdin);args=parser.parse_args(envelope['args'][1:])
+        if args.random_only:
+            require(args.random_manifest is not None,'random','--random-manifest required')
+            result=evaluate_random(args.random_manifest.resolve(),envelope.get('random_results'))
+            report=dict(random=result,random_evidence=random_execution_evidence(ROOT/'_build/conformance'),coverage_matrix=coverage_matrix())
+            args.report_json.parent.mkdir(parents=True,exist_ok=True)
+            args.report_json.write_bytes(canonical_bytes(report))
+            args.report_md.parent.mkdir(parents=True,exist_ok=True)
+            args.report_md.write_text('\n'.join(matrix_markdown(report['coverage_matrix'])+random_markdown(result,report['random_evidence']))+'\n',encoding='utf-8',newline='\n')
+            print(f"Native random conformance: paths={result['passed']}/24, differences={result['differences']}, execution_errors={result['execution_errors']}")
+            return 2 if result['execution_errors'] else 1 if result['differences'] else 0
         report=evaluate(args.manifest.resolve(),envelope['results'])
+        report['coverage_matrix']=coverage_matrix(bool(args.random_manifest))
+        if args.random_manifest:
+            report['random']=evaluate_random(args.random_manifest.resolve(),envelope.get('random_results'))
+            report['random_evidence']=random_execution_evidence(ROOT/'_build/conformance')
         from evidence import internal_evidence,tree_evidence,offset_evidence,stroke_evidence,composition_evidence,decimal_evidence
         if args.offset_manifest:
             report['offset']=evaluate_offset(args.offset_manifest.resolve(),envelope.get('offset_results'))
@@ -439,7 +559,9 @@ def main():
         minkowski=report.get('minkowski',{})
         if minkowski:
             print(f"Native minkowski conformance: cases=144, paths={minkowski['passed']}/144, NonZero, preserve_collinear=true, differences={minkowski['differences']}, execution_errors={minkowski['execution_errors']}")
-        return 2 if any(r.get('execution_errors') for r in (report,offset,stroke,composition,decimal,simplify,minkowski)) else 1 if any(r.get('differences') for r in (report,offset,stroke,composition,decimal,simplify,minkowski)) else 0
+        random=report.get('random',{})
+        if random:print(f"Native random conformance: paths={random['passed']}/24, differences={random['differences']}, execution_errors={random['execution_errors']}")
+        return 2 if any(r.get('execution_errors') for r in (report,offset,stroke,composition,decimal,simplify,minkowski,random)) else 1 if any(r.get('differences') for r in (report,offset,stroke,composition,decimal,simplify,minkowski,random)) else 0
     except (Invalid,OSError,ValueError,KeyError,TypeError) as error:
         print(f'Conformance error: {error}',file=sys.stderr);return 2
 if __name__=='__main__':sys.exit(main())

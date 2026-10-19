@@ -41,6 +41,10 @@ def verified_binary(root):
 def expected_directory(records):
     require(bool(records), 'generation', 'empty reference batch')
     operations={case['operation'] for _,case,_,_ in records}
+    random_entries=[bool(e and e.get('expected','').startswith('testdata/random/expected/')) for e,_,_,_ in records]
+    if any(random_entries):
+        require(all(random_entries) and operations <= {'Intersection','Union','Difference','Xor'},'generation','mixed random/reference category')
+        return 'testdata/random/expected'
     if operations <= {'Intersection','Union','Difference','Xor'}:
         return 'testdata/upstream/expected'
     if operations == {'OffsetPolygons'}:

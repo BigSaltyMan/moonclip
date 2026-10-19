@@ -198,3 +198,10 @@ v6明确 normalization=ConsecutiveDuplicatesAndClosedSeam、模式、路线、�
 v7严格接收MinkowskiSum、pattern、path及布尔path_is_closed，固定preserve_collinear=true/reverse_solution=false，结果NonZero。4图案（矩形、整数近圆、凹L、偏置不对称）×9路线（长/短水平、斜线、直角、锐角、折返、自交、矩形、重复点）×Open/Closed×正反路线，首次运行MoonClip前锁定。
 
 真实固定C++MinkowskiSum生成期望，完整轮廓仅旋转环起点/排列兄弟，不反向、不删共线点、不忽略重数。缺失/重复/多余ID、哈希、选项、类型错误失败；适配器预检原始及生成坐标、保守乘积规模，保留子进程超时。独立目录和manifest/selection记录全部144条。运行器只编译输入和哈希，真实调用公开入口；报告独立读取期望，单列覆盖和两目标筛选，明确旧六类与本类设置不同。旧1216参考、清单与选择字节不变，总独立参考1360；七类均支持--check逐字节重建。
+
+
+## Commit16：固定种子小规模随机补充
+
+独立testdata/random目录复用v1，种子20261019、xorshift32-small-polygons-v1，固定3构型×4操作×2规则共24条，仅验证公开Boolean平铺。原有1360条参考、清单与选择字节不变，新增后1384条；能力槽2276不等于独立案例数。覆盖矩阵由八类清单与输入逐项重建，缺项及适用限制如实列出，不为表格补矩阵。
+
+本地只运行新增24条native/JS及新参考复核，旧证据保留；普通CI一次完整2234测试含24随机，不重复随机筛选。参考CI默认catalog=random，只执行新增24条重建，all留给最终验收。默认不运行真实失败缩减；显式工具按双方实际执行保留失败类别、最多40次候选，材料位于_build/conformance/failures，工具注入故障明确标记，不自动创建永久回归。详见[random-regression.md](random-regression.md)。

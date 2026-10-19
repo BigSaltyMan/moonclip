@@ -1,0 +1,31 @@
+{
+  "case_ids": [
+    "random_rectangle_intersection_evenodd",
+    "random_rectangle_intersection_nonzero",
+    "random_rectangle_union_evenodd",
+    "random_rectangle_union_nonzero",
+    "random_rectangle_difference_evenodd",
+    "random_rectangle_difference_nonzero",
+    "random_rectangle_xor_evenodd",
+    "random_rectangle_xor_nonzero",
+    "random_orthogonal_concave_intersection_evenodd",
+    "random_orthogonal_concave_intersection_nonzero",
+    "random_orthogonal_concave_union_evenodd",
+    "random_orthogonal_concave_union_nonzero",
+    "random_orthogonal_concave_difference_evenodd",
+    "random_orthogonal_concave_difference_nonzero",
+    "random_orthogonal_concave_xor_evenodd",
+    "random_orthogonal_concave_xor_nonzero",
+    "random_small_convex_intersection_evenodd",
+    "random_small_convex_intersection_nonzero",
+    "random_small_convex_union_evenodd",
+    "random_small_convex_union_nonzero",
+    "random_small_convex_difference_evenodd",
+    "random_small_convex_difference_nonzero",
+    "random_small_convex_xor_evenodd",
+    "random_small_convex_xor_nonzero"
+  ],
+  "expected_count": 24,
+  "format_version": 1,
+  "kind": "random"
+}

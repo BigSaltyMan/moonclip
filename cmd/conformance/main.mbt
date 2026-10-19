@@ -45,15 +45,21 @@ fn actual_case(
 
 ///|
 fn main {
+  let random_only = @env.args().contains("--random-only")
   let envelope = Json::object({
     "args": @env.args().to_json(),
-    "results": run_cases().to_json(),
-    "offset_results": run_offset_cases().to_json(),
-    "stroke_results": run_stroke_cases().to_json(),
-    "composition_results": run_composition_cases().to_json(),
-    "decimal_results": run_decimal_cases().to_json(),
-    "simplify_results": run_simplify_cases().to_json(),
-    "minkowski_results": run_minkowski_cases().to_json(),
+    "random_results": run_random_cases().to_json(),
+    "results": (if random_only { [] } else { run_cases() }).to_json(),
+    "offset_results": (if random_only { [] } else { run_offset_cases() }).to_json(),
+    "stroke_results": (if random_only { [] } else { run_stroke_cases() }).to_json(),
+    "composition_results": (if random_only {
+      []
+    } else {
+      run_composition_cases()
+    }).to_json(),
+    "decimal_results": (if random_only { [] } else { run_decimal_cases() }).to_json(),
+    "simplify_results": (if random_only { [] } else { run_simplify_cases() }).to_json(),
+    "minkowski_results": (if random_only { [] } else { run_minkowski_cases() }).to_json(),
   })
   exit_code(report(@utf8.encode(envelope.stringify())))
 }

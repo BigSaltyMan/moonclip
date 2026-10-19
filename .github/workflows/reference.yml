@@ -2,6 +2,15 @@ name: rebuild-reference
 
 on:
   workflow_dispatch:
+    inputs:
+      catalog:
+        description: Reference scope (random for Commit16; all for final acceptance)
+        type: choice
+        required: true
+        default: random
+        options:
+          - random
+          - all
 
 permissions:
   contents: read
@@ -24,32 +33,51 @@ jobs:
       - name: Build verified fixed upstream
         run: bash scripts/build_oracle.sh
       - name: Run real adapter integration tests
+        if: ${{ inputs.catalog == 'all' }}
         run: python tools/oracle/test_adapter.py
       - name: Rebuild and compare all reference results
+        if: ${{ inputs.catalog == 'all' }}
         run: bash scripts/generate_reference.sh --manifest testdata/manifest.json --check
       - name: Check offline catalog
+        if: ${{ inputs.catalog == 'all' }}
         run: python scripts/check_reference.py --manifest testdata/manifest.json --strict
       - name: Rebuild and compare all offset reference results
+        if: ${{ inputs.catalog == 'all' }}
         run: bash scripts/generate_reference.sh --manifest testdata/offset-manifest.json --check
       - name: Check offline offset catalog
+        if: ${{ inputs.catalog == 'all' }}
         run: python scripts/check_reference.py --manifest testdata/offset-manifest.json --strict
       - name: Rebuild and compare all stroke reference results
+        if: ${{ inputs.catalog == 'all' }}
         run: bash scripts/generate_reference.sh --manifest testdata/stroke-manifest.json --check
       - name: Check offline stroke catalog
+        if: ${{ inputs.catalog == 'all' }}
         run: python scripts/check_reference.py --manifest testdata/stroke-manifest.json --strict
       - name: Rebuild and compare all two-step composition reference results
+        if: ${{ inputs.catalog == 'all' }}
         run: bash scripts/generate_reference.sh --manifest testdata/composition-manifest.json --check
       - name: Check offline composition catalog
+        if: ${{ inputs.catalog == 'all' }}
         run: python scripts/check_reference.py --manifest testdata/composition-manifest.json --strict
       - name: Rebuild decimal-grid and actual ClipperD reference results
+        if: ${{ inputs.catalog == 'all' }}
         run: bash scripts/generate_reference.sh --manifest testdata/decimal-manifest.json --check
       - name: Check offline decimal catalog and route counts
+        if: ${{ inputs.catalog == 'all' }}
         run: python scripts/check_reference.py --manifest testdata/decimal-manifest.json --strict
       - name: Rebuild ordered integer and decimal-grid simplification references
+        if: ${{ inputs.catalog == 'all' }}
         run: bash scripts/generate_reference.sh --manifest testdata/simplify-manifest.json --check
       - name: Check offline simplification catalog and reports
+        if: ${{ inputs.catalog == 'all' }}
         run: python scripts/check_reference.py --manifest testdata/simplify-manifest.json --strict
       - name: Rebuild fixed MinkowskiSum complete-contour references
+        if: ${{ inputs.catalog == 'all' }}
         run: bash scripts/generate_reference.sh --manifest testdata/minkowski-manifest.json --check
       - name: Check offline Minkowski catalog and coverage
+        if: ${{ inputs.catalog == 'all' }}
         run: python scripts/check_reference.py --manifest testdata/minkowski-manifest.json --strict
+      - name: Rebuild and compare only new random v1 references
+        run: bash scripts/generate_reference.sh --manifest testdata/random-manifest.json --check
+      - name: Check random seed, order, hashes and selection
+        run: python scripts/check_reference.py --manifest testdata/random-manifest.json --strict
