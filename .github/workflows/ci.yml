@@ -47,3 +47,7 @@ jobs:
       - name: Smoke test the real JS geometry bridge
         working-directory: demo
         run: npm test
+      - name: Check bounded benchmark runner (no performance threshold)
+        run: |
+          python -m unittest discover -s scripts -p test_bench.py
+          bash scripts/bench.sh --target native --smoke --report _build/bench/smoke.json

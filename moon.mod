@@ -12,4 +12,4 @@ keywords = [ "geometry", "polygon" ]
 
 preferred_target = "native"
 
-description = "Integer polygon geometry and EvenOdd Boolean operations for MoonBit"
+description = "Integer and decimal polygon Boolean, PolyTree, offset, stroke, simplification and Minkowski Sum for MoonBit"

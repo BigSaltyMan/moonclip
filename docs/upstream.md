@@ -1,5 +1,7 @@
 # 上游来源与移植记录
 
+当前范围：整数 / 小数 Boolean、整数 PolyTree、闭合偏移、开放描边、显式简化、整数单图案 Minkowski Sum 已实现。下面按提交保留实际来源历史；“本笔未实现”等描述仅指对应历史阶段。当前公开差异与证据计数见 [related-work.md](related-work.md)，支持范围见 [scope.md](scope.md)。
+
 ## 固定参考
 
 - 仓库：https://github.com/AngusJohnson/Clipper2
@@ -68,8 +70,8 @@ C# 源码作为主要阅读与后续移植参考；固定版本的 C++ 实现作
 
 | 上游参考文件 | 计划用途与目标 |
 | --- | --- |
-| `CSharp/Clipper2Lib/Clipper.Engine.cs` / C++ 引擎的其余部分 | 后续开放路径；孔洞树已在 Commit 8 接入；EvenOdd 已在 Commit 6、NonZero 和私有正负规则已在 Commit 7 接入。 |
-| `CSharp/Clipper2Lib/Clipper.Offset.cs` | 后续偏移与描边；尚未建立 MoonBit 对应文件。 |
+| `CSharp/Clipper2Lib/Clipper.Engine.cs` / C++ 引擎的其余部分 | 开放路径参与 Boolean 仍未接入；孔洞树、四种闭合操作及私有正负规则已实现，具体见后续来源表。 |
+| `CSharp/Clipper2Lib/Clipper.Offset.cs` / `CPP/Clipper2Lib/src/clipper.offset.cpp` 的其他能力 | 闭合偏移、四种连接和开放描边已在 Commit 9—11 接入 offset.mbt / stroke.mbt；尚无 Joined / Polygon 端点或可变宽度回调等额外接口。 |
 
 已提供 C++ 参考适配器；Commit 3 时 MoonClip 算法兼容性尚未运行。后续引擎、偏移等按实际实现继续补充逐文件来源记录。
 
@@ -220,3 +222,9 @@ C# 源码作为主要阅读与后续移植参考；固定版本的 C++ 实现作
 | MoonClip自有 | minkowski.mbt、limits.mbt及v7构造/比较/报告 | 乘积预检、生成坐标诊断、累计账本、Result及完整轮廓证据。 |
 
 自有代码版权BigSaltyMan2026、BSL-1.0。运行库纯MoonBit，无新增依赖；C++仅独立参考。锁只增加minkowski_protocol_version=7；未实现MinkowskiDiff、小数扫掠或带孔图案集合。
+
+## Commit 18 来源核对与基准（2026-10-20）
+
+核对现有锁文件、LICENSE、生成公开接口及实际 MoonBit 文件，固定标签、完整 SHA、BSL-1.0 和原有文件映射保持不变；修正了早期计划表中偏移 / 描边尚未实现的过时描述。未下载或重建参考程序，也未修改参考、选择文件或适配器。
+
+新增 bench/ 和 scripts/bench.py 为 MoonClip 自行编写的确定性输入、公开调用、校验与报告逻辑，不复制上游基准。计时调用固定工具链自带 moonbitlang/core/bench 的单调时钟（Apache-2.0，作为标准库依赖，未复制源码），没有新增第三方依赖。几何运行库仍由 MoonBit 实现，本次未修改核心算法。结果与适用范围见 [benchmarks.md](benchmarks.md)。

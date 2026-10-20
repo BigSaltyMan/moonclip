@@ -1,0 +1,10 @@
+supported_targets = "native"
+
+import {
+  "BigSaltyMan/moonclip",
+  "moonbitlang/core/bench" @clock,
+  "moonbitlang/core/debug",
+  "moonbitlang/core/env",
+}
+
+pkgtype(kind: "executable")
