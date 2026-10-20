@@ -39,11 +39,11 @@ ZIP、report.json、package.log、consumer-native.log、consumer-js.log 位于 `
 
 ## 后续树能力版本发布前检查
 
-本节是后续检查事项，当前未选择新版本号，也未执行上传、创建标签、公开 Release 或赛事申报。已发布 0.1.0 的记录和上文历史核验保持原样。[升级说明](upgrade-trees.md)区分五个新增库入口与首版已提供的整数 Boolean 树，[增量验收](acceptance-trees.md)保留测试和历史 CI 归属。
+本节跟踪 0.2.0 候选的后续发布检查，版本已选择；尚未执行 0.2.0 上传、创建标签、公开 Release 或赛事申报。已发布 0.1.0 的记录和上文历史核验保持原样。[升级说明](upgrade-trees.md)区分五个新增库入口与首版已提供的整数 Boolean 树，[增量验收](acceptance-trees.md)保留测试和历史 CI 归属。
 
-- 确定拟发布版本，届时重新核对 Mooncakes 的实时版本规则、账号／模块归属与版本占用；准备文档不构成版本预留。
-- 在确定版本后同步元数据、消费者依赖与审计配置，再生成候选。当前沿用 0.1.0 元数据的产物只是含 Unreleased 内容的源码候选，不得覆盖已发布版本。
-- 执行 `python scripts/check_release.py --report _build/release-trees/report.json`。核对实际归档的精确文件集合、原始字节、大小、SHA-256、许可、来源与相对链接；升级和增量验收两份新文档均应分发。文件数按实际结果记录，不能沿用 Commit 23 的 48 文件作为固定要求。
+- 已确定拟发布版本为 0.2.0，正式上传前仍重新核对 Mooncakes 的实时版本规则、账号／模块归属与版本占用；准备文档不构成版本预留。
+- 本笔将元数据、消费者依赖与审计配置同步为 0.2.0，并重新生成准确版本的候选；Commit 24 沿用 0.1.0 元数据的产物只保留为历史候选，不得覆盖已发布版本。
+- 执行 `python scripts/check_release.py --report _build/release-0.2.0/report.json`。核对实际归档的精确文件集合、原始字节、大小、SHA-256、许可、来源与相对链接；升级和增量验收两份新文档均应分发。文件数按实际结果记录，不沿用 Commit 23 的 48 文件或 Commit 24 的 50 文件作为固定要求。
 - 在真实归档的仓库外解压消费者中，native、JS 各自执行 `boolean_tree`、`boolean_tree_d`、`offset_tree`、`offset_tree_d`、`stroke_tree`、`stroke_tree_d`；六个 `TREE_API_OK` 标记必须各出现一次，且总体成功标记有效。对照各自日志及 `consumers.<target>.tree_apis_checked`，不能用 native 结果代替 JS。
 - 核对编译没有修改解压库；逐成员路径和内容哈希对应拟发布提交。Windows、Linux 的 ZIP 各保存自己的大小和校验和，不要求归档时间戳或 ZIP 哈希相同。
 - 核对最终 SHA 的现有 Linux CI。库测试仍为两端各 2323，桥接 20，工具在本笔增加 5 项后为 281；保持参考 1384 案例／2276 能力检查，不扩大新入口的上游兼容性声明。浏览器和性能沿用原归属，不推导未测树性能。

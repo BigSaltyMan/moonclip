@@ -18,7 +18,7 @@ priv struct TreeDataD {
 }
 
 ///|
-/// Immutable topology from the quantized integer region. Available in Unreleased.
+/// Immutable topology from the quantized integer region. Introduced in 0.2.0.
 pub struct PolyTreeD {
   priv data : TreeDataD
 }

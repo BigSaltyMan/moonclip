@@ -637,7 +637,7 @@ fn offset_tree_execute(
 }
 
 ///|
-/// Final offset region with geometric parentage. Unreleased; not in 0.1.0.
+/// Final offset region with geometric parentage. Introduced in 0.2.0.
 pub fn offset_tree(
   paths : Paths64,
   delta : Double,

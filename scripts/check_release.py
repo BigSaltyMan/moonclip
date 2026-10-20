@@ -15,7 +15,7 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 MODULE = "BigSaltyMan/moonclip"
-VERSION = "0.1.0"
+VERSION = "0.2.0"
 EXPECTED = {
     "name": MODULE, "version": VERSION, "readme": "README.md", "license": "BSL-1.0",
     "repository": "https://github.com/BigSaltyMan/moonclip",

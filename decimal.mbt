@@ -498,7 +498,7 @@ fn decimal_tree_execute(
 
 ///|
 /// Boolean hierarchy of the quantized region, with decoded Double contours.
-/// Unreleased: not included in the published 0.1.0 package.
+/// Introduced in 0.2.0; not included in the published 0.1.0 package.
 pub fn boolean_tree_d(
   subject : PathsD,
   clip : PathsD,
@@ -565,7 +565,7 @@ fn decimal_offset_tree_execute(
 }
 
 ///|
-/// Offset hierarchy on the decimal grid. Unreleased; not in published 0.1.0.
+/// Offset hierarchy on the decimal grid. Introduced in 0.2.0.
 pub fn offset_tree_d(
   paths : PathsD,
   delta : Double,
@@ -653,7 +653,7 @@ fn decimal_stroke_tree_execute(
 }
 
 ///|
-/// Open-route stroke hierarchy on the decimal grid. Unreleased; not in 0.1.0.
+/// Open-route stroke hierarchy on the decimal grid. Introduced in 0.2.0.
 pub fn stroke_tree_d(
   path : PathD,
   width : Double,

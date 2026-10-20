@@ -27,9 +27,9 @@ moon add BigSaltyMan/moonclip@0.1.0
 
 Boolean 支持 Intersection、Union、Difference（Subject 减 Clip）、Xor，以及公开 EvenOdd / NonZero；Positive / Negative 仍是内部能力。Offset 和 Stroke 支持 Miter、Bevel、Square、Round 四种连接；Stroke 提供 Butt、Square、Round 三种端点。方向、边界框、精确两倍有向面积、点包含及无损重复点整理也已实现。完整接口见 [`pkg.generated.mbti`](pkg.generated.mbti)，入口默认值与限制见 [支持范围](docs/scope.md)。
 
-## 开发源码中的 Unreleased 能力
+## 0.2.0 发布候选与源码使用
 
-从当前仓库源码使用下列增量，**安装 Mooncakes 0.1.0 不包含这些新入口**。新增库入口共 5 个：小数 Boolean 树与整数／小数偏移树、描边树；整数 `boolean_tree` 已在首版提供。本笔未确定下一版版本号，也未执行发布。
+当前源码版本确定为 **0.2.0 发布候选，尚未正式发布**。从仓库源码使用下列增量，**安装 Mooncakes 0.1.0 不包含这些新入口**。新增库入口共 5 个：小数 Boolean 树与整数／小数偏移树、描边树；整数 `boolean_tree` 已在首版提供。此时仍使用上文已验证的 0.1.0 安装方式；0.2.0 的注册表安装命令须在正式上传与真实安装验证后另行提供。候选范围见 [0.2.0 说明](docs/release-0.2.0.md)。
 
 只需要结果边界可继续使用平铺入口；需要孔洞归属则直接调用对应树入口；已有树可用 `to_paths()` 取得独立轮廓副本，但会丢失显式层级。完整迁移路径见[树接口升级说明](docs/upgrade-trees.md)，历史 CI、测试口径与六入口候选消费者见[增量验收材料](docs/acceptance-trees.md)。
 
@@ -71,7 +71,7 @@ Minkowski: rectangle/polyline, offcenter/diagonal and closed route/hole OK
 MoonClip geometry, Boolean, PolyTree, offset, stroke, composition, decimal, simplify and Minkowski OK
 ```
 
-该包的 `moon.pkg` 导入根模块 `BigSaltyMan/moonclip`。当前源码示例还检查 Unreleased 小数树；已发布包中的旧示例和注册表消费者仍以 0.1.0 的接口为准。
+该包的 `moon.pkg` 导入根模块 `BigSaltyMan/moonclip`。当前 0.2.0 候选源码示例还检查小数树；已发布包中的旧示例和注册表消费者仍以 0.1.0 的接口为准。
 
 导入配置与随包示例相同（`cmd/example/moon.pkg`）：
 
@@ -96,7 +96,7 @@ npm run dev
 
 演示无 npm 依赖，无需先安装包。在 demo 目录运行 `npm test` 复用已构建产物做 20 项桥接／导出冒烟；`npm run build` 生成可静态托管的 `demo/dist`，`npm run build -- --reuse` 可只打包已有产物。SVG 独立打开并保留孔洞；JSON 保存原输入、参数、精度、真实结果及简化统计。输入变更或错误会禁用导出。
 
-开发演示还提供 **Unreleased 孔洞层级查看**：Boolean、Offset、Stroke 的整数／小数六个树入口可展开父子节点、选择边界高亮；SVG 仍只导出填充区域，树 JSON 使用版本 2 保存层级与可复现请求。平铺模式默认行为和版本 1 JSON 保持兼容，Minkowski 只支持平铺。
+0.2.0 候选源码的演示提供**孔洞层级查看**：Boolean、Offset、Stroke 的整数／小数六个树入口可展开父子节点、选择边界高亮；SVG 仍只导出填充区域，树 JSON 使用版本 2 保存层级与可复现请求。平铺模式默认行为和版本 1 JSON 保持兼容，Minkowski 只支持平铺。
 
 操作说明见 [demo.md](docs/demo.md)，三张主要场景截图及实际操作记录见 [浏览器验收](docs/demo-acceptance.md)。
 
@@ -109,7 +109,7 @@ bash scripts/bench.sh --target native --report _build/bench/report.json
 
 统一检查执行格式、接口、native / JS 回归、构建、CLI 示例和离线参考工具；普通 CI 另构建演示、执行桥接冒烟及一个极小基准入口。修改代码后运行 `moon info && moon fmt` 并审查接口变化。
 
-已发布 0.1.0 的正确性基线为**同一批 2234 项库测试**。Unreleased 树入口累计新增 89 项定向测试（小数 Boolean 33、偏移 27、描边 29），当前源码完整回归计数为 **2323**；演示的 20 项桥接测试独立统计，native、JS 分别执行，不相加。**1384 条独立参考案例**对应 2276 项能力检查，旧数据未改，也不宣称覆盖新增入口。固定种子只覆盖公开 Boolean 平铺结果。覆盖矩阵及既有执行证据见 [兼容报告](docs/compatibility.md)，失败缩减见 [随机回归说明](docs/random-regression.md)。
+已发布 0.1.0 的正确性基线为**同一批 2234 项库测试**。0.2.0 候选相对首版累计新增 89 项树定向测试（小数 Boolean 33、偏移 27、描边 29），当前源码完整回归计数为 **2323**；演示的 20 项桥接测试独立统计，native、JS 分别执行，不相加。**1384 条独立参考案例**对应 2276 项能力检查，旧数据未改，也不宣称覆盖新增入口。固定种子只覆盖公开 Boolean 平铺结果。覆盖矩阵及既有执行证据见 [兼容报告](docs/compatibility.md)，失败缩减见 [随机回归说明](docs/random-regression.md)。
 
 native release 的 11 个固定基准（含三个有上限的压力探针）已测量，环境、输入输出规模、中位数及最小 / 最大值见 [性能基线](docs/benchmarks.md)。没有测上游速度，不作跨库性能结论；CI 不设耗时阈值。
 

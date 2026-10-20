@@ -273,7 +273,7 @@ fn stroke_tree_execute(
 }
 
 ///|
-/// Final filled hierarchy of a single open route. Unreleased; not in 0.1.0.
+/// Final filled hierarchy of a single open route. Introduced in 0.2.0.
 pub fn stroke_tree(
   path : Path64,
   width : Double,
