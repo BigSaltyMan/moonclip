@@ -1,6 +1,6 @@
 # 0.1.0 发布候选检查清单
 
-状态：**待发布**。本笔准备候选归档与材料，不执行 Mooncakes 上传、GitHub Release 或正式申报；注册表安装验证尚未完成。
+状态：**0.1.0 已于 2026-10-20 正式发布**，注册表消费者与 GitHub Release 已完成，见 [发布记录](release-0.1.0.md)。下文保留候选审计方法和通用发布前检查；正式赛事申报未执行。
 
 ## 固定内容与分发
 
@@ -28,11 +28,11 @@ ZIP、report.json、package.log、consumer-native.log、consumer-js.log 位于 `
 
 提交前运行 moon info、moon fmt、git diff --check，审查根接口。最终完整 SHA、包校验和、消费者状态及同 SHA CI 链接由提交后的交付报告承载，见 [acceptance.md](acceptance.md)。未提交源码的检查保留父 SHA / dirty 标记，交付时以包内逐文件哈希核对最终提交，避免为填写自身 SHA 反复补提交。
 
-正式发布须后续明确授权，并在当时重新核对：
+发布前检查要求如下；本次已获得明确授权并完成第 1—3 项，公开 Release 也已创建，赛事申报仍未授权：
 
 1. Mooncakes 的版本规则、账号 / 模块名归属及 BigSaltyMan/moonclip@0.1.0 占用情况；准备阶段版本号不构成预留。
 2. 候选与拟发布提交一致，许可、元数据和实际归档审计通过。
 3. 上传成功后，在干净外部项目从注册表获取指定版本并运行消费者，成功后才能补安装命令及“Mooncakes 安装验证通过”。
 4. 公开 Release、申报提交及人员字段分别按授权和事实完成。
 
-[官方版本说明](https://docs.moonbitlang.com/en/latest/toolchain/moon/package-manage-tour.html)描述 SemVer 格式；发布时仍需核对实时服务端规则与占用。本笔不以旧经验替代当时检查。
+[官方版本说明](https://docs.moonbitlang.com/en/stable/toolchain/moon/package-manage-tour.html)描述 SemVer 格式。本次核对账号 BigSaltyMan、模块 / 版本发布前 404、服务端 dry-run 202 接受，随后正式上传 200；未来版本仍须重新核对实时规则与占用。

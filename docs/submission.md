@@ -1,6 +1,6 @@
 # MoonClip 成果说明
 
-仓库：https://github.com/BigSaltyMan/moonclip 。候选版本 **0.1.0，待发布**。项目用于二维区域构造与拓扑运算，运行库由 MoonBit 实现，已在 native / JS 验证。
+仓库：https://github.com/BigSaltyMan/moonclip 。版本 **0.1.0 已于 2026-10-20 发布**，注册表消费者 native / JS 通过，[GitHub Release](https://github.com/BigSaltyMan/moonclip/releases/tag/v0.1.0)已创建。项目用于二维区域构造与拓扑运算，运行库由 MoonBit 实现。
 
 ## 能力与贡献
 
@@ -25,10 +25,10 @@ MoonClip 面向二维区域构造与拓扑运算，提供多边形布尔运算�
 
 Positive / Negative 仍内部；简化不保证拓扑保持；Minkowski 仅整数单图案单路线；没有开放路径 Boolean、小数 PolyTree 或一般拓扑修复。合法输入仍可能触及数值或累计预算边界。
 
-当前仅准备候选与材料，不宣称 Mooncakes 已可安装、公开 Release 已发布或正式申报已提交。
+Mooncakes 发布、注册表安装验证和公开 Release 已完成，证据见 [release-0.1.0.md](release-0.1.0.md)。本次没有执行正式赛事申报。
 
 | 待确认字段 | 内容 |
 | --- | --- |
 | 申报人 / 团队 / 联系方式 | 待填 |
 | 组别 / 申报编号 / 指导信息 | 待填 |
-| 正式发布日期 / 注册表地址 / Release | 待授权并实际完成后填写 |
+| 正式发布 | 2026-10-20，BigSaltyMan/moonclip@0.1.0；链接见正式发布记录 |

@@ -1,8 +1,8 @@
 # Changelog
 
-## 0.1.0 — 待发布
+## 0.1.0 — 2026-10-20
 
-首个发布候选，尚未发布至 Mooncakes；没有注册表安装或公开 Release 的交付声明。
+已发布至 Mooncakes，并创建 [GitHub Release v0.1.0](https://github.com/BigSaltyMan/moonclip/releases/tag/v0.1.0)。发布源码为 `10a9a1012d5fb07a333936ea83ce22e1f98a03d5`；仓库外注册表消费者 native、JS 均通过，完整记录见 [正式发布验收](docs/release-0.1.0.md)。
 
 - 整数与统一十进制网格的小数 Boolean：Intersection、Union、Difference、Xor，公开 EvenOdd / NonZero。
 - 整数 PolyTree 外轮廓、孔洞与岛的层级及独立访问器。

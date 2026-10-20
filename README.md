@@ -1,8 +1,18 @@
 # MoonClip
 
-MoonClip 是用 MoonBit 实现的二维多边形几何库，提供整数与统一十进制网格的小数入口。当前为开发中的目标版本 **0.1.0**，尚未发布到 Mooncakes；发布前仍需确认模块名称可用性。运行库不依赖 C++ 或其他几何运行时，支持 native 和 JS。
+MoonClip 是用 MoonBit 实现的二维多边形几何库，提供整数与统一十进制网格的小数入口。**0.1.0 已于 2026-10-20 发布到 Mooncakes**，并完成仓库外 native / JS 注册表消费者验证。运行库不依赖 C++ 或其他几何运行时。
 
-首版内容见 [CHANGELOG](CHANGELOG.md)。[发布清单](docs/release-checklist.md)、[验收证据](docs/acceptance.md)和[成果说明](docs/submission.md)区分准备、实际候选消费者验证与正式发布；当前没有注册表安装成功的声明。
+首版内容见 [CHANGELOG](CHANGELOG.md)，下载与校验和见 [GitHub Release v0.1.0](https://github.com/BigSaltyMan/moonclip/releases/tag/v0.1.0)。[正式发布记录](docs/release-0.1.0.md)区分候选验收、注册表安装与既有 CI；[成果说明](docs/submission.md)保留来源、贡献和申报边界。
+
+## 从 Mooncakes 使用
+
+在自己的 MoonBit 模块中运行：
+
+```bash
+moon add BigSaltyMan/moonclip@0.1.0
+```
+
+在包的 moon.pkg 中导入 `BigSaltyMan/moonclip`，配置见下文。该版本从注册表获取后已在独立项目运行 native、JS；数值与预算边界仍按 [scope.md](docs/scope.md) 解释。
 
 ## 已实现的能力
 
@@ -46,7 +56,7 @@ Minkowski: rectangle/polyline, offcenter/diagonal and closed route/hole OK
 MoonClip geometry, Boolean, PolyTree, offset, stroke, composition, decimal, simplify and Minkowski OK
 ```
 
-该包的 `moon.pkg` 导入根模块 `BigSaltyMan/moonclip`。开发阶段从源码运行，Mooncakes 安装命令待实际发布并验证后补充。
+该包的 `moon.pkg` 导入根模块 `BigSaltyMan/moonclip`。源码示例和注册表消费者使用相同的公开接口。
 
 导入配置与随包示例相同（`cmd/example/moon.pkg`）：
 
@@ -58,7 +68,7 @@ import {
 pkgtype(kind: "executable")
 ```
 
-包导入配置与 [`cmd/example/main.mbt`](cmd/example/main.mbt) 是受检的使用起点，各类 API 按上表进入 [scope.md](docs/scope.md)。候选 ZIP 包含运行库、接口、该示例和文字文档；演示、测试、参考工具与基准从 Git 仓库使用。在仓库运行 `python scripts/check_release.py --report _build/release/report.json`，可审计正式归档，并对解压内容执行仓库外 native / JS 消费者。这不代表已从 Mooncakes 安装。
+包导入配置与 [`cmd/example/main.mbt`](cmd/example/main.mbt) 是受检的使用起点，各类 API 按上表进入 [scope.md](docs/scope.md)。发布 ZIP 包含运行库、接口、该示例和文字文档；演示、测试、参考工具与基准从 Git 仓库使用。`scripts/check_release.py` 只审计源码候选及解压消费者，不执行发布；本次真正的注册表安装验证另见 [发布记录](docs/release-0.1.0.md)。
 
 ## 浏览器交互演示
 
