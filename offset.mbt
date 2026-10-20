@@ -523,14 +523,18 @@ fn offset_options_error(options : OffsetOptions, stage : Stage) -> ClipError? {
 }
 
 ///|
-fn offset_execute(
+// Only the result extraction differs between flat and tree outputs. The empty
+// callback reuses the normalization result for flat output without extra fees.
+fn[T] offset_compute(
   paths : Paths64,
   delta : Double,
   fill_rule : FillRule,
   options : OffsetOptions,
   limits : ScanLimits,
+  extract : (ScanState) -> T raise ScanAbort,
+  empty : (Paths64, CallBudget) -> T raise ScanAbort,
   budget? : CallBudget,
-) -> Result[Paths64, ClipError] {
+) -> Result[T, ClipError] {
   let loc = location(OffsetParameters, None, None)
   if delta.is_nan() || delta.is_inf() {
     return Err(InvalidInput(loc, "Offset delta must be finite"))
@@ -542,16 +546,23 @@ fn offset_execute(
     Some(value) => value
     None => new_call_budget(limits)
   }
+  let limits = budget.limits
+  let rule = match fill_rule {
+    EvenOdd => Parity
+    NonZero => SignedNonZero
+  }
+  // A small distance still normalizes all operands. Extract the final tree
+  // here, while this scan owns cleanup; no second scan or flat snapshot.
+  if delta.abs() < 0.5 {
+    return boolean_compute(paths, [], Union, limits, rule, extract, budget~)
+  }
   let normalized = match
     boolean_compute(
       paths,
       [],
       Union,
       limits,
-      match fill_rule {
-        EvenOdd => Parity
-        NonZero => SignedNonZero
-      },
+      rule,
       fn(state) raise ScanAbort {
         output_extract(state, preserve_collinear=false)
       },
@@ -561,8 +572,10 @@ fn offset_execute(
     Err(error) => return Err(error)
   }
   // Normalization already produced independent, positive outer / negative hole rings.
-  if delta.abs() < 0.5 || normalized.is_empty() {
-    return Ok(normalized)
+  if normalized.is_empty() {
+    return Ok(empty(normalized, budget)) catch {
+      ScanAbort(error) => Err(error)
+    }
   }
   let generated = offset_generate(normalized, delta, options, budget) catch {
     ScanAbort(error) => return Err(error)
@@ -573,12 +586,70 @@ fn offset_execute(
     Union,
     limits,
     Positive,
-    fn(state) raise ScanAbort {
-      output_extract(state, preserve_collinear=false)
-    },
+    extract,
     budget~,
     internal_input=true,
   )
+}
+
+///|
+fn offset_execute(
+  paths : Paths64,
+  delta : Double,
+  fill_rule : FillRule,
+  options : OffsetOptions,
+  limits : ScanLimits,
+  budget? : CallBudget,
+) -> Result[Paths64, ClipError] {
+  offset_compute(
+    paths,
+    delta,
+    fill_rule,
+    options,
+    limits,
+    fn(state) raise ScanAbort {
+      output_extract(state, preserve_collinear=false)
+    },
+    fn(paths, _) { paths },
+    budget?,
+  )
+}
+
+///|
+fn offset_tree_execute(
+  paths : Paths64,
+  delta : Double,
+  fill_rule : FillRule,
+  options : OffsetOptions,
+  limits : ScanLimits,
+  budget? : CallBudget,
+) -> Result[PolyTree64, ClipError] {
+  offset_compute(
+    paths,
+    delta,
+    fill_rule,
+    options,
+    limits,
+    tree_build,
+    fn(_, budget) raise ScanAbort { tree_empty(budget) },
+    budget?,
+  )
+}
+
+///|
+/// Final offset region with geometric parentage. Unreleased; not in 0.1.0.
+pub fn offset_tree(
+  paths : Paths64,
+  delta : Double,
+  fill_rule? : FillRule = NonZero,
+  options? : OffsetOptions = Default::default(),
+  limits? : Limits = Default::default(),
+) -> Result[PolyTree64, ClipError] {
+  offset_tree_execute(paths, delta, fill_rule, options, {
+    input: limits,
+    max_nodes: 500000,
+    max_work: 5000000,
+  })
 }
 
 ///|

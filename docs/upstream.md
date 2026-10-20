@@ -1,6 +1,6 @@
 # 上游来源与移植记录
 
-当前范围：整数 / 小数 Boolean、整数 PolyTree 及 Unreleased 小数 PolyTree、闭合偏移、开放描边、显式简化、整数单图案 Minkowski Sum 已实现。下面按提交保留实际来源历史；“本笔未实现”等描述仅指对应历史阶段。当前公开差异与证据计数见 [related-work.md](related-work.md)，支持范围见 [scope.md](scope.md)。
+当前范围：整数 / 小数 Boolean、整数 PolyTree 及 Unreleased 小数 PolyTree、闭合偏移及 Unreleased 整数／小数偏移树、开放描边、显式简化、整数单图案 Minkowski Sum 已实现。下面按提交保留实际来源历史；“本笔未实现”等描述仅指对应历史阶段。当前公开差异与证据计数见 [related-work.md](related-work.md)，支持范围见 [scope.md](scope.md)。
 
 ## 固定参考
 
@@ -241,3 +241,11 @@ C# 源码作为主要阅读与后续移植参考；固定版本的 C++ 实现作
 | MoonClip 自有树存储与输出转换 | polytree_d.mbt | 直接迭代复制索引、深度及解码坐标；独立访问器与 DecimalOutput 计费，不重新计算包含关系。 |
 
 新增适配版权 BigSaltyMan 2026、BSL-1.0；运行库仍纯 MoonBit，无新增依赖。C++ 仍仅用于既有参考工具，本笔未运行参考重建。旧 1384 个独立参考案例、2276 项能力检查及选择文件保持原样，不宣称覆盖新小数树接口。新增定向测试另行记录。已发布 0.1.0 与 46 文件归档记录保持历史事实；CI 临时候选会包含新增根源码，不是重新发布 0.1.0。
+
+## Commit 21 闭合偏移树适配（Unreleased）
+
+复用既有固定 Clipper2 2.0.1 偏移移植和整数树构建，本笔没有新移植上游算法、下载来源或重建参考。新增 `offset_tree` / `offset_tree_d`，通过私有 `offset_compute` 共用参数检查、输入规范化、偏移生成及最终 Positive 清理，选择平铺或树提取。小距离在规范化回调内结束；规范化为空时用 `tree_empty` 计费构造，不增加扫描。旧平铺空结果不增加树费用。
+
+新增泛型结果适配、空树构造、小数输出衔接和预算／隔离测试为 MoonClip 自有实现，版权 BigSaltyMan 2026、BSL-1.0。`decimal_offset_tree_execute` 沿用量化和 `decimal_tree_output`，层级仅由最终整数区域确定，解码失败经过所属扫描清理。没有增加依赖，填充规则、舍入、默认限制及旧公开签名不变。
+
+27 项新库测试另计，原 1384 个参考案例、2276 项能力检查和参考文件不变；候选消费者从实际 ZIP 验证两个新入口，仍属 Unreleased，不覆盖已发布 0.1.0 或其标签。描边树未在本笔接入。

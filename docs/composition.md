@@ -1,6 +1,16 @@
 # Composition and cumulative resource protection
 
-## Internal fee table
+## Unreleased：Offset trees
+
+`offset_tree` and `offset_tree_d` return the final offset hierarchy in one cumulative call. This differs from the historical InsetThenTree recipe below, which intentionally composes two public calls with independent ledgers. Neither new entry is in published 0.1.0. The default fill is NonZero; the caller's rule is used for shared input normalization, while final cleanup keeps the existing internal Positive rule.
+
+For outer [0,0]–[40,40] and reversed hole [10,10]–[30,30], Miter +2 gives one root [-2,-2]–[42,42] and its reversed child [12,12]–[28,28], at depths 1 and 2. `run_offset_tree_example` asserts complete contours and hierarchy for integer and decimal units. The tree describes the final region: offsets can merge or split regions and remove holes; input order is not parentage.
+
+For abs(grid delta)<0.5, normalization extracts the final tree directly, including decimal conversion while the scan still owns cleanup. For a normal distance with empty normalized paths, the private empty-tree constructor charges four logical nodes (two arrays, data and tree wrappers) and one work unit before allocation, without another scan. Flat output returns its existing normalized empty array with no extra fee. Decimal empty conversion adds the existing four-node, one-work charge. Ordinary generation, cleanup, tree construction and decoding all retain the same ledger, including prior usage; intermediates are never refunded. Accessor copies occur after execution and retain the established ownership contract.
+
+The 27 new library tests and candidate consumers are separate from the unchanged eight reference catalogs. They do not enlarge the 1384-case / 2276-capability upstream compatibility claim.
+
+## Existing internal fee table
 
 InternalNodes counts logical allocation units: records and the container/slot charges listed below. It does not model allocator capacity, bytes, scalar temporaries or immutable Point64 objects. Fixed empty ScanState control containers are constant overhead; dynamic scratch and output storage are charged. Charges precede storage and are cumulative; releasing memory never refunds them.
 

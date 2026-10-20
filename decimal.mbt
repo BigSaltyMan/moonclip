@@ -515,6 +515,73 @@ pub fn boolean_tree_d(
 }
 
 ///|
+fn decimal_offset_tree_execute(
+  paths : PathsD,
+  delta : Double,
+  precision : Precision,
+  fill_rule : FillRule,
+  options : OffsetOptions,
+  limits : ScanLimits,
+  budget? : CallBudget,
+) -> Result[PolyTreeD, ClipError] {
+  let budget = match budget {
+    Some(value) => value
+    None => new_call_budget(limits)
+  }
+  try {
+    if delta.is_nan() || delta.is_inf() {
+      raise ScanAbort(
+        InvalidInput(
+          location(DecimalParameters, None, None),
+          "Offset distance must be finite",
+        ),
+      )
+    }
+    let scaled_delta = decimal_parameter(delta, precision)
+    let scaled_options = decimal_scaled_options(options, precision)
+    decimal_precheck(paths, [], precision, budget)
+    let (grid, _) = decimal_quantize(paths, [], precision, true, budget)
+    match
+      offset_compute(
+        grid,
+        scaled_delta,
+        fill_rule,
+        scaled_options,
+        budget.limits,
+        fn(state) raise ScanAbort {
+          decimal_tree_output(tree_build(state), precision, budget)
+        },
+        fn(_, budget) raise ScanAbort {
+          decimal_tree_output(tree_empty(budget), precision, budget)
+        },
+        budget~,
+      ) {
+      Ok(tree) => Ok(tree)
+      Err(error) => Err(decimal_error(error, precision))
+    }
+  } catch {
+    ScanAbort(error) => Err(decimal_error(error, precision))
+  }
+}
+
+///|
+/// Offset hierarchy on the decimal grid. Unreleased; not in published 0.1.0.
+pub fn offset_tree_d(
+  paths : PathsD,
+  delta : Double,
+  precision? : Precision = Default::default(),
+  fill_rule? : FillRule = NonZero,
+  options? : OffsetOptions = Default::default(),
+  limits? : Limits = Default::default(),
+) -> Result[PolyTreeD, ClipError] {
+  decimal_offset_tree_execute(paths, delta, precision, fill_rule, options, {
+    input: limits,
+    max_nodes: 500000,
+    max_work: 5000000,
+  })
+}
+
+///|
 pub fn offset_polygons_d(
   paths : PathsD,
   delta : Double,

@@ -22,17 +22,19 @@ printf 'Checking native target\n'
 moon check --target native --deny-warn
 mkdir -p _build/conformance
 moon test --target native | tee _build/conformance/all-native.log
-grep -Fxq "Total tests: 2267, passed: 2267, failed: 0." _build/conformance/all-native.log
+grep -Fxq "Total tests: 2294, passed: 2294, failed: 0." _build/conformance/all-native.log
 moon build --target native
 moon run --target native cmd/example
 printf 'Checking JS target\n'
 node --version
 moon check --target js --deny-warn
 moon test --target js | tee _build/conformance/all-js.log
-grep -Fxq "Total tests: 2267, passed: 2267, failed: 0." _build/conformance/all-js.log
+grep -Fxq "Total tests: 2294, passed: 2294, failed: 0." _build/conformance/all-js.log
 moon fmt --check
 mkdir -p _build/conformance
 for target in native js; do
+  { printf 'Selection: offset tree: *\n'; moon test --target "$target" --filter "offset tree: *"; } | tee "_build/conformance/offset-tree-$target.log"
+  grep -Fxq 'Total tests: 27, passed: 27, failed: 0.' "_build/conformance/offset-tree-$target.log"
   { printf 'Selection: decimal tree: *\n'; moon test --target "$target" --filter "decimal tree: *"; } | tee "_build/conformance/decimal-tree-$target.log"
   # Exact nonzero count: reject silently empty selections as well as failures.
   grep -Fxq 'Total tests: 33, passed: 33, failed: 0.' "_build/conformance/decimal-tree-$target.log"

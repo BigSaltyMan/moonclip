@@ -2,6 +2,10 @@
 
 ## Unreleased：小数孔洞树
 
+开发源码另提供 `offset_tree_d(paths, delta, precision=, fill_rule=, options=, limits=)`，返回 `Result[PolyTreeD, ClipError]`。默认 Precision=3、NonZero，沿用平铺偏移的参数验证和缩放规则；delta 与 ArcTolerance 随十进制倍率缩放，MiterLimit 不缩放。小距离判断针对缩放后的 delta，例如 Precision=3 时原单位 .001 对应整数距离 1，不能按原单位与 .5 比较。
+
+偏移树在共同规范化、生成与最终 Positive Union 后构建整数树，再通过下述同一转换函数解码。小距离在规范化扫描回调内构建并解码，规范化为空时用已计费的空树辅助，不追加扫描。正常及小距离回调失败均沿用所属扫描的清理路径，错误保留原有阶段。整个流程共用累计预算，不退款。小数树保存最终量化区域的层级，Precision、偏移造成的合并或孔洞消失都可能改变结果，不能沿用输入层级。该入口尚未包含在 0.1.0。
+
 `boolean_tree_d(subject, clip, operation, precision=, fill_rule=, limits=)` 返回 `Result[PolyTreeD, ClipError]`。参数与默认值同 `boolean_op_d`：Precision 默认 3、范围 0—6，EvenOdd 默认，NonZero 可选，四种 Boolean 操作均可用。**此入口仅开发源码可用，已发布 0.1.0 不包含它**。下文原有参考数量与 Commit 13 记录仍是历史证据。
 
 一次调用依次执行原始预检、闭合规则量化、私有 Boolean 求值、整数树构建及验证、小数树转换、扫描清理。转换在提取回调内完成，失败也经过同一清理路径，并沿用既有小数错误映射。旧 `decimal_execute`、整数树与平铺小数入口不变。
@@ -30,7 +34,7 @@
 
 分配前收费。N 节点、V 点时，根槽与孩子槽合计 N，新增节点费为 `4 + 5*N + 2*V`，工作费为 `1 + 2*N + V`；空树仍需 4 节点、1 工作。这是逻辑单位，不是物理字节或数组容量。执行结束后访问器的按需复制成本沿用整数树约定。额度不足返回完整 Err，不发布部分树，也不将输出节点号当作输入位置。
 
-受检 CLI 的 `run_decimal_tree_example` 构造边界为 ±5.25、±3.25、±1.25 的三层矩形，断言完整轮廓与层级。运行 `moon run --target native cmd/example`。新增 33 项 `decimal tree: *` 定向测试含手工预期、两个已锁定整数树案例的固定网格解码、隔离、预算边界及失败清理；native / JS 执行同一批，源码全量为 2234+33=2267。既有 1384 个参考案例、2276 项能力检查不变，不能解释为已覆盖新入口。
+受检 CLI 的 `run_decimal_tree_example` 构造边界为 ±5.25、±3.25、±1.25 的三层矩形，`run_offset_tree_example` 检查带孔区域的整数／小数偏移树。运行 `moon run --target native cmd/example`。33 项 `decimal tree: *` 测试及 27 项 `offset tree: *` 测试覆盖完整预期、层级、隔离、预算边界和失败清理；源码全量为 2234+33+27=2294。既有 1384 个参考案例、2276 项能力检查不变，不能解释为已覆盖新树入口。
 
 ## 既有小数数据模型
 

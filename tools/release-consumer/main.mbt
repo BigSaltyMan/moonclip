@@ -63,6 +63,65 @@ fn main raise {
     fail("Offset failed")
   }
   check_rect(expanded, rect(-2L, -2L, 24L, 24L))
+  // Both new Unreleased entries must be present in the audited ZIP itself.
+  let reverse_hole = Array::makei(hole.length(), fn(i) {
+    hole[hole.length() - 1 - i]
+  })
+  guard @moonclip.offset_tree([outer, reverse_hole], 2.0) is Ok(offset_tree) else {
+    fail("Offset tree failed")
+  }
+  assert_eq(offset_tree.roots().length(), 1)
+  let offset_root = offset_tree.roots()[0]
+  check_rect([offset_root.contour()], rect(-2L, -2L, 24L, 24L))
+  assert_eq(offset_root.depth(), 1)
+  assert_true(!offset_root.is_hole())
+  assert_eq(offset_root.children().length(), 1)
+  let offset_hole = offset_root.children()[0]
+  let inset_hole = rect(7L, 7L, 6L, 6L)
+  check_rect(
+    [offset_hole.contour()],
+    Array::makei(4, fn(i) { inset_hole[3 - i] }),
+  )
+  assert_eq(offset_hole.depth(), 2)
+  assert_true(offset_hole.is_hole())
+  assert_eq(offset_hole.children().length(), 0)
+  let decimal_input = [outer, reverse_hole].map(fn(path) {
+    path.map(fn(p) {
+      @moonclip.PointD::new(p.x.to_double() / 10.0, p.y.to_double() / 10.0)
+    })
+  })
+  guard @moonclip.offset_tree_d(decimal_input, 0.2) is Ok(decimal_tree) else {
+    fail("Decimal offset tree failed")
+  }
+  assert_eq(decimal_tree.roots().length(), 1)
+  let decimal_root = decimal_tree.roots()[0]
+  assert_eq(decimal_root.depth(), 1)
+  assert_true(!decimal_root.is_hole())
+  assert_eq(decimal_root.children().length(), 1)
+  let decimal_hole = decimal_root.children()[0]
+  assert_eq(decimal_hole.depth(), 2)
+  assert_true(decimal_hole.is_hole())
+  assert_eq(decimal_hole.children().length(), 0)
+  for
+    (actual, grid) in [
+      (decimal_root.contour(), offset_root.contour()),
+      (decimal_hole.contour(), offset_hole.contour()),
+    ] {
+    let expected = grid.map(fn(p) {
+      @moonclip.PointD::new(p.x.to_double() / 10.0, p.y.to_double() / 10.0)
+    })
+    assert_eq(actual.length(), expected.length())
+    let mut found = false
+    for shift = 0; shift < expected.length(); shift = shift + 1 {
+      if Array::makei(actual.length(), fn(i) {
+          actual[(i + shift) % actual.length()]
+        }) ==
+        expected {
+        found = true
+      }
+    }
+    assert_true(found)
+  }
   let route = [@moonclip.Point64::new(0L, 0L), @moonclip.Point64::new(20L, 0L)]
   guard @moonclip.stroke_polyline(route, 4.0, cap=Butt) is Ok(stroke) else {
     fail("Stroke failed")

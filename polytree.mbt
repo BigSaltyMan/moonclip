@@ -462,6 +462,14 @@ fn tree_verify_output(
 }
 
 ///|
+// Empty normalization needs no extra scan. Charge both array containers and
+// the data/tree wrappers before allocation, including one unit of build work.
+fn tree_empty(budget : CallBudget) -> PolyTree64 raise ScanAbort {
+  budget_spend(budget, 4, 1, location(PolyTree, None, None))
+  { data: { nodes: [], roots: [], }, }
+}
+
+///|
 fn boolean_tree_execute(
   subject : Paths64,
   clip : Paths64,

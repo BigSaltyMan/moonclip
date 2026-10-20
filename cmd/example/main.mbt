@@ -92,6 +92,7 @@ fn main raise {
   run_winding_example()
   run_tree_example()
   run_offset_example()
+  run_offset_tree_example()
   run_join_example()
   // Open-route widening.
   run_stroke_example()
@@ -104,6 +105,70 @@ fn main raise {
   println(
     "MoonClip geometry, Boolean, PolyTree, offset, stroke, composition, decimal, simplify and Minkowski OK",
   )
+}
+
+///|
+// Unreleased: one cumulative offset call produces the final hole hierarchy.
+fn run_offset_tree_example() -> Unit raise {
+  let input = [
+    example_rect(0L, 0L, 40L, 40L),
+    example_reverse(example_rect(10L, 10L, 20L, 20L)),
+  ]
+  guard @moonclip.offset_tree(input, 2.0) is Ok(tree) else {
+    fail("Expected holed offset tree")
+  }
+  assert_eq(tree.roots().length(), 1)
+  let root = tree.roots()[0]
+  assert_eq(root.depth(), 1)
+  assert_true(!root.is_hole())
+  example_result([root.contour()], [example_rect(-2L, -2L, 44L, 44L)])
+  assert_eq(root.children().length(), 1)
+  let hole = root.children()[0]
+  assert_eq(hole.depth(), 2)
+  assert_true(hole.is_hole())
+  assert_eq(hole.children().length(), 0)
+  example_result([hole.contour()], [
+    example_reverse(example_rect(12L, 12L, 16L, 16L)),
+  ])
+
+  let decimal = input.map(fn(path) {
+    path.map(fn(p) {
+      @moonclip.PointD::new(p.x.to_double() / 10.0, p.y.to_double() / 10.0)
+    })
+  })
+  guard @moonclip.offset_tree_d(decimal, 0.2) is Ok(decoded) else {
+    fail("Expected decimal holed offset tree")
+  }
+  assert_eq(decoded.roots().length(), 1)
+  let droot = decoded.roots()[0]
+  assert_eq(droot.depth(), 1)
+  assert_true(!droot.is_hole())
+  assert_eq(droot.children().length(), 1)
+  let dhole = droot.children()[0]
+  assert_eq(dhole.depth(), 2)
+  assert_true(dhole.is_hole())
+  assert_eq(dhole.children().length(), 0)
+  for
+    (actual, grid) in [
+      (droot.contour(), root.contour()),
+      (dhole.contour(), hole.contour()),
+    ] {
+    let expected = grid.map(fn(p) {
+      @moonclip.PointD::new(p.x.to_double() / 10.0, p.y.to_double() / 10.0)
+    })
+    assert_eq(actual.length(), expected.length())
+    // Ring start is unspecified; preserve every point and its winding.
+    let mut found = false
+    for shift = 0; shift < expected.length(); shift = shift + 1 {
+      if Array::makei(actual.length(), fn(i) {
+          actual[(i + shift) % actual.length()]
+        }) ==
+        expected {
+        found = true
+      }
+    }
+    assert_true(found)
+  }
 }
 
 ///|

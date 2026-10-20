@@ -41,6 +41,10 @@ pub fn offset_polygons(Array[Array[Point64]], Double, fill_rule? : FillRule, opt
 
 pub fn offset_polygons_d(Array[Array[PointD]], Double, precision? : Precision, fill_rule? : FillRule, options? : OffsetOptions, limits? : Limits) -> Result[Array[Array[PointD]], ClipError]
 
+pub fn offset_tree(Array[Array[Point64]], Double, fill_rule? : FillRule, options? : OffsetOptions, limits? : Limits) -> Result[PolyTree64, ClipError]
+
+pub fn offset_tree_d(Array[Array[PointD]], Double, precision? : Precision, fill_rule? : FillRule, options? : OffsetOptions, limits? : Limits) -> Result[PolyTreeD, ClipError]
+
 pub fn orientation(Point64, Point64, Point64, limits? : Limits) -> Result[Orientation, ClipError]
 
 pub fn point_in_polygon(Point64, Array[Point64], limits? : Limits) -> Result[PointLocation, ClipError]
