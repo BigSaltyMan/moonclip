@@ -2,9 +2,9 @@
 
 ## 固定来源
 
-MoonClip 参考 [Clipper2 2.0.1](https://github.com/AngusJohnson/Clipper2/tree/21ebba05db8894f0c7217ad35ea518080f324946)，标签 Clipper2_2.0.1，完整 SHA `21ebba05db8894f0c7217ad35ea518080f324946`，BSL-1.0。本次核对了[锁文件](../tools/oracle/upstream-lock.json)、[许可证](../LICENSE)、实际改写文件及[逐文件来源表](upstream.md)，未更换版本、归档或适配器。
+MoonClip 参考 [Clipper2 2.0.1](https://github.com/AngusJohnson/Clipper2/tree/21ebba05db8894f0c7217ad35ea518080f324946)，标签 Clipper2_2.0.1，完整 SHA `21ebba05db8894f0c7217ad35ea518080f324946`，BSL-1.0。本次核对了[锁文件](https://github.com/BigSaltyMan/moonclip/blob/6a116b45600cbe8ecd577664a71b50fdfa8ce5c0/tools/oracle/upstream-lock.json)、[许可证](../LICENSE)、实际改写文件及[逐文件来源表](upstream.md)，未更换版本、归档或适配器。
 
-C# 源码是主要引擎阅读与移植参考，偏移、简化、扫掠等实际来源以逐文件表为准。固定 C++ 引擎独立编译成测试参考程序，生成完整轮廓 / 树及其他预期；运行库由 MoonBit 实现。适配器的 nlohmann/json 3.12.0（MIT）仅用于工具解析，既不是 MoonClip 运行依赖，也不参与几何求值。许可记录见 [THIRD_PARTY_NOTICES.md](../tools/oracle/THIRD_PARTY_NOTICES.md)。
+C# 源码是主要引擎阅读与移植参考，偏移、简化、扫掠等实际来源以逐文件表为准。固定 C++ 引擎独立编译成测试参考程序，生成完整轮廓 / 树及其他预期；运行库由 MoonBit 实现。适配器的 nlohmann/json 3.12.0（MIT）仅用于工具解析，既不是 MoonClip 运行依赖，也不参与几何求值。许可记录见 [THIRD_PARTY_NOTICES.md](https://github.com/BigSaltyMan/moonclip/blob/6a116b45600cbe8ecd577664a71b50fdfa8ce5c0/tools/oracle/THIRD_PARTY_NOTICES.md)。
 
 ## 相同设计与公开差异
 
@@ -35,3 +35,16 @@ C# 源码是主要引擎阅读与移植参考，偏移、简化、扫掠等实�
 ## 性能结论的边界
 
 [性能基线](benchmarks.md)只测 MoonClip native 的完整公开调用，没有配对测量 C++ 或其他库，也未测 JS 性能。因此不作“接近 Clipper2”、跨库快慢或“纯量化开销”的结论。本次不扩展同类项目调研。
+
+## 与 MoonGeoKit 的区别
+
+2026-10-20 读取并核对 MoonGeoKit 固定提交 **0300c9cd7600c255011ddae96c9f7d929679e18a** 的 [公开 README](https://github.com/cn-xjr/moongeokit/blob/0300c9cd7600c255011ddae96c9f7d929679e18a/README.mbt.md)与[生成 API](https://github.com/cn-xjr/moongeokit/blob/0300c9cd7600c255011ddae96c9f7d929679e18a/pkg.generated.mbti)。下表限于当次公开内容，不推断其未来路线或性能。
+
+| 维度 | MoonClip | MoonGeoKit 当次公开接口 |
+| --- | --- | --- |
+| 主要用途 | 构造和生成合并、裁剪、缓冲及描边后的区域边界 | 基础几何关系、距离与包含、凸包、面积 / 周长 / 重心，以及空间候选检索 |
+| 区域结果 | boolean_op / boolean_tree、offset_polygons、stroke_polyline、minkowski_sum | README / 该 API 未列出这些多边形 Boolean、孔洞树和扫掠入口；Bounds::union 是包围盒并集 |
+| 查询与索引 | 精确方向、单轮廓 EvenOdd 点包含；无动态空间索引 | GridSpatialIndex 的 insert / update / remove（含批量）、query_bounds / query_point / query_nearest |
+| 坐标与输出 | Int64 限定网格、统一十进制 Precision、小数结果与结构化错误；演示导出 SVG / JSON | Double 基础类型、*_eps 容差谓词、GeoJSON 输出；不据此比较两者数值精度优劣 |
+
+MoonClip 面向二维区域构造与拓扑运算；MoonGeoKit 侧重基础关系和动态网格空间索引。一个可行用途是先用 MoonGeoKit 筛选空间候选对象，再用 MoonClip 生成合并、裁剪、缓冲或描边边界，形成互补。这是用途说明，本笔没有集成依赖、跨库适配或配对性能测量，不声称生态唯一、全面领先或更快。[成果说明](submission.md)引用本表，不维护另一份详细对照。

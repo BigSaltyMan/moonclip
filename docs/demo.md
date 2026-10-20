@@ -56,8 +56,8 @@ JSON格式为MoonClipDemo版本1，包含kernel、完整原始request（场景�
 
 ## 实际场景截图
 
-![区域Boolean](demo-screenshots/boolean.png)
+![区域Boolean](https://raw.githubusercontent.com/BigSaltyMan/moonclip/6a116b45600cbe8ecd577664a71b50fdfa8ce5c0/docs/demo-screenshots/boolean.png)
 
-![带孔偏移](demo-screenshots/offset.png)
+![带孔偏移](https://raw.githubusercontent.com/BigSaltyMan/moonclip/6a116b45600cbe8ecd577664a71b50fdfa8ce5c0/docs/demo-screenshots/offset.png)
 
-![路线加宽](demo-screenshots/stroke.png)
+![路线加宽](https://raw.githubusercontent.com/BigSaltyMan/moonclip/6a116b45600cbe8ecd577664a71b50fdfa8ce5c0/docs/demo-screenshots/stroke.png)

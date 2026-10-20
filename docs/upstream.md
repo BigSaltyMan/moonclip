@@ -50,7 +50,7 @@ C# 源码作为主要阅读与后续移植参考；固定版本的 C++ 实现作
 | 上述固定 C++ 参考程序的实际输出 | `testdata/upstream/expected/` | 保存分别执行的平铺轮廓与孔洞树，关联输入哈希，并由 Python 整数计算诊断指标；生成时全部 reference_only；当前能力状态见兼容性报告。 |
 | MoonClip 自行实现 | `tools/conformance/compare.py`、工具测试与比较器反例 | 只规范循环起点与同级排列，保留所有顶点、绕向、重复数量和父子层级；不使用 MoonClip 待实现算法作证。 |
 
-上游 C++ 文件保留 Angus Johnson 2010-2025 的版权与 BSL-1.0 许可头。上游源码与编译产物不提交；工具及自行构造数据为 BigSaltyMan 2026，BSL-1.0。构建源身份、依赖和许可核验见 [参考工具说明](../tools/oracle/README.md)。C# 继续是主要阅读与后续移植参考，C++ 是独立预期结果的生成实现。
+上游 C++ 文件保留 Angus Johnson 2010-2025 的版权与 BSL-1.0 许可头。上游源码与编译产物不提交；工具及自行构造数据为 BigSaltyMan 2026，BSL-1.0。构建源身份、依赖和许可核验见 [参考工具说明](https://github.com/BigSaltyMan/moonclip/blob/6a116b45600cbe8ecd577664a71b50fdfa8ce5c0/tools/oracle/README.md)。C# 继续是主要阅读与后续移植参考，C++ 是独立预期结果的生成实现。
 
 ## Commit 4 内部扫描结构与投影（2026-10-17）
 

@@ -2,6 +2,8 @@
 
 MoonClip 是用 MoonBit 实现的二维多边形几何库，提供整数与统一十进制网格的小数入口。当前为开发中的目标版本 **0.1.0**，尚未发布到 Mooncakes；发布前仍需确认模块名称可用性。运行库不依赖 C++ 或其他几何运行时，支持 native 和 JS。
 
+首版内容见 [CHANGELOG](CHANGELOG.md)。[发布清单](docs/release-checklist.md)、[验收证据](docs/acceptance.md)和[成果说明](docs/submission.md)区分准备、实际候选消费者验证与正式发布；当前没有注册表安装成功的声明。
+
 ## 已实现的能力
 
 | 用途 | 公开入口 | 成功结果 |
@@ -31,6 +33,8 @@ Boolean 支持 Intersection、Union、Difference（Subject 减 Clip）、Xor，�
 使用 [固定工具链](docs/toolchain.md)。Windows 使用 Git Bash；Linux 使用 Bash：
 
 ```bash
+git clone https://github.com/BigSaltyMan/moonclip.git
+cd moonclip
 moon run --target native cmd/example
 ```
 
@@ -43,6 +47,18 @@ MoonClip geometry, Boolean, PolyTree, offset, stroke, composition, decimal, simp
 ```
 
 该包的 `moon.pkg` 导入根模块 `BigSaltyMan/moonclip`。开发阶段从源码运行，Mooncakes 安装命令待实际发布并验证后补充。
+
+导入配置与随包示例相同（`cmd/example/moon.pkg`）：
+
+```moonbit
+import {
+  "BigSaltyMan/moonclip",
+}
+
+pkgtype(kind: "executable")
+```
+
+包导入配置与 [`cmd/example/main.mbt`](cmd/example/main.mbt) 是受检的使用起点，各类 API 按上表进入 [scope.md](docs/scope.md)。候选 ZIP 包含运行库、接口、该示例和文字文档；演示、测试、参考工具与基准从 Git 仓库使用。在仓库运行 `python scripts/check_release.py --report _build/release/report.json`，可审计正式归档，并对解压内容执行仓库外 native / JS 消费者。这不代表已从 Mooncakes 安装。
 
 ## 浏览器交互演示
 
@@ -74,4 +90,4 @@ native release 的 11 个固定基准（含三个有上限的压力探针）已�
 
 固定参考 **Clipper2 2.0.1 / `Clipper2_2.0.1` / `21ebba05db8894f0c7217ad35ea518080f324946`**，BSL-1.0。C# 是主要引擎阅读和移植参考；固定 C++ 实现作为测试参考适配器，仅用于生成和复核数据。普通 CI 读取已提交参考，不下载、构建或执行 C++。
 
-[来源与逐文件映射](docs/upstream.md) · [与固定上游的关系及差异](docs/related-work.md) · [参考适配器说明](tools/oracle/README.md) · [完整许可证](LICENSE)
+[来源与逐文件映射](docs/upstream.md) · [与固定上游的关系及差异](docs/related-work.md) · [参考适配器说明](https://github.com/BigSaltyMan/moonclip/blob/6a116b45600cbe8ecd577664a71b50fdfa8ce5c0/tools/oracle/README.md) · [完整许可证](LICENSE)

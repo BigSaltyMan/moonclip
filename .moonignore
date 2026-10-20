@@ -1,0 +1,24 @@
+# Library distribution; development evidence stays in the Git repository.
+/_build/
+/.moonbuild/
+/.mooncakes/
+/.tmp/
+/.github/
+/AGENTS.md
+/moonclip-development-plan.md
+/bench/
+/conformance/
+/demo/
+/scripts/
+/testdata/
+/tools/
+/cmd/conformance/
+/cmd/demo/
+/cmd/reduce_probe/
+**/*_test.mbt
+**/*_wbtest.mbt
+/docs/demo-screenshots/
+*.log
+*.pyc
+__pycache__/
+!/.moonignore

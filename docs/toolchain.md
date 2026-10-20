@@ -32,7 +32,7 @@ Linux native / JS 的实际结果以本次提交的 GitHub Actions 日志为准�
 
 MoonBit 工具链继续固定为上述版本，运行库和公开接口不因参考工具改变。C++ 参考工具实际使用 GNU C++ 14.2.0（MinGW-W64）、CMake 3.30.2、Ninja 1.12.1、Python 3.11.9，以 C++17 / Release 构建。136 个参考案例实际生成并重复重建核对成功；55 项离线工具测试与 10 项实际适配器集成测试通过。库的原有 71 项测试保持原样，本地 native 71/71、JS 71/71 均实际通过，native 构建和示例成功。
 
-普通 CI 不构建 C++；独立手动参考 workflow 另验证实际构建及全部重建。版本锁与来源见 tools/oracle/upstream-lock.json，参数、协议及验证细节见 [参考工具说明](../tools/oracle/README.md)。实际远端结果以对应提交的两份 Actions 日志为准，离线 CI 成功不替代参考构建/运行的证据。
+普通 CI 不构建 C++；独立手动参考 workflow 另验证实际构建及全部重建。版本锁与来源见 tools/oracle/upstream-lock.json，参数、协议及验证细节见 [参考工具说明](https://github.com/BigSaltyMan/moonclip/blob/6a116b45600cbe8ecd577664a71b50fdfa8ce5c0/tools/oracle/README.md)。实际远端结果以对应提交的两份 Actions 日志为准，离线 CI 成功不替代参考构建/运行的证据。
 
 ## Commit 4 本地结果（2026-10-17）
 
