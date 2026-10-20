@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- 新增 `boolean_tree_d`、`PolyTreeD` / `PolyNodeD` 及六个只读访问器，仅开发源码可用，未包含在已发布的 0.1.0 中。
+- 在同一次累计预算内构建整数孔洞树并解码坐标，保留父子关系、深度和方向；新增输出分配与工作计费，失败沿用整数求值清理路径。
+- 新增 33 项定向回归，native / JS 执行同一批；完整回归计数为 2267。旧 1384 个参考案例及 2276 项能力检查不变，不代表已覆盖新小数树入口。
+- CLI 示例增加小数外轮廓、孔洞和岛的完整轮廓与层级断言。没有更改既有整数树、小数平铺接口或发布标签，不自动发布新版本。
+
 ## 0.1.0 — 2026-10-20
 
 已发布至 Mooncakes，并创建 [GitHub Release v0.1.0](https://github.com/BigSaltyMan/moonclip/releases/tag/v0.1.0)。发布源码为 `10a9a1012d5fb07a333936ea83ce22e1f98a03d5`；仓库外注册表消费者 native、JS 均通过，完整记录见 [正式发布验收](docs/release-0.1.0.md)。

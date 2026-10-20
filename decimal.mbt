@@ -454,6 +454,67 @@ pub fn boolean_op_d(
 }
 
 ///|
+// Keep the PathsD executor unchanged. Conversion runs inside extraction so a
+// DecimalOutput failure takes boolean_compute's normal scan cleanup path.
+fn decimal_tree_execute(
+  subject : PathsD,
+  clip : PathsD,
+  operation : ClipType,
+  precision : Precision,
+  fill_rule : FillRule,
+  limits : ScanLimits,
+  budget? : CallBudget,
+) -> Result[PolyTreeD, ClipError] {
+  let budget = match budget {
+    Some(value) => value
+    None => new_call_budget(limits)
+  }
+  try {
+    decimal_precheck(subject, clip, precision, budget)
+    let (left, right) = decimal_quantize(subject, clip, precision, true, budget)
+    match
+      boolean_compute(
+        left,
+        right,
+        operation,
+        budget.limits,
+        if fill_rule == EvenOdd {
+          Parity
+        } else {
+          SignedNonZero
+        },
+        fn(state) raise ScanAbort {
+          decimal_tree_output(tree_build(state), precision, budget)
+        },
+        budget~,
+      ) {
+      Ok(tree) => Ok(tree)
+      Err(error) => Err(decimal_error(error, precision))
+    }
+  } catch {
+    ScanAbort(error) => Err(decimal_error(error, precision))
+  }
+}
+
+///|
+/// Boolean hierarchy of the quantized region, with decoded Double contours.
+/// Unreleased: not included in the published 0.1.0 package.
+pub fn boolean_tree_d(
+  subject : PathsD,
+  clip : PathsD,
+  operation : ClipType,
+  precision? : Precision = Default::default(),
+  fill_rule? : FillRule = EvenOdd,
+  limits? : Limits = Default::default(),
+) -> Result[PolyTreeD, ClipError] {
+  decimal_tree_execute(subject, clip, operation, precision, fill_rule, {
+    input: limits,
+    max_nodes: 500000,
+    max_work: 5000000,
+  })
+}
+
+///|
 pub fn offset_polygons_d(
   paths : PathsD,
   delta : Double,

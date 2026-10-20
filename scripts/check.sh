@@ -22,17 +22,20 @@ printf 'Checking native target\n'
 moon check --target native --deny-warn
 mkdir -p _build/conformance
 moon test --target native | tee _build/conformance/all-native.log
-grep -Fxq "Total tests: 2234, passed: 2234, failed: 0." _build/conformance/all-native.log
+grep -Fxq "Total tests: 2267, passed: 2267, failed: 0." _build/conformance/all-native.log
 moon build --target native
 moon run --target native cmd/example
 printf 'Checking JS target\n'
 node --version
 moon check --target js --deny-warn
 moon test --target js | tee _build/conformance/all-js.log
-grep -Fxq "Total tests: 2234, passed: 2234, failed: 0." _build/conformance/all-js.log
+grep -Fxq "Total tests: 2267, passed: 2267, failed: 0." _build/conformance/all-js.log
 moon fmt --check
 mkdir -p _build/conformance
 for target in native js; do
+  { printf 'Selection: decimal tree: *\n'; moon test --target "$target" --filter "decimal tree: *"; } | tee "_build/conformance/decimal-tree-$target.log"
+  # Exact nonzero count: reject silently empty selections as well as failures.
+  grep -Fxq 'Total tests: 33, passed: 33, failed: 0.' "_build/conformance/decimal-tree-$target.log"
   { printf 'Selection: reference minkowski paths: *\n'; moon test --target "$target" --filter "reference minkowski paths: *"; } | tee "_build/conformance/minkowski-$target.log"
   grep -Fxq 'Total tests: 144, passed: 144, failed: 0.' "_build/conformance/minkowski-$target.log"
   { printf 'Selection: reference simplify paths: *\n'; moon test --target "$target" --filter "reference simplify paths: *"; } | tee "_build/conformance/simplify-$target.log"

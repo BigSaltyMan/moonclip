@@ -98,6 +98,7 @@ fn main raise {
   run_composition_example()
   // Decimal units, explicit simplification and integer pattern sweeps.
   run_decimal_example()
+  run_decimal_tree_example()
   run_simplify_example()
   run_minkowski_example()
   println(
@@ -656,6 +657,52 @@ fn run_decimal_example() -> Unit raise {
       )
     ),
   )
+}
+
+///|
+fn example_decimal_ring(
+  path : @moonclip.PathD,
+  expected : @moonclip.PathD,
+) -> Unit raise {
+  assert_eq(path.length(), expected.length())
+  for start = 0; start < path.length(); start = start + 1 {
+    if path[start] == expected[0] {
+      for i = 0; i < path.length(); i = i + 1 {
+        assert_eq(path[(start + i) % path.length()], expected[i])
+      }
+      return
+    }
+  }
+  fail("Decimal tree contour differs from expected ring")
+}
+
+///|
+fn run_decimal_tree_example() -> Unit raise {
+  let outer = example_box_d(-5.25, -5.25, 5.25, 5.25)
+  let hole = example_box_d(-3.25, -3.25, 3.25, 3.25)
+  let island = example_box_d(-1.25, -1.25, 1.25, 1.25)
+  // EvenOdd accepts equal input winding; the returned hole is negative.
+  let expected = [
+    outer,
+    Array::makei(hole.length(), fn(i) { hole[hole.length() - 1 - i] }),
+    island,
+  ]
+  guard @moonclip.boolean_tree_d([outer, hole, island], [], @moonclip.Union)
+    is Ok(tree) else {
+    fail("Decimal tree failed")
+  }
+  let mut views = tree.roots()
+  for i = 0; i < 3; i = i + 1 {
+    assert_eq(views.length(), 1)
+    let node = views[0]
+    assert_eq(node.depth(), i + 1)
+    assert_eq(node.is_hole(), i == 1)
+    example_decimal_ring(node.contour(), expected[i])
+    views = node.children()
+  }
+  assert_eq(views.length(), 0)
+  assert_eq(tree.to_paths().length(), 3)
+  println("Decimal tree: outer/hole/island OK")
 }
 
 ///|

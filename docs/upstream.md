@@ -1,6 +1,6 @@
 # 上游来源与移植记录
 
-当前范围：整数 / 小数 Boolean、整数 PolyTree、闭合偏移、开放描边、显式简化、整数单图案 Minkowski Sum 已实现。下面按提交保留实际来源历史；“本笔未实现”等描述仅指对应历史阶段。当前公开差异与证据计数见 [related-work.md](related-work.md)，支持范围见 [scope.md](scope.md)。
+当前范围：整数 / 小数 Boolean、整数 PolyTree 及 Unreleased 小数 PolyTree、闭合偏移、开放描边、显式简化、整数单图案 Minkowski Sum 已实现。下面按提交保留实际来源历史；“本笔未实现”等描述仅指对应历史阶段。当前公开差异与证据计数见 [related-work.md](related-work.md)，支持范围见 [scope.md](scope.md)。
 
 ## 固定参考
 
@@ -228,3 +228,16 @@ C# 源码作为主要阅读与后续移植参考；固定版本的 C++ 实现作
 核对现有锁文件、LICENSE、生成公开接口及实际 MoonBit 文件，固定标签、完整 SHA、BSL-1.0 和原有文件映射保持不变；修正了早期计划表中偏移 / 描边尚未实现的过时描述。未下载或重建参考程序，也未修改参考、选择文件或适配器。
 
 新增 bench/ 和 scripts/bench.py 为 MoonClip 自行编写的确定性输入、公开调用、校验与报告逻辑，不复制上游基准。计时调用固定工具链自带 moonbitlang/core/bench 的单调时钟（Apache-2.0，作为标准库依赖，未复制源码），没有新增第三方依赖。几何运行库仍由 MoonBit 实现，本次未修改核心算法。结果与适用范围见 [benchmarks.md](benchmarks.md)。
+
+
+## Commit 20 小数孔洞树适配（Unreleased）
+
+固定 Clipper2 2.0.1、标签 Clipper2_2.0.1、SHA 21ebba05db8894f0c7217ad35ea518080f324946 及 BSL-1.0 均未变化。本笔没有新增上游算法移植，也未读取新的上游引擎作为实现来源。
+
+| 已有来源 / 自有适配 | MoonBit 文件 | 实际改动 |
+| --- | --- | --- |
+| 复用既有 Clipper2 参考移植的 Boolean 引擎及已验证整数树 | boolean.mbt、polytree.mbt（均未修改） | 通过现有提取回调调用 tree_build，拓扑、绕向验证仍由整数阶段完成。 |
+| MoonClip 自有十进制执行适配 | decimal.mbt | 新私有执行入口及 boolean_tree_d；共用预检、量化、错误映射与同一累计账本，不改旧小数执行器。 |
+| MoonClip 自有树存储与输出转换 | polytree_d.mbt | 直接迭代复制索引、深度及解码坐标；独立访问器与 DecimalOutput 计费，不重新计算包含关系。 |
+
+新增适配版权 BigSaltyMan 2026、BSL-1.0；运行库仍纯 MoonBit，无新增依赖。C++ 仍仅用于既有参考工具，本笔未运行参考重建。旧 1384 个独立参考案例、2276 项能力检查及选择文件保持原样，不宣称覆盖新小数树接口。新增定向测试另行记录。已发布 0.1.0 与 46 文件归档记录保持历史事实；CI 临时候选会包含新增根源码，不是重新发布 0.1.0。

@@ -14,7 +14,7 @@ moon add BigSaltyMan/moonclip@0.1.0
 
 在包的 moon.pkg 中导入 `BigSaltyMan/moonclip`，配置见下文。该版本从注册表获取后已在独立项目运行 native、JS；数值与预算边界仍按 [scope.md](docs/scope.md) 解释。
 
-## 已实现的能力
+## 已发布 0.1.0 的能力
 
 | 用途 | 公开入口 | 成功结果 |
 | --- | --- | --- |
@@ -26,6 +26,12 @@ moon add BigSaltyMan/moonclip@0.1.0
 | 单图案扫掠 | `minkowski_sum` | 整数平铺轮廓 |
 
 Boolean 支持 Intersection、Union、Difference（Subject 减 Clip）、Xor，以及公开 EvenOdd / NonZero；Positive / Negative 仍是内部能力。Offset 和 Stroke 支持 Miter、Bevel、Square、Round 四种连接；Stroke 提供 Butt、Square、Round 三种端点。方向、边界框、精确两倍有向面积、点包含及无损重复点整理也已实现。完整接口见 [`pkg.generated.mbti`](pkg.generated.mbti)，入口默认值与限制见 [支持范围](docs/scope.md)。
+
+## 开发源码中的 Unreleased 能力
+
+`boolean_tree_d(subject, clip, operation, precision=, fill_rule=, limits=)` 返回 `Result[PolyTreeD, ClipError]`，默认 Precision=3、EvenOdd。`PolyTreeD` 提供 `roots()` / `to_paths()`；节点提供 `contour()` / `children()` / `depth()` / `is_hole()`，访问器数组均独立复制。
+
+该入口只在当前开发源码中可用，**Mooncakes 0.1.0 不包含此接口**。层级沿用量化后整数区域已验证的拓扑，Precision 变化可能影响可表达关系；坐标解码为 Double，`to_paths()` 会丢失显式父子关系。用法及预算见 [小数树说明](docs/decimal.md#unreleased小数孔洞树)，可运行的完整断言见下文 CLI 示例。当前源码接口见 `.mbti`，不能据此推定已发布包具备新能力。
 
 ## 数据与使用边界
 
@@ -51,12 +57,13 @@ moon run --target native cmd/example
 [`cmd/example/main.mbt`](cmd/example/main.mbt) 是受检的公开调用示例，包含复制隔离、精确几何、Boolean / PolyTree、带孔偏移、路线描边、小数组合、显式简化和图案扫掠。它检查完整轮廓与错误，成功输出：
 
 ```text
+Decimal tree: outer/hole/island OK
 Simplify vertices: 9 -> 8; input_degenerate=[2]; degenerate=[2]; collapsed=[]; offset/tree OK
 Minkowski: rectangle/polyline, offcenter/diagonal and closed route/hole OK
 MoonClip geometry, Boolean, PolyTree, offset, stroke, composition, decimal, simplify and Minkowski OK
 ```
 
-该包的 `moon.pkg` 导入根模块 `BigSaltyMan/moonclip`。源码示例和注册表消费者使用相同的公开接口。
+该包的 `moon.pkg` 导入根模块 `BigSaltyMan/moonclip`。当前源码示例还检查 Unreleased 小数树；已发布包中的旧示例和注册表消费者仍以 0.1.0 的接口为准。
 
 导入配置与随包示例相同（`cmd/example/moon.pkg`）：
 
@@ -92,7 +99,7 @@ bash scripts/bench.sh --target native --report _build/bench/report.json
 
 统一检查执行格式、接口、native / JS 回归、构建、CLI 示例和离线参考工具；普通 CI 另构建演示、执行桥接冒烟及一个极小基准入口。修改代码后运行 `moon info && moon fmt` 并审查接口变化。
 
-正确性基线为**同一批 2234 项库测试**，native、JS 分别执行；**1384 条独立参考案例**对应 2276 项能力检查，不能重复相加为案例数。固定种子只覆盖公开 Boolean 平铺结果。覆盖矩阵及真实执行证据见 [兼容报告](docs/compatibility.md)，失败缩减见 [随机回归说明](docs/random-regression.md)。
+已发布 0.1.0 的正确性基线为**同一批 2234 项库测试**。Unreleased 新增 33 项 `decimal tree: *` 定向测试，当前源码完整回归计数为 **2267**，native、JS 分别执行，不相加。**1384 条独立参考案例**对应 2276 项能力检查，旧数据未改，也不宣称覆盖新增入口。固定种子只覆盖公开 Boolean 平铺结果。覆盖矩阵及既有执行证据见 [兼容报告](docs/compatibility.md)，失败缩减见 [随机回归说明](docs/random-regression.md)。
 
 native release 的 11 个固定基准（含三个有上限的压力探针）已测量，环境、输入输出规模、中位数及最小 / 最大值见 [性能基线](docs/benchmarks.md)。没有测上游速度，不作跨库性能结论；CI 不设耗时阈值。
 

@@ -17,6 +17,8 @@ pub fn boolean_op_d(Array[Array[PointD]], Array[Array[PointD]], ClipType, precis
 
 pub fn boolean_tree(Array[Array[Point64]], Array[Array[Point64]], ClipType, fill_rule? : FillRule, limits? : Limits) -> Result[PolyTree64, ClipError]
 
+pub fn boolean_tree_d(Array[Array[PointD]], Array[Array[PointD]], ClipType, precision? : Precision, fill_rule? : FillRule, limits? : Limits) -> Result[PolyTreeD, ClipError]
+
 pub fn bounds(Array[Point64], limits? : Limits) -> Result[Bounds64?, ClipError]
 
 pub fn copy_path(Array[Point64]) -> Array[Point64]
@@ -163,11 +165,25 @@ pub fn PolyNode64::contour(Self) -> Array[Point64]
 pub fn PolyNode64::depth(Self) -> Int
 pub fn PolyNode64::is_hole(Self) -> Bool
 
+pub struct PolyNodeD {
+  // private fields
+}
+pub fn PolyNodeD::children(Self) -> Array[Self]
+pub fn PolyNodeD::contour(Self) -> Array[PointD]
+pub fn PolyNodeD::depth(Self) -> Int
+pub fn PolyNodeD::is_hole(Self) -> Bool
+
 pub struct PolyTree64 {
   // private fields
 }
 pub fn PolyTree64::roots(Self) -> Array[PolyNode64]
 pub fn PolyTree64::to_paths(Self) -> Array[Array[Point64]]
+
+pub struct PolyTreeD {
+  // private fields
+}
+pub fn PolyTreeD::roots(Self) -> Array[PolyNodeD]
+pub fn PolyTreeD::to_paths(Self) -> Array[Array[PointD]]
 
 pub struct Precision {
   // private fields
