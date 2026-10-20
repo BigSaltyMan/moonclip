@@ -58,10 +58,10 @@
 
 截图保留在 `docs/demo-screenshots/tree-boolean.jpg`、`tree-offset.jpg`、`tree-stroke.jpg` 和 `tree-narrow.jpg`。实际下载 JSON、SVG 和验收收据位于本地忽略目录 `_build/commit23/`；SVG 的 HTTP 重开副本在 `demo/.qa/`。历史 Commit 17 的截图和记录保持原样。
 
-![Boolean 孔洞与岛](demo-screenshots/tree-boolean.jpg)
+![Boolean 孔洞与岛](https://raw.githubusercontent.com/BigSaltyMan/moonclip/fd047569a3d649fd6b2f08e07985ce364da8150a/docs/demo-screenshots/tree-boolean.jpg)
 
-![偏移孔洞选择](demo-screenshots/tree-offset.jpg)
+![偏移孔洞选择](https://raw.githubusercontent.com/BigSaltyMan/moonclip/fd047569a3d649fd6b2f08e07985ce364da8150a/docs/demo-screenshots/tree-offset.jpg)
 
-![描边孔洞选择](demo-screenshots/tree-stroke.jpg)
+![描边孔洞选择](https://raw.githubusercontent.com/BigSaltyMan/moonclip/fd047569a3d649fd6b2f08e07985ce364da8150a/docs/demo-screenshots/tree-stroke.jpg)
 
-![窄屏层级列表](demo-screenshots/tree-narrow.jpg)
+![窄屏层级列表](https://raw.githubusercontent.com/BigSaltyMan/moonclip/fd047569a3d649fd6b2f08e07985ce364da8150a/docs/demo-screenshots/tree-narrow.jpg)
