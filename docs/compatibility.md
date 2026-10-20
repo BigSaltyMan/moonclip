@@ -1595,7 +1595,7 @@ Absent / not applicable fields: clip_type, join_type, cap_type, precision, refer
 
 - Manifest selections are coverage, not fresh execution evidence.
 - Random v1 adds only public flat Boolean: three small configurations, four operations, two fill rules; no random trees, decimal, offset, stroke, simplification or Minkowski coverage.
-- Positive/Negative Boolean remain internal; no open-path Boolean, decimal tree, MinkowskiDiff, decimal Minkowski or multi-pattern holes API.
+- Positive/Negative Boolean remain internal; no open-path Boolean, MinkowskiDiff, decimal Minkowski or multi-pattern holes API. Unreleased decimal trees are not validated by these catalogs.
 - Simplification checks ordered vertices, statistics and degeneracy; it is not a general topology-preservation proof.
 - Individual field coverage does not imply the full Cartesian product is covered. Missing fields below mean absent/not applicable, not passed.
 
