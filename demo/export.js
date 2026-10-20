@@ -13,5 +13,6 @@ export function resultSvg(paths){
 }
 export function resultDocument(request,response){
   if(!response?.ok)throw new Error('No valid result to export');
-  return {format:'MoonClipDemo',version:1,kernel:'MoonBit',request:structuredClone(request),result:{paths:structuredClone(response.paths),mode:response.mode,precision:response.precision},simplification:structuredClone(response.simplification)};
+  const tree=response.output==='tree';
+  return {format:'MoonClipDemo',version:tree?2:1,kernel:'MoonBit',request:structuredClone(request),result:{paths:structuredClone(response.paths),mode:response.mode,precision:response.precision,...(tree?{output:'tree',tree:structuredClone(response.tree)}:{})},simplification:structuredClone(response.simplification)};
 }

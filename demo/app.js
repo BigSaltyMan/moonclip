@@ -2,9 +2,9 @@ import {cases,patterns} from './cases.js';
 import {viewFor,contourData,resultSvg,resultDocument} from './export.js';
 const $=id=>document.getElementById(id);
 const titles={boolean:'区域布尔',offset:'带孔偏移',stroke:'路线加宽',minkowski:'图案扫掠'};
-let scene='boolean',input=null,valid=null,requestId=0,view=null,ready=false;
+let scene='boolean',input=null,valid=null,requestId=0,view=null,ready=false,selectedNode=null;
 const worker=new Worker(new URL('./worker.js',import.meta.url),{type:'module'});
-worker.onerror=e=>showError({kind:'WorkerError',stage:'BrowserBridge',message:e.message});
+worker.onerror=e=>{requestId++;showError({kind:'WorkerError',stage:'BrowserBridge',message:e.message});};
 worker.onmessage=({data})=>{
   if(data.ready){ready=true;calculate();return;}
   if(data.id!==requestId)return;
@@ -15,14 +15,32 @@ worker.onmessage=({data})=>{
   $('status').textContent='计算完成';const units=input.mode==='decimal'?'小数 Precision '+input.precision:'整数';$('result-detail').textContent=scene==='minkowski'?'整数图案扫掠 · NonZero · 保留共线点':scene==='stroke'?`${units} · 完整宽度 ${input.params.width} · ${input.params.cap} / ${input.params.join}`:scene==='offset'?`${units} · 偏移 ${input.params.delta} · ${input.params.join} / ${input.params.fill_rule}`:`${units} · ${input.params.operation} / ${input.params.fill_rule}`;
   $('contours').textContent=r.paths.length;$('vertices').textContent=r.paths.reduce((n,p)=>n+p.length,0);$('elapsed').textContent=data.elapsed.toFixed(2);$('removed').textContent=r.simplification?.removed_vertices??0;
   $('error').hidden=true;$('export-svg').disabled=false;$('export-json').disabled=false;
-  fit();
+  renderTree();fit();
 };
+function clearTree(){selectedNode=null;$('tree-panel').hidden=true;$('tree-list').replaceChildren();$('tree-summary').textContent='';$('selection-detail').textContent='点击节点，定位对应轮廓。';$('clear-selection').disabled=true;}
+function selectNode(index){selectedNode=index;for(const b of $('tree-list').querySelectorAll('[data-node-index]'))b.setAttribute('aria-pressed',String(Number(b.dataset.nodeIndex)===index));$('clear-selection').disabled=index===null;$('selection-detail').textContent=index===null?'点击节点，定位对应轮廓。':`已选择 #${index} · ${valid.response.tree.nodes[index].is_hole?'孔洞':'外轮廓'} · 仅高亮边界`;draw();}
+function renderTree(){
+  clearTree();const tree=valid?.response.tree;if(!tree)return;
+  $('tree-panel').hidden=false;
+  let maxDepth=0;for(const n of tree.nodes)maxDepth=Math.max(maxDepth,n.depth);
+  $('tree-summary').textContent=`${tree.roots.length} 个根 · ${tree.nodes.length} 个轮廓 · 最大深度 ${maxDepth}`;
+  if(!tree.nodes.length){$('tree-list').textContent='空区域，没有可选择的轮廓。';return;}
+  const queue=tree.roots.map(index=>({index,container:$('tree-list')}));
+  for(let cursor=0;cursor<queue.length;cursor++){
+    const {index,container}=queue[cursor],node=tree.nodes[index];
+    const button=document.createElement('button');button.type='button';button.className='tree-node';button.dataset.nodeIndex=index;button.setAttribute('aria-pressed','false');button.textContent=`#${index} · 深度 ${node.depth} · ${node.is_hole?'孔洞':'外轮廓'} · ${valid.response.paths[index].length} 点`;button.onclick=event=>{event.preventDefault();event.stopPropagation();selectNode(index);};
+    let childContainer;
+    if(node.children.length){const details=document.createElement('details');details.open=true;const summary=document.createElement('summary');summary.append(button);childContainer=document.createElement('div');childContainer.className='tree-children';details.append(summary,childContainer);container.append(details);}
+    else container.append(button);
+    for(const child of node.children)queue.push({index:child,container:childContainer});
+  }
+}
 function showReport(report){$('simplification').hidden=!report;if(report)$('simplification-data').textContent=JSON.stringify(report,null,2);}
-function invalidate(){requestId++;valid=null;$('export-svg').disabled=true;$('export-json').disabled=true;$('status').textContent='输入已更新 · 待计算';$('result-detail').textContent='当前没有有效结果，计算后才可导出';for(const id of ['contours','vertices','elapsed','removed'])$(id).textContent='—';$('error').hidden=true;showReport(null);$('compute').disabled=false;draw();}
-function showError(error,report){valid=null;$('export-svg').disabled=true;$('export-json').disabled=true;$('compute').disabled=false;$('status').textContent='计算未完成';$('result-detail').textContent='检查错误信息，修正后重新计算';$('error').hidden=false;$('error').textContent=JSON.stringify(error,null,2);showReport(report);for(const id of ['contours','vertices','elapsed'])$(id).textContent='—';$('removed').textContent=report?.removed_vertices??'—';draw();}
+function invalidate(){requestId++;valid=null;clearTree();$('export-svg').disabled=true;$('export-json').disabled=true;$('status').textContent='输入已更新 · 待计算';$('result-detail').textContent='当前没有有效结果，计算后才可导出';for(const id of ['contours','vertices','elapsed','removed'])$(id).textContent='—';$('error').hidden=true;showReport(null);$('compute').disabled=false;draw();}
+function showError(error,report){valid=null;clearTree();$('export-svg').disabled=true;$('export-json').disabled=true;$('compute').disabled=false;$('status').textContent='计算未完成';$('result-detail').textContent='检查错误信息，修正后重新计算';$('error').hidden=false;$('error').textContent=JSON.stringify(error,null,2);showReport(report);for(const id of ['contours','vertices','elapsed'])$(id).textContent='—';$('removed').textContent=report?.removed_vertices??'—';draw();}
 function numeric(id){const value=$(id).value.trim();if(value==='')throw new Error('参数不能为空: '+id);const n=Number(value);if(!Number.isFinite(n))throw new Error('参数必须是有限数值: '+id);return n;}
 function readRequest(){
-  const r={version:1,scene,mode:$('mode').value,precision:numeric('precision'),params:{operation:$('operation').value,fill_rule:$('fill-rule').value,delta:numeric('delta'),width:numeric('width'),join:$('join').value,cap:$('cap').value,miter_limit:numeric('miter-limit'),arc_tolerance:numeric('arc-tolerance'),path_is_closed:$('closed').checked},simplify:{enabled:$('simplify').checked,epsilon:numeric('epsilon')}};
+  const r={version:1,scene,output:$('output').value,mode:$('mode').value,precision:numeric('precision'),params:{operation:$('operation').value,fill_rule:$('fill-rule').value,delta:numeric('delta'),width:numeric('width'),join:$('join').value,cap:$('cap').value,miter_limit:numeric('miter-limit'),arc_tolerance:numeric('arc-tolerance'),path_is_closed:$('closed').checked},simplify:{enabled:$('simplify').checked,epsilon:numeric('epsilon')}};
   const a=JSON.parse($('input-a').value);
   if(scene==='boolean'){r.subject=a;r.clip=JSON.parse($('input-b').value);}
   else if(scene==='offset')r.subject=a;
@@ -39,6 +57,7 @@ function setVisibility(){
   $('route-tabs').hidden=scene!=='stroke'&&scene!=='minkowski';
   $('stroke-tab').classList.toggle('selected',scene==='stroke');$('sweep-tab').classList.toggle('selected',scene==='minkowski');
   $('scene-title').textContent=titles[scene];
+  $('output').disabled=scene==='minkowski';if(scene==='minkowski')$('output').value='paths';
   $('mode').disabled=scene==='minkowski';if(scene==='minkowski'){$('mode').value='integer';$('simplify').checked=false;}
   $('precision').disabled=$('mode').value==='integer';$('simplify-control').hidden=scene==='minkowski';
   $('mode-badge').textContent=scene==='minkowski'?'仅整数':$('mode').value==='decimal'?'小数':'整数';
@@ -49,7 +68,7 @@ function setVisibility(){
 }
 function loadCase(){
   const c=structuredClone(cases[scene].find(c=>c.id===$('case').value)??cases[scene][0]);
-  $('mode').value=c.mode;$('precision').value=String(c.precision);$('simplify').checked=false;$('epsilon').value=.5;
+  $('output').value=c.output??'paths';$('mode').value=c.mode;$('precision').value=String(c.precision);$('simplify').checked=false;$('epsilon').value=.5;
   const p=c.params;
   for(const [id,key,fallback] of [['operation','operation','Intersection'],['fill-rule','fill_rule','EvenOdd'],['delta','delta',5],['width','width',12],['join','join','Miter'],['cap','cap','Butt'],['miter-limit','miter_limit',2],['arc-tolerance','arc_tolerance',.25]])$(id).value=p[key]??fallback;
   $('closed').checked=p.path_is_closed??false;$('input-a').value=JSON.stringify(c.subject??c.path,null,2);$('input-b').value=JSON.stringify(c.clip??c.pattern??[],null,2);
@@ -84,6 +103,7 @@ function draw(){
     }
     if(scene==='minkowski')objects.push(`<path d="M${-view.w/60},0h${view.w/30}M0,${-view.w/60}v${view.w/30}" stroke="#8265a6" stroke-width="2" vector-effect="non-scaling-stroke"/>`);
   }
+  if($('show-result').checked&&valid&&selectedNode!==null)objects.push(`<path data-selected-contour="${selectedNode}" d="${contourData([valid.response.paths[selectedNode]])}" fill="none" stroke="#d65a25" stroke-width="4" vector-effect="non-scaling-stroke"/>`);
   svg.innerHTML=`<g transform="scale(1,-1)">${objects.join('')}</g>`;
   $('legend').replaceChildren(...[...layers,{name:'MoonBit 结果',color:'#087f72'}].map(l=>{const span=document.createElement('span');const i=document.createElement('i');i.style.background=l.color;span.append(i,document.createTextNode(l.name));return span;}));
   $('view-label').textContent=`x: ${view.x.toFixed(1)} … ${(view.x+view.w).toFixed(1)} · y 向上`;
@@ -93,6 +113,7 @@ document.querySelectorAll('[data-scene]').forEach(b=>b.onclick=()=>switchScene(b
 $('stroke-tab').onclick=()=>switchScene('stroke');$('sweep-tab').onclick=()=>switchScene('minkowski');
 $('pattern-select').replaceChildren(...Object.entries(patterns).map(([id,p])=>new Option(p.label,id)));
 $('pattern-select').onchange=()=>{$('input-b').value=JSON.stringify(patterns[$('pattern-select').value].points,null,2);invalidate();fit();calculate();};
+$('output').onchange=calculate;$('clear-selection').onclick=()=>selectNode(null);
 $('case').onchange=loadCase;$('compute').onclick=calculate;
 for(const id of ['mode','precision','operation','fill-rule','delta','width','join','cap','miter-limit','arc-tolerance','closed','simplify','epsilon','input-a','input-b'])$(id).addEventListener('input',()=>{invalidate();setVisibility();draw();});
 for(const id of ['show-input','show-result'])$(id).onchange=draw;

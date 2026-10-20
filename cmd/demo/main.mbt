@@ -138,6 +138,70 @@ fn encode_decimal(paths : @moonclip.PathsD) -> Json {
 }
 
 ///|
+// One breadth-first traversal assigns both contour and node indices. No geometry
+// or relationship is inferred from coordinates or from a separate flat output.
+fn[T] encode_tree_nodes(
+  roots : Array[T],
+  contour : (T) -> Json,
+  children : (T) -> Array[T],
+  depth : (T) -> Int,
+  is_hole : (T) -> Bool,
+) -> (Json, Json) {
+  let queue = roots.copy()
+  let parents : Array[Int?] = Array::make(roots.length(), None)
+  let root_indices = Array::makei(roots.length(), fn(i) { i })
+  let paths = []
+  let nodes = []
+  for i = 0; i < queue.length(); i = i + 1 {
+    let node = queue[i]
+    let child_indices = []
+    for child in children(node) {
+      child_indices.push(queue.length())
+      queue.push(child)
+      parents.push(Some(i))
+    }
+    paths.push(contour(node))
+    nodes.push(
+      Json::object({
+        "parent": index_json(parents[i]),
+        "children": child_indices.to_json(),
+        "depth": depth(node).to_json(),
+        "is_hole": is_hole(node).to_json(),
+      }),
+    )
+  }
+  (
+    Json::array(paths),
+    Json::object({
+      "roots": root_indices.to_json(),
+      "nodes": Json::array(nodes),
+    }),
+  )
+}
+
+///|
+fn encode_tree(tree : @moonclip.PolyTree64) -> (Json, Json) {
+  encode_tree_nodes(
+    tree.roots(),
+    fn(n) { n.contour().map(fn(p) { [p.x.to_int(), p.y.to_int()] }).to_json() },
+    fn(n) { n.children() },
+    fn(n) { n.depth() },
+    fn(n) { n.is_hole() },
+  )
+}
+
+///|
+fn encode_tree_d(tree : @moonclip.PolyTreeD) -> (Json, Json) {
+  encode_tree_nodes(
+    tree.roots(),
+    fn(n) { n.contour().map(fn(p) { [p.x, p.y] }).to_json() },
+    fn(n) { n.children() },
+    fn(n) { n.depth() },
+    fn(n) { n.is_hole() },
+  )
+}
+
+///|
 fn stats(
   removed : Int,
   per_path : Array[Int],
@@ -228,6 +292,13 @@ fn execute(request : Json) -> Json raise DemoError {
   }
   let scene = text(r, "scene", "boolean")
   let mode = text(r, "mode", "integer")
+  let output = text(r, "output", "paths")
+  if output != "paths" && output != "tree" {
+    raise Input("Unknown output mode", None, None)
+  }
+  if scene == "minkowski" && output == "tree" {
+    raise Input("Minkowski supports paths output only", None, None)
+  }
   if mode != "integer" && mode != "decimal" {
     raise Input("Unknown coordinate mode", None, None)
   }
@@ -300,6 +371,7 @@ fn execute(request : Json) -> Json raise DemoError {
     @moonclip.Closed
   }
   let mut report = Json::null()
+  let mut tree = Json::null()
   let paths = if mode == "decimal" {
     let prepared = if enabled {
       let simple = value(
@@ -326,35 +398,81 @@ fn execute(request : Json) -> Json raise DemoError {
     }
     let a = prepared.iter().take(split).collect()
     let b = prepared.iter().drop(split).collect()
-    encode_decimal(
-      match scene {
-        "boolean" =>
-          value(
-            @moonclip.boolean_op_d(a, b, operation, precision~, fill_rule=rule),
-          )
-        "offset" =>
-          value(
-            @moonclip.offset_polygons_d(
-              a,
-              number(params, "delta", 4.0),
-              precision~,
-              fill_rule=rule,
-              options~,
-            ),
-          )
-        "stroke" =>
-          value(
-            @moonclip.stroke_polyline_d(
-              a[0],
-              number(params, "width", 8.0),
-              precision~,
-              cap~,
-              options~,
-            ),
-          )
-        _ => raise Input("Unknown decimal scene", None, None)
-      },
-    )
+    if output == "tree" {
+      let encoded = encode_tree_d(
+        match scene {
+          "boolean" =>
+            value(
+              @moonclip.boolean_tree_d(
+                a,
+                b,
+                operation,
+                precision~,
+                fill_rule=rule,
+              ),
+            )
+          "offset" =>
+            value(
+              @moonclip.offset_tree_d(
+                a,
+                number(params, "delta", 4.0),
+                precision~,
+                fill_rule=rule,
+                options~,
+              ),
+            )
+          "stroke" =>
+            value(
+              @moonclip.stroke_tree_d(
+                a[0],
+                number(params, "width", 8.0),
+                precision~,
+                cap~,
+                options~,
+              ),
+            )
+          _ => raise Input("Unknown decimal scene", None, None)
+        },
+      )
+      tree = encoded.1
+      encoded.0
+    } else {
+      encode_decimal(
+        match scene {
+          "boolean" =>
+            value(
+              @moonclip.boolean_op_d(
+                a,
+                b,
+                operation,
+                precision~,
+                fill_rule=rule,
+              ),
+            )
+          "offset" =>
+            value(
+              @moonclip.offset_polygons_d(
+                a,
+                number(params, "delta", 4.0),
+                precision~,
+                fill_rule=rule,
+                options~,
+              ),
+            )
+          "stroke" =>
+            value(
+              @moonclip.stroke_polyline_d(
+                a[0],
+                number(params, "width", 8.0),
+                precision~,
+                cap~,
+                options~,
+              ),
+            )
+          _ => raise Input("Unknown decimal scene", None, None)
+        },
+      )
+    }
   } else {
     let originals = integer_paths(all)
     let prepared = if enabled {
@@ -381,49 +499,80 @@ fn execute(request : Json) -> Json raise DemoError {
     }
     let a = prepared.iter().take(split).collect()
     let b = prepared.iter().drop(split).collect()
-    encode_paths(
-      match scene {
-        "boolean" =>
-          value(@moonclip.boolean_op(a, b, operation, fill_rule=rule))
-        "offset" =>
-          value(
-            @moonclip.offset_polygons(
-              a,
-              number(params, "delta", 4.0),
-              fill_rule=rule,
-              options~,
-            ),
-          )
-        "stroke" =>
-          value(
-            @moonclip.stroke_polyline(
-              a[0],
-              number(params, "width", 8.0),
-              cap~,
-              options~,
-            ),
-          )
-        "minkowski" => {
-          let pattern = integer_paths(
-            coordinates(Json::array([r.get("pattern").unwrap_or(empty)])),
-          )
-          value(
-            @moonclip.minkowski_sum(
-              pattern[0],
-              a[0],
-              flag(params, "path_is_closed", false),
-            ),
-          )
-        }
-        _ => raise Input("Unknown integer scene", None, None)
-      },
-    )
+    if output == "tree" {
+      let encoded = encode_tree(
+        match scene {
+          "boolean" =>
+            value(@moonclip.boolean_tree(a, b, operation, fill_rule=rule))
+          "offset" =>
+            value(
+              @moonclip.offset_tree(
+                a,
+                number(params, "delta", 4.0),
+                fill_rule=rule,
+                options~,
+              ),
+            )
+          "stroke" =>
+            value(
+              @moonclip.stroke_tree(
+                a[0],
+                number(params, "width", 8.0),
+                cap~,
+                options~,
+              ),
+            )
+          _ => raise Input("Unknown integer scene", None, None)
+        },
+      )
+      tree = encoded.1
+      encoded.0
+    } else {
+      encode_paths(
+        match scene {
+          "boolean" =>
+            value(@moonclip.boolean_op(a, b, operation, fill_rule=rule))
+          "offset" =>
+            value(
+              @moonclip.offset_polygons(
+                a,
+                number(params, "delta", 4.0),
+                fill_rule=rule,
+                options~,
+              ),
+            )
+          "stroke" =>
+            value(
+              @moonclip.stroke_polyline(
+                a[0],
+                number(params, "width", 8.0),
+                cap~,
+                options~,
+              ),
+            )
+          "minkowski" => {
+            let pattern = integer_paths(
+              coordinates(Json::array([r.get("pattern").unwrap_or(empty)])),
+            )
+            value(
+              @moonclip.minkowski_sum(
+                pattern[0],
+                a[0],
+                flag(params, "path_is_closed", false),
+              ),
+            )
+          }
+          _ => raise Input("Unknown integer scene", None, None)
+        },
+      )
+    }
   }
-  Json::object({
+  let response = {
     "ok": true.to_json(),
     "kernel": "MoonBit".to_json(),
     "scene": scene.to_json(),
     "mode": mode.to_json(),
+    "output": output.to_json(),
     "precision": if mode == "decimal" {
       digits.to_json()
     } else {
@@ -431,7 +580,11 @@ fn execute(request : Json) -> Json raise DemoError {
     },
     "paths": paths,
     "simplification": report,
-  })
+  }
+  if output == "tree" {
+    response["tree"] = tree
+  }
+  Json::object(response)
 }
 
 ///|

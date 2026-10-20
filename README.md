@@ -90,7 +90,9 @@ npm run dev
 
 打开 **http://127.0.0.1:4173**。区域 Boolean、带孔偏移、路线加宽三个场景可切换整数 / 小数及 Precision；路线页签另有**仅整数**的图案扫掠。显式简化默认关闭，出现退化时显示报告并停止后续计算。计算调用 MoonBit 核心，JS 处理交互、绘制和下载。
 
-演示无 npm 依赖，无需先安装包。在 demo 目录运行 `npm test` 复用已构建产物做 7 项桥接冒烟；`npm run build` 生成可静态托管的 `demo/dist`，`npm run build -- --reuse` 可只打包已有产物。SVG 独立打开并保留孔洞；JSON 保存原输入、参数、精度、真实结果及简化统计。输入变更或错误会禁用导出。
+演示无 npm 依赖，无需先安装包。在 demo 目录运行 `npm test` 复用已构建产物做 20 项桥接／导出冒烟；`npm run build` 生成可静态托管的 `demo/dist`，`npm run build -- --reuse` 可只打包已有产物。SVG 独立打开并保留孔洞；JSON 保存原输入、参数、精度、真实结果及简化统计。输入变更或错误会禁用导出。
+
+开发演示还提供 **Unreleased 孔洞层级查看**：Boolean、Offset、Stroke 的整数／小数六个树入口可展开父子节点、选择边界高亮；SVG 仍只导出填充区域，树 JSON 使用版本 2 保存层级与可复现请求。平铺模式默认行为和版本 1 JSON 保持兼容，Minkowski 只支持平铺。
 
 操作说明见 [demo.md](docs/demo.md)，三张主要场景截图及实际操作记录见 [浏览器验收](docs/demo-acceptance.md)。
 
@@ -103,7 +105,7 @@ bash scripts/bench.sh --target native --report _build/bench/report.json
 
 统一检查执行格式、接口、native / JS 回归、构建、CLI 示例和离线参考工具；普通 CI 另构建演示、执行桥接冒烟及一个极小基准入口。修改代码后运行 `moon info && moon fmt` 并审查接口变化。
 
-已发布 0.1.0 的正确性基线为**同一批 2234 项库测试**。Unreleased 新增 33 项 `decimal tree: *` 定向测试，当前源码完整回归计数为 **2267**，native、JS 分别执行，不相加。**1384 条独立参考案例**对应 2276 项能力检查，旧数据未改，也不宣称覆盖新增入口。固定种子只覆盖公开 Boolean 平铺结果。覆盖矩阵及既有执行证据见 [兼容报告](docs/compatibility.md)，失败缩减见 [随机回归说明](docs/random-regression.md)。
+已发布 0.1.0 的正确性基线为**同一批 2234 项库测试**。Unreleased 树入口累计新增 89 项定向测试（小数 Boolean 33、偏移 27、描边 29），当前源码完整回归计数为 **2323**；演示的 20 项桥接测试独立统计，native、JS 分别执行，不相加。**1384 条独立参考案例**对应 2276 项能力检查，旧数据未改，也不宣称覆盖新增入口。固定种子只覆盖公开 Boolean 平铺结果。覆盖矩阵及既有执行证据见 [兼容报告](docs/compatibility.md)，失败缩减见 [随机回归说明](docs/random-regression.md)。
 
 native release 的 11 个固定基准（含三个有上限的压力探针）已测量，环境、输入输出规模、中位数及最小 / 最大值见 [性能基线](docs/benchmarks.md)。没有测上游速度，不作跨库性能结论；CI 不设耗时阈值。
 
