@@ -96,6 +96,7 @@ fn main raise {
   run_join_example()
   // Open-route widening.
   run_stroke_example()
+  run_stroke_tree_example()
   run_composition_example()
   // Decimal units, explicit simplification and integer pattern sweeps.
   run_decimal_example()
@@ -108,7 +109,75 @@ fn main raise {
 }
 
 ///|
-// Unreleased: one cumulative offset call produces the final hole hierarchy.
+// Unreleased: one cumulative open-route stroke produces its filled hierarchy.
+fn run_stroke_tree_example() -> Unit raise {
+  let line = [@moonclip.Point64::new(0L, 0L), @moonclip.Point64::new(20L, 0L)]
+  guard @moonclip.stroke_tree(line, 4.0) is Ok(straight) else {
+    fail("Expected straight stroke tree")
+  }
+  assert_eq(straight.roots().length(), 1)
+  assert_eq(straight.roots()[0].depth(), 1)
+  assert_true(!straight.roots()[0].is_hole())
+  assert_eq(straight.roots()[0].children().length(), 0)
+  example_result(straight.to_paths(), [example_rect(0L, -2L, 20L, 4L)])
+  let route = example_rect(0L, 0L, 30L, 30L)
+  route.push(route[0]) // Still an open route with two Square caps.
+  guard @moonclip.stroke_tree(route, 4.0, cap=Square) is Ok(tree) else {
+    fail("Expected holed stroke tree")
+  }
+  let expected = [
+    example_rect(-2L, -2L, 34L, 34L),
+    example_reverse(example_rect(2L, 2L, 26L, 26L)),
+  ]
+  assert_eq(tree.roots().length(), 1)
+  let root = tree.roots()[0]
+  assert_eq(root.depth(), 1)
+  assert_true(!root.is_hole())
+  assert_eq(root.children().length(), 1)
+  let hole = root.children()[0]
+  assert_eq(hole.depth(), 2)
+  assert_true(hole.is_hole())
+  assert_eq(hole.children().length(), 0)
+  example_result([root.contour()], [expected[0]])
+  example_result([hole.contour()], [expected[1]])
+  let decimal = route.map(fn(p) {
+    @moonclip.PointD::new(p.x.to_double() / 10.0, p.y.to_double() / 10.0)
+  })
+  guard @moonclip.stroke_tree_d(decimal, 0.4, cap=Square) is Ok(decoded) else {
+    fail("Expected decimal stroke tree")
+  }
+  assert_eq(decoded.roots().length(), 1)
+  let droot = decoded.roots()[0]
+  assert_eq(droot.depth(), 1)
+  assert_true(!droot.is_hole())
+  assert_eq(droot.children().length(), 1)
+  let dhole = droot.children()[0]
+  assert_eq(dhole.depth(), 2)
+  assert_true(dhole.is_hole())
+  assert_eq(dhole.children().length(), 0)
+  for
+    (actual, grid) in [
+      (droot.contour(), expected[0]),
+      (dhole.contour(), expected[1]),
+    ] {
+    let ring = grid.map(fn(p) {
+      @moonclip.PointD::new(p.x.to_double() / 10.0, p.y.to_double() / 10.0)
+    })
+    assert_eq(actual.length(), ring.length())
+    let mut found = false
+    for shift = 0; shift < ring.length(); shift = shift + 1 {
+      if Array::makei(actual.length(), fn(i) {
+          actual[(i + shift) % actual.length()]
+        }) ==
+        ring {
+        found = true
+      }
+    }
+    assert_true(found)
+  }
+}
+
+///|
 fn run_offset_tree_example() -> Unit raise {
   let input = [
     example_rect(0L, 0L, 40L, 40L),

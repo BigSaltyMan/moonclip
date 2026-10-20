@@ -164,14 +164,18 @@ fn stroke_generate(
 }
 
 ///|
-fn stroke_execute(
+// Shared open-route preparation and generation; select the final representation
+// while cleanup still belongs to the scan. Empty routes never start a scan.
+fn[T] stroke_compute(
   path : Path64,
   width : Double,
   cap : CapType,
   options : OffsetOptions,
   limits : ScanLimits,
+  extract : (ScanState) -> T raise ScanAbort,
+  empty : (CallBudget) -> T raise ScanAbort,
   budget? : CallBudget,
-) -> Result[Paths64, ClipError] {
+) -> Result[T, ClipError] {
   if width.is_nan() || width.is_inf() || width < 0.0 {
     return Err(
       InvalidInput(
@@ -207,7 +211,7 @@ fn stroke_execute(
     ScanAbort(error) => return Err(error)
   }
   if width < 1.0 || prepared.length() < 2 {
-    return Ok([])
+    return Ok(empty(budget)) catch { ScanAbort(error) => Err(error) }
   }
   let generated = stroke_generate(prepared, width / 2.0, cap, options, budget) catch {
     ScanAbort(error) => return Err(error)
@@ -216,14 +220,72 @@ fn stroke_execute(
     generated,
     [],
     Union,
-    limits,
+    budget.limits,
     Positive,
-    fn(state) raise ScanAbort {
-      output_extract(state, preserve_collinear=false)
-    },
+    extract,
     budget~,
     internal_input=true,
   )
+}
+
+///|
+fn stroke_execute(
+  path : Path64,
+  width : Double,
+  cap : CapType,
+  options : OffsetOptions,
+  limits : ScanLimits,
+  budget? : CallBudget,
+) -> Result[Paths64, ClipError] {
+  stroke_compute(
+    path,
+    width,
+    cap,
+    options,
+    limits,
+    fn(state) raise ScanAbort {
+      output_extract(state, preserve_collinear=false)
+    },
+    fn(_) { [] },
+    budget?,
+  )
+}
+
+///|
+fn stroke_tree_execute(
+  path : Path64,
+  width : Double,
+  cap : CapType,
+  options : OffsetOptions,
+  limits : ScanLimits,
+  budget? : CallBudget,
+) -> Result[PolyTree64, ClipError] {
+  stroke_compute(
+    path,
+    width,
+    cap,
+    options,
+    limits,
+    tree_build,
+    tree_empty,
+    budget?,
+  )
+}
+
+///|
+/// Final filled hierarchy of a single open route. Unreleased; not in 0.1.0.
+pub fn stroke_tree(
+  path : Path64,
+  width : Double,
+  cap? : CapType = Butt,
+  options? : OffsetOptions = Default::default(),
+  limits? : Limits = Default::default(),
+) -> Result[PolyTree64, ClipError] {
+  stroke_tree_execute(path, width, cap, options, {
+    input: limits,
+    max_nodes: 500000,
+    max_work: 5000000,
+  })
 }
 
 ///|

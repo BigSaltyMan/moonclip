@@ -315,7 +315,7 @@ def coverage_matrix(include_random=True):
     return dict(cases=len(all_ids),capability_checks=sum(r['capability_checks'] for r in rows),catalogs=rows,
         limitations=['Manifest selections are coverage, not fresh execution evidence.',
           'Random v1 adds only public flat Boolean: three small configurations, four operations, two fill rules; no random trees, decimal, offset, stroke, simplification or Minkowski coverage.',
-          'Positive/Negative Boolean remain internal; no open-path Boolean, MinkowskiDiff, decimal Minkowski or multi-pattern holes API. Unreleased decimal Boolean trees and integer/decimal offset trees are not validated by these catalogs.',
+          'Positive/Negative Boolean remain internal; no open-path Boolean, MinkowskiDiff, decimal Minkowski or multi-pattern holes API. Unreleased decimal Boolean trees and integer/decimal offset or stroke trees are not validated by these catalogs.',
           'Simplification checks ordered vertices, statistics and degeneracy; it is not a general topology-preservation proof.',
           'Individual field coverage does not imply the full Cartesian product is covered. Missing fields below mean absent/not applicable, not passed.'])
 
@@ -328,7 +328,7 @@ def random_execution_evidence(directory):
         if not path.exists():path=directory/('all-'+target+'.log');full=True
         if not path.exists():result[target]={'status':'not_recorded'};continue
         totals=re.findall(r'Total tests: (\d+), passed: (\d+), failed: (\d+)\.',path.read_text(encoding='utf-8-sig'))
-        count=2294 if full else 24
+        count=2323 if full else 24
         require(totals==[(str(count),str(count),'0')],str(path),'unexpected random/full execution count')
         result[target]=dict(status='passed',executed=24,passed=24,source='full' if full else 'random-only')
     return result

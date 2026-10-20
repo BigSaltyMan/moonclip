@@ -1,5 +1,15 @@
 # Composition and cumulative resource protection
 
+## Unreleased：Stroke trees
+
+`stroke_tree` and `stroke_tree_d` return the final filled hierarchy of one open route. They keep full width, Butt / Square / Round caps and four joins, with no fill-rule argument. Neither entry is in published 0.1.0. The shared `stroke_compute` prepares the open route, generates both sides and caps, then uses the existing Positive Union with `tree_build`; decimal conversion runs inside that extraction callback. Failure cleans the same scan. Flat output keeps its existing extraction and shortcut fees.
+
+For route (0,0) → (20,0), width 4 and Butt caps give [0,-2]–[20,2], depth one without a hole. For (0,0) → (30,0) → (30,30) → (0,30) → (0,0), Miter / Square at width 4 gives outer [-2,-2]–[32,32] and reversed hole [2,2]–[28,28], depths one and two. The repeated endpoint remains an open endpoint, not a switch to closed offset mode. `run_stroke_tree_example` checks these complete integer regions and the decimal hole example. A route has no input hole hierarchy to reuse; the tree describes the cleaned stroke region, and `to_paths()` drops explicit parentage.
+
+Width below one grid unit or fewer than two prepared points produces an empty tree only after parameters, raw counts, coordinates and preparation are checked. Even an empty route consumes one input-path allowance; repeats count before preparation. The empty callback starts no scan and adds the existing four logical nodes and one work for `tree_empty`, plus four nodes and one work for decimal empty conversion. A singleton never becomes a cap-shaped area. Quantization uses open rules and scaled full width; original width .001 at Precision=3 reaches the integer width-one case.
+
+Preparation, generation, cleanup, tree construction and decoding use the same ledger, with no refunds. Tree stages use PolyTree / DecimalOutput; other errors retain their actual phase (including EnginePrepare for scan control allocation). New 29 library tests and candidate consumers are separate from the unchanged reference catalogs and their 1384 cases / 2276 capability checks.
+
 ## Unreleased：Offset trees
 
 `offset_tree` and `offset_tree_d` return the final offset hierarchy in one cumulative call. This differs from the historical InsetThenTree recipe below, which intentionally composes two public calls with independent ledgers. Neither new entry is in published 0.1.0. The default fill is NonZero; the caller's rule is used for shared input normalization, while final cleanup keeps the existing internal Positive rule.

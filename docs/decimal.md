@@ -1,5 +1,13 @@
 # 小数坐标与统一十进制网格
 
+## Unreleased：小数描边树
+
+`stroke_tree_d(path, width, precision=, cap=, options=, limits=)` 返回 `Result[PolyTreeD, ClipError]`，默认 Precision=3、Butt，支持三种端点和四种连接，没有填充规则参数。此接口尚未包含在 0.1.0。width 是原单位完整宽度，width 和 ArcTolerance 按十进制倍率缩放，MiterLimit 保持无量纲。
+
+独立适配使用开放量化规则，不要求三点非共线；先检查原单位参数，再量化并调用共享描边执行器。零宽度也不能绕过量化合并、坐标和原始数量检查。小宽度判断针对缩放后的完整 width：Precision=3 时原单位 .001 对应网格宽度 1，并不提前返回空树。实际边界仍受生成坐标舍入影响。
+
+新建账本使用 StrokeGenerate / StrokeCleanup，传入账本的限制及历史用量保持权威。预检、量化、开放整理、生成、清理、整数树和下文的小数转换共用预算，释放不退款。正常转换放在清理扫描的提取回调内，失败也执行清理；快捷空结果不启动扫描，先计费构造整数空树，再计费解码空树。树构建标记 PolyTree、解码标记 DecimalOutput，其他错误保留实际阶段，输出位置不冒充输入索引。坐标转换只复制整数拓扑，首尾重合仍按开放路线处理。
+
 ## Unreleased：小数孔洞树
 
 开发源码另提供 `offset_tree_d(paths, delta, precision=, fill_rule=, options=, limits=)`，返回 `Result[PolyTreeD, ClipError]`。默认 Precision=3、NonZero，沿用平铺偏移的参数验证和缩放规则；delta 与 ArcTolerance 随十进制倍率缩放，MiterLimit 不缩放。小距离判断针对缩放后的 delta，例如 Precision=3 时原单位 .001 对应整数距离 1，不能按原单位与 .5 比较。
@@ -34,7 +42,7 @@
 
 分配前收费。N 节点、V 点时，根槽与孩子槽合计 N，新增节点费为 `4 + 5*N + 2*V`，工作费为 `1 + 2*N + V`；空树仍需 4 节点、1 工作。这是逻辑单位，不是物理字节或数组容量。执行结束后访问器的按需复制成本沿用整数树约定。额度不足返回完整 Err，不发布部分树，也不将输出节点号当作输入位置。
 
-受检 CLI 的 `run_decimal_tree_example` 构造边界为 ±5.25、±3.25、±1.25 的三层矩形，`run_offset_tree_example` 检查带孔区域的整数／小数偏移树。运行 `moon run --target native cmd/example`。33 项 `decimal tree: *` 测试及 27 项 `offset tree: *` 测试覆盖完整预期、层级、隔离、预算边界和失败清理；源码全量为 2234+33+27=2294。既有 1384 个参考案例、2276 项能力检查不变，不能解释为已覆盖新树入口。
+受检 CLI 的 `run_decimal_tree_example` 构造边界为 ±5.25、±3.25、±1.25 的三层矩形，`run_offset_tree_example` 检查整数／小数偏移树，`run_stroke_tree_example` 检查普通路线和带孔描边的完整轮廓及层级。运行 `moon run --target native cmd/example`。33 项 `decimal tree: *`、27 项 `offset tree: *` 和 29 项 `stroke tree: *` 测试覆盖完整预期、层级、开放端点、隔离、预算边界和失败清理；源码全量为 2234+33+27+29=2323。既有 1384 个参考案例、2276 项能力检查不变，不能解释为已覆盖新树入口。
 
 ## 既有小数数据模型
 

@@ -598,6 +598,78 @@ pub fn offset_polygons_d(
 }
 
 ///|
+fn decimal_stroke_tree_execute(
+  path : PathD,
+  width : Double,
+  precision : Precision,
+  cap : CapType,
+  options : OffsetOptions,
+  limits : ScanLimits,
+  budget? : CallBudget,
+) -> Result[PolyTreeD, ClipError] {
+  let budget = match budget {
+    Some(value) => value
+    None =>
+      new_call_budget(
+        limits,
+        generate_stage=StrokeGenerate,
+        cleanup_stage=StrokeCleanup,
+      )
+  }
+  try {
+    if width.is_nan() || width.is_inf() || width < 0.0 {
+      raise ScanAbort(
+        InvalidInput(
+          location(DecimalParameters, None, None),
+          "Stroke width must be finite and non-negative",
+        ),
+      )
+    }
+    let scaled_width = decimal_parameter(width, precision)
+    let scaled_options = decimal_scaled_options(options, precision)
+    decimal_precheck([path], [], precision, budget)
+    let (grid, _) = decimal_quantize([path], [], precision, false, budget)
+    match
+      stroke_compute(
+        grid[0],
+        scaled_width,
+        cap,
+        scaled_options,
+        budget.limits,
+        fn(state) raise ScanAbort {
+          decimal_tree_output(tree_build(state), precision, budget)
+        },
+        fn(budget) raise ScanAbort {
+          decimal_tree_output(tree_empty(budget), precision, budget)
+        },
+        budget~,
+      ) {
+      Ok(tree) => Ok(tree)
+      Err(error) => Err(decimal_error(error, precision))
+    }
+  } catch {
+    ScanAbort(error) => Err(decimal_error(error, precision))
+  }
+}
+
+///|
+/// Open-route stroke hierarchy on the decimal grid. Unreleased; not in 0.1.0.
+pub fn stroke_tree_d(
+  path : PathD,
+  width : Double,
+  precision? : Precision = Default::default(),
+  cap? : CapType = Butt,
+  options? : OffsetOptions = Default::default(),
+  limits? : Limits = Default::default(),
+) -> Result[PolyTreeD, ClipError] {
+  decimal_stroke_tree_execute(path, width, precision, cap, options, {
+    input: limits,
+    max_nodes: 500000,
+    max_work: 5000000,
+  })
+}
+
+///|
 pub fn stroke_polyline_d(
   path : PathD,
   width : Double,

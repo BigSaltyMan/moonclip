@@ -29,6 +29,8 @@ Boolean 支持 Intersection、Union、Difference（Subject 减 Clip）、Xor，�
 
 ## 开发源码中的 Unreleased 能力
 
+`stroke_tree(path, width, cap=, options=, limits=)` 返回 `Result[PolyTree64, ClipError]`，`stroke_tree_d(path, width, precision=, cap=, options=, limits=)` 返回 `Result[PolyTreeD, ClipError]`。width 是完整宽度，默认 Butt，支持三种端点和四种连接。输入是一条开放路线，返回清理后填充区域的层级；首尾重合仍保留开放端点语义。输入整理、生成、清理、树构建和解码共用预算。**两个描边树入口均未随 0.1.0 发布**，示例见 [组合说明](docs/composition.md#unreleasedstroke-trees)。
+
 `offset_tree(paths, delta, fill_rule=, options=, limits=)` 返回 `Result[PolyTree64, ClipError]`；`offset_tree_d(paths, delta, precision=, fill_rule=, options=, limits=)` 返回 `Result[PolyTreeD, ClipError]`。默认 NonZero，沿用四种连接与现有偏移参数。树表达最终偏移区域，扩张、收缩可能合并区域、分裂轮廓或消灭孔洞。规范化、生成、清理、树构建及小数解码共用一份累计预算。**两个偏移树入口均未随 Mooncakes 0.1.0 发布**。示例见 [组合说明](docs/composition.md#unreleasedoffset-trees)。
 
 `boolean_tree_d(subject, clip, operation, precision=, fill_rule=, limits=)` 返回 `Result[PolyTreeD, ClipError]`，默认 Precision=3、EvenOdd。`PolyTreeD` 提供 `roots()` / `to_paths()`；节点提供 `contour()` / `children()` / `depth()` / `is_hole()`，访问器数组均独立复制。

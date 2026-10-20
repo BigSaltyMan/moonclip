@@ -191,7 +191,62 @@ fn main raise {
     @moonclip.bounds([@moonclip.Point64::new(1000000001L, 0L)])
     is Err(CoordinateOutOfRange({ vertex_index: Some(0), .. }, X, 1000000001L)),
   )
+  check_stroke_trees()
   println(
     "MoonClip candidate consumer OK: Boolean PolyTree Offset Stroke Decimal Simplify Minkowski errors",
   )
+}
+
+///|
+fn check_stroke_trees() -> Unit raise {
+  let route = rect(0L, 0L, 30L, 30L)
+  route.push(route[0])
+  guard @moonclip.stroke_tree(route, 4.0, cap=Square) is Ok(tree) else {
+    fail("Stroke tree failed")
+  }
+  assert_eq(tree.roots().length(), 1)
+  let root = tree.roots()[0]
+  assert_eq(root.depth(), 1)
+  assert_true(!root.is_hole())
+  assert_eq(root.children().length(), 1)
+  let hole = root.children()[0]
+  assert_eq(hole.depth(), 2)
+  assert_true(hole.is_hole())
+  assert_eq(hole.children().length(), 0)
+  let outer = rect(-2L, -2L, 34L, 34L)
+  let inner = rect(2L, 2L, 26L, 26L)
+  let reversed = Array::makei(4, fn(i) { inner[3 - i] })
+  check_rect([root.contour()], outer)
+  check_rect([hole.contour()], reversed)
+  let decimal = route.map(fn(p) {
+    @moonclip.PointD::new(p.x.to_double() / 10.0, p.y.to_double() / 10.0)
+  })
+  guard @moonclip.stroke_tree_d(decimal, 0.4, cap=Square) is Ok(decoded) else {
+    fail("Decimal stroke tree failed")
+  }
+  assert_eq(decoded.roots().length(), 1)
+  let droot = decoded.roots()[0]
+  assert_eq(droot.depth(), 1)
+  assert_true(!droot.is_hole())
+  assert_eq(droot.children().length(), 1)
+  let dhole = droot.children()[0]
+  assert_eq(dhole.depth(), 2)
+  assert_true(dhole.is_hole())
+  assert_eq(dhole.children().length(), 0)
+  for (actual, grid) in [(droot.contour(), outer), (dhole.contour(), reversed)] {
+    let expected = grid.map(fn(p) {
+      @moonclip.PointD::new(p.x.to_double() / 10.0, p.y.to_double() / 10.0)
+    })
+    assert_eq(actual.length(), expected.length())
+    let mut found = false
+    for shift = 0; shift < expected.length(); shift = shift + 1 {
+      if Array::makei(actual.length(), fn(i) {
+          actual[(i + shift) % actual.length()]
+        }) ==
+        expected {
+        found = true
+      }
+    }
+    assert_true(found)
+  }
 }
