@@ -26,6 +26,10 @@ TOOLCHAIN = (
     "moonrun 0.1.20260915 (2e1a46d 2026-09-15)",
 )
 SUCCESS = "MoonClip candidate consumer OK: Boolean PolyTree Offset Stroke Decimal Simplify Minkowski errors"
+TREE_APIS = (
+    "boolean_tree", "boolean_tree_d", "offset_tree", "offset_tree_d",
+    "stroke_tree", "stroke_tree_d",
+)
 
 
 def require(condition, message):
@@ -47,6 +51,24 @@ def command(args, cwd=ROOT, timeout=180):
 
 def git(*args):
     return command(["git", "-c", f"safe.directory={ROOT.as_posix()}", *args], timeout=20).strip()
+
+
+def consumer_tree_apis(output):
+    """Validate actual execution markers from one target, without shared state."""
+    lines = output.splitlines()
+    require(lines.count(SUCCESS) == 1, "Missing or duplicate consumer success marker")
+    markers = [line for line in lines if line.startswith("TREE_API_OK")]
+    expected = [f"TREE_API_OK {api}" for api in TREE_APIS]
+    require(len(markers) == len(expected) and set(markers) == set(expected),
+            "Missing, duplicate or unknown tree API execution marker: " + repr(markers))
+    return list(TREE_APIS)
+
+
+def run_consumer(target, consumer, report_dir):
+    output = command(["moon", "run", "--target", target, "."], cwd=consumer)
+    (report_dir / f"consumer-{target}.log").write_text(output, encoding="utf-8")
+    checked = consumer_tree_apis(output)
+    return dict(status="success", marker=SUCCESS, tree_apis_checked=checked)
 
 
 def metadata(text):
@@ -183,11 +205,13 @@ def main():
                                                  external_workspace=True)
             for target in ("native", "js"):
                 report["commands"].append(f"moon run --target {target} . (external consumer)")
-                output = command(["moon", "run", "--target", target, "."], cwd=consumer)
-                require(output.splitlines().count(SUCCESS) == 1, f"Missing consumer success marker: {target}")
-                (report_path.parent / f"consumer-{target}.log").write_text(output, encoding="utf-8")
-                report["consumers"][target] = dict(status="success", marker=SUCCESS)
+                try:
+                    report["consumers"][target] = run_consumer(target, consumer, report_path.parent)
+                except (OSError, ValueError, subprocess.SubprocessError) as exc:
+                    report["consumers"][target] = dict(status="failure", error=str(exc))
+                    raise
                 print(f"External candidate consumer {target}: success", flush=True)
+                print(f"Tree APIs checked {target}: " + ", ".join(report["consumers"][target]["tree_apis_checked"]), flush=True)
             # Confirm compilation did not change the extracted library source/interface.
             require(all((library / name).read_bytes() == data for name, data in payload.items()),
                     "Consumer compilation modified candidate payload")

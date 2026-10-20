@@ -58,6 +58,9 @@ fn main raise {
   assert_true(child.is_hole())
   assert_eq(child.children().length(), 0)
   assert_eq(@moonclip.area2(child.contour()), Ok(-200N))
+  check_rect([child.contour()], Array::makei(4, fn(i) { hole[3 - i] }))
+  println("TREE_API_OK boolean_tree")
+  check_decimal_boolean_tree()
 
   guard @moonclip.offset_polygons([outer], 2.0) is Ok(expanded) else {
     fail("Offset failed")
@@ -85,6 +88,7 @@ fn main raise {
   assert_eq(offset_hole.depth(), 2)
   assert_true(offset_hole.is_hole())
   assert_eq(offset_hole.children().length(), 0)
+  println("TREE_API_OK offset_tree")
   let decimal_input = [outer, reverse_hole].map(fn(path) {
     path.map(fn(p) {
       @moonclip.PointD::new(p.x.to_double() / 10.0, p.y.to_double() / 10.0)
@@ -122,6 +126,7 @@ fn main raise {
     }
     assert_true(found)
   }
+  println("TREE_API_OK offset_tree_d")
   let route = [@moonclip.Point64::new(0L, 0L), @moonclip.Point64::new(20L, 0L)]
   guard @moonclip.stroke_polyline(route, 4.0, cap=Butt) is Ok(stroke) else {
     fail("Stroke failed")
@@ -218,6 +223,7 @@ fn check_stroke_trees() -> Unit raise {
   let reversed = Array::makei(4, fn(i) { inner[3 - i] })
   check_rect([root.contour()], outer)
   check_rect([hole.contour()], reversed)
+  println("TREE_API_OK stroke_tree")
   let decimal = route.map(fn(p) {
     @moonclip.PointD::new(p.x.to_double() / 10.0, p.y.to_double() / 10.0)
   })
@@ -249,4 +255,67 @@ fn check_stroke_trees() -> Unit raise {
     }
     assert_true(found)
   }
+  println("TREE_API_OK stroke_tree_d")
+}
+
+///|
+fn check_rect_d(
+  actual : @moonclip.PathD,
+  expected : @moonclip.PathD,
+) -> Unit raise {
+  assert_eq(actual.length(), 4)
+  assert_eq(expected.length(), 4)
+  for start = 0; start < 4; start = start + 1 {
+    if actual[start] == expected[0] {
+      for i = 0; i < 4; i = i + 1 {
+        assert_eq(actual[(start + i) % 4], expected[i])
+      }
+      return
+    }
+  }
+  fail("Expected complete decimal rectangle with original winding")
+}
+
+///|
+fn decimal_rect(min : Double, max : Double) -> @moonclip.PathD {
+  [
+    @moonclip.PointD::new(min, min),
+    @moonclip.PointD::new(max, min),
+    @moonclip.PointD::new(max, max),
+    @moonclip.PointD::new(min, max),
+  ]
+}
+
+///|
+fn check_decimal_boolean_tree() -> Unit raise {
+  let outer = decimal_rect(-5.25, 5.25)
+  let inner = decimal_rect(-3.25, 3.25)
+  let hole = Array::makei(4, fn(i) { inner[3 - i] })
+  let island = decimal_rect(-1.25, 1.25)
+  let subject = [outer, hole, island]
+  let clip : @moonclip.PathsD = []
+  let original = @moonclip.copy_paths_d(subject)
+  guard @moonclip.boolean_tree_d(subject, clip, Union, fill_rule=NonZero)
+    is Ok(tree) else {
+    fail("Decimal Boolean tree failed")
+  }
+  assert_eq(subject, original)
+  assert_eq(clip, [])
+  assert_eq(tree.roots().length(), 1)
+  let root = tree.roots()[0]
+  check_rect_d(root.contour(), outer)
+  assert_eq(root.depth(), 1)
+  assert_true(!root.is_hole())
+  assert_eq(root.children().length(), 1)
+  let child = root.children()[0]
+  check_rect_d(child.contour(), hole)
+  assert_eq(child.depth(), 2)
+  assert_true(child.is_hole())
+  assert_eq(child.children().length(), 1)
+  let deepest = child.children()[0]
+  check_rect_d(deepest.contour(), island)
+  assert_eq(deepest.depth(), 3)
+  assert_true(!deepest.is_hole())
+  assert_eq(deepest.children().length(), 0)
+  println("TREE_API_OK boolean_tree_d")
 }
