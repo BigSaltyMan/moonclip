@@ -17,7 +17,9 @@ def main():
         _, records = read_manifest(ROOT, args.manifest.resolve(), strict=args.strict)
         print(f"Reference cases: {len(records)}; integrity only; geometry execution is checked separately by cmd/conformance")
         print("Operations: " + str(dict(sorted(Counter(c['operation'] for _, c, _, _ in records).items()))))
-        if all(c['operation']=='MinkowskiSum' for _,c,_,_ in records):
+        if all(c['operation']=='RectClipLines' for _,c,_,_ in records):
+            print('Ordered open fragments; no rotation, reversal or sorting')
+        elif all(c['operation']=='MinkowskiSum' for _,c,_,_ in records):
             print('Output settings: NonZero; preserve_collinear=true; reverse_solution=false')
             print('Groups: '+str(dict(sorted(Counter(c['source']['group'] for _,c,_,_ in records).items()))))
         elif all(c['operation'] in ('Simplify64','SimplifyD') for _,c,_,_ in records):

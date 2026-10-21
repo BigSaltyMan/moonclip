@@ -1,0 +1,48 @@
+{
+  "case_id": "rectclip_reentry",
+  "format_version": 8,
+  "operation": "RectClipLines",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [
+      [
+        -5,
+        2
+      ],
+      [
+        5,
+        2
+      ],
+      [
+        15,
+        2
+      ],
+      [
+        15,
+        8
+      ],
+      [
+        5,
+        8
+      ],
+      [
+        -5,
+        8
+      ]
+    ]
+  ],
+  "rect": [
+    0,
+    0,
+    10,
+    10
+  ],
+  "source": {
+    "group": "reentry",
+    "intent": "Ordered open rectangular clipping reentry",
+    "kind": "moonclip_constructed"
+  }
+}

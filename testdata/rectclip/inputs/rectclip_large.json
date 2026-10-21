@@ -1,0 +1,32 @@
+{
+  "case_id": "rectclip_large",
+  "format_version": 8,
+  "operation": "RectClipLines",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [
+      [
+        -1000000000,
+        -999999999
+      ],
+      [
+        1000000000,
+        999999998
+      ]
+    ]
+  ],
+  "rect": [
+    -999999999,
+    -999999999,
+    999999999,
+    999999999
+  ],
+  "source": {
+    "group": "large",
+    "intent": "Ordered open rectangular clipping large",
+    "kind": "moonclip_constructed"
+  }
+}

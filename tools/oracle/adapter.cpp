@@ -212,7 +212,9 @@ json execute_composition(const json& request);
 json execute_decimal(const json& request);
 json execute_simplify(const json& request);
 json execute_minkowski(const json& request);
+json execute_rectclip(const json& request);
 json execute(const json& request) {
+  if(request.is_object() && request.value("operation",json())=="RectClipLines") return execute_rectclip(request);
   if(request.is_object() && request.value("operation",json())=="MinkowskiSum") return execute_minkowski(request);
   if (request.is_object() && (request.value("operation",json())=="Simplify64" || request.value("operation",json())=="SimplifyD")) return execute_simplify(request);
   if (request.is_object() && (request.value("operation",json())=="BooleanD" || request.value("operation",json())=="OffsetD" || request.value("operation",json())=="StrokeD")) return execute_decimal(request);
@@ -509,6 +511,24 @@ json execute_simplify(const json& request) {
   json response={{"format_version",6},{"adapter_protocol_version",6},{"case_id",id},{"oracle_commit",kCommit},{"status","success"},{"operation",request["operation"]},{"mode",request["mode"]},{"reference_route",request["reference_route"]},{"paths",output},{"removed_vertices",removed},{"removed_per_path",counts},{"input_degenerate_indices",before},{"degenerate_indices",after},{"collapsed_indices",collapsed}};
   if(decimal) {response["precision"]=precision;response["paths_d"]=decoded;}
   return response;
+}
+
+// v8: real locked RectClipLines64. Output stays ordered, open and directed.
+json execute_rectclip(const json& request) {
+  keys(request,{"format_version","case_id","source","operation","options","rect","paths"},"rectclip");
+  integer(request["format_version"],"rectclip version",8,8);
+  const auto id=request_metadata(request);
+  const auto& r=request["rect"];
+  require(r.is_array() && r.size()==4,"rect: expected four integer coordinates");
+  int64_t a=integer(r[0],"rect.min_x",-1000000000,1000000000),b=integer(r[1],"rect.min_y",-1000000000,1000000000);
+  int64_t c=integer(r[2],"rect.max_x",-1000000000,1000000000),d=integer(r[3],"rect.max_y",-1000000000,1000000000);
+  require(a<=c && b<=d,"rect: reversed bounds");
+  size_t pc=0,vc=0;auto input=paths(request["paths"],"rectclip paths",pc,vc);
+  RectClipLines64 engine(Rect64(a,b,c,d));
+  auto result=engine.Execute(input);
+  json output=json::array();for(const auto& path:result) output.push_back(output_path(path));
+  pc=0;vc=0;paths(output,"rectclip output",pc,vc);
+  return {{"format_version",8},{"adapter_protocol_version",8},{"case_id",id},{"oracle_commit",kCommit},{"status","success"},{"operation","RectClipLines"},{"options",request["options"]},{"paths",output}};
 }
 
 // v7: real locked MinkowskiSum. Only preflight is adapter code.

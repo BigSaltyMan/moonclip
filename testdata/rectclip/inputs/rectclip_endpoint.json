@@ -1,0 +1,42 @@
+{
+  "case_id": "rectclip_endpoint",
+  "format_version": 8,
+  "operation": "RectClipLines",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [
+      [
+        -10,
+        5
+      ],
+      [
+        0,
+        5
+      ]
+    ],
+    [
+      [
+        10,
+        5
+      ],
+      [
+        20,
+        5
+      ]
+    ]
+  ],
+  "rect": [
+    0,
+    0,
+    10,
+    10
+  ],
+  "source": {
+    "group": "endpoint",
+    "intent": "Ordered open rectangular clipping endpoint",
+    "kind": "moonclip_constructed"
+  }
+}

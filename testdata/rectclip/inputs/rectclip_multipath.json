@@ -1,0 +1,43 @@
+{
+  "case_id": "rectclip_multipath",
+  "format_version": 8,
+  "operation": "RectClipLines",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [
+      [
+        -5,
+        3
+      ],
+      [
+        15,
+        3
+      ]
+    ],
+    [
+      [
+        15,
+        7
+      ],
+      [
+        -5,
+        7
+      ]
+    ],
+    []
+  ],
+  "rect": [
+    0,
+    0,
+    10,
+    10
+  ],
+  "source": {
+    "group": "multipath",
+    "intent": "Ordered open rectangular clipping multipath",
+    "kind": "moonclip_constructed"
+  }
+}

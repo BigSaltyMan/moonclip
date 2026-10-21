@@ -1,0 +1,40 @@
+{
+  "case_id": "rectclip_collinear",
+  "format_version": 8,
+  "operation": "RectClipLines",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [
+      [
+        1,
+        5
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        6,
+        5
+      ],
+      [
+        9,
+        5
+      ]
+    ]
+  ],
+  "rect": [
+    0,
+    0,
+    10,
+    10
+  ],
+  "source": {
+    "group": "collinear",
+    "intent": "Ordered open rectangular clipping collinear",
+    "kind": "moonclip_constructed"
+  }
+}

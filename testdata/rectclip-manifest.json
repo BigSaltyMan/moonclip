@@ -1,0 +1,295 @@
+{
+  "cases": [
+    {
+      "case_id": "rectclip_collinear",
+      "expected": "testdata/rectclip/expected/rectclip_collinear.json",
+      "input": "testdata/rectclip/inputs/rectclip_collinear.json",
+      "status": "validate",
+      "validation": {
+        "ordered_paths": "validate"
+      }
+    },
+    {
+      "case_id": "rectclip_corner_exit",
+      "expected": "testdata/rectclip/expected/rectclip_corner_exit.json",
+      "input": "testdata/rectclip/inputs/rectclip_corner_exit.json",
+      "status": "validate",
+      "validation": {
+        "ordered_paths": "validate"
+      }
+    },
+    {
+      "case_id": "rectclip_corners",
+      "expected": "testdata/rectclip/expected/rectclip_corners.json",
+      "input": "testdata/rectclip/inputs/rectclip_corners.json",
+      "status": "validate",
+      "validation": {
+        "ordered_paths": "validate"
+      }
+    },
+    {
+      "case_id": "rectclip_diagonal",
+      "expected": "testdata/rectclip/expected/rectclip_diagonal.json",
+      "input": "testdata/rectclip/inputs/rectclip_diagonal.json",
+      "status": "validate",
+      "validation": {
+        "ordered_paths": "validate"
+      }
+    },
+    {
+      "case_id": "rectclip_edge_transition",
+      "expected": "testdata/rectclip/expected/rectclip_edge_transition.json",
+      "input": "testdata/rectclip/inputs/rectclip_edge_transition.json",
+      "status": "validate",
+      "validation": {
+        "ordered_paths": "validate"
+      }
+    },
+    {
+      "case_id": "rectclip_empty",
+      "expected": "testdata/rectclip/expected/rectclip_empty.json",
+      "input": "testdata/rectclip/inputs/rectclip_empty.json",
+      "status": "validate",
+      "validation": {
+        "ordered_paths": "validate"
+      }
+    },
+    {
+      "case_id": "rectclip_endpoint",
+      "expected": "testdata/rectclip/expected/rectclip_endpoint.json",
+      "input": "testdata/rectclip/inputs/rectclip_endpoint.json",
+      "status": "validate",
+      "validation": {
+        "ordered_paths": "validate"
+      }
+    },
+    {
+      "case_id": "rectclip_explicit_closed",
+      "expected": "testdata/rectclip/expected/rectclip_explicit_closed.json",
+      "input": "testdata/rectclip/inputs/rectclip_explicit_closed.json",
+      "status": "validate",
+      "validation": {
+        "ordered_paths": "validate"
+      }
+    },
+    {
+      "case_id": "rectclip_half_negative",
+      "expected": "testdata/rectclip/expected/rectclip_half_negative.json",
+      "input": "testdata/rectclip/inputs/rectclip_half_negative.json",
+      "status": "validate",
+      "validation": {
+        "ordered_paths": "validate"
+      }
+    },
+    {
+      "case_id": "rectclip_half_positive",
+      "expected": "testdata/rectclip/expected/rectclip_half_positive.json",
+      "input": "testdata/rectclip/inputs/rectclip_half_positive.json",
+      "status": "validate",
+      "validation": {
+        "ordered_paths": "validate"
+      }
+    },
+    {
+      "case_id": "rectclip_horizontal",
+      "expected": "testdata/rectclip/expected/rectclip_horizontal.json",
+      "input": "testdata/rectclip/inputs/rectclip_horizontal.json",
+      "status": "validate",
+      "validation": {
+        "ordered_paths": "validate"
+      }
+    },
+    {
+      "case_id": "rectclip_identical",
+      "expected": "testdata/rectclip/expected/rectclip_identical.json",
+      "input": "testdata/rectclip/inputs/rectclip_identical.json",
+      "status": "validate",
+      "validation": {
+        "ordered_paths": "validate"
+      }
+    },
+    {
+      "case_id": "rectclip_inside",
+      "expected": "testdata/rectclip/expected/rectclip_inside.json",
+      "input": "testdata/rectclip/inputs/rectclip_inside.json",
+      "status": "validate",
+      "validation": {
+        "ordered_paths": "validate"
+      }
+    },
+    {
+      "case_id": "rectclip_inside_edge",
+      "expected": "testdata/rectclip/expected/rectclip_inside_edge.json",
+      "input": "testdata/rectclip/inputs/rectclip_inside_edge.json",
+      "status": "validate",
+      "validation": {
+        "ordered_paths": "validate"
+      }
+    },
+    {
+      "case_id": "rectclip_large",
+      "expected": "testdata/rectclip/expected/rectclip_large.json",
+      "input": "testdata/rectclip/inputs/rectclip_large.json",
+      "status": "validate",
+      "validation": {
+        "ordered_paths": "validate"
+      }
+    },
+    {
+      "case_id": "rectclip_left_edge",
+      "expected": "testdata/rectclip/expected/rectclip_left_edge.json",
+      "input": "testdata/rectclip/inputs/rectclip_left_edge.json",
+      "status": "validate",
+      "validation": {
+        "ordered_paths": "validate"
+      }
+    },
+    {
+      "case_id": "rectclip_max_y_edge",
+      "expected": "testdata/rectclip/expected/rectclip_max_y_edge.json",
+      "input": "testdata/rectclip/inputs/rectclip_max_y_edge.json",
+      "status": "validate",
+      "validation": {
+        "ordered_paths": "validate"
+      }
+    },
+    {
+      "case_id": "rectclip_min_y_edge",
+      "expected": "testdata/rectclip/expected/rectclip_min_y_edge.json",
+      "input": "testdata/rectclip/inputs/rectclip_min_y_edge.json",
+      "status": "validate",
+      "validation": {
+        "ordered_paths": "validate"
+      }
+    },
+    {
+      "case_id": "rectclip_multipath",
+      "expected": "testdata/rectclip/expected/rectclip_multipath.json",
+      "input": "testdata/rectclip/inputs/rectclip_multipath.json",
+      "status": "validate",
+      "validation": {
+        "ordered_paths": "validate"
+      }
+    },
+    {
+      "case_id": "rectclip_near_endpoint",
+      "expected": "testdata/rectclip/expected/rectclip_near_endpoint.json",
+      "input": "testdata/rectclip/inputs/rectclip_near_endpoint.json",
+      "status": "validate",
+      "validation": {
+        "ordered_paths": "validate"
+      }
+    },
+    {
+      "case_id": "rectclip_negative",
+      "expected": "testdata/rectclip/expected/rectclip_negative.json",
+      "input": "testdata/rectclip/inputs/rectclip_negative.json",
+      "status": "validate",
+      "validation": {
+        "ordered_paths": "validate"
+      }
+    },
+    {
+      "case_id": "rectclip_outside",
+      "expected": "testdata/rectclip/expected/rectclip_outside.json",
+      "input": "testdata/rectclip/inputs/rectclip_outside.json",
+      "status": "validate",
+      "validation": {
+        "ordered_paths": "validate"
+      }
+    },
+    {
+      "case_id": "rectclip_outside_edge",
+      "expected": "testdata/rectclip/expected/rectclip_outside_edge.json",
+      "input": "testdata/rectclip/inputs/rectclip_outside_edge.json",
+      "status": "validate",
+      "validation": {
+        "ordered_paths": "validate"
+      }
+    },
+    {
+      "case_id": "rectclip_reentry",
+      "expected": "testdata/rectclip/expected/rectclip_reentry.json",
+      "input": "testdata/rectclip/inputs/rectclip_reentry.json",
+      "status": "validate",
+      "validation": {
+        "ordered_paths": "validate"
+      }
+    },
+    {
+      "case_id": "rectclip_repeats",
+      "expected": "testdata/rectclip/expected/rectclip_repeats.json",
+      "input": "testdata/rectclip/inputs/rectclip_repeats.json",
+      "status": "validate",
+      "validation": {
+        "ordered_paths": "validate"
+      }
+    },
+    {
+      "case_id": "rectclip_retrace",
+      "expected": "testdata/rectclip/expected/rectclip_retrace.json",
+      "input": "testdata/rectclip/inputs/rectclip_retrace.json",
+      "status": "validate",
+      "validation": {
+        "ordered_paths": "validate"
+      }
+    },
+    {
+      "case_id": "rectclip_right_edge",
+      "expected": "testdata/rectclip/expected/rectclip_right_edge.json",
+      "input": "testdata/rectclip/inputs/rectclip_right_edge.json",
+      "status": "validate",
+      "validation": {
+        "ordered_paths": "validate"
+      }
+    },
+    {
+      "case_id": "rectclip_single",
+      "expected": "testdata/rectclip/expected/rectclip_single.json",
+      "input": "testdata/rectclip/inputs/rectclip_single.json",
+      "status": "validate",
+      "validation": {
+        "ordered_paths": "validate"
+      }
+    },
+    {
+      "case_id": "rectclip_tangent",
+      "expected": "testdata/rectclip/expected/rectclip_tangent.json",
+      "input": "testdata/rectclip/inputs/rectclip_tangent.json",
+      "status": "validate",
+      "validation": {
+        "ordered_paths": "validate"
+      }
+    },
+    {
+      "case_id": "rectclip_vertical",
+      "expected": "testdata/rectclip/expected/rectclip_vertical.json",
+      "input": "testdata/rectclip/inputs/rectclip_vertical.json",
+      "status": "validate",
+      "validation": {
+        "ordered_paths": "validate"
+      }
+    },
+    {
+      "case_id": "rectclip_zero_height",
+      "expected": "testdata/rectclip/expected/rectclip_zero_height.json",
+      "input": "testdata/rectclip/inputs/rectclip_zero_height.json",
+      "status": "validate",
+      "validation": {
+        "ordered_paths": "validate"
+      }
+    },
+    {
+      "case_id": "rectclip_zero_width",
+      "expected": "testdata/rectclip/expected/rectclip_zero_width.json",
+      "input": "testdata/rectclip/inputs/rectclip_zero_width.json",
+      "status": "validate",
+      "validation": {
+        "ordered_paths": "validate"
+      }
+    }
+  ],
+  "format_version": 8,
+  "kind": "rectclip",
+  "oracle_lock": "tools/oracle/upstream-lock.json"
+}

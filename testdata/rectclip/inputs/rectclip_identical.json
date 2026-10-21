@@ -1,0 +1,36 @@
+{
+  "case_id": "rectclip_identical",
+  "format_version": 8,
+  "operation": "RectClipLines",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [
+      [
+        5,
+        5
+      ],
+      [
+        5,
+        5
+      ],
+      [
+        5,
+        5
+      ]
+    ]
+  ],
+  "rect": [
+    0,
+    0,
+    10,
+    10
+  ],
+  "source": {
+    "group": "identical",
+    "intent": "Ordered open rectangular clipping identical",
+    "kind": "moonclip_constructed"
+  }
+}

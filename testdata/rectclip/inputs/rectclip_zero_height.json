@@ -1,0 +1,32 @@
+{
+  "case_id": "rectclip_zero_height",
+  "format_version": 8,
+  "operation": "RectClipLines",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [
+      [
+        5,
+        -5
+      ],
+      [
+        5,
+        15
+      ]
+    ]
+  ],
+  "rect": [
+    0,
+    0,
+    10,
+    0
+  ],
+  "source": {
+    "group": "zero_height",
+    "intent": "Ordered open rectangular clipping zero_height",
+    "kind": "moonclip_constructed"
+  }
+}

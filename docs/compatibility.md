@@ -181,7 +181,7 @@ Only cyclic ring starts and sibling order are normalized. Parentage, depth, full
 
 Offset public paths: 272/272; required=272, differences=0, execution_errors=0.
 
-Boolean reference cases: 200. Offset reference cases: 272. Boolean/Offset subtotal: 472. Offset has no public tree interface; hole/island composition is covered separately by functional tests.
+Boolean reference cases: 200. Offset reference cases: 272. Boolean/Offset subtotal: 472. This offset catalog checks flat output; the newer direct tree interfaces have separate targeted tests and consumer checks.
 
 | Target | Offset filtered paths |
 | --- | --- |
@@ -1476,7 +1476,7 @@ Real pinned MinkowskiSum, internal NonZero, preserve_collinear=true, reverse_sol
 
 # Manifest coverage matrix
 
-Unique catalog cases: 1384; selected capability checks: 2276. A case with flat/tree or intermediate/final results is counted once as a case.
+Unique catalog cases: 1416; selected capability checks: 2308. A case with flat/tree or intermediate/final results is counted once as a case.
 
 Each field value counts distinct cases containing that value (including composition steps). Counts across capabilities or fields must not be added as independent cases.
 
@@ -1490,6 +1490,7 @@ Each field value counts distinct cases containing that value (including composit
 | simplify | 224 | 672 | degeneracy:validate=224, ordered_paths:validate=224, statistics:validate=224 |
 | minkowski | 144 | 144 | paths:validate=144 |
 | random | 24 | 24 | paths:validate=24 |
+| rectclip | 32 | 32 | ordered_paths:validate=32 |
 
 ## boolean field coverage
 
@@ -1591,11 +1592,21 @@ Absent / not applicable fields: clip_type, fill_rule, join_type, cap_type, preci
 
 Absent / not applicable fields: clip_type, join_type, cap_type, precision, reference_route, mode, epsilon, path_is_closed.
 
+## rectclip field coverage
+
+| Field | Case incidence |
+| --- | --- |
+| operation | "RectClipLines": 32 |
+| preserve_collinear | false: 32 |
+| reverse_solution | false: 32 |
+
+Absent / not applicable fields: clip_type, fill_rule, join_type, cap_type, precision, reference_route, mode, epsilon, path_is_closed.
+
 ## Limits of this evidence
 
 - Manifest selections are coverage, not fresh execution evidence.
 - Random v1 adds only public flat Boolean: three small configurations, four operations, two fill rules; no random trees, decimal, offset, stroke, simplification or Minkowski coverage.
-- Positive/Negative Boolean remain internal; no open-path Boolean, MinkowskiDiff, decimal Minkowski or multi-pattern holes API. Unreleased decimal Boolean trees and integer/decimal offset or stroke trees are not validated by these catalogs.
+- Positive/Negative Boolean remain internal; no arbitrary-region open-path Boolean, MinkowskiDiff, decimal Minkowski or multi-pattern holes API. Decimal Boolean trees and integer/decimal offset or stroke trees are not validated by these catalogs. Rectclip checks ordered integer open fragments, not filled contours or trees.
 - Simplification checks ordered vertices, statistics and degeneracy; it is not a general topology-preservation proof.
 - Individual field coverage does not imply the full Cartesian product is covered. Missing fields below mean absent/not applicable, not passed.
 
@@ -1636,3 +1647,44 @@ Seed 20261019; xorshift32-small-polygons-v1. Three configurations x four operati
 | random_small_convex_difference_nonzero | small_convex | passed |
 | random_small_convex_xor_evenodd | small_convex | passed |
 | random_small_convex_xor_nonzero | small_convex | passed |
+
+# Rectangle open-line clipping compatibility
+
+Ordered open fragments: 32/32; required=32; differences=0; execution_errors=0.
+
+Pinned C++ RectClipLines64, CLIPPER2_HI_PRECISION=0. Fragment order, travel direction, every vertex and coordinate are compared exactly. No ring rotation, reversal, sorting, epsilon or forced boundary snapping. Boundary inclusion depends on traversal history.
+
+| Case | Ordered open paths |
+| --- | --- |
+| rectclip_collinear | passed |
+| rectclip_corner_exit | passed |
+| rectclip_corners | passed |
+| rectclip_diagonal | passed |
+| rectclip_edge_transition | passed |
+| rectclip_empty | passed |
+| rectclip_endpoint | passed |
+| rectclip_explicit_closed | passed |
+| rectclip_half_negative | passed |
+| rectclip_half_positive | passed |
+| rectclip_horizontal | passed |
+| rectclip_identical | passed |
+| rectclip_inside | passed |
+| rectclip_inside_edge | passed |
+| rectclip_large | passed |
+| rectclip_left_edge | passed |
+| rectclip_max_y_edge | passed |
+| rectclip_min_y_edge | passed |
+| rectclip_multipath | passed |
+| rectclip_near_endpoint | passed |
+| rectclip_negative | passed |
+| rectclip_outside | passed |
+| rectclip_outside_edge | passed |
+| rectclip_reentry | passed |
+| rectclip_repeats | passed |
+| rectclip_retrace | passed |
+| rectclip_right_edge | passed |
+| rectclip_single | passed |
+| rectclip_tangent | passed |
+| rectclip_vertical | passed |
+| rectclip_zero_height | passed |
+| rectclip_zero_width | passed |

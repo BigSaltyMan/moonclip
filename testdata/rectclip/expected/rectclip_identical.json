@@ -1,0 +1,18 @@
+{
+  "adapter_protocol_version": 8,
+  "case_id": "rectclip_identical",
+  "format_version": 8,
+  "input_sha256": "784ff44c92dbbc650dba49afb00cdba7b1a76d74eb99883941f21879cae8ac35",
+  "metrics": {
+    "path_count": 0,
+    "vertex_count": 0
+  },
+  "operation": "RectClipLines",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [],
+  "status": "success"
+}

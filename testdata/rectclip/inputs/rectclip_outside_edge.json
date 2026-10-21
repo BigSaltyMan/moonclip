@@ -1,0 +1,40 @@
+{
+  "case_id": "rectclip_outside_edge",
+  "format_version": 8,
+  "operation": "RectClipLines",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [
+      [
+        -5,
+        0
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        5,
+        5
+      ]
+    ]
+  ],
+  "rect": [
+    0,
+    0,
+    10,
+    10
+  ],
+  "source": {
+    "group": "outside_edge",
+    "intent": "Ordered open rectangular clipping outside_edge",
+    "kind": "moonclip_constructed"
+  }
+}

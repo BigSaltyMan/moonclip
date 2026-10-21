@@ -1,0 +1,32 @@
+{
+  "case_id": "rectclip_near_endpoint",
+  "format_version": 8,
+  "operation": "RectClipLines",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [
+      [
+        -1,
+        0
+      ],
+      [
+        999999999,
+        1
+      ]
+    ]
+  ],
+  "rect": [
+    0,
+    0,
+    10,
+    10
+  ],
+  "source": {
+    "group": "near_endpoint",
+    "intent": "Ordered open rectangular clipping near_endpoint",
+    "kind": "moonclip_constructed"
+  }
+}

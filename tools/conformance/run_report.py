@@ -285,6 +285,40 @@ def evaluate_minkowski(manifest,results):
 
 
 
+def evaluate_rectclip(manifest,results):
+    from rectclip_compare import read_rectclip_manifest,validate_rectclip_geometry,OPTIONS,COUNT
+    from compare import keys
+    _,records=read_rectclip_manifest(ROOT,manifest,strict=True)
+    require(type(results) is list,'rectclip actual','expected results array')
+    actual={}
+    for r in results:
+        require(type(r) is dict and type(r.get('case_id')) is str,'rectclip actual','missing ID')
+        require(r['case_id'] not in actual,r['case_id'],'duplicate result');actual[r['case_id']]=r
+    require(set(actual)=={e['case_id'] for e,_,_,_ in records},'rectclip actual','missing/extra results')
+    details=[]
+    for e,c,d,v in records:
+        cid=c['case_id'];r=actual[cid];require(r.get('input_sha256')==d,cid,'compiled input hash mismatch')
+        detail=dict(case_id=cid)
+        if r.get('status')=='error':
+            keys(r,{'case_id','input_sha256','status','error'},cid)
+            require(type(r['error']) is str,cid,'invalid execution error')
+            detail.update(status='execution_error',message=r['error'])
+        else:
+            keys(r,{'case_id','input_sha256','status','paths'},cid)
+            validate_rectclip_geometry(dict(r,format_version=8,operation='RectClipLines',options=OPTIONS),cid)
+            detail['status']='passed' if r['paths']==v['paths'] else 'difference'
+        details.append(detail)
+    return {**summary(details),'required':COUNT,'reference_cases':COUNT,'cases':details,'capability':'ordered open fragments'}
+
+
+def rectclip_markdown(result):
+    return ['','# Rectangle open-line clipping compatibility','',
+        f"Ordered open fragments: {result['passed']}/{result['executed']}; required={result['required']}; differences={result['differences']}; execution_errors={result['execution_errors']}.",'',
+        'Pinned C++ RectClipLines64, CLIPPER2_HI_PRECISION=0. Fragment order, travel direction, every vertex and coordinate are compared exactly. No ring rotation, reversal, sorting, epsilon or forced boundary snapping. Boundary inclusion depends on traversal history.','',
+        '| Case | Ordered open paths |','| --- | --- |',
+        *[f"| {r['case_id']} | {r['status']} |" for r in result['cases']]]
+
+
 def coverage_matrix(include_random=True):
     """Counts catalog cases once; capability selections and field incidence are separate."""
     from collections import Counter
@@ -293,6 +327,7 @@ def coverage_matrix(include_random=True):
               ('composition','composition-manifest'),('decimal','decimal-manifest'),
               ('simplify','simplify-manifest'),('minkowski','minkowski-manifest')]
     if include_random:catalogs.append(('random','random-manifest'))
+    catalogs.append(('rectclip','rectclip-manifest'))
     fields=('operation','clip_type','fill_rule','join_type','cap_type','precision','reference_route','mode','epsilon','path_is_closed','preserve_collinear','reverse_solution')
     rows=[];all_ids=set()
     for name,stem in catalogs:
@@ -315,7 +350,7 @@ def coverage_matrix(include_random=True):
     return dict(cases=len(all_ids),capability_checks=sum(r['capability_checks'] for r in rows),catalogs=rows,
         limitations=['Manifest selections are coverage, not fresh execution evidence.',
           'Random v1 adds only public flat Boolean: three small configurations, four operations, two fill rules; no random trees, decimal, offset, stroke, simplification or Minkowski coverage.',
-          'Positive/Negative Boolean remain internal; no open-path Boolean, MinkowskiDiff, decimal Minkowski or multi-pattern holes API. Unreleased decimal Boolean trees and integer/decimal offset or stroke trees are not validated by these catalogs.',
+          'Positive/Negative Boolean remain internal; no arbitrary-region open-path Boolean, MinkowskiDiff, decimal Minkowski or multi-pattern holes API. Decimal Boolean trees and integer/decimal offset or stroke trees are not validated by these catalogs. Rectclip checks ordered integer open fragments, not filled contours or trees.',
           'Simplification checks ordered vertices, statistics and degeneracy; it is not a general topology-preservation proof.',
           'Individual field coverage does not imply the full Cartesian product is covered. Missing fields below mean absent/not applicable, not passed.'])
 
@@ -328,7 +363,7 @@ def random_execution_evidence(directory):
         if not path.exists():path=directory/('all-'+target+'.log');full=True
         if not path.exists():result[target]={'status':'not_recorded'};continue
         totals=re.findall(r'Total tests: (\d+), passed: (\d+), failed: (\d+)\.',path.read_text(encoding='utf-8-sig'))
-        count=2323 if full else 24
+        count=2370 if full else 24
         require(totals==[(str(count),str(count),'0')],str(path),'unexpected random/full execution count')
         result[target]=dict(status='passed',executed=24,passed=24,source='full' if full else 'random-only')
     return result
@@ -402,7 +437,7 @@ def markdown(report):
     if 'offset' in report:
         r=report['offset']
         lines+=['','# Offset compatibility','',f"Offset public paths: {r['passed']}/{r['executed']}; required={r['required']}, differences={r['differences']}, execution_errors={r['execution_errors']}.",'',
-          'Boolean reference cases: 200. Offset reference cases: 272. Boolean/Offset subtotal: 472. Offset has no public tree interface; hole/island composition is covered separately by functional tests.','',
+          'Boolean reference cases: 200. Offset reference cases: 272. Boolean/Offset subtotal: 472. This offset catalog checks flat output; the newer direct tree interfaces have separate targeted tests and consumer checks.','',
           '| Target | Offset filtered paths |','| --- | --- |']
         for target in ('native','js'):
             e=report.get('offset_evidence',{}).get(target,{})
@@ -482,11 +517,14 @@ def markdown(report):
         lines += [f"| {c['case_id']} | {c['status']} |" for c in r['cases']]
     if 'coverage_matrix' in report:lines+=matrix_markdown(report['coverage_matrix'])
     if 'random' in report:lines+=random_markdown(report['random'],report.get('random_evidence',{}))
+    if 'rectclip' in report:lines+=rectclip_markdown(report['rectclip'])
     return '\n'.join(lines)+'\n'
 
 def main():
     parser=argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,description='Execute independent MoonClip paths and tree comparisons. Exit codes: 0 success/help; 1 differences; 2 arguments, integrity or execution errors.')
     parser.add_argument('--random-only',action='store_true',help='Execute/report only the24 new inputs locally; no old geometry execution')
+    parser.add_argument('--rectclip-only',action='store_true',help='Execute/report only the new rectangle line inputs')
+    parser.add_argument('--rectclip-manifest',type=Path)
     parser.add_argument('--random-manifest',type=Path)
     parser.add_argument('--manifest',type=Path,default=ROOT/'testdata/manifest.json')
     parser.add_argument('--offset-manifest',type=Path,help='Include independently executed offset protocol v2 cases')
@@ -500,6 +538,14 @@ def main():
     parser.add_argument('--strict',action='store_true',help='Require exactly 152 public cases with independent paths and tree results (also enforced by default)')
     try:
         envelope=json.load(sys.stdin);args=parser.parse_args(envelope['args'][1:])
+        if args.rectclip_only:
+            require(args.rectclip_manifest is not None,'rectclip','--rectclip-manifest required')
+            result=evaluate_rectclip(args.rectclip_manifest.resolve(),envelope.get('rectclip_results'))
+            report=dict(rectclip=result)
+            args.report_json.parent.mkdir(parents=True,exist_ok=True);args.report_md.parent.mkdir(parents=True,exist_ok=True)
+            args.report_json.write_bytes(canonical_bytes(report));args.report_md.write_text('\n'.join(rectclip_markdown(result))+'\n',encoding='utf-8',newline='\n')
+            print(f"Native rectclip conformance: ordered_paths={result['passed']}/{result['required']}, differences={result['differences']}, execution_errors={result['execution_errors']}")
+            return 2 if result['execution_errors'] else 1 if result['differences'] else 0
         if args.random_only:
             require(args.random_manifest is not None,'random','--random-manifest required')
             result=evaluate_random(args.random_manifest.resolve(),envelope.get('random_results'))
@@ -511,6 +557,8 @@ def main():
             print(f"Native random conformance: paths={result['passed']}/24, differences={result['differences']}, execution_errors={result['execution_errors']}")
             return 2 if result['execution_errors'] else 1 if result['differences'] else 0
         report=evaluate(args.manifest.resolve(),envelope['results'])
+        if args.rectclip_manifest:
+            report['rectclip']=evaluate_rectclip(args.rectclip_manifest.resolve(),envelope.get('rectclip_results'))
         report['coverage_matrix']=coverage_matrix(bool(args.random_manifest))
         if args.random_manifest:
             report['random']=evaluate_random(args.random_manifest.resolve(),envelope.get('random_results'))
@@ -561,7 +609,9 @@ def main():
             print(f"Native minkowski conformance: cases=144, paths={minkowski['passed']}/144, NonZero, preserve_collinear=true, differences={minkowski['differences']}, execution_errors={minkowski['execution_errors']}")
         random=report.get('random',{})
         if random:print(f"Native random conformance: paths={random['passed']}/24, differences={random['differences']}, execution_errors={random['execution_errors']}")
-        return 2 if any(r.get('execution_errors') for r in (report,offset,stroke,composition,decimal,simplify,minkowski,random)) else 1 if any(r.get('differences') for r in (report,offset,stroke,composition,decimal,simplify,minkowski,random)) else 0
+        rectclip=report.get('rectclip',{})
+        if rectclip:print(f"Native rectclip conformance: ordered_paths={rectclip['passed']}/{rectclip['required']}, differences={rectclip['differences']}, execution_errors={rectclip['execution_errors']}")
+        return 2 if any(r.get('execution_errors') for r in (report,offset,stroke,composition,decimal,simplify,minkowski,random,rectclip)) else 1 if any(r.get('differences') for r in (report,offset,stroke,composition,decimal,simplify,minkowski,random,rectclip)) else 0
     except (Invalid,OSError,ValueError,KeyError,TypeError) as error:
         print(f'Conformance error: {error}',file=sys.stderr);return 2
 if __name__=='__main__':sys.exit(main())

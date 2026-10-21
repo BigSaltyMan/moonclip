@@ -1,0 +1,32 @@
+{
+  "case_id": "rectclip_right_edge",
+  "format_version": 8,
+  "operation": "RectClipLines",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [
+      [
+        10,
+        9
+      ],
+      [
+        10,
+        1
+      ]
+    ]
+  ],
+  "rect": [
+    0,
+    0,
+    10,
+    10
+  ],
+  "source": {
+    "group": "right_edge",
+    "intent": "Ordered open rectangular clipping right_edge",
+    "kind": "moonclip_constructed"
+  }
+}

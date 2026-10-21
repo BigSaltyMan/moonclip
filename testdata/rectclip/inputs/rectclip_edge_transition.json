@@ -1,0 +1,52 @@
+{
+  "case_id": "rectclip_edge_transition",
+  "format_version": 8,
+  "operation": "RectClipLines",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [
+      [
+        -5,
+        5
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        0,
+        8
+      ],
+      [
+        5,
+        8
+      ],
+      [
+        10,
+        8
+      ],
+      [
+        10,
+        5
+      ],
+      [
+        15,
+        5
+      ]
+    ]
+  ],
+  "rect": [
+    0,
+    0,
+    10,
+    10
+  ],
+  "source": {
+    "group": "edge_transition",
+    "intent": "Ordered open rectangular clipping edge_transition",
+    "kind": "moonclip_constructed"
+  }
+}

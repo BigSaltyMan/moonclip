@@ -4,12 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       catalog:
-        description: Reference scope (random for Commit16; all for final acceptance)
+        description: Reference scope (rectclip for Commit26; all for final acceptance)
         type: choice
         required: true
-        default: random
+        default: rectclip
         options:
           - random
+          - rectclip
           - all
 
 permissions:
@@ -78,6 +79,17 @@ jobs:
         if: ${{ inputs.catalog == 'all' }}
         run: python scripts/check_reference.py --manifest testdata/minkowski-manifest.json --strict
       - name: Rebuild and compare only new random v1 references
+        if: ${{ inputs.catalog == 'all' || inputs.catalog == 'random' }}
         run: bash scripts/generate_reference.sh --manifest testdata/random-manifest.json --check
       - name: Check random seed, order, hashes and selection
+        if: ${{ inputs.catalog == 'all' || inputs.catalog == 'random' }}
         run: python scripts/check_reference.py --manifest testdata/random-manifest.json --strict
+      - name: Run only new rectclip adapter checks
+        if: ${{ inputs.catalog == 'rectclip' }}
+        run: python tools/oracle/test_adapter.py -k rectclip
+      - name: Rebuild only selected ordered rectangle line references
+        if: ${{ inputs.catalog == 'all' || inputs.catalog == 'rectclip' }}
+        run: bash scripts/generate_reference.sh --manifest testdata/rectclip-manifest.json --check
+      - name: Check rectangle line catalog integrity
+        if: ${{ inputs.catalog == 'all' || inputs.catalog == 'rectclip' }}
+        run: python scripts/check_reference.py --manifest testdata/rectclip-manifest.json --strict

@@ -43,12 +43,14 @@ class RandomTests(unittest.TestCase):
         self.assertEqual(evaluate_random(ROOT/'testdata/random-manifest.json',values)['execution_errors'],1)
 
     def test_matrix_unique_cases_and_capability_checks(self):
-        result=coverage_matrix();self.assertEqual(result['cases'],1384)
-        self.assertEqual(sum(r['cases'] for r in result['catalogs']),1384)
+        result=coverage_matrix();self.assertEqual(result['cases'],1416)
+        self.assertEqual(sum(r['cases'] for r in result['catalogs']),1416)
         self.assertEqual(matrix_markdown(result),matrix_markdown(__import__('json').loads(canonical_bytes(result))))
         boolean=result['catalogs'][0];self.assertEqual((boolean['cases'],boolean['capability_checks']),(200,400))
-        self.assertEqual(result['catalogs'][-1]['capability_checks'],24)
-        self.assertEqual(result['catalogs'][-2]['fields']['preserve_collinear'],{'true':144})
+        by={c['catalog']:c for c in result['catalogs']}
+        self.assertEqual(by['random']['capability_checks'],24)
+        self.assertEqual(by['rectclip']['capability_checks'],32)
+        self.assertEqual(by['minkowski']['fields']['preserve_collinear'],{'true':144})
         self.assertEqual(set(result['catalogs'][4]['fields']['precision']),{str(i) for i in range(7)})
 
     def test_generator_publication_isolated_and_mixtures_rejected(self):
@@ -68,9 +70,9 @@ class RandomTests(unittest.TestCase):
             root=Path(directory);(root/'random-native.log').write_text('Total tests: 24, passed: 24, failed: 0.\n')
             e=random_execution_evidence(root);self.assertEqual(e['native']['passed'],24);self.assertEqual(e['js']['status'],'not_recorded')
             # A stale full-suite count must not establish JS execution evidence.
-            (root/'all-js.log').write_text('Total tests: 2294, passed: 2294, failed: 0.\n')
-            with self.assertRaises(Invalid):random_execution_evidence(root)
             (root/'all-js.log').write_text('Total tests: 2323, passed: 2323, failed: 0.\n')
+            with self.assertRaises(Invalid):random_execution_evidence(root)
+            (root/'all-js.log').write_text('Total tests: 2370, passed: 2370, failed: 0.\n')
             self.assertEqual(random_execution_evidence(root)['js']['passed'],24)
 
     def test_reducer_keeps_category_and_attempt_cap(self):

@@ -46,20 +46,19 @@ fn actual_case(
 ///|
 fn main {
   let random_only = @env.args().contains("--random-only")
+  let rectclip_only = @env.args().contains("--rectclip-only")
+  let isolated = random_only || rectclip_only
   let envelope = Json::object({
+    "rectclip_results": (if random_only { [] } else { run_rectclip_cases() }).to_json(),
     "args": @env.args().to_json(),
-    "random_results": run_random_cases().to_json(),
-    "results": (if random_only { [] } else { run_cases() }).to_json(),
-    "offset_results": (if random_only { [] } else { run_offset_cases() }).to_json(),
-    "stroke_results": (if random_only { [] } else { run_stroke_cases() }).to_json(),
-    "composition_results": (if random_only {
-      []
-    } else {
-      run_composition_cases()
-    }).to_json(),
-    "decimal_results": (if random_only { [] } else { run_decimal_cases() }).to_json(),
-    "simplify_results": (if random_only { [] } else { run_simplify_cases() }).to_json(),
-    "minkowski_results": (if random_only { [] } else { run_minkowski_cases() }).to_json(),
+    "random_results": (if rectclip_only { [] } else { run_random_cases() }).to_json(),
+    "results": (if isolated { [] } else { run_cases() }).to_json(),
+    "offset_results": (if isolated { [] } else { run_offset_cases() }).to_json(),
+    "stroke_results": (if isolated { [] } else { run_stroke_cases() }).to_json(),
+    "composition_results": (if isolated { [] } else { run_composition_cases() }).to_json(),
+    "decimal_results": (if isolated { [] } else { run_decimal_cases() }).to_json(),
+    "simplify_results": (if isolated { [] } else { run_simplify_cases() }).to_json(),
+    "minkowski_results": (if isolated { [] } else { run_minkowski_cases() }).to_json(),
   })
   exit_code(report(@utf8.encode(envelope.stringify())))
 }

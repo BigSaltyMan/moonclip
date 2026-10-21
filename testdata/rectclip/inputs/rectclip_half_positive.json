@@ -1,0 +1,36 @@
+{
+  "case_id": "rectclip_half_positive",
+  "format_version": 8,
+  "operation": "RectClipLines",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [
+      [
+        -2,
+        0
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        12,
+        6
+      ]
+    ]
+  ],
+  "rect": [
+    0,
+    0,
+    10,
+    10
+  ],
+  "source": {
+    "group": "half_positive",
+    "intent": "Ordered open rectangular clipping half_positive",
+    "kind": "moonclip_constructed"
+  }
+}

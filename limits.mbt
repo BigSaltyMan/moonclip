@@ -41,6 +41,9 @@ pub(all) enum Stage {
   MinkowskiParameters
   MinkowskiGenerate
   MinkowskiCleanup
+  RectClipParameters
+  RectClipEvaluate
+  RectClipOutput
 } derive(Eq, Debug)
 
 ///|

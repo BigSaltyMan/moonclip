@@ -1,5 +1,11 @@
 # 上游来源与移植记录
 
+## Commit 26：整数矩形开放折线裁剪（Unreleased）
+
+固定 Clipper2_2.0.1 / `21ebba05db8894f0c7217ad35ea518080f324946`，BSL-1.0；新增 `rectclip.mbt` 适配 C++ `clipper.rectclip.cpp` 中 RectClipLines64::ExecuteInternal / GetPath、GetLocation、GetNextLocation、GetIntersection、GetSegmentIntersection，并核对 `clipper.core.h` 的普通精度 GetLineIntersectPt。保留 Angus Johnson 2010—2025 版权。只移植开放线段路线，不包含闭合 RectClip64 的边缘拓扑整理。
+
+保留状态转换、边界优先顺序、精确叉积分支、Double 运算顺序及向零截断；不混用扫描投影舍入。以独立有序数组替代 C++ 输出环；预算、错误定位、原始数量预检与容器隔离为 BigSaltyMan 2026 自有适配。没有增加新的上游依赖。参考构建实际加入 clipper.rectclip.cpp，仍使用 CLIPPER2_HI_PRECISION=0；仅新增 v8 RectClipLines 协议，旧协议及 1384 条旧参考不变。32 条新参考不扩大对小数、闭合裁剪或任意区域开放路径 Boolean 的兼容声明。
+
 当前范围：整数 / 小数 Boolean、整数／小数 PolyTree、闭合偏移、开放描边及整数／小数偏移树和描边树、显式简化、整数单图案 Minkowski Sum 已实现；新增树接口自 0.2.0 提供。下面按提交保留实际来源历史；“Unreleased”“本笔未实现”等描述仅指对应历史阶段。当前公开差异与证据计数见 [related-work.md](related-work.md)，支持范围见 [scope.md](scope.md)。
 
 ## 固定参考

@@ -1,0 +1,36 @@
+{
+  "case_id": "rectclip_inside_edge",
+  "format_version": 8,
+  "operation": "RectClipLines",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [
+      [
+        5,
+        5
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        9,
+        0
+      ]
+    ]
+  ],
+  "rect": [
+    0,
+    0,
+    10,
+    10
+  ],
+  "source": {
+    "group": "inside_edge",
+    "intent": "Ordered open rectangular clipping inside_edge",
+    "kind": "moonclip_constructed"
+  }
+}

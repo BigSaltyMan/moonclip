@@ -1,0 +1,33 @@
+{
+  "adapter_protocol_version": 8,
+  "case_id": "rectclip_half_positive",
+  "format_version": 8,
+  "input_sha256": "dc973f14008b00d1d45dfb2372981357ea52dc982455f46454b3be33c3f54e88",
+  "metrics": {
+    "path_count": 1,
+    "vertex_count": 3
+  },
+  "operation": "RectClipLines",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "oracle_commit": "21ebba05db8894f0c7217ad35ea518080f324946",
+  "paths": [
+    [
+      [
+        0,
+        0
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        10,
+        5
+      ]
+    ]
+  ],
+  "status": "success"
+}

@@ -1,0 +1,32 @@
+{
+  "case_id": "rectclip_negative",
+  "format_version": 8,
+  "operation": "RectClipLines",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [
+      [
+        -20,
+        -7
+      ],
+      [
+        5,
+        -3
+      ]
+    ]
+  ],
+  "rect": [
+    -10,
+    -10,
+    0,
+    0
+  ],
+  "source": {
+    "group": "negative",
+    "intent": "Ordered open rectangular clipping negative",
+    "kind": "moonclip_constructed"
+  }
+}

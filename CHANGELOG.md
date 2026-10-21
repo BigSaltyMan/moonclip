@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- 新增整数 `rect_clip_lines`：轴对齐矩形窗口的开放折线裁剪，保留有向片段顺序和完整共线顶点。
+- 新增 RectClipParameters、RectClipEvaluate、RectClipOutput 阶段，共用输入边界、结构化错误和一次调用累计预算。
+- 固定 C++ v8 参考仅覆盖新增整数开放路线；不增加小数、闭合区域裁剪、任意区域开放路径 Boolean、树或演示。
+
 ## 0.2.1 — 2026-10-21
 
 已发布至 [Mooncakes](https://mooncakes.io/docs/BigSaltyMan/moonclip@0.2.1/) 和 [GitHub Release](https://github.com/BigSaltyMan/moonclip/releases/tag/v0.2.1)。独立注册表 native／JS 消费者及实际文档页核验通过，见[发布记录](docs/release-0.2.1.md)。

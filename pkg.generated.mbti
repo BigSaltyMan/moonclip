@@ -51,6 +51,8 @@ pub fn point_in_polygon(Point64, Array[Point64], limits? : Limits) -> Result[Poi
 
 pub fn point_on_segment(Point64, Point64, Point64, limits? : Limits) -> Result[Bool, ClipError]
 
+pub fn rect_clip_lines(Bounds64, Array[Array[Point64]], limits? : Limits) -> Result[Array[Array[Point64]], ClipError]
+
 pub fn simplify_paths(Array[Array[Point64]], options? : SimplifyOptions, limits? : Limits) -> Result[SimplifyResult, ClipError]
 
 pub fn simplify_paths_d(Array[Array[PointD]], precision? : Precision, options? : SimplifyOptions, limits? : Limits) -> Result[SimplifyResultD, ClipError]
@@ -270,6 +272,9 @@ pub(all) enum Stage {
   MinkowskiParameters
   MinkowskiGenerate
   MinkowskiCleanup
+  RectClipParameters
+  RectClipEvaluate
+  RectClipOutput
 } derive(Eq, @debug.Debug)
 
 // Type aliases

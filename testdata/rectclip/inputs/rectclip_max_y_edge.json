@@ -1,0 +1,32 @@
+{
+  "case_id": "rectclip_max_y_edge",
+  "format_version": 8,
+  "operation": "RectClipLines",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [
+      [
+        9,
+        10
+      ],
+      [
+        1,
+        10
+      ]
+    ]
+  ],
+  "rect": [
+    0,
+    0,
+    10,
+    10
+  ],
+  "source": {
+    "group": "max_y_edge",
+    "intent": "Ordered open rectangular clipping max_y_edge",
+    "kind": "moonclip_constructed"
+  }
+}

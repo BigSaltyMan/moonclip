@@ -8,6 +8,7 @@
   "compile_inputs": [
     "CPP/Clipper2Lib/src/clipper.engine.cpp",
     "CPP/Clipper2Lib/src/clipper.offset.cpp",
+    "CPP/Clipper2Lib/src/clipper.rectclip.cpp",
     "CPP/Clipper2Lib/include/clipper2/*.h"
   ],
   "composition_protocol_version": 4,
@@ -26,6 +27,7 @@
   "license": "BSL-1.0",
   "minkowski_protocol_version": 7,
   "offset_protocol_version": 2,
+  "rectclip_protocol_version": 8,
   "repository": "https://github.com/AngusJohnson/Clipper2",
   "simplify_protocol_version": 6,
   "stroke_protocol_version": 3,

@@ -49,6 +49,8 @@ def expected_directory(records):
         return 'testdata/upstream/expected'
     if operations == {'OffsetPolygons'}:
         return 'testdata/offset/expected'
+    if operations == {'RectClipLines'}:
+        return 'testdata/rectclip/expected'
     if operations == {'MinkowskiSum'}:
         return 'testdata/minkowski/expected'
     if operations <= {'Simplify64','SimplifyD'}:

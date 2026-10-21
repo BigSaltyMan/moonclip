@@ -1,5 +1,6 @@
 ///|
 fn run_foundation_example() -> Unit raise {
+  run_rectclip_example()
   let path : @moonclip.Path64 = [
     @moonclip.Point64::new(-10L, 0L),
     @moonclip.Point64::new(10L, 0L),
@@ -81,6 +82,25 @@ fn run_foundation_example() -> Unit raise {
     @moonclip.normalize_paths([contour, []], @moonclip.Closed, limits~)
     is Err(ResourceLimitExceeded(_, InputPaths, 1)),
   )
+}
+
+///|
+fn run_rectclip_example() -> Unit raise {
+  let r : @moonclip.Bounds64 = { min_x: 0L, min_y: 0L, max_x: 10L, max_y: 10L, }
+  let point = fn(x, y) { @moonclip.Point64::new(x, y) }
+  assert_eq(
+    @moonclip.rect_clip_lines(r, [
+      [point(-10L, 5L), point(5L, 5L), point(20L, 5L)],
+    ]),
+    Ok([[point(0L, 5L), point(5L, 5L), point(10L, 5L)]]),
+  )
+  assert_eq(
+    @moonclip.rect_clip_lines(r, [
+      [point(-5L, 2L), point(15L, 2L), point(15L, 8L), point(-5L, 8L)],
+    ]),
+    Ok([[point(0L, 2L), point(10L, 2L)], [point(10L, 8L), point(0L, 8L)]]),
+  )
+  println("Rect clip lines: ordered open fragments OK")
 }
 
 ///|

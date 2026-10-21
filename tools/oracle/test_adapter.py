@@ -561,6 +561,48 @@ class AdapterTests(unittest.TestCase):
         c=self.minkowski_case();c.update(pattern=[[0,-1],[0,1]],path=[[0,0],[10,0]],path_is_closed=False)
         self.assertEqual(normalize_paths(decode(self.call(c).stdout)['paths']),normalize_paths([[[0,-1],[10,-1],[10,1],[0,1]]]))
 
+    def test_rectclip_real_ordered_fragments(self):
+        c=load(ROOT/'testdata/rectclip/inputs/rectclip_reentry.json',True)
+        v=decode(self.call(c).stdout)
+        self.assertEqual(v['paths'],[[[0,2],[5,2],[10,2]],[[10,8],[5,8],[0,8]]])
+
+    def test_rectclip_strict_window_and_integer_tokens(self):
+        c=load(ROOT/'testdata/rectclip/inputs/rectclip_horizontal.json',True)
+        for rect in [[10,0,0,10],[True,0,10,10],[0.5,0,10,10],[0,0,1000000001,10]]:
+            bad=copy.deepcopy(c);bad['rect']=rect;self.rejected(bad)
+        bad=copy.deepcopy(c);bad['format_version']=7;self.rejected(bad)
+
+    def test_rectclip_zero_area_still_rejects_invalid_input(self):
+        c=load(ROOT/'testdata/rectclip/inputs/rectclip_zero_width.json',True)
+        self.assertEqual(decode(self.call(c).stdout)['paths'],[])
+        c['paths']=[[[1000000001,0]]];self.rejected(c)
+
+    def test_rectclip_fractional_and_boundary_history(self):
+        for name,want in [('half_positive',[[[0,0],[2,1],[10,5]]]),('outside_edge',[[[5,0],[5,5]]]),('tangent',[])]:
+            c=load(ROOT/f'testdata/rectclip/inputs/rectclip_{name}.json',True)
+            self.assertEqual(decode(self.call(c).stdout)['paths'],want)
+
+    def test_rectclip_real_ordered_fragments(self):
+        c=load(ROOT/'testdata/rectclip/inputs/rectclip_reentry.json',True)
+        v=decode(self.call(c).stdout)
+        self.assertEqual(v['paths'],[[[0,2],[5,2],[10,2]],[[10,8],[5,8],[0,8]]])
+
+    def test_rectclip_strict_window_and_integer_tokens(self):
+        c=load(ROOT/'testdata/rectclip/inputs/rectclip_horizontal.json',True)
+        for rect in [[10,0,0,10],[True,0,10,10],[0.5,0,10,10],[0,0,1000000001,10]]:
+            bad=copy.deepcopy(c);bad['rect']=rect;self.rejected(bad)
+        bad=copy.deepcopy(c);bad['format_version']=7;self.rejected(bad)
+
+    def test_rectclip_zero_area_still_rejects_invalid_input(self):
+        c=load(ROOT/'testdata/rectclip/inputs/rectclip_zero_width.json',True)
+        self.assertEqual(decode(self.call(c).stdout)['paths'],[])
+        c['paths']=[[[1000000001,0]]];self.rejected(c)
+
+    def test_rectclip_fractional_and_boundary_history(self):
+        for name,want in [('half_positive',[[[0,0],[2,1],[10,5]]]),('outside_edge',[[[5,0],[5,5]]]),('tangent',[])]:
+            c=load(ROOT/f'testdata/rectclip/inputs/rectclip_{name}.json',True)
+            self.assertEqual(decode(self.call(c).stdout)['paths'],want)
+
     def case_commit(self):
         return load(ROOT/'tools/oracle/upstream-lock.json',True)['commit']
 

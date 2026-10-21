@@ -31,6 +31,10 @@ fn check_rect(
 
 ///|
 fn main raise {
+  let window : @moonclip.Bounds64 = {min_x:0L,min_y:0L,max_x:10L,max_y:10L}
+  let point = fn(x,y) { @moonclip.Point64::new(x,y) }
+  assert_eq(@moonclip.rect_clip_lines(window,[[point(-10L,5L),point(5L,5L),point(20L,5L)]]),Ok([[point(0L,5L),point(5L,5L),point(10L,5L)]]))
+  println("RECTCLIP_API_OK rect_clip_lines")
   let outer = rect(0L, 0L, 20L, 20L)
   let hole = rect(5L, 5L, 10L, 10L)
   guard @moonclip.boolean_op(

@@ -1,0 +1,40 @@
+{
+  "case_id": "rectclip_explicit_closed",
+  "format_version": 8,
+  "operation": "RectClipLines",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [
+      [
+        2,
+        2
+      ],
+      [
+        8,
+        2
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        2,
+        2
+      ]
+    ]
+  ],
+  "rect": [
+    0,
+    0,
+    10,
+    10
+  ],
+  "source": {
+    "group": "explicit_closed",
+    "intent": "Ordered open rectangular clipping explicit_closed",
+    "kind": "moonclip_constructed"
+  }
+}

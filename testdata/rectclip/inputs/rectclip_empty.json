@@ -1,0 +1,21 @@
+{
+  "case_id": "rectclip_empty",
+  "format_version": 8,
+  "operation": "RectClipLines",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [],
+  "rect": [
+    0,
+    0,
+    10,
+    10
+  ],
+  "source": {
+    "group": "empty",
+    "intent": "Ordered open rectangular clipping empty",
+    "kind": "moonclip_constructed"
+  }
+}

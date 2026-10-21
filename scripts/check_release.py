@@ -61,6 +61,8 @@ def consumer_tree_apis(output):
     expected = [f"TREE_API_OK {api}" for api in TREE_APIS]
     require(len(markers) == len(expected) and set(markers) == set(expected),
             "Missing, duplicate or unknown tree API execution marker: " + repr(markers))
+    require(lines.count("RECTCLIP_API_OK rect_clip_lines") == 1,
+            "Missing or duplicate rectangle line API execution marker")
     return list(TREE_APIS)
 
 
@@ -68,7 +70,7 @@ def run_consumer(target, consumer, report_dir):
     output = command(["moon", "run", "--target", target, "."], cwd=consumer)
     (report_dir / f"consumer-{target}.log").write_text(output, encoding="utf-8")
     checked = consumer_tree_apis(output)
-    return dict(status="success", marker=SUCCESS, tree_apis_checked=checked)
+    return dict(status="success", marker=SUCCESS, tree_apis_checked=checked, rectclip_api_checked=True)
 
 
 def metadata(text):

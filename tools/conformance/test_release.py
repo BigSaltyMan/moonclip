@@ -13,10 +13,18 @@ spec.loader.exec_module(release)
 
 
 def complete():
-    return "\n".join([*(f"TREE_API_OK {api}" for api in release.TREE_APIS), release.SUCCESS]) + "\n"
+    return "\n".join([*(f"TREE_API_OK {api}" for api in release.TREE_APIS), "RECTCLIP_API_OK rect_clip_lines", release.SUCCESS]) + "\n"
 
 
 class ReleaseTreeMarkers(unittest.TestCase):
+    def test_rectclip_marker_is_required_separately_from_six_trees(self):
+        for output in (complete().replace('RECTCLIP_API_OK rect_clip_lines\n',''),complete()+'RECTCLIP_API_OK rect_clip_lines\n'):
+            with self.assertRaises(ValueError):release.consumer_tree_apis(output)
+        self.assertEqual(len(release.TREE_APIS),6)
+    def test_rectclip_marker_is_required_separately_from_six_trees(self):
+        for output in (complete().replace('RECTCLIP_API_OK rect_clip_lines\n',''),complete()+'RECTCLIP_API_OK rect_clip_lines\n'):
+            with self.assertRaises(ValueError):release.consumer_tree_apis(output)
+        self.assertEqual(len(release.TREE_APIS),6)
     def test_complete_markers_and_overall_success(self):
         self.assertEqual(release.consumer_tree_apis(complete()), list(release.TREE_APIS))
         self.assertEqual(release.consumer_tree_apis("\n".join(reversed(complete().splitlines()))),

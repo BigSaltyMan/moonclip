@@ -1,0 +1,32 @@
+{
+  "case_id": "rectclip_min_y_edge",
+  "format_version": 8,
+  "operation": "RectClipLines",
+  "options": {
+    "preserve_collinear": false,
+    "reverse_solution": false
+  },
+  "paths": [
+    [
+      [
+        1,
+        0
+      ],
+      [
+        9,
+        0
+      ]
+    ]
+  ],
+  "rect": [
+    0,
+    0,
+    10,
+    10
+  ],
+  "source": {
+    "group": "min_y_edge",
+    "intent": "Ordered open rectangular clipping min_y_edge",
+    "kind": "moonclip_constructed"
+  }
+}
