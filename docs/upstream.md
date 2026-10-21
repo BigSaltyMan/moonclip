@@ -1,6 +1,6 @@
 # 上游来源与移植记录
 
-当前范围：整数 / 小数 Boolean、整数 PolyTree 及 Unreleased 小数 PolyTree、闭合偏移、开放描边及 Unreleased 整数／小数偏移树和描边树、显式简化、整数单图案 Minkowski Sum 已实现。下面按提交保留实际来源历史；“本笔未实现”等描述仅指对应历史阶段。当前公开差异与证据计数见 [related-work.md](related-work.md)，支持范围见 [scope.md](scope.md)。
+当前范围：整数 / 小数 Boolean、整数／小数 PolyTree、闭合偏移、开放描边及整数／小数偏移树和描边树、显式简化、整数单图案 Minkowski Sum 已实现；新增树接口自 0.2.0 提供。下面按提交保留实际来源历史；“Unreleased”“本笔未实现”等描述仅指对应历史阶段。当前公开差异与证据计数见 [related-work.md](related-work.md)，支持范围见 [scope.md](scope.md)。
 
 ## 固定参考
 

@@ -1,6 +1,6 @@
 # MoonClip
 
-MoonClip 是用 MoonBit 实现的二维多边形几何库，提供整数与统一十进制网格的小数入口。**0.2.0 已于 2026-10-21 发布到 Mooncakes**，并完成仓库外 native / JS 注册表消费者验证。运行库不依赖 C++ 或其他几何运行时。
+MoonClip 是用 MoonBit 实现的二维多边形几何库，提供整数与统一十进制网格的小数入口。0.2 系列提供整数／小数 Boolean、偏移与描边的孔洞层级输出。运行库不依赖 C++ 或其他几何运行时。
 
 版本内容见 [CHANGELOG](CHANGELOG.md)，下载、校验和及验收摘要见 [GitHub Release v0.2.0](https://github.com/BigSaltyMan/moonclip/releases/tag/v0.2.0)。[0.2.0 发布记录](docs/release-0.2.0.md)区分发布源码、注册表安装和后续状态提交；[0.1.0 历史记录](docs/release-0.1.0.md)保持原样，[成果说明](docs/submission.md)保留来源、贡献和申报边界。
 
@@ -9,10 +9,10 @@ MoonClip 是用 MoonBit 实现的二维多边形几何库，提供整数与统�
 在自己的 MoonBit 模块中运行：
 
 ```bash
-moon add BigSaltyMan/moonclip@0.2.0
+moon add BigSaltyMan/moonclip@0.2.1
 ```
 
-在包的 moon.pkg 中导入 `BigSaltyMan/moonclip`，配置见下文。该版本从注册表获取后已在独立项目运行 native、JS；数值与预算边界仍按 [scope.md](docs/scope.md) 解释。
+在包的 moon.pkg 中导入 `BigSaltyMan/moonclip`，配置见下文。0.2.0 已完成独立 native／JS 注册表消费者验证；0.2.1 只修正文档，运行库与公开接口保持一致。数值与预算边界按 [scope.md](docs/scope.md) 解释。
 
 ## 0.1.0 已有、0.2.0 继续提供的能力
 
@@ -29,7 +29,7 @@ Boolean 支持 Intersection、Union、Difference（Subject 减 Clip）、Xor，�
 
 ## 0.2.0 新增树接口
 
-下列增量已随 **0.2.0 正式发布，并完成 registry 来源的独立 native／JS 消费者验证**。新增库入口共 5 个：小数 Boolean 树与整数／小数偏移树、描边树；整数 `boolean_tree` 已在首版提供。安装上文精确 0.2.0 可使用新入口，0.1.0 不包含这些增量。完整发布事实见 [0.2.0 记录](docs/release-0.2.0.md)。
+下列增量已随 **0.2.0 正式发布，并完成 registry 来源的独立 native／JS 消费者验证**。新增库入口共 5 个：小数 Boolean 树与整数／小数偏移树、描边树；整数 `boolean_tree` 已在首版提供。0.2 系列均提供这些入口，0.1.0 不包含这些增量。完整发布事实见 [0.2.0 记录](docs/release-0.2.0.md)。
 
 只需要结果边界可继续使用平铺入口；需要孔洞归属则直接调用对应树入口；已有树可用 `to_paths()` 取得独立轮廓副本，但会丢失显式层级。完整迁移路径见[树接口升级说明](docs/upgrade-trees.md)，历史 CI、测试口径与六入口候选消费者见[增量验收材料](docs/acceptance-trees.md)。
 

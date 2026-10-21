@@ -1,6 +1,6 @@
 # MoonClip 交互演示
 
-发布状态：本文所述新增树能力已随 **0.2.0** 发布，见[正式发布记录](release-0.2.0.md)。既有 Unreleased 标题、锚点或截图保留原验收归属，接口契约不变。
+本文的六个树入口均自 **0.2.0** 提供，见[正式发布记录](release-0.2.0.md)。演示从仓库启动；旧锚点继续兼容已有链接，截图和验收记录保留原提交归属。
 
 ## 本地启动与静态构建
 
@@ -38,9 +38,11 @@ build生成demo/dist，包含HTML、CSS、案例输入、界面/导出/worker脚
 
 图形按数学坐标系显示，x向右、y向上。蓝色为输入区域/操作数A，橙色为操作数B或路线，紫色为局部图案及原点十字，绿色为真实结果。扫掠图案绘于局部原点，路线各顶点对应平移位置；偏置图案不会自动居中。可显隐输入/结果、自适应、按钮/滚轮缩放、拖动平移。绘制通过SVG坐标变换处理y轴，不改变核心语义。结果按NonZero复合路径绘制孔洞。
 
-## Unreleased 孔洞层级查看与桥接协议
+<a id="unreleased-孔洞层级查看与桥接协议"></a>
 
-结果结构默认 `paths`；切换为 `tree` 后重新计算，Boolean、Offset、Stroke 根据整数／小数模式分别调用 `boolean_tree` / `boolean_tree_d`、`offset_tree` / `offset_tree_d`、`stroke_tree` / `stroke_tree_d`。每次只运行选中的一个几何入口。Minkowski 禁用层级输出并重置为平铺，切换时清空树与选择。这些演示扩展属于开发源码，不表示 Mooncakes 0.1.0 包含新增入口。
+## 孔洞层级查看与桥接协议（自 0.2.0）
+
+结果结构默认 `paths`；切换为 `tree` 后重新计算，Boolean、Offset、Stroke 根据整数／小数模式分别调用 `boolean_tree` / `boolean_tree_d`、`offset_tree` / `offset_tree_d`、`stroke_tree` / `stroke_tree_d`。每次只运行选中的一个几何入口。Minkowski 禁用层级输出并重置为平铺，切换时清空树与选择。演示从仓库运行，所调用的新增库入口已随 Mooncakes 0.2.0 发布，0.1.0 不包含它们。
 
 桥接请求仍为 `version: 1`，可选 `output: "paths" | "tree"`，省略时为 `paths`。未知值或 Minkowski 的 tree 请求返回 `BridgeInput` 错误。成功响应保留 paths，并标记 output；只有树响应包含 tree：
 

@@ -1,8 +1,10 @@
 # 小数坐标与统一十进制网格
 
-发布状态：本文所述新增树能力已随 **0.2.0** 发布，见[正式发布记录](release-0.2.0.md)。既有 Unreleased 标题、锚点或截图保留原验收归属，接口契约不变。
+本文的树接口均自 **0.2.0** 提供，见[正式发布记录](release-0.2.0.md)。旧锚点继续兼容已有链接，历史验收记录保留原提交归属。
 
-## Unreleased：小数描边树
+<a id="unreleased小数描边树"></a>
+
+## 小数描边树（自 0.2.0）
 
 `stroke_tree_d(path, width, precision=, cap=, options=, limits=)` 返回 `Result[PolyTreeD, ClipError]`，默认 Precision=3、Butt，支持三种端点和四种连接，没有填充规则参数。此接口尚未包含在 0.1.0。width 是原单位完整宽度，width 和 ArcTolerance 按十进制倍率缩放，MiterLimit 保持无量纲。
 
@@ -10,13 +12,15 @@
 
 新建账本使用 StrokeGenerate / StrokeCleanup，传入账本的限制及历史用量保持权威。预检、量化、开放整理、生成、清理、整数树和下文的小数转换共用预算，释放不退款。正常转换放在清理扫描的提取回调内，失败也执行清理；快捷空结果不启动扫描，先计费构造整数空树，再计费解码空树。树构建标记 PolyTree、解码标记 DecimalOutput，其他错误保留实际阶段，输出位置不冒充输入索引。坐标转换只复制整数拓扑，首尾重合仍按开放路线处理。
 
-## Unreleased：小数孔洞树
+<a id="unreleased小数孔洞树"></a>
 
-开发源码另提供 `offset_tree_d(paths, delta, precision=, fill_rule=, options=, limits=)`，返回 `Result[PolyTreeD, ClipError]`。默认 Precision=3、NonZero，沿用平铺偏移的参数验证和缩放规则；delta 与 ArcTolerance 随十进制倍率缩放，MiterLimit 不缩放。小距离判断针对缩放后的 delta，例如 Precision=3 时原单位 .001 对应整数距离 1，不能按原单位与 .5 比较。
+## 小数孔洞树（自 0.2.0）
+
+`offset_tree_d(paths, delta, precision=, fill_rule=, options=, limits=)` 返回 `Result[PolyTreeD, ClipError]`，自 0.2.0 提供。默认 Precision=3、NonZero，沿用平铺偏移的参数验证和缩放规则；delta 与 ArcTolerance 随十进制倍率缩放，MiterLimit 不缩放。小距离判断针对缩放后的 delta，例如 Precision=3 时原单位 .001 对应整数距离 1，不能按原单位与 .5 比较。
 
 偏移树在共同规范化、生成与最终 Positive Union 后构建整数树，再通过下述同一转换函数解码。小距离在规范化扫描回调内构建并解码，规范化为空时用已计费的空树辅助，不追加扫描。正常及小距离回调失败均沿用所属扫描的清理路径，错误保留原有阶段。整个流程共用累计预算，不退款。小数树保存最终量化区域的层级，Precision、偏移造成的合并或孔洞消失都可能改变结果，不能沿用输入层级。该入口尚未包含在 0.1.0。
 
-`boolean_tree_d(subject, clip, operation, precision=, fill_rule=, limits=)` 返回 `Result[PolyTreeD, ClipError]`。参数与默认值同 `boolean_op_d`：Precision 默认 3、范围 0—6，EvenOdd 默认，NonZero 可选，四种 Boolean 操作均可用。**此入口仅开发源码可用，已发布 0.1.0 不包含它**。下文原有参考数量与 Commit 13 记录仍是历史证据。
+`boolean_tree_d(subject, clip, operation, precision=, fill_rule=, limits=)` 返回 `Result[PolyTreeD, ClipError]`。参数与默认值同 `boolean_op_d`：Precision 默认 3、范围 0—6，EvenOdd 默认，NonZero 可选，四种 Boolean 操作均可用。**此入口自 0.2.0 提供，0.1.0 不包含它**。下文原有参考数量与 Commit 13 记录仍是历史证据。
 
 一次调用依次执行原始预检、闭合规则量化、私有 Boolean 求值、整数树构建及验证、小数树转换、扫描清理。转换在提取回调内完成，失败也经过同一清理路径，并沿用既有小数错误映射。旧 `decimal_execute`、整数树与平铺小数入口不变。
 

@@ -1,8 +1,10 @@
 # Composition and cumulative resource protection
 
-发布状态：本文所述新增树能力已随 **0.2.0** 发布，见[正式发布记录](release-0.2.0.md)。既有 Unreleased 标题、锚点或截图保留原验收归属，接口契约不变。
+The tree APIs below are available since **0.2.0**; see the [release record](release-0.2.0.md). Legacy anchors remain valid, and earlier acceptance evidence retains its original commit attribution.
 
-## Unreleased：Stroke trees
+<a id="unreleasedstroke-trees"></a>
+
+## Stroke trees (since 0.2.0)
 
 `stroke_tree` and `stroke_tree_d` return the final filled hierarchy of one open route. They keep full width, Butt / Square / Round caps and four joins, with no fill-rule argument. Neither entry is in published 0.1.0. The shared `stroke_compute` prepares the open route, generates both sides and caps, then uses the existing Positive Union with `tree_build`; decimal conversion runs inside that extraction callback. Failure cleans the same scan. Flat output keeps its existing extraction and shortcut fees.
 
@@ -12,7 +14,9 @@ Width below one grid unit or fewer than two prepared points produces an empty tr
 
 Preparation, generation, cleanup, tree construction and decoding use the same ledger, with no refunds. Tree stages use PolyTree / DecimalOutput; other errors retain their actual phase (including EnginePrepare for scan control allocation). New 29 library tests and candidate consumers are separate from the unchanged reference catalogs and their 1384 cases / 2276 capability checks.
 
-## Unreleased：Offset trees
+<a id="unreleasedoffset-trees"></a>
+
+## Offset trees (since 0.2.0)
 
 `offset_tree` and `offset_tree_d` return the final offset hierarchy in one cumulative call. This differs from the historical InsetThenTree recipe below, which intentionally composes two public calls with independent ledgers. Neither new entry is in published 0.1.0. The default fill is NonZero; the caller's rule is used for shared input normalization, while final cleanup keeps the existing internal Positive rule.
 
