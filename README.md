@@ -2,7 +2,7 @@
 
 MoonClip 是用 MoonBit 实现的二维多边形几何库，提供整数与统一十进制网格的小数入口。0.2 系列提供整数／小数 Boolean、偏移与描边的孔洞层级输出。运行库不依赖 C++ 或其他几何运行时。
 
-版本内容见 [CHANGELOG](CHANGELOG.md)，下载、校验和及验收摘要见 [GitHub Release v0.2.0](https://github.com/BigSaltyMan/moonclip/releases/tag/v0.2.0)。[0.2.0 发布记录](docs/release-0.2.0.md)区分发布源码、注册表安装和后续状态提交；[0.1.0 历史记录](docs/release-0.1.0.md)保持原样，[成果说明](docs/submission.md)保留来源、贡献和申报边界。
+版本内容见 [CHANGELOG](CHANGELOG.md)，下载、校验和及验收摘要见 [GitHub Release v0.2.1](https://github.com/BigSaltyMan/moonclip/releases/tag/v0.2.1)。[0.2.1 发布记录](docs/release-0.2.1.md)说明文档修正和实际页面核验；[0.2.0](docs/release-0.2.0.md)与[0.1.0 历史记录](docs/release-0.1.0.md)保持原样，[成果说明](docs/submission.md)保留来源、贡献和申报边界。
 
 ## 从 Mooncakes 使用
 
@@ -12,7 +12,7 @@ MoonClip 是用 MoonBit 实现的二维多边形几何库，提供整数与统�
 moon add BigSaltyMan/moonclip@0.2.1
 ```
 
-在包的 moon.pkg 中导入 `BigSaltyMan/moonclip`，配置见下文。0.2.0 已完成独立 native／JS 注册表消费者验证；0.2.1 只修正文档，运行库与公开接口保持一致。数值与预算边界按 [scope.md](docs/scope.md) 解释。
+在包的 moon.pkg 中导入 `BigSaltyMan/moonclip`，配置见下文。0.2.1 已完成独立 native／JS 注册表消费者验证；本次只修正文档，运行库与公开接口和 0.2.0 保持一致。数值与预算边界按 [scope.md](docs/scope.md) 解释。
 
 ## 0.1.0 已有、0.2.0 继续提供的能力
 

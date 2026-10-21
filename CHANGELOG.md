@@ -1,6 +1,8 @@
 # Changelog
 
-## 0.2.1
+## 0.2.1 — 2026-10-21
+
+已发布至 [Mooncakes](https://mooncakes.io/docs/BigSaltyMan/moonclip@0.2.1/) 和 [GitHub Release](https://github.com/BigSaltyMan/moonclip/releases/tag/v0.2.1)。独立注册表 native／JS 消费者及实际文档页核验通过，见[发布记录](docs/release-0.2.1.md)。
 
 - 修正注册表文档中的过时发布状态、安装版本和树接口说明；0.2.0 已包含五个新增函数及小数树类型，并非只能从开发源码使用。
 - 小数、组合及演示文档的树章节改为 0.2.0 已提供的能力，保留旧锚点供已有链接使用；来源记录中的提交阶段描述仍按历史解释。
