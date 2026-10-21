@@ -10,9 +10,9 @@ C# 源码是主要引擎阅读与移植参考，偏移、简化、扫掠等实�
 
 | 项目 | MoonClip 当前行为 | 证据或差异 |
 | --- | --- | --- |
-| 闭合区域 Boolean | 四种操作、公开 EvenOdd / NonZero，整数／小数平铺及树；小数树为 0.2.0 候选 | 旧固定 C++ 对照分别检查所选整数轮廓和树；新增小数树另有定向测试与消费者，不能扩大旧矩阵范围；Positive / Negative 仅内部 |
+| 闭合区域 Boolean | 四种操作、公开 EvenOdd / NonZero，整数／小数平铺及树；小数树为 0.2.0 | 旧固定 C++ 对照分别检查所选整数轮廓和树；新增小数树另有定向测试与消费者，不能扩大旧矩阵范围；Positive / Negative 仅内部 |
 | 偏移及开放描边 | 四种连接、三种端点、ArcTolerance；公开完整 width | 偏移参考先共同规范化区域；描边按开放路线生成；单点及整数 0≤width<1 的空结果属于 MoonClip 契约，未据此承诺所有上游特殊分支兼容 |
-| 偏移／描边树（0.2.0 候选） | 整数与小数入口返回最终区域父子层级，沿用单次累计预算 | 复用既有生成、清理、树构建及解码；定向测试与六入口候选消费者见[增量验收](acceptance-trees.md)，无新增算法移植声明 |
+| 偏移／描边树（0.2.0） | 整数与小数入口返回最终区域父子层级，沿用单次累计预算 | 复用既有生成、清理、树构建及解码；定向测试与六入口候选消费者见[增量验收](acceptance-trees.md)，无新增算法移植声明 |
 | 小数入口 | 固定 10^precision 网格，0—6 | ClipperD 使用二进制倍率；DecimalGrid 与 ClipperDCommonGrid 是不同参考路线，不能互相替代 |
 | 简化 | 显式入口、完整报告，epsilon=0 只去约定重复点 | 正 epsilon 的有序轮廓与独立统计有严格参考；零阈值及三类退化报告属于 MoonClip 契约 |
 | Minkowski Sum | 单个整数图案、单路线、显式开闭、保留共线点 | 真实调用固定 C++ MinkowskiSum 对照；没有小数 / Diff / 带孔图案集合入口 |
@@ -48,7 +48,7 @@ C# 源码是主要引擎阅读与移植参考，偏移、简化、扫掠等实�
 | 维度 | MoonClip | MoonGeoKit 当次公开接口 |
 | --- | --- | --- |
 | 主要用途 | 构造和生成合并、裁剪、缓冲及描边后的区域边界 | 基础几何关系、距离与包含、凸包、面积 / 周长 / 重心，以及空间候选检索 |
-| 区域结果 | Boolean、Offset、Stroke 平铺结果；整数／小数树（新增部分为 0.2.0 候选），以及整数 Minkowski Sum | README / 该 API 未列出这些多边形 Boolean、孔洞树和扫掠入口；Bounds::union 是包围盒并集 |
+| 区域结果 | Boolean、Offset、Stroke 平铺结果；整数／小数树（新增部分为 0.2.0），以及整数 Minkowski Sum | README / 该 API 未列出这些多边形 Boolean、孔洞树和扫掠入口；Bounds::union 是包围盒并集 |
 | 查询与索引 | 精确方向、单轮廓 EvenOdd 点包含；无动态空间索引 | GridSpatialIndex 的 insert / update / remove（含批量）、query_bounds / query_point / query_nearest |
 | 坐标与输出 | Int64 限定网格、统一十进制 Precision、小数结果与结构化错误；演示导出 SVG / JSON | Double 基础类型、*_eps 容差谓词、GeoJSON 输出；不据此比较两者数值精度优劣 |
 

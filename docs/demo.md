@@ -1,5 +1,7 @@
 # MoonClip 交互演示
 
+发布状态：本文所述新增树能力已随 **0.2.0** 发布，见[正式发布记录](release-0.2.0.md)。既有 Unreleased 标题、锚点或截图保留原验收归属，接口契约不变。
+
 ## 本地启动与静态构建
 
 使用项目固定MoonBit工具链与Node.js20以上。本机验证Node.js24.18.0；没有npm依赖，不需要npm install。Windows的npm脚本使用已安装Git Bash，Linux使用bash。

@@ -1,21 +1,21 @@
 # 支持范围与使用边界
 
-0.1.0 已于 2026-10-20 发布，[注册表与 Release 验收](release-0.1.0.md)已完成。下表另标注开发源码中的 0.2.0 候选 小数 Boolean 树及整数／小数偏移树、描边树，均未随 0.1.0 发布。当前源码公开契约以[生成接口](../pkg.generated.mbti)及下列专题文档为准；历史发布与提交记录描述的是当时状态。
+0.1.0 已于 2026-10-20 发布，[注册表与 Release 验收](release-0.1.0.md)已完成。0.2.0 已于 2026-10-21 正式发布，新增小数 Boolean 树及整数／小数偏移树、描边树，见[0.2.0 发布记录](release-0.2.0.md)；这些增量均未随 0.1.0 发布。当前源码公开契约以[生成接口](../pkg.generated.mbti)及下列专题文档为准；历史发布与提交记录描述的是当时状态。
 
 ## 入口与返回值
 
-相对首版新增的是小数 Boolean 树与整数／小数偏移树、描边树，共 5 个库入口；整数 `boolean_tree` 已在 0.1.0 中提供。选择平铺、树或 `to_paths()` 的迁移方法见[升级说明](upgrade-trees.md)，各提交的测试与消费者口径见[增量验收](acceptance-trees.md)。开发演示另提供六入口层级查看、边界高亮与 v2 JSON，属于 0.2.0 候选。
+相对首版新增的是小数 Boolean 树与整数／小数偏移树、描边树，共 5 个库入口；整数 `boolean_tree` 已在 0.1.0 中提供。选择平铺、树或 `to_paths()` 的迁移方法见[升级说明](upgrade-trees.md)，各提交的测试与消费者口径见[增量验收](acceptance-trees.md)。开发演示另提供六入口层级查看、边界高亮与 v2 JSON，属于 0.2.0。
 
 所有计算入口返回 `Result[成功类型, ClipError]`。`Ok([])` 可表示真实的空区域；`Err` 不能替换为空区域。Point 构造、复制与只读访问器不属于计算错误入口。
 
 | 能力 | 整数入口 / 成功类型 | 小数入口 / 成功类型 | 默认值及边界 |
 | --- | --- | --- | --- |
 | Boolean | `boolean_op` / `Paths64` | `boolean_op_d` / `PathsD` | 四种操作；EvenOdd 默认，NonZero 可选；两个操作数都是闭合填充区域 |
-| 孔洞树 | `boolean_tree` / `PolyTree64` | **0.2.0 候选**：`boolean_tree_d` / `PolyTreeD` | 同样四种操作、两种公开填充；小数树保留量化区域的真实归属 |
+| 孔洞树 | `boolean_tree` / `PolyTree64` | **0.2.0**：`boolean_tree_d` / `PolyTreeD` | 同样四种操作、两种公开填充；小数树保留量化区域的真实归属 |
 | 闭合偏移 | `offset_polygons` / `Paths64` | `offset_polygons_d` / `PathsD` | NonZero 默认；delta 为单侧有符号距离；共同 Union 后偏移及清理 |
-| 偏移孔洞树 | **0.2.0 候选**：`offset_tree` / `PolyTree64` | **0.2.0 候选**：`offset_tree_d` / `PolyTreeD` | 与平铺偏移相同的参数、四种连接；最终区域的层级，所有内部阶段共用预算 |
+| 偏移孔洞树 | **0.2.0**：`offset_tree` / `PolyTree64` | **0.2.0**：`offset_tree_d` / `PolyTreeD` | 与平铺偏移相同的参数、四种连接；最终区域的层级，所有内部阶段共用预算 |
 | 开放描边 | `stroke_polyline` / `Paths64` | `stroke_polyline_d` / `PathsD` | width 是完整宽度，两侧各半；Butt 默认，另有 Square / Round 端点 |
-| 描边孔洞树 | **0.2.0 候选**：`stroke_tree` / `PolyTree64` | **0.2.0 候选**：`stroke_tree_d` / `PolyTreeD` | 同样的完整宽度、三种端点和四种连接；单条开放路线，无填充规则参数，返回最终区域层级 |
+| 描边孔洞树 | **0.2.0**：`stroke_tree` / `PolyTree64` | **0.2.0**：`stroke_tree_d` / `PolyTreeD` | 同样的完整宽度、三种端点和四种连接；单条开放路线，无填充规则参数，返回最终区域层级 |
 | 显式简化 | `simplify_paths` / `SimplifyResult` | `simplify_paths_d` / `SimplifyResultD` | 默认 Closed、epsilon=0；报告保留退化路径，不自行过滤 |
 | 单图案扫掠 | `minkowski_sum` / `Paths64` | 尚无 | 必须指定路线开闭；图案总是闭合；结果保留共线点 |
 
@@ -33,7 +33,7 @@ PointD 保存 Double，Precision 支持 0—6、默认 3，以 10^digits 为倍�
 
 数学坐标系 x 向右、y 向上，正面积为逆时针。EvenOdd 与 NonZero 公开支持；Positive / Negative 只有私有引擎和白盒证据。EvenOdd 与方向无关；NonZero 累计有向绕数，孔洞通常以相反方向输入。只反转部分路径可能改变区域。
 
-Boolean / Offset / Stroke 的平铺输出采用外轮廓正向、孔洞负向，不保证轮廓顺序或环起点。平铺数组本身不记录父子关系，勿将排序当作孔洞归属。树的根外轮廓深度 1，孔洞 2，孔中岛 3，之后交替。0.2.0 候选 的 boolean_tree_d 保留量化区域的整数归属，再解码为 Double；Precision 会影响区域。offset_tree / offset_tree_d 返回最终偏移区域的树，stroke_tree / stroke_tree_d 返回开放路线加宽并清理后的区域层级；路线本身没有可直接沿用的孔洞关系，首尾重合不自动改变开放端点语义。这些新入口内部共享预算，小数转换不重新判断包含。0.1.0 没有小数树或直接偏移／描边树。将平铺结果传入另一个公开调用会重新建账。两种树的 to_paths() 都丢失显式父子信息。
+Boolean / Offset / Stroke 的平铺输出采用外轮廓正向、孔洞负向，不保证轮廓顺序或环起点。平铺数组本身不记录父子关系，勿将排序当作孔洞归属。树的根外轮廓深度 1，孔洞 2，孔中岛 3，之后交替。0.2.0 的 boolean_tree_d 保留量化区域的整数归属，再解码为 Double；Precision 会影响区域。offset_tree / offset_tree_d 返回最终偏移区域的树，stroke_tree / stroke_tree_d 返回开放路线加宽并清理后的区域层级；路线本身没有可直接沿用的孔洞关系，首尾重合不自动改变开放端点语义。这些新入口内部共享预算，小数转换不重新判断包含。0.1.0 没有小数树或直接偏移／描边树。将平铺结果传入另一个公开调用会重新建账。两种树的 to_paths() 都丢失显式父子信息。
 
 树内部独立拥有数据，根 / 孩子 / contour / to_paths 访问器返回副本；按需复制属于访问器成本。路径数组赋值则可能共享存储；需要独立容器时显式 copy_path(s)，小数用对应 `_d`。结构 Eq 逐点比较，不是忽略绕向、起点或共线点的几何等价判定。
 
@@ -57,4 +57,4 @@ Minkowski 图案坐标直接与路线坐标相加，原点就是锚点，不自�
 
 没有公开 Positive / Negative、开放路径参与 Boolean、多路线或闭合模式描边、小数 Minkowski、MinkowskiDiff、带孔图案集合、三角剖分、SVG 输入解析、GIS 投影、三维几何、可变宽度回调或一般拓扑修复。演示 SVG 是结果导出，不意味着库能解析任意 SVG。
 
-0.1.0 的 native 与 JS 正确性证据为同一批 2234 项测试。0.2.0 候选 新增 33 项小数 Boolean 树、27 项偏移树和 29 项描边树定向测试，源码完整回归为 2323 项，两目标分别记录。1384 条参考在[兼容报告](compatibility.md)中按 2276 项能力检查分开记录；旧参考没有扩展到新树入口，也不是对任意输入兼容全部 Clipper2 的证明。性能仍为原测量提交的指定 Windows native 基线，本笔未重测，JS 性能未测量。
+0.1.0 的 native 与 JS 正确性证据为同一批 2234 项测试。0.2.0 新增 33 项小数 Boolean 树、27 项偏移树和 29 项描边树定向测试，源码完整回归为 2323 项，两目标分别记录。1384 条参考在[兼容报告](compatibility.md)中按 2276 项能力检查分开记录；旧参考没有扩展到新树入口，也不是对任意输入兼容全部 Clipper2 的证明。性能仍为原测量提交的指定 Windows native 基线，本笔未重测，JS 性能未测量。

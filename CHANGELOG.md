@@ -1,8 +1,8 @@
 # Changelog
 
-## 0.2.0 — 待发布
+## 0.2.0 — 2026-10-21
 
-本节为已确定版本的发布候选；尚未上传注册表或创建 v0.2.0 标签／Release，发布日期和注册表安装结论留待正式发布后记录。候选与首版历史分开，见 [0.2.0 发布候选说明](docs/release-0.2.0.md)。
+已发布至 Mooncakes，并创建 [GitHub Release v0.2.0](https://github.com/BigSaltyMan/moonclip/releases/tag/v0.2.0)。发布源码固定为 `e0ef766b34562bcad2b3f3e0d50002adf7b05912`；独立注册表消费者 native／JS 均通过，51 个下载文件与冻结候选一致。发布后状态文档提交与发布源码分开，见 [0.2.0 发布记录](docs/release-0.2.0.md)。
 
 ### 库接口
 

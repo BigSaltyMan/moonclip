@@ -1,5 +1,7 @@
 # 小数坐标与统一十进制网格
 
+发布状态：本文所述新增树能力已随 **0.2.0** 发布，见[正式发布记录](release-0.2.0.md)。既有 Unreleased 标题、锚点或截图保留原验收归属，接口契约不变。
+
 ## Unreleased：小数描边树
 
 `stroke_tree_d(path, width, precision=, cap=, options=, limits=)` 返回 `Result[PolyTreeD, ClipError]`，默认 Precision=3、Butt，支持三种端点和四种连接，没有填充规则参数。此接口尚未包含在 0.1.0。width 是原单位完整宽度，width 和 ArcTolerance 按十进制倍率缩放，MiterLimit 保持无量纲。
