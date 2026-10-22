@@ -1,5 +1,9 @@
 # 上游来源与移植记录
 
+## Commit 35：闭合区域矩形窗口适配（Unreleased）
+
+`rect_clip_polygons` 复用已有 Boolean 求交、填充规则、扫描和提取引擎。本笔窗口适配、预检和累计预算衔接由 MoonClip 自行实现，没有移植新的上游 RectClip 专用算法，也没有新增依赖；既有引擎版权及 BSL-1.0 来源记录继续适用。开放折线裁剪实现未改动。
+
 ## Commit 34：小数批量描边（Unreleased）
 
 `stroke_polylines_d` 复用既有共同量化、整数批量描边、连接／端点、Boolean 清理和小数解码，没有新增算法移植或上游依赖。新增的是 MoonClip 自行实现的小数批量适配与共享预算衔接，沿用现有版权和 BSL-1.0 来源声明。

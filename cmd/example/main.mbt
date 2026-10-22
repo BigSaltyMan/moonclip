@@ -1,6 +1,7 @@
 ///|
 fn run_foundation_example() -> Unit raise {
   run_rectclip_example()
+  run_rectclip_polygons_example()
   run_stroke_batch_example()
   run_decimal_stroke_batch_example()
   run_decimal_minkowski_example()
@@ -1093,4 +1094,22 @@ fn run_minkowski_example() -> Unit raise {
   println(
     "Minkowski: rectangle/polyline, offcenter/diagonal and closed route/hole OK",
   )
+}
+
+///|
+fn run_rectclip_polygons_example() -> Unit raise {
+  let rect : @moonclip.Bounds64 = {
+    min_x: 0L,
+    min_y: 0L,
+    max_x: 10L,
+    max_y: 10L,
+  }
+  let result = @moonclip.rect_clip_polygons(rect, [
+    example_rect(-2L, -2L, 14L, 14L),
+    example_rect(3L, 3L, 4L, 4L),
+  ]).unwrap()
+  example_result(result, [
+    example_rect(0L, 0L, 10L, 10L),
+    example_reverse(example_rect(3L, 3L, 4L, 4L)),
+  ])
 }

@@ -1,5 +1,7 @@
 # 支持范围与使用边界
 
+Unreleased：`rect_clip_polygons` 将整数闭合区域与矩形窗口一次求交，支持 EvenOdd／NonZero，返回可含孔洞的平铺区域。复用 Boolean 数值与预算契约，没有矩形专用优化、小数或树包装；详见[矩形裁剪](rectclip.md)。
+
 Unreleased：整数 `PolyTree64::locate` 返回最深严格包含的填充／孔洞节点，或优先返回全部边界命中。最坏线性访问全部轮廓顶点，Limits 限制被查询树的轮廓和总顶点，合法树也可能被较小查询额度拒绝。空树仍验证参数；不提供小数树或批量点查询。详见[树点定位](polytree-query.md)。
 
 Unreleased：`minkowski_sum_d` 提供小数单图案、单路线的平铺扫掠区域，默认 Precision=3（0—6）。继承整数入口锚点、路线开闭和共线点语义；不提供 MinkowskiDiff、多图案或路线、树、自动简化及演示。图案和路线同网格量化后再作整数求和，生成范围及共享预算见[扫掠契约](minkowski.md)。
