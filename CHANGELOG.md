@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- 批量加宽演示接入小数模式与 Precision，整批一次调用 `stroke_polylines_d`，原单位宽度与容差交给核心处理；复用区域 SVG／v1 JSON 和原有 3 项检查。完成有限窄屏对照，临时容器观察异常归因仍未确认；未发布。
+
 - 窗口裁剪演示接入小数模式与 Precision，直接调用 `rect_clip_lines_d`；开放 v3 JSON 补充实际 mode／precision，可重放。扩展原有 3 项裁剪检查，未新增测试块或 CI scope，未发布。
 
 - 新增 `rect_clip_lines_d`：窗口独立量化、全部开放路线共同量化，复用整数开放裁剪并共享解码预算，保留片段顺序、方向和共线中间点。新增 3 项定向测试；网页窗口裁剪仍仅整数，未发布。

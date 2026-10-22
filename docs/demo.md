@@ -1,5 +1,15 @@
 # MoonClip 交互演示
 
+## Commit 39：小数多路线批量加宽（Unreleased）
+
+“路线实验 → 批量加宽”支持整数／小数模式。整批请求分别一次调用 `stroke_polylines` 或 `stroke_polylines_d`；小数路线直接解析为 PointD，完整宽度与 ArcTolerance 使用原单位，MiterLimit 无量纲，由核心共同量化、生成并合并。前端不逐条描边、缩放或合并。Precision 默认 3、范围 0—6，仅小数模式启用，树输出、填充规则及简化继续不可用。
+
+新增“小数路线 · 重叠合并”：两条水平路线 (-1.25,0.5)→(0.75,0.5)、(-0.25,0.5)→(1.75,0.5)，完整宽度 0.5，Precision=2，Butt／Miter，合并为 [-1.25,0.25]—[1.75,0.75] 的四顶点闭合矩形。所有路线共享样式，输入分别开放绘制，输出是闭合覆盖区域，不保证一条路线对应一个轮廓。
+
+模式、精度、路线或样式修改立即清除有效结果、禁用导出；切回整数保留小数原值并明确拒绝。迟到响应继续受请求编号约束。SVG 沿用闭合区域和 NonZero 填充，v1 JSON 原样保存全部路线、mode、Precision、原单位样式及真实结果，request 可直接重放；导出格式和版本未变。
+
+本地开发服务构建一次后，复用产物执行原有 `demo stroke batch:` 三项；同 SHA CI 使用已有 `demo-stroke-batch`，不新增测试块或 scope。有限窄屏对照与实际下载重放见[验收记录](demo-acceptance.md#commit-39小数多路线批量描边增量验收)。未改根库、公开接口、默认参数、版本或标签，未发布；下面各 Commit 节保留历史范围。
+
 ## Commit 38：小数窗口折线裁剪（Unreleased）
 
 “路线实验 → 窗口裁剪”现支持整数／小数切换。整数桥接调用 `rect_clip_lines`，小数桥接直接将 BoundsD、PathsD 和 Precision 交给 `rect_clip_lines_d`；前端不缩放、量化或裁剪。小数 Precision 默认 3、支持 0—6，整数模式禁用精度控件；窗口字段 step=any，保留原始值，切回整数后小数输入明确报错。树、填充规则和简化继续不可用。
@@ -83,7 +93,7 @@ build生成demo/dist，包含HTML、CSS、案例输入、界面/导出/worker脚
 | 带孔偏移 | 轮廓及孔洞；有符号delta；四种Join；MiterLimit；ArcTolerance | 整数或小数 |
 | 路线加宽 | 单条开放路线；完整width；Butt/Square/Round端点；四种Join | 整数或小数 |
 | 图案扫掠 | 一个图案、一条路线；显式开闭；图案直接相加 | 整数／小数，开发演示 Unreleased |
-| 批量加宽 | 多条独立开放路线、共享样式、一次合并覆盖区域 | 仅整数坐标，开发演示 Unreleased |
+| 批量加宽 | 多条独立开放路线、共享样式、一次合并覆盖区域 | 整数／小数，开发演示 Unreleased |
 
 整数坐标要求合法JSON整数，桥接只接受可精确表示的安全整数，之后由库检查几何范围±10^9；小数直接构造PointD并传入Precision0—6。没有前端自行缩放的小数扫掠。距离、完整宽度、正ArcTolerance及epsilon都使用当前输入坐标的原始单位；MiterLimit无量纲且至少2，ArcTolerance0保留库的自动策略。允许负偏移，参数错误原样显示库错误和位置。
 

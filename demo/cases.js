@@ -11,6 +11,7 @@ export const cases={
   'stroke-batch':[
     {id:'overlap-lines',label:'两条直线 · 重叠合并',version:1,scene:'stroke-batch',mode:'integer',output:'paths',paths:[[[0,0],[10,0]],[[5,0],[15,0]]],params:{width:2,cap:'Butt',join:'Miter',miter_limit:2,arc_tolerance:0},simplify:{enabled:false}},
     {id:'two-turns',label:'两条转角路线 · 共享样式',version:1,scene:'stroke-batch',mode:'integer',output:'paths',paths:[[[0,0],[10,0],[10,10]],[[5,-5],[5,5],[15,5]]],params:{width:2,cap:'Butt',join:'Miter',miter_limit:2,arc_tolerance:0},simplify:{enabled:false}},
+    {id:'decimal-overlap',label:'小数路线 · 重叠合并',version:1,scene:'stroke-batch',mode:'decimal',precision:2,output:'paths',paths:[[[-1.25,.5],[.75,.5]],[[-.25,.5],[1.75,.5]]],params:{width:.5,cap:'Butt',join:'Miter',miter_limit:2,arc_tolerance:0},simplify:{enabled:false}},
   ],
   rectclip:[
     {id:'cross',label:'穿过窗口 · 保留中间顶点',version:1,scene:'rectclip',mode:'integer',output:'paths',rect:{min_x:0,min_y:0,max_x:10,max_y:10},paths:[[[-10,5],[5,5],[20,5]]],simplify:{enabled:false}},

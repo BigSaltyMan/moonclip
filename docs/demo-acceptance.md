@@ -140,3 +140,29 @@
 | 控制台 | 主页面 error／warn 为 0；窄屏容器记录 1 条无源码位置的 MutationObserver observe 异常，页面仍正常操作和计算。演示源文件未包含该调用，异常归因未确认，不宣称窄屏控制台完全无异常 |
 
 浏览器视口 override 未改变实际 1280×720 尺寸，因此改用忽略目录中的同源 iframe 创建真实 390×844 内容视口；已清除 override 并关闭临时容器。截图仅保存[小数裁剪页签](demo-screenshots/commit38-decimal-rectclip.png)。浏览器实际下载原件复制在忽略目录 `demo/.qa/commit38/result.svg` 与 `result.json`，Node 使用生成的真实 MoonBit 桥接重放 JSON。截图计时不是性能测量。未复测其他场景、完整桥接、根库、参考、性能或候选包；未调整版本或发布。
+
+
+## Commit 39：小数多路线批量描边增量验收
+
+2026-10-22，Windows，在本地 `npm run dev` 构建一次后，通过 Codex 内置浏览器访问 http://127.0.0.1:4173/。原有 3 项 `demo stroke batch:` 扩展后 **3/3** 通过，没有新增测试块或 scope；导出代码直接复用，根 `.mbti` 无变化。Linux 同 SHA 轻量 CI 单独核对，不把本地浏览器操作计为 Linux 验收。
+
+| 操作 | 实际结果 |
+|---|---|
+| 小数批量案例，width=0.5、Precision=2 | 两条输入独立开放，输出合并为四顶点矩形 [-1.25,0.25]—[1.75,0.75] |
+| 修改 width=1、Precision=3 | 真实重新计算，区域更新为 [-1.25,0]—[1.75,1] |
+| 两条路线分别含 (0.001,0)、(0.002,0)，Precision=2 | DecimalQuantize / QuantizationFailure，path=1、vertex=0，related 指向 path=0、vertex=0；旧结果清除，导出禁用 |
+| 恢复案例并实际下载 SVG／JSON | SVG 可打开，闭合且 NonZero 填充，真实小数坐标保留；v1 JSON 保留原始路线、mode=decimal、precision=2 和 width=0.5 等原单位参数，request 重放逐点一致 |
+| 切回整数 | 小数路线和参数原值保留，Precision 禁用，BridgeInput 明确拒绝坐标，导出禁用 |
+| 主页面与窄屏对照 | 实际主页面内容视口 1280×720；临时同源 iframe 内脚本实测 390×844、scrollWidth=375。两处均完成案例、宽度／精度更新、量化错误、恢复和模式拒绝操作，窄屏控件正常；下载和重放使用主页面实际文件 |
+
+有限对照只执行一轮。主页面 error／warn 日志为空。临时窄屏容器的浏览器日志再次出现：
+
+```text
+Uncaught TypeError: Failed to execute 'observe' on 'MutationObserver': parameter 1 is not of type 'Node'.
+```
+
+日志时间为 **2026-10-22T11:18:21.282Z**，早于诊断页 load 记录 **11:18:21.445Z**，即进入批量页签之前；浏览器日志接口没有提供来源地址、行列或堆栈，保存时 source／stack 明确记为 null。临时子页安装的 error／unhandledrejection 监听没有捕获对应事件（errors=[]）。演示 app／worker／export／HTML 和桥接源码未找到 MutationObserver 调用；这些观察不足以确定错误来源，**归因仍未确认，暂不定性为页面布局缺陷**，也不宣称窄屏控制台完全无异常。没有据此修改产品布局、加入防御性补丁或展开长期排查。
+
+诊断仅在忽略目录中的 HTML 副本加入监听和 base 地址，不改产品页面；实际视口数据由子页通过同源 postMessage 报告，不使用设置目标值冒充测量结果。完整本地诊断位于 `demo/.qa/commit39/main-observation.json`、`narrow-observation.json`；实际下载原件为同目录 `result.svg`、`result.json`。临时容器已关闭，未设置浏览器 viewport override。
+
+仅保存一张[小数批量加宽截图](demo-screenshots/commit39-decimal-stroke-batch.png)，截图计时不代表性能结论。未运行库全量、完整工具／桥接、参考重建、性能、基准或候选验收；未修改消费者、版本和发布标签，保持 Unreleased。
