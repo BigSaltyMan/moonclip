@@ -30,5 +30,6 @@ export const cases={
   minkowski:[
     {id:'open',label:'开放折线 · 图案直接相加',...base,scene:'minkowski',path:[[-45,-20],[-10,22],[40,-12]],pattern:patterns.rectangle.points,params:{path_is_closed:false}},
     {id:'closed',label:'闭合矩形 · 扫掠保留孔洞',...base,scene:'minkowski',path:rect(-36,-24,72,48),pattern:patterns.rectangle.points,params:{path_is_closed:true}},
+    {id:'decimal-grid',label:'小数扫掠 · 两点图案',...base,scene:'minkowski',mode:'decimal',precision:2,path:[[-1,0],[1,0]],pattern:[[0,-.25],[0,.25]],params:{path_is_closed:false}},
   ],
 };

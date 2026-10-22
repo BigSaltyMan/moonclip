@@ -361,9 +361,6 @@ fn execute(request : Json) -> Json raise DemoError {
   if mode != "integer" && mode != "decimal" {
     raise Input("Unknown coordinate mode", None, None)
   }
-  if scene == "minkowski" && mode != "integer" {
-    raise Input("Minkowski supports integer mode only", None, None)
-  }
   let params = object(r.get("params").unwrap_or(Json::object({})))
   let simplify = object(r.get("simplify").unwrap_or(Json::object({})))
   let enabled = flag(simplify, "enabled", false)
@@ -528,6 +525,19 @@ fn execute(request : Json) -> Json raise DemoError {
                 options~,
               ),
             )
+          "minkowski" => {
+            let pattern = coordinates(
+              Json::array([r.get("pattern").unwrap_or(empty)]),
+            )
+            value(
+              @moonclip.minkowski_sum_d(
+                pattern[0],
+                a[0],
+                flag(params, "path_is_closed", false),
+                precision~,
+              ),
+            )
+          }
           _ => raise Input("Unknown decimal scene", None, None)
         },
       )

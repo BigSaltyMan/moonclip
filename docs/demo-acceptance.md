@@ -78,3 +78,17 @@
 下载 SVG SHA-256：`0b06c002ef863cd77f4d60d18c48d93eb8a93f2d908c89e66fb0be4eeb0456b6`。JSON SHA-256：`fedcc61d51dfdae3693597129777a8200eeee24a36d8ce102ce042eb221d61fe`。
 
 仅保存一张新增页签截图：[窗口裁剪](demo-screenshots/rectclip.jpg)。这份记录属于本地浏览器和下载验收；同 SHA Linux CI 的轻量构建／测试结果另行核对，不把历史全量、参考、性能或注册表证据算成本笔结果。根几何算法、公开 API、旧参考、版本及发布标签未变，新功能为 Unreleased。
+
+## Commit 31：小数扫掠增量验收
+
+2026-10-22，Windows，Codex 内置浏览器，先重启本会话开发服务，以 `npm run dev` 唯一构建完成后访问 http://127.0.0.1:4173。本地 JS 静态检查及 `demo decimal minkowski:` **3/3** 通过；其中新增 2 项，旧结构化错误检查调整 1 项，保留其余有效断言。未运行整套桥接、库或工具测试，也未重复构建。
+
+- 只验收“图案扫掠”的新增小数案例。Precision=2 时得到完整矩形，实际区域路径为 M1,-0.25L1,0.25L-1,0.25L-1,-0.25Z；4 个顶点、原有绕向和小数坐标保留。
+- Precision 改为 3，先失效导出，再计算成功；改为 0 后返回 DecimalQuantize / QuantizationFailure，图案索引 0、顶点 1，关联顶点 0，结果清除且两种导出禁用。
+- 恢复 Precision=2 后实际下载 SVG、JSON，副本保存于 `_build/commit31/moonclip-minkowski.svg`、`_build/commit31/moonclip-minkowski.json`。SVG 保留闭合 Z、NonZero 和小数坐标；JSON version=1，request 含原图案、路线、mode=decimal、precision=2、path_is_closed=false。将下载 request 重新交给真实桥接，完整结果逐点一致。
+- 切回整数时输入的 ±0.25 保留，Precision 禁用，旧结果立即失效；点击计算返回 BridgeInput / InvalidInput（Integer mode requires integer coordinates），没有悄悄取整。
+- 同页 390×844 窄屏下模式、Precision 和图案控件均位于可见宽度内，文档宽度 375 ≤ 390；控制台无 warning/error。临时视口已恢复。小尺度图形暴露坐标轴随缩放变粗的问题，已把 non-scaling-stroke 放到实际轴 path，浏览器复核后不再遮挡矩形。
+
+下载 SVG SHA-256：`299a58dac9bc21036d1d8f3b7b7357031133b069207464b9215da2ae19219dda`。JSON SHA-256：`3d138c36a6490163b8458f72d613bf18adc6a85e54da42e46405261876e0072d`。
+
+仅保存一张截图：[小数扫掠](demo-screenshots/minkowski-decimal.jpg)。本记录属于本地浏览器和下载验收，同 SHA Linux CI 轻量结果另行核对。根 API、整数扫掠及小数量化契约、旧参考、版本、标签和申报书未改动；本笔不接批量描边或点定位演示，保持 Unreleased。
