@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- 新增不可变 `BoundsD` 与 `rect_clip_polygons_d`：小数窗口独立量化，区域使用同一精度网格，复用整数窗口裁剪并累计解码预算；区分原始空窗口与量化塌缩。新增 3 项定向测试，未发布。
+
 - 新增 `rect_clip_polygons`：使用现有 Boolean 求交裁剪整数闭合区域，支持 EvenOdd／NonZero 和孔洞；内部矩形不占原始输入额度，预检、窗口构造和扫描共用预算。新增 3 项定向测试，未发布。
 
 - 新增 `stroke_polylines_d`：独立开放路线共同量化，复用整数批量描边并统一解码为合并平铺区域。完整宽度与 ArcTolerance 按 Precision 缩放，全流程共享预算；零宽度仍检查原始输入与量化碰撞。新增 3 项定向测试，未发布。

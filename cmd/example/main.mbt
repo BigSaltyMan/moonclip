@@ -2,6 +2,7 @@
 fn run_foundation_example() -> Unit raise {
   run_rectclip_example()
   run_rectclip_polygons_example()
+  run_decimal_rectclip_polygons_example()
   run_stroke_batch_example()
   run_decimal_stroke_batch_example()
   run_decimal_minkowski_example()
@@ -1112,4 +1113,37 @@ fn run_rectclip_polygons_example() -> Unit raise {
     example_rect(0L, 0L, 10L, 10L),
     example_reverse(example_rect(3L, 3L, 4L, 4L)),
   ])
+}
+
+///|
+fn run_decimal_rectclip_polygons_example() -> Unit raise {
+  let rect : @moonclip.BoundsD = {
+    min_x: -1.25,
+    min_y: -0.5,
+    max_x: 2.75,
+    max_y: 2.5,
+  }
+  let result = @moonclip.rect_clip_polygons_d(
+    rect,
+    [example_box_d(-2.0, -1.0, 4.0, 4.0), example_box_d(0.0, 0.0, 1.0, 1.0)],
+    precision=@moonclip.Precision::new(2).unwrap(),
+  ).unwrap()
+  assert_eq(result.length(), 2)
+  let outer = example_box_d(-1.25, -0.5, 2.75, 2.5)
+  let hole = [
+    @moonclip.PointD::new(0.0, 0.0),
+    @moonclip.PointD::new(0.0, 1.0),
+    @moonclip.PointD::new(1.0, 1.0),
+    @moonclip.PointD::new(1.0, 0.0),
+  ]
+  let mut outer_count = 0
+  for ring in result {
+    if ring.contains(outer[0]) {
+      example_decimal_ring(ring, outer)
+      outer_count += 1
+    } else {
+      example_decimal_ring(ring, hole)
+    }
+  }
+  assert_eq(outer_count, 1)
 }

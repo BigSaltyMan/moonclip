@@ -57,6 +57,8 @@ pub fn rect_clip_lines(Bounds64, Array[Array[Point64]], limits? : Limits) -> Res
 
 pub fn rect_clip_polygons(Bounds64, Array[Array[Point64]], fill_rule? : FillRule, limits? : Limits) -> Result[Array[Array[Point64]], ClipError]
 
+pub fn rect_clip_polygons_d(BoundsD, Array[Array[PointD]], precision? : Precision, fill_rule? : FillRule, limits? : Limits) -> Result[Array[Array[PointD]], ClipError]
+
 pub fn simplify_paths(Array[Array[Point64]], options? : SimplifyOptions, limits? : Limits) -> Result[SimplifyResult, ClipError]
 
 pub fn simplify_paths_d(Array[Array[PointD]], precision? : Precision, options? : SimplifyOptions, limits? : Limits) -> Result[SimplifyResultD, ClipError]
@@ -88,6 +90,13 @@ pub(all) struct Bounds64 {
   min_y : Int64
   max_x : Int64
   max_y : Int64
+} derive(Eq, @debug.Debug)
+
+pub(all) struct BoundsD {
+  min_x : Double
+  min_y : Double
+  max_x : Double
+  max_y : Double
 } derive(Eq, @debug.Debug)
 
 pub(all) enum CapType {

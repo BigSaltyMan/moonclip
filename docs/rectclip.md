@@ -1,5 +1,11 @@
 # 整数矩形窗口裁剪（Unreleased）
 
+## Unreleased：小数闭合区域窗口
+
+`BoundsD` 保存 min_x、min_y、max_x、max_y 四个不可变 Double，数据类型本身不验证。`rect_clip_polygons_d` 以相同 Precision 量化窗口和区域，再复用整数闭合裁剪，支持 EvenOdd／NonZero，返回小数平铺区域。默认精度 3，支持 0—6；不提供树包装或小数开放折线裁剪。
+
+窗口四个标量必须有限、在精度对应的原单位范围内且 min 不大于 max。原始零宽或零高窗口合法，但仍验证全部区域并执行闭合量化检查；原本有面积、量化后宽或高为零的窗口返回 QuantizationFailure，不静默吸附或扩宽。窗口是独立参数，不占原始路径额度，也不进入路径量化碰撞表。路径间碰撞检查不变，参数、存储、整数裁剪与小数解码共用预算，详见[小数契约](decimal.md)。
+
 ## Unreleased：闭合区域窗口裁剪
 
 `rect_clip_polygons(rect, paths, fill_rule=, limits=)` 返回整数平铺闭合区域，默认 EvenOdd，也支持 NonZero。多条轮廓作为同一个填充区域求值，每条末点隐式连接首点，不要求重复首点；孔洞、重叠、自交及退化输入沿用 Boolean 语义。仅点或线接触不产生填充区域。输出可含孔洞，沿用 Boolean 的方向、共线清理和顺序约定，不保证保留原始顶点数、起点或轮廓排列。输入与输出隔离，失败不返回部分区域。

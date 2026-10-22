@@ -16,7 +16,7 @@ moon add BigSaltyMan/moonclip@0.2.1
 
 ## Unreleased：小数扫掠、批量描边与矩形裁剪
 
-开发源码提供 `rect_clip_polygons(rect, paths, fill_rule=, limits=) -> Result[Paths64, ClipError]`，按 EvenOdd（默认）或 NonZero 将闭合区域与窗口一次求交，可保留孔洞。与开放片段入口 `rect_clip_lines` 的区别见[矩形裁剪](docs/rectclip.md)。此入口尚未发布。
+开发源码提供 `rect_clip_polygons(rect, paths, fill_rule=, limits=) -> Result[Paths64, ClipError]`，按 EvenOdd（默认）或 NonZero 将闭合区域与窗口一次求交，可保留孔洞。小数入口 `rect_clip_polygons_d(rect : BoundsD, paths, precision=, fill_rule=, limits=)` 返回 `Result[PathsD, ClipError]`，默认 Precision=3（0—6），窗口和区域使用同一网格，窗口不占路径额度。与开放片段入口 `rect_clip_lines` 的区别见[矩形裁剪](docs/rectclip.md)。此入口尚未发布。
 
 整数 `PolyTree64::locate(point, limits=)` 返回 `Outside`、`Inside(node)`、`InHole(node)` 或 `OnBoundary(nodes)`，供区域查询和命中测试使用。内部结果对应最深节点，边界优先并保留全部命中；最坏线性访问所有轮廓顶点。这是尚未发布的整数树能力，详见[树点定位](docs/polytree-query.md)。
 

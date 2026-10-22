@@ -63,3 +63,12 @@ pub fn copy_path_d(path : PathD) -> PathD {
 pub fn copy_paths_d(paths : PathsD) -> PathsD {
   paths.map(copy_path_d)
 }
+
+///|
+/// Raw immutable decimal window parameters; geometry entry points validate them.
+pub(all) struct BoundsD {
+  min_x : Double
+  min_y : Double
+  max_x : Double
+  max_y : Double
+} derive(Eq, Debug)

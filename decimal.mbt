@@ -872,3 +872,124 @@ pub fn stroke_polylines_d(
     max_work: 5000000,
   })
 }
+
+///|
+fn decimal_rect_parameters(
+  rect : BoundsD,
+  precision : Precision,
+  budget : CallBudget,
+) -> Unit raise ScanAbort {
+  let limits = budget.limits
+  if limits.input.max_input_paths < 0 ||
+    limits.input.max_input_vertices < 0 ||
+    limits.max_nodes < 0 ||
+    limits.max_work < 0 {
+    raise ScanAbort(
+      InvalidInput(
+        location(DecimalParameters, None, None),
+        "Limits must be non-negative",
+      ),
+    )
+  }
+  // Four scalar checks and one ordering check; no temporary parameter arrays.
+  budget_spend(budget, 0, 5, location(RectClipParameters, None, None))
+  let loc = location(DecimalParameters, None, None)
+  // The existing coordinate validator checks finite/range before any narrowing.
+  ignore(decimal_coordinate(rect.min_x, X, precision, loc))
+  ignore(decimal_coordinate(rect.min_y, Y, precision, loc))
+  ignore(decimal_coordinate(rect.max_x, X, precision, loc))
+  ignore(decimal_coordinate(rect.max_y, Y, precision, loc))
+  if rect.min_x > rect.max_x || rect.min_y > rect.max_y {
+    raise ScanAbort(
+      InvalidInput(
+        location(RectClipParameters, None, None),
+        "Rectangle minimum exceeds maximum",
+      ),
+    )
+  }
+}
+
+///|
+fn decimal_rect_quantize(
+  rect : BoundsD,
+  precision : Precision,
+  budget : CallBudget,
+) -> Bounds64 raise ScanAbort {
+  let loc = location(DecimalQuantize, None, None)
+  // One immutable Bounds64 and four coordinate conversions, outside the path map.
+  budget_spend(budget, 1, 4, loc)
+  let grid : Bounds64 = {
+    min_x: decimal_coordinate(rect.min_x, X, precision, loc),
+    min_y: decimal_coordinate(rect.min_y, Y, precision, loc),
+    max_x: decimal_coordinate(rect.max_x, X, precision, loc),
+    max_y: decimal_coordinate(rect.max_y, Y, precision, loc),
+  }
+  if rect.min_x < rect.max_x &&
+    rect.min_y < rect.max_y &&
+    (grid.min_x == grid.max_x || grid.min_y == grid.max_y) {
+    raise ScanAbort(
+      QuantizationFailure(
+        loc,
+        None,
+        None,
+        "Nonempty rectangle collapses on the precision grid",
+      ),
+    )
+  }
+  grid
+}
+
+///|
+fn decimal_rect_clip_polygons_execute(
+  rect : BoundsD,
+  paths : PathsD,
+  precision : Precision,
+  fill_rule : FillRule,
+  limits : ScanLimits,
+  budget? : CallBudget,
+) -> Result[PathsD, ClipError] {
+  let budget = match budget {
+    Some(value) => value
+    None =>
+      new_call_budget(
+        limits,
+        generate_stage=RectClipEvaluate,
+        cleanup_stage=RectClipEvaluate,
+      )
+  }
+  try {
+    decimal_rect_parameters(rect, precision, budget)
+    decimal_precheck(paths, [], precision, budget)
+    let window = decimal_rect_quantize(rect, precision, budget)
+    let (grid, _) = decimal_quantize(paths, [], precision, true, budget)
+    match
+      rect_clip_polygons_execute(
+        window,
+        grid,
+        fill_rule,
+        budget.limits,
+        budget~,
+      ) {
+      Ok(region) => Ok(decimal_output(region, precision, budget))
+      Err(error) => Err(decimal_error(error, precision))
+    }
+  } catch {
+    ScanAbort(error) => Err(decimal_error(error, precision))
+  }
+}
+
+///|
+/// Unreleased: clip a decimal closed region using one precision grid and budget.
+/// Window parameters do not consume raw path quotas or join the collision map.
+pub fn rect_clip_polygons_d(
+  rect : BoundsD,
+  paths : PathsD,
+  precision? : Precision = Default::default(),
+  fill_rule? : FillRule = EvenOdd,
+  limits? : Limits = Default::default(),
+) -> Result[PathsD, ClipError] {
+  decimal_rect_clip_polygons_execute(rect, paths, precision, fill_rule, {
+    ..Default::default(),
+    input: limits,
+  })
+}
