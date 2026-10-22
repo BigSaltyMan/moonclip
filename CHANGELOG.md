@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- 窗口演示新增闭合区域输入类型，整数／小数分别调用对应区域裁剪入口，支持 EvenOdd／NonZero 及孔洞。切换类型保留编辑内容；按实际响应选择开放 SVG／v3 JSON 或闭合 SVG／v1 JSON，旧请求缺省仍为开放路线。扩展原有 3 项检查，未新增 scope，未发布。
+
 - 批量加宽演示接入小数模式与 Precision，整批一次调用 `stroke_polylines_d`，原单位宽度与容差交给核心处理；复用区域 SVG／v1 JSON 和原有 3 项检查。完成有限窄屏对照，临时容器观察异常归因仍未确认；未发布。
 
 - 窗口裁剪演示接入小数模式与 Precision，直接调用 `rect_clip_lines_d`；开放 v3 JSON 补充实际 mode／precision，可重放。扩展原有 3 项裁剪检查，未新增测试块或 CI scope，未发布。

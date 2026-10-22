@@ -342,12 +342,26 @@ fn library_error(error : @moonclip.ClipError) -> Json {
 
 ///|
 fn execute_rectclip(r : Map[String, Json]) -> Json raise DemoError {
+  let kind = text(r, "input_kind", "lines")
+  if kind != "lines" && kind != "polygons" {
+    raise Input("Unknown RectClip input kind", None, None)
+  }
+  let rule = if kind == "polygons" {
+    let params = object(r.get("params").unwrap_or(Json::object({})))
+    match text(params, "fill_rule", "EvenOdd") {
+      "EvenOdd" => @moonclip.EvenOdd
+      "NonZero" => @moonclip.NonZero
+      _ => raise Input("Unknown fill rule", None, None)
+    }
+  } else {
+    @moonclip.EvenOdd
+  }
   let mode = text(r, "mode", "integer")
   if mode != "integer" && mode != "decimal" {
     raise Input("Unknown coordinate mode", None, None)
   }
   if text(r, "output", "paths") != "paths" {
-    raise Input("RectClip supports open paths only", None, None)
+    raise Input("RectClip supports paths output only", None, None)
   }
   let simplify = object(r.get("simplify").unwrap_or(Json::object({})))
   if flag(simplify, "enabled", false) {
@@ -372,7 +386,22 @@ fn execute_rectclip(r : Map[String, Json]) -> Json raise DemoError {
   }
   let paths = coordinates(r.get("paths").unwrap_or(Json::array([])))
   let result = if mode == "decimal" {
-    encode_decimal(value(@moonclip.rect_clip_lines_d(rect, paths, precision~)))
+    if kind == "polygons" {
+      encode_decimal(
+        value(
+          @moonclip.rect_clip_polygons_d(
+            rect,
+            paths,
+            precision~,
+            fill_rule=rule,
+          ),
+        ),
+      )
+    } else {
+      encode_decimal(
+        value(@moonclip.rect_clip_lines_d(rect, paths, precision~)),
+      )
+    }
   } else {
     let corners = integer_paths([
         [
@@ -380,19 +409,20 @@ fn execute_rectclip(r : Map[String, Json]) -> Json raise DemoError {
           @moonclip.PointD::new(rect.max_x, rect.max_y),
         ],
       ])[0]
-    encode_paths(
-      value(
-        @moonclip.rect_clip_lines(
-          {
-            min_x: corners[0].x,
-            min_y: corners[0].y,
-            max_x: corners[1].x,
-            max_y: corners[1].y,
-          },
-          integer_paths(paths),
-        ),
-      ),
-    )
+    let window : @moonclip.Bounds64 = {
+      min_x: corners[0].x,
+      min_y: corners[0].y,
+      max_x: corners[1].x,
+      max_y: corners[1].y,
+    }
+    let grid = integer_paths(paths)
+    if kind == "polygons" {
+      encode_paths(
+        value(@moonclip.rect_clip_polygons(window, grid, fill_rule=rule)),
+      )
+    } else {
+      encode_paths(value(@moonclip.rect_clip_lines(window, grid)))
+    }
   }
   Json::object({
     "ok": true.to_json(),
@@ -405,7 +435,11 @@ fn execute_rectclip(r : Map[String, Json]) -> Json raise DemoError {
     } else {
       Json::null()
     },
-    "geometry": "open-paths".to_json(),
+    "geometry": (if kind == "polygons" {
+      "closed-regions"
+    } else {
+      "open-paths"
+    }).to_json(),
     "paths": result,
     "simplification": Json::null(),
   })

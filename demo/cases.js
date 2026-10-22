@@ -17,6 +17,8 @@ export const cases={
     {id:'cross',label:'穿过窗口 · 保留中间顶点',version:1,scene:'rectclip',mode:'integer',output:'paths',rect:{min_x:0,min_y:0,max_x:10,max_y:10},paths:[[[-10,5],[5,5],[20,5]]],simplify:{enabled:false}},
     {id:'reentry',label:'先出后入 · 两个片段',version:1,scene:'rectclip',mode:'integer',output:'paths',rect:{min_x:0,min_y:0,max_x:10,max_y:10},paths:[[[2,2],[12,2],[12,8],[2,8]]],simplify:{enabled:false}},
     {id:'decimal-cross',label:'小数窗口 · 保留三点片段',version:1,scene:'rectclip',mode:'decimal',precision:2,output:'paths',rect:{min_x:-1.25,min_y:-.5,max_x:2.75,max_y:2.5},paths:[[[-2,.25],[.5,.25],[3,.25]]],simplify:{enabled:false}},
+    {id:'integer-region',label:'整数区域 · 同向内轮廓',version:1,scene:'rectclip',input_kind:'polygons',mode:'integer',output:'paths',rect:{min_x:0,min_y:0,max_x:10,max_y:10},paths:[rect(-2,-2,14,14),rect(3,3,4,4)],params:{fill_rule:'EvenOdd'},simplify:{enabled:false}},
+    {id:'decimal-region',label:'小数区域 · 窗口与孔洞',version:1,scene:'rectclip',input_kind:'polygons',mode:'decimal',precision:2,output:'paths',rect:{min_x:-1.25,min_y:-.5,max_x:2.75,max_y:2.5},paths:[rect(-2,-1,6,5),rect(0,0,1,1)],params:{fill_rule:'EvenOdd'},simplify:{enabled:false}},
   ],
   boolean:[
     {id:'overlap',label:'交叠矩形 · 负坐标',...base,scene:'boolean',subject:[rect(-48,-28,62,52)],clip:[rect(-10,-8,60,48)],params:{operation:'Intersection',fill_rule:'EvenOdd'}},

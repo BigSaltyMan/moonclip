@@ -166,3 +166,24 @@ Uncaught TypeError: Failed to execute 'observe' on 'MutationObserver': parameter
 诊断仅在忽略目录中的 HTML 副本加入监听和 base 地址，不改产品页面；实际视口数据由子页通过同源 postMessage 报告，不使用设置目标值冒充测量结果。完整本地诊断位于 `demo/.qa/commit39/main-observation.json`、`narrow-observation.json`；实际下载原件为同目录 `result.svg`、`result.json`。临时容器已关闭，未设置浏览器 viewport override。
 
 仅保存一张[小数批量加宽截图](demo-screenshots/commit39-decimal-stroke-batch.png)，截图计时不代表性能结论。未运行库全量、完整工具／桥接、参考重建、性能、基准或候选验收；未修改消费者、版本和发布标签，保持 Unreleased。
+
+
+## Commit 40：闭合区域窗口裁剪增量验收
+
+2026-10-22，Windows，启动 `npm run dev` 构建一次后，通过 Codex 内置浏览器访问 http://127.0.0.1:4173/。扩展已有 `demo rectclip:` 三项后 **3/3** 通过，没有新增测试块或 scope。根 `.mbti` 无变化；Linux 同 SHA 轻量 CI 另行核对，不把本地浏览器操作当作 Linux 验收。
+
+| 操作 | 实际结果 |
+|---|---|
+| 开放切闭合 | 原点数组逐字保留，案例列表切换为区域案例并选择“保留当前输入”，填充规则可见，旧结果和导出清除 |
+| 整数同向嵌套矩形 | EvenOdd 返回窗口外轮廓及孔洞（2 轮廓／8 点）；NonZero 返回完整窗口（1 轮廓／4 点），完整坐标已核对 |
+| 小数带孔区域 | Precision=2 返回窗口 [-1.25,-0.5]—[2.75,2.5] 及负向孔洞 [0,0]—[1,1] |
+| 修改 max_x=2.25、Precision=3 | 外轮廓右界更新为 2.25，孔洞保留，2 轮廓／8 点 |
+| 实际闭合下载 | 恢复手算案例后下载 SVG、v1 JSON；SVG 打开后孔洞可见，两个 Z 闭合轮廓、NonZero 填充。JSON 保存 input_kind=polygons、EvenOdd、窗口、原始路径、decimal 和 precision=2；真实桥接重放逐点一致 |
+| 切回开放 | 原区域点数组保留，填充规则隐藏，输入不再闭合、无填充，导出禁用；选择小数开放案例后恢复三点片段，实际下载 JSON 为 v3、input_kind=lines、geometry=open-paths |
+| 窄屏抽查 | 临时同源 iframe 内实测 390×844、scrollWidth=375；输入类型、模式、Precision、填充和窗口控件可用，区域计算正常 |
+
+主页面控制台 error／warn 为 0。临时窄屏容器仍记录一条 `Uncaught TypeError: Failed to execute 'observe' on 'MutationObserver': parameter 1 is not of type 'Node'.`，时间为 **2026-10-22T15:32:58.259Z**，早于容器 load 记录 **15:32:58.406Z**。来源地址及堆栈未提供，局部 error／unhandledrejection 监听记录为空；**归因继续未确认，不定性为页面布局缺陷**，不宣称窄屏控制台完全无异常。本笔只做一次抽查，没有修改浏览器环境、重复排查或据此更改布局。
+
+下载原件及重放材料保留在忽略目录 `demo/.qa/commit40/result.svg`、`result.json`、`open-result.json`；主页面／窄屏诊断保留在同目录 `main-observation.json`、`narrow-observation.json`。诊断仅位于临时 HTML 副本，未混入产品；容器已关闭。仅新增一张[区域窗口裁剪截图](demo-screenshots/commit40-rectclip-regions.png)，计时不作为性能证据。
+
+未运行库全量、全部工具／桥接、参考重建、性能、基准或候选验收；原规划书、申报书、版本和标签不变，新演示保持 Unreleased。

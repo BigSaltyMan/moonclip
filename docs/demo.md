@@ -1,5 +1,17 @@
 # MoonClip 交互演示
 
+## Commit 40：闭合区域窗口裁剪（Unreleased）
+
+窗口裁剪页签增加“开放路线／闭合区域”。请求 `input_kind` 为 lines 或 polygons，省略时仍按 lines 处理；未知类型明确拒绝。两种输入类型均支持整数／小数，分别一次调用 `rect_clip_lines`、`rect_clip_lines_d`、`rect_clip_polygons` 或 `rect_clip_polygons_d`。闭合模式默认 EvenOdd，也支持 NonZero；树输出和简化继续拒绝。前端不求交、修复拓扑或逐轮廓拼接。
+
+切换输入类型保留点数组、窗口、坐标模式和参数，不补点、反向或修复；案例列表按类型筛选，并选中“保留当前输入 · 选择案例可替换”。只有显式选择案例才替换内容。切换立即清除有效结果和导出，迟到响应继续受请求编号保护。闭合模式显示填充规则、标签“闭合区域轮廓集合”和轮廓计数；开放模式隐藏填充规则、显示片段计数。提示同一组点在两种类型下含义不同。
+
+输入闭合区域按所选填充规则显示，末点与首点构成闭合边；结果根据实际响应 geometry 绘制：open-paths 为不闭合、无填充的片段，closed-regions 为闭合的 NonZero 区域，孔洞保留。窗口仍为紫色虚线，视图范围继续包含窗口、输入和结果。输出导出也根据实际响应选择：开放 SVG／v3 JSON 或闭合 SVG／v1 JSON，不新增格式版本。JSON 保存完整 request，包括 input_kind、窗口、原始路径、填充规则、模式及 Precision，缺省 input_kind 的旧请求可继续重放为开放裁剪。
+
+只新增两个输入案例：“整数区域 · 同向内轮廓”便于比较 EvenOdd／NonZero；“小数区域 · 窗口与孔洞”使用窗口 [-1.25,-0.5]—[2.75,2.5]、外轮廓 [-2,-1]—[4,4] 和内轮廓 [0,0]—[1,1]，Precision=2。案例不保存计算结果。
+
+本地开发服务构建一次后复用产物执行原有 `demo rectclip:` 三项；同 SHA CI 复用 `demo-rectclip`，不新增测试块或 scope。实际下载、重放和窄屏抽查见[验收记录](demo-acceptance.md#commit-40闭合区域窗口裁剪增量验收)。下面 Commit 节保留各自历史范围；本笔未改根库、公开接口、版本或标签，未发布。
+
 ## Commit 39：小数多路线批量加宽（Unreleased）
 
 “路线实验 → 批量加宽”支持整数／小数模式。整批请求分别一次调用 `stroke_polylines` 或 `stroke_polylines_d`；小数路线直接解析为 PointD，完整宽度与 ArcTolerance 使用原单位，MiterLimit 无量纲，由核心共同量化、生成并合并。前端不逐条描边、缩放或合并。Precision 默认 3、范围 0—6，仅小数模式启用，树输出、填充规则及简化继续不可用。

@@ -18,6 +18,10 @@ test('demo rectclip: complete ordered open bridge result',()=>{
   assert.equal(decimal.ok,true,JSON.stringify(decimal));assert.equal(decimal.geometry,'open-paths');
   assert.equal(decimal.mode,'decimal');assert.equal(decimal.precision,2);
   assert.deepEqual(decimal.paths,[[[-1.25,.25],[.5,.25],[2.75,.25]]]);
+  const integerRegion=exact({...cases.rectclip.find(c=>c.id==='integer-region'),params:{fill_rule:'NonZero'}},[rect(0,0,10,10)]);
+  assert.equal(integerRegion.geometry,'closed-regions');assert.equal(integerRegion.mode,'integer');
+  const decimalRegion=exact(cases.rectclip.find(c=>c.id==='decimal-region'),[rect(-1.25,-.5,4,3),rect(0,0,1,1).reverse()]);
+  assert.equal(decimalRegion.geometry,'closed-regions');assert.equal(decimalRegion.mode,'decimal');assert.equal(decimalRegion.precision,2);
 });
 
 test('demo rectclip: open SVG and replayable v3 JSON',()=>{
@@ -34,6 +38,16 @@ test('demo rectclip: open SVG and replayable v3 JSON',()=>{
     assert.deepEqual(run(doc.request).paths,doc.result.paths);
     assert.match(openResultSvg({...response,paths:[]}),/viewBox="-10 -10 20 20"/);
   }
+  const request=structuredClone(cases.rectclip.find(c=>c.id==='decimal-region')),response=run(request),doc=resultDocument(request,response);
+  assert.equal(response.ok,true,JSON.stringify(response));assert.equal(doc.version,1);
+  assert.equal(doc.request.input_kind,'polygons');assert.equal(doc.request.params.fill_rule,'EvenOdd');
+  assert.deepEqual(doc.request,request);assert.equal(doc.result.mode,'decimal');assert.equal(doc.result.precision,2);
+  const expected=[rect(-1.25,-.5,4,3),rect(0,0,1,1).reverse()];
+  assert.deepEqual(canonical(doc.result.paths),canonical(expected));assert.deepEqual(canonical(run(doc.request).paths),canonical(expected));
+  const svg=resultSvg(response.paths),d=svg.match(/<path d="([^"]*)"/)[1];
+  assert.equal((d.match(/Z/g)??[]).length,2);assert.match(svg,/fill-rule="nonzero"/);
+  assert.ok(d.includes('0,0'));assert.ok(d.includes('-1.25,-0.5'));
+
 });
 
 test('demo rectclip: invalid requests cannot export a result',()=>{
@@ -42,7 +56,9 @@ test('demo rectclip: invalid requests cannot export a result',()=>{
   assert.equal(reversed.ok,false);assert.equal(reversed.error.stage,'RectClipParameters');
   const collapsed=run({...decimal,precision:0,rect:{min_x:.1,min_y:0,max_x:.2,max_y:1}});
   assert.equal(collapsed.ok,false);assert.equal(collapsed.error.kind,'QuantizationFailure');assert.equal(collapsed.error.stage,'DecimalQuantize');
+  assert.equal(Object.hasOwn(request,'input_kind'),false);assert.equal(run(request).geometry,'open-paths');assert.deepEqual(run(request).paths,[[[0,5],[5,5],[10,5]]]);
   for(const bad of [reversed,collapsed,
+    run({...request,input_kind:'unknown'}),run({...cases.rectclip.find(c=>c.id==='integer-region'),params:{fill_rule:'invalid'}}),
     run({...request,mode:'unknown'}),run({...decimal,precision:7}),
     run({...request,paths:[[[0.5,5],[5,5]]]}),
     run({...request,rect:{...request.rect,min_x:.5}}),

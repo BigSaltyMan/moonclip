@@ -12,7 +12,8 @@ worker.onmessage=({data})=>{
   const r=data.response;showReport(r.simplification);
   if(!r.ok){showError(r.error,r.simplification);return;}
   valid={request:structuredClone(input),response:r};
-  $('status').textContent='计算完成';const units=input.mode==='decimal'?'小数 Precision '+input.precision:'整数';$('result-detail').textContent=scene==='rectclip'?`${units} · 开放折线 · 窗口裁剪`:scene==='stroke-batch'?`${units} · 批量加宽 · 完整宽度 ${input.params.width} · ${input.params.cap} / ${input.params.join} · 重叠区域统一合并`:scene==='minkowski'?`${units} · 图案扫掠 · NonZero · 保留共线点`:scene==='stroke'?`${units} · 完整宽度 ${input.params.width} · ${input.params.cap} / ${input.params.join}`:scene==='offset'?`${units} · 偏移 ${input.params.delta} · ${input.params.join} / ${input.params.fill_rule}`:`${units} · ${input.params.operation} / ${input.params.fill_rule}`;
+  $('status').textContent='计算完成';const units=input.mode==='decimal'?'小数 Precision '+input.precision:'整数';$('result-detail').textContent=scene==='rectclip'?`${units} · ${r.geometry==='closed-regions'?'闭合区域 / '+input.params.fill_rule:'开放折线'} · 窗口裁剪`:scene==='stroke-batch'?`${units} · 批量加宽 · 完整宽度 ${input.params.width} · ${input.params.cap} / ${input.params.join} · 重叠区域统一合并`:scene==='minkowski'?`${units} · 图案扫掠 · NonZero · 保留共线点`:scene==='stroke'?`${units} · 完整宽度 ${input.params.width} · ${input.params.cap} / ${input.params.join}`:scene==='offset'?`${units} · 偏移 ${input.params.delta} · ${input.params.join} / ${input.params.fill_rule}`:`${units} · ${input.params.operation} / ${input.params.fill_rule}`;
+  if(scene==='rectclip')$('contours-label').textContent=r.geometry==='open-paths'?'输出片段':'结果轮廓';
   $('contours').textContent=r.paths.length;$('vertices').textContent=r.paths.reduce((n,p)=>n+p.length,0);$('elapsed').textContent=data.elapsed.toFixed(2);$('removed').textContent=['rectclip','stroke-batch'].includes(scene)?input.paths.length:(r.simplification?.removed_vertices??0);
   $('error').hidden=true;$('export-svg').disabled=false;$('export-json').disabled=false;
   renderTree();renderQuery();fit();
@@ -48,7 +49,7 @@ function showError(error,report){valid=null;clearTree();clearQuery();$('export-s
 function numeric(id){const value=$(id).value.trim();if(value==='')throw new Error('参数不能为空: '+id);const n=Number(value);if(!Number.isFinite(n))throw new Error('参数必须是有限数值: '+id);return n;}
 function readRequest(){
   if(scene==='stroke-batch')return {version:1,scene,mode:$('mode').value,precision:numeric('precision'),output:'paths',paths:JSON.parse($('input-a').value),params:{width:numeric('width'),cap:$('cap').value,join:$('join').value,miter_limit:numeric('miter-limit'),arc_tolerance:numeric('arc-tolerance')},simplify:{enabled:false}};
-  if(scene==='rectclip')return {version:1,scene,mode:$('mode').value,precision:numeric('precision'),output:'paths',paths:JSON.parse($('input-a').value),rect:{min_x:numeric('min-x'),min_y:numeric('min-y'),max_x:numeric('max-x'),max_y:numeric('max-y')},simplify:{enabled:false}};
+  if(scene==='rectclip')return {version:1,scene,input_kind:$('input-kind').value,...($('input-kind').value==='polygons'?{params:{fill_rule:$('fill-rule').value}}:{}),mode:$('mode').value,precision:numeric('precision'),output:'paths',paths:JSON.parse($('input-a').value),rect:{min_x:numeric('min-x'),min_y:numeric('min-y'),max_x:numeric('max-x'),max_y:numeric('max-y')},simplify:{enabled:false}};
   const r={version:1,scene,output:$('output').value,mode:$('mode').value,precision:numeric('precision'),params:{operation:$('operation').value,fill_rule:$('fill-rule').value,delta:numeric('delta'),width:numeric('width'),join:$('join').value,cap:$('cap').value,miter_limit:numeric('miter-limit'),arc_tolerance:numeric('arc-tolerance'),path_is_closed:$('closed').checked},simplify:{enabled:$('simplify').checked,epsilon:numeric('epsilon')}};
   if(scene==='boolean'&&r.mode==='integer'&&r.output==='tree'&&$('query-enabled').checked)r.query={point:[numeric('query-x'),numeric('query-y')]};
   const a=JSON.parse($('input-a').value);
@@ -67,19 +68,20 @@ function setVisibility(){
   $('query-controls').hidden=!querySupported;if(!querySupported)$('query-enabled').checked=false;
   $('query-fields').hidden=!$('query-enabled').checked;
   document.querySelectorAll('[data-for]').forEach(el=>{el.hidden=!el.dataset.for.split(' ').includes(scene);});
+  if(scene==='rectclip')$('fill-controls').hidden=$('input-kind').value!=='polygons';
   $('route-tabs').hidden=!['stroke','minkowski','rectclip','stroke-batch'].includes(scene);
   $('rectclip-tab').classList.toggle('selected',scene==='rectclip');$('batch-tab').classList.toggle('selected',scene==='stroke-batch');
   $('coordinate-controls').hidden=false;$('output-controls').hidden=['rectclip','stroke-batch'].includes(scene);
-  $('contours-label').textContent=scene==='rectclip'?'输出片段':'结果轮廓';$('removed-label').textContent=['rectclip','stroke-batch'].includes(scene)?'输入路线':'简化删点';
+  $('contours-label').textContent=scene==='rectclip'&&$('input-kind').value==='lines'?'输出片段':'结果轮廓';$('removed-label').textContent=scene==='rectclip'&&$('input-kind').value==='polygons'?'输入轮廓':['rectclip','stroke-batch'].includes(scene)?'输入路线':'简化删点';
   $('stroke-tab').classList.toggle('selected',scene==='stroke');$('sweep-tab').classList.toggle('selected',scene==='minkowski');
   $('scene-title').textContent=titles[scene];
   $('output').disabled=scene==='minkowski';if(scene==='minkowski')$('output').value='paths';
   $('mode').disabled=false;if(scene==='minkowski')$('simplify').checked=false;
   $('precision').disabled=$('mode').value==='integer';$('simplify-control').hidden=['minkowski','rectclip','stroke-batch'].includes(scene);
   if(['rectclip','stroke-batch'].includes(scene)){$('output').value='paths';$('simplify').checked=false;$('closed').checked=false;}
-  $('mode-badge').textContent=scene==='rectclip'?($('mode').value==='decimal'?'小数 · 开放折线':'整数 · 开放折线'):$('mode').value==='decimal'?'小数':'整数';
-  $('mode-note').textContent=scene==='stroke-batch'?'整批共享样式，重叠区域统一合并。小数模式使用共同精度网格，宽度和圆弧容差采用原始坐标单位。输入路线独立开放，输出为闭合区域。':scene==='rectclip'?'输入与输出均为开放路线；窗口以虚线标示。小数按共同精度网格计算；有面积窗口可能因精度过粗而塌缩报错，与原始空窗口不同。':scene==='minkowski'?'图案与路线单位相同；小数由 MoonBit 公共入口量化。Precision 影响细节，合并可能报错；图案不自动居中，不额外补满端点。':$('mode').value==='decimal'?'Precision 0—6；距离与 epsilon 使用原始小数单位。':'整数坐标 ±10⁹；距离与宽度使用相同单位。';
-  $('input-a-label').textContent=['rectclip','stroke-batch'].includes(scene)?'开放路线集合 · Paths':scene==='boolean'?'操作数 A · Paths':scene==='offset'?'区域与孔洞 · Paths':'开放/闭合路线 · Path';
+  $('mode-badge').textContent=scene==='rectclip'?`${$('mode').value==='decimal'?'小数':'整数'} · ${$('input-kind').value==='polygons'?'闭合区域':'开放折线'}`:$('mode').value==='decimal'?'小数':'整数';
+  $('mode-note').textContent=scene==='stroke-batch'?'整批共享样式，重叠区域统一合并。小数模式使用共同精度网格，宽度和圆弧容差采用原始坐标单位。输入路线独立开放，输出为闭合区域。':scene==='rectclip'?`${$('input-kind').value==='polygons'?'末点与首点按闭合区域解释，填充规则可能产生孔洞。':'输入与输出均为开放路线，不隐式连接末点与首点。'}同一组点在两种类型下含义不同；切换类型保留点数组，选择案例才会替换。小数按共同精度网格计算，有面积窗口可能因精度过粗而塌缩报错。`:scene==='minkowski'?'图案与路线单位相同；小数由 MoonBit 公共入口量化。Precision 影响细节，合并可能报错；图案不自动居中，不额外补满端点。':$('mode').value==='decimal'?'Precision 0—6；距离与 epsilon 使用原始小数单位。':'整数坐标 ±10⁹；距离与宽度使用相同单位。';
+  $('input-a-label').textContent=scene==='rectclip'&&$('input-kind').value==='polygons'?'闭合区域轮廓集合 · Paths':['rectclip','stroke-batch'].includes(scene)?'开放路线集合 · Paths':scene==='boolean'?'操作数 A · Paths':scene==='offset'?'区域与孔洞 · Paths':'开放/闭合路线 · Path';
   $('editor-b').hidden=scene!=='boolean'&&scene!=='minkowski';$('input-b-label').textContent=scene==='minkowski'?'图案 · Path（相对锚点）':'操作数 B · Paths';
   $('epsilon-row').hidden=!$('simplify').checked;
 }
@@ -88,18 +90,24 @@ function loadCase(){
   $('output').value=c.output??'paths';$('mode').value=c.mode;$('precision').value=String(c.precision??3);$('simplify').checked=false;$('epsilon').value=.5;
   $('query-enabled').checked=false;$('query-x').value=String(c.query?.point?.[0]??6);$('query-y').value=String(c.query?.point?.[1]??6);
   const p=c.params??{};
+  if(scene==='rectclip'){$('input-kind').value=c.input_kind??'lines';updateRectclipCases(false);$('case').value=c.id;}
   if(scene==='rectclip')for(const [id,key] of [['min-x','min_x'],['min-y','min_y'],['max-x','max_x'],['max-y','max_y']])$(id).value=String(c.rect[key]);
   for(const [id,key,fallback] of [['operation','operation','Intersection'],['fill-rule','fill_rule','EvenOdd'],['delta','delta',5],['width','width',12],['join','join','Miter'],['cap','cap','Butt'],['miter-limit','miter_limit',2],['arc-tolerance','arc_tolerance',.25]])$(id).value=p[key]??fallback;
   $('closed').checked=p.path_is_closed??false;$('input-a').value=JSON.stringify(c.paths??c.subject??c.path,null,2);$('input-b').value=JSON.stringify(c.clip??c.pattern??[],null,2);
   if(scene==='minkowski')$('pattern-select').value=c.id==='decimal-grid'?'custom':'rectangle';
   input=c;setVisibility();view=null;invalidate();fit();if(ready)calculate();
 }
-function switchScene(next){scene=next;document.querySelectorAll('[data-scene]').forEach(b=>b.classList.toggle('active',b.dataset.scene===(['stroke','minkowski','rectclip','stroke-batch'].includes(scene)?'route':scene)));$('case').replaceChildren(...cases[scene].map(c=>new Option(c.label,c.id)));loadCase();}
+function updateRectclipCases(preserveInput){
+  const items=cases.rectclip.filter(c=>(c.input_kind??'lines')===$('input-kind').value);
+  $('case').replaceChildren(...(preserveInput?[new Option('保留当前输入 · 选择案例可替换','')]:[]),...items.map(c=>new Option(c.label,c.id)));
+  if(preserveInput)$('case').value='';
+}
+function switchScene(next){scene=next;document.querySelectorAll('[data-scene]').forEach(b=>b.classList.toggle('active',b.dataset.scene===(['stroke','minkowski','rectclip','stroke-batch'].includes(scene)?'route':scene)));if(scene==='rectclip'){$('input-kind').value='lines';updateRectclipCases(false);}else $('case').replaceChildren(...cases[scene].map(c=>new Option(c.label,c.id)));loadCase();}
 function inputLayers(){
   let r;try{r=readRequest();}catch{return [];}
   const safe=layers=>layers.filter(l=>Array.isArray(l.paths)&&l.paths.every(p=>Array.isArray(p)&&p.every(q=>Array.isArray(q)&&q.length===2&&q.every(Number.isFinite))));
   if(scene==='stroke-batch')return safe([{name:'独立输入路线',paths:r.paths,color:'#b9782e',closed:false}]);
-  if(scene==='rectclip')return safe([{name:'输入路线',paths:r.paths,color:'#b9782e',closed:false},{name:'裁剪窗口',paths:[[[r.rect.min_x,r.rect.min_y],[r.rect.max_x,r.rect.min_y],[r.rect.max_x,r.rect.max_y],[r.rect.min_x,r.rect.max_y]]],color:'#8265a6',closed:true,window:true}]);
+  if(scene==='rectclip')return safe([{name:r.input_kind==='polygons'?'输入区域':'输入路线',paths:r.paths,color:'#b9782e',closed:r.input_kind==='polygons'},{name:'裁剪窗口',paths:[[[r.rect.min_x,r.rect.min_y],[r.rect.max_x,r.rect.min_y],[r.rect.max_x,r.rect.max_y],[r.rect.min_x,r.rect.max_y]]],color:'#8265a6',closed:true,window:true}]);
   if(scene==='boolean')return safe([{name:'操作数 A',paths:r.subject,color:'#3972bd',closed:true},{name:'操作数 B',paths:r.clip,color:'#bd792d',closed:true}]);
   if(scene==='offset')return safe([{name:'输入区域 / 孔洞',paths:r.subject,color:'#3972bd',closed:true}]);
   const layers=[{name:'路线',paths:[r.path],color:'#b9782e',closed:scene==='minkowski'&&r.params.path_is_closed}];
@@ -143,7 +151,8 @@ $('stroke-tab').onclick=()=>switchScene('stroke');$('sweep-tab').onclick=()=>swi
 $('pattern-select').replaceChildren(new Option('案例／自定义图案','custom'),...Object.entries(patterns).map(([id,p])=>new Option(p.label,id)));
 $('pattern-select').onchange=()=>{if($('pattern-select').value==='custom')return;$('input-b').value=JSON.stringify(patterns[$('pattern-select').value].points,null,2);invalidate();fit();calculate();};
 $('output').onchange=()=>{setVisibility();calculate();};$('clear-selection').onclick=()=>selectNode(null);
-$('case').onchange=loadCase;$('compute').onclick=calculate;
+$('input-kind').onchange=()=>{updateRectclipCases(true);invalidate();setVisibility();draw();};
+$('case').onchange=()=>{if($('case').value)loadCase();};$('compute').onclick=calculate;
 for(const id of ['mode','precision','operation','fill-rule','delta','width','join','cap','miter-limit','arc-tolerance','closed','simplify','epsilon','input-a','input-b','min-x','min-y','max-x','max-y','query-enabled','query-x','query-y'])$(id).addEventListener('input',()=>{if(id==='input-b'&&scene==='minkowski')$('pattern-select').value='custom';invalidate();setVisibility();draw();});
 for(const id of ['show-input','show-result'])$(id).onchange=draw;
 $('zoom-in').onclick=()=>zoom(.8);$('zoom-out').onclick=()=>zoom(1.25);$('fit').onclick=fit;
