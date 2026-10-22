@@ -1,6 +1,8 @@
 # 支持范围与使用边界
 
-Unreleased：`rect_clip_polygons_d` 配合不可变 `BoundsD` 提供小数闭合区域窗口裁剪，Precision 默认 3（0—6），支持 EvenOdd／NonZero，仅返回平铺区域。窗口独立量化但使用同一网格，不占原始路径额度；原始空窗口与量化塌缩区别处理。不提供树包装或小数开放折线裁剪。
+Unreleased：`rect_clip_lines_d` 提供小数开放路线的矩形窗口裁剪，默认 Precision=3（0—6），输出为有序、保方向的开放片段，普通共线中间点保留，无填充规则或树结构。窗口独立量化、全部路线共同量化并共享预算，网页窗口裁剪仍仅整数；详见[矩形裁剪](rectclip.md)。
+
+Unreleased：`rect_clip_polygons_d` 配合不可变 `BoundsD` 提供小数闭合区域窗口裁剪，Precision 默认 3（0—6），支持 EvenOdd／NonZero，仅返回平铺区域。窗口独立量化但使用同一网格，不占原始路径额度；原始空窗口与量化塌缩区别处理。不提供树包装；小数开放折线另用 `rect_clip_lines_d`。
 
 Unreleased：`rect_clip_polygons` 将整数闭合区域与矩形窗口一次求交，支持 EvenOdd／NonZero，返回可含孔洞的平铺区域。复用 Boolean 数值与预算契约，没有矩形专用优化或树包装；详见[矩形裁剪](rectclip.md)。
 

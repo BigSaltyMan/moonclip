@@ -70,9 +70,9 @@ class RandomTests(unittest.TestCase):
             root=Path(directory);(root/'random-native.log').write_text('Total tests: 24, passed: 24, failed: 0.\n')
             e=random_execution_evidence(root);self.assertEqual(e['native']['passed'],24);self.assertEqual(e['js']['status'],'not_recorded')
             # A stale full-suite count must not establish JS execution evidence.
-            (root/'all-js.log').write_text('Total tests: 2385, passed: 2385, failed: 0.\n')
-            with self.assertRaises(Invalid):random_execution_evidence(root)
             (root/'all-js.log').write_text('Total tests: 2388, passed: 2388, failed: 0.\n')
+            with self.assertRaises(Invalid):random_execution_evidence(root)
+            (root/'all-js.log').write_text('Total tests: 2391, passed: 2391, failed: 0.\n')
             self.assertEqual(random_execution_evidence(root)['js']['passed'],24)
 
     def test_reducer_keeps_category_and_attempt_cap(self):

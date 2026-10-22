@@ -55,6 +55,8 @@ pub fn point_on_segment(Point64, Point64, Point64, limits? : Limits) -> Result[B
 
 pub fn rect_clip_lines(Bounds64, Array[Array[Point64]], limits? : Limits) -> Result[Array[Array[Point64]], ClipError]
 
+pub fn rect_clip_lines_d(BoundsD, Array[Array[PointD]], precision? : Precision, limits? : Limits) -> Result[Array[Array[PointD]], ClipError]
+
 pub fn rect_clip_polygons(Bounds64, Array[Array[Point64]], fill_rule? : FillRule, limits? : Limits) -> Result[Array[Array[Point64]], ClipError]
 
 pub fn rect_clip_polygons_d(BoundsD, Array[Array[PointD]], precision? : Precision, fill_rule? : FillRule, limits? : Limits) -> Result[Array[Array[PointD]], ClipError]

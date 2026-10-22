@@ -993,3 +993,50 @@ pub fn rect_clip_polygons_d(
     input: limits,
   })
 }
+
+///|
+fn decimal_rect_clip_lines_execute(
+  rect : BoundsD,
+  paths : PathsD,
+  precision : Precision,
+  limits : ScanLimits,
+  budget? : CallBudget,
+) -> Result[PathsD, ClipError] {
+  let budget = match budget {
+    Some(value) => value
+    None =>
+      new_call_budget(
+        limits,
+        generate_stage=RectClipEvaluate,
+        cleanup_stage=RectClipOutput,
+      )
+  }
+  try {
+    decimal_rect_parameters(rect, precision, budget)
+    decimal_precheck(paths, [], precision, budget)
+    let window = decimal_rect_quantize(rect, precision, budget)
+    // One shared path collision map, without closed-region validity requirements.
+    let (grid, _) = decimal_quantize(paths, [], precision, false, budget)
+    match rect_clip_execute(window, grid, budget.limits, budget~) {
+      Ok(pieces) => Ok(decimal_output(pieces, precision, budget))
+      Err(error) => Err(decimal_error(error, precision))
+    }
+  } catch {
+    ScanAbort(error) => Err(decimal_error(error, precision))
+  }
+}
+
+///|
+/// Unreleased: clip independent decimal open routes on a common precision grid.
+/// Preserves integer clipping's fragment order, direction and collinear vertices.
+pub fn rect_clip_lines_d(
+  rect : BoundsD,
+  paths : PathsD,
+  precision? : Precision = Default::default(),
+  limits? : Limits = Default::default(),
+) -> Result[PathsD, ClipError] {
+  decimal_rect_clip_lines_execute(rect, paths, precision, {
+    ..Default::default(),
+    input: limits,
+  })
+}

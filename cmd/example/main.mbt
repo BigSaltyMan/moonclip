@@ -1,6 +1,7 @@
 ///|
 fn run_foundation_example() -> Unit raise {
   run_rectclip_example()
+  run_decimal_rectclip_lines_example()
   run_rectclip_polygons_example()
   run_decimal_rectclip_polygons_example()
   run_stroke_batch_example()
@@ -1146,4 +1147,33 @@ fn run_decimal_rectclip_polygons_example() -> Unit raise {
     }
   }
   assert_eq(outer_count, 1)
+}
+
+///|
+fn run_decimal_rectclip_lines_example() -> Unit raise {
+  let rect : @moonclip.BoundsD = {
+    min_x: -1.25,
+    min_y: -0.5,
+    max_x: 2.75,
+    max_y: 2.5,
+  }
+  let result = @moonclip.rect_clip_lines_d(
+    rect,
+    [
+      [
+        @moonclip.PointD::new(-2.0, 0.25),
+        @moonclip.PointD::new(0.5, 0.25),
+        @moonclip.PointD::new(3.0, 0.25),
+      ],
+    ],
+    precision=@moonclip.Precision::new(2).unwrap(),
+  ).unwrap()
+  // Direct ordered comparison: the middle collinear point remains present.
+  assert_eq(result, [
+    [
+      @moonclip.PointD::new(-1.25, 0.25),
+      @moonclip.PointD::new(0.5, 0.25),
+      @moonclip.PointD::new(2.75, 0.25),
+    ],
+  ])
 }
