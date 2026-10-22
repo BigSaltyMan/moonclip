@@ -747,3 +747,57 @@ pub fn simplify_paths_d(
     max_work: 5000000,
   })
 }
+
+///|
+fn decimal_minkowski_execute(
+  pattern : PathD,
+  path : PathD,
+  closed : Bool,
+  precision : Precision,
+  limits : ScanLimits,
+  budget? : CallBudget,
+) -> Result[PathsD, ClipError] {
+  let budget = match budget {
+    Some(value) => value
+    None =>
+      new_call_budget(
+        limits,
+        generate_stage=MinkowskiGenerate,
+        cleanup_stage=MinkowskiCleanup,
+      )
+  }
+  try {
+    decimal_precheck([pattern], [path], precision, budget)
+    // One shared collision map, without closed-region degeneracy validation.
+    let (left, right) = decimal_quantize(
+      [pattern],
+      [path],
+      precision,
+      false,
+      budget,
+    )
+    match minkowski_execute(left[0], right[0], closed, budget.limits, budget~) {
+      Ok(paths) => Ok(decimal_output(paths, precision, budget))
+      Err(error) => Err(decimal_error(error, precision))
+    }
+  } catch {
+    ScanAbort(error) => Err(decimal_error(error, precision))
+  }
+}
+
+///|
+/// Unreleased: quantize pattern offsets and route on one grid before integer sums.
+/// Preserves the integer sweep's anchor, closure and collinear-output rules.
+pub fn minkowski_sum_d(
+  pattern : PathD,
+  path : PathD,
+  path_is_closed : Bool,
+  precision? : Precision = Default::default(),
+  limits? : Limits = Default::default(),
+) -> Result[PathsD, ClipError] {
+  decimal_minkowski_execute(pattern, path, path_is_closed, precision, {
+    input: limits,
+    max_nodes: 500000,
+    max_work: 5000000,
+  })
+}

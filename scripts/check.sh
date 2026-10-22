@@ -6,8 +6,8 @@ cd "$repo_root"
 
 scope=full
 if [[ $# -ne 0 ]]; then
-  if [[ $# -ne 2 || "$1" != --scope || ( "$2" != full && "$2" != stroke-batch ) ]]; then
-    printf 'Usage: bash scripts/check.sh [--scope full|stroke-batch]\n' >&2
+  if [[ $# -ne 2 || "$1" != --scope || ( "$2" != full && "$2" != stroke-batch && "$2" != minkowski-decimal ) ]]; then
+    printf 'Usage: bash scripts/check.sh [--scope full|stroke-batch|minkowski-decimal]\n' >&2
     exit 2
   fi
   scope="$2"
@@ -27,12 +27,16 @@ if [[ -n "$untracked_interfaces" ]]; then
   printf 'Untracked public interfaces; review and stage them:\n%s\n' "$untracked_interfaces" >&2
   exit 1
 fi
-if [[ "$scope" == stroke-batch ]]; then
-  mkdir -p _build/stroke-batch
+if [[ "$scope" == stroke-batch || "$scope" == minkowski-decimal ]]; then
+  selection='stroke batch: *'
+  if [[ "$scope" == minkowski-decimal ]]; then
+    selection='decimal minkowski: *'
+  fi
+  mkdir -p "_build/$scope"
   for target in native js; do
     moon check --target "$target" --deny-warn
-    moon test --target "$target" --filter 'stroke batch: *' | tee "_build/stroke-batch/$target.log"
-    grep -Fxq 'Total tests: 3, passed: 3, failed: 0.' "_build/stroke-batch/$target.log"
+    moon test --target "$target" --filter "$selection" | tee "_build/$scope/$target.log"
+    grep -Fxq 'Total tests: 3, passed: 3, failed: 0.' "_build/$scope/$target.log"
   done
   moon run --target native cmd/example
   git diff --check
@@ -42,14 +46,14 @@ printf 'Checking native target\n'
 moon check --target native --deny-warn
 mkdir -p _build/conformance
 moon test --target native | tee _build/conformance/all-native.log
-grep -Fxq "Total tests: 2373, passed: 2373, failed: 0." _build/conformance/all-native.log
+grep -Fxq "Total tests: 2376, passed: 2376, failed: 0." _build/conformance/all-native.log
 moon build --target native
 moon run --target native cmd/example
 printf 'Checking JS target\n'
 node --version
 moon check --target js --deny-warn
 moon test --target js | tee _build/conformance/all-js.log
-grep -Fxq "Total tests: 2373, passed: 2373, failed: 0." _build/conformance/all-js.log
+grep -Fxq "Total tests: 2376, passed: 2376, failed: 0." _build/conformance/all-js.log
 moon fmt --check
 mkdir -p _build/conformance
 for target in native js; do

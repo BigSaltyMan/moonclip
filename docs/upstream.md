@@ -1,5 +1,9 @@
 # 上游来源与移植记录
 
+## Commit 28：小数 Minkowski Sum（Unreleased）
+
+整数平移矩阵、四边形生成及 NonZero 清理继续复用固定 Clipper2 的既有实现与来源声明。本笔只新增 MoonClip 自行实现的十进制量化、错误映射和累计预算适配，没有新增上游算法移植、依赖或参考协议。历史整数参考不直接构成新小数入口的执行证据。
+
 ## Commit 27：整数批量描边（Unreleased）
 
 `stroke_polylines` 复用现有 `stroke_generate`、连接／端点辅助和 Positive Union Boolean 清理引擎，没有新增算法移植或上游依赖。整批预检、逐路线调度、汇集容器和共享预算适配由 MoonClip 自行实现；既有 Clipper2 描边／Boolean 的版权与 BSL-1.0 来源声明继续适用。
