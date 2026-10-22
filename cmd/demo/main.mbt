@@ -285,12 +285,71 @@ fn library_error(error : @moonclip.ClipError) -> Json {
 }
 
 ///|
+fn execute_rectclip(r : Map[String, Json]) -> Json raise DemoError {
+  if text(r, "mode", "integer") != "integer" ||
+    text(r, "output", "paths") != "paths" {
+    raise Input("RectClip supports integer open paths only", None, None)
+  }
+  let simplify = object(r.get("simplify").unwrap_or(Json::object({})))
+  if flag(simplify, "enabled", false) {
+    raise Input("RectClip does not apply simplification", None, None)
+  }
+  let rect = object(r.get("rect").unwrap_or(Json::null()))
+  for key in ["min_x", "min_y", "max_x", "max_y"] {
+    if rect.get(key) is None {
+      raise Input("Missing window field: " + key, None, None)
+    }
+  }
+  let corners = integer_paths([
+      [
+        @moonclip.PointD::new(
+          number(rect, "min_x", 0.0),
+          number(rect, "min_y", 0.0),
+        ),
+        @moonclip.PointD::new(
+          number(rect, "max_x", 0.0),
+          number(rect, "max_y", 0.0),
+        ),
+      ],
+    ])[0]
+  let paths = integer_paths(
+    coordinates(r.get("paths").unwrap_or(Json::array([]))),
+  )
+  let result = value(
+    @moonclip.rect_clip_lines(
+      {
+        min_x: corners[0].x,
+        min_y: corners[0].y,
+        max_x: corners[1].x,
+        max_y: corners[1].y,
+      },
+      paths,
+    ),
+  )
+  Json::object({
+    "ok": true.to_json(),
+    "kernel": "MoonBit".to_json(),
+    "scene": "rectclip".to_json(),
+    "mode": "integer".to_json(),
+    "output": "paths".to_json(),
+    "precision": Json::null(),
+    "geometry": "open-paths".to_json(),
+    "paths": encode_paths(result),
+    "simplification": Json::null(),
+  })
+}
+
+///|
 fn execute(request : Json) -> Json raise DemoError {
   let r = object(request)
   if number(r, "version", 1.0) != 1.0 {
     raise Input("Unknown demo bridge version", None, None)
   }
   let scene = text(r, "scene", "boolean")
+  // Open paths must bypass closed-region preparation and all unrelated parameters.
+  if scene == "rectclip" {
+    return execute_rectclip(r)
+  }
   let mode = text(r, "mode", "integer")
   let output = text(r, "output", "paths")
   if output != "paths" && output != "tree" {

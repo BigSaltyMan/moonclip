@@ -2,12 +2,44 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {compute} from './generated/moonclip.js';
-import {resultSvg,resultDocument} from './export.js';
+import {resultSvg,resultDocument,openResultSvg} from './export.js';
 import {cases} from './cases.js';
 const rect=(x,y,w,h)=>[[x,y],[x+w,y],[x+w,y+h],[x,y+h]];
 const canonical=paths=>paths.map(p=>p.map((_,i)=>JSON.stringify(p.slice(i).concat(p.slice(0,i)))).sort()[0]).sort();
 function run(request){return JSON.parse(compute(JSON.stringify({version:1,mode:'integer',precision:3,...request})));}
 function exact(request,expected){const r=run(request);assert.equal(r.ok,true,JSON.stringify(r));assert.equal(r.kernel,'MoonBit');assert.deepEqual(canonical(r.paths),canonical(expected));return r;}
+
+test('demo rectclip: complete ordered open bridge result',()=>{
+  const r=run(cases.rectclip[0]);
+  assert.equal(r.ok,true,JSON.stringify(r));assert.equal(r.kernel,'MoonBit');
+  assert.equal(r.geometry,'open-paths');
+  assert.deepEqual(r.paths,[[[0,5],[5,5],[10,5]]]);
+});
+
+test('demo rectclip: open SVG and replayable v3 JSON',()=>{
+  const request=structuredClone(cases.rectclip[0]),response=run(request);
+  const svg=openResultSvg(response),d=svg.match(/<path d="([^"]*)"/)[1];
+  assert.equal(/[zZ]/.test(d),false);assert.match(svg,/fill="none"/);
+  assert.equal(d,'M0,5L5,5L10,5');
+  const doc=resultDocument(request,response);
+  assert.equal(doc.version,3);assert.equal(doc.result.geometry,'open-paths');
+  assert.deepEqual(doc.request,request);assert.deepEqual(doc.result.paths,response.paths);
+  assert.deepEqual(run(doc.request).paths,doc.result.paths);
+  assert.match(openResultSvg({...response,paths:[]}),/viewBox="-10 -10 20 20"/);
+});
+
+test('demo rectclip: invalid requests cannot export a result',()=>{
+  const request=cases.rectclip[0];
+  const reversed=run({...request,rect:{...request.rect,min_x:11}});
+  assert.equal(reversed.ok,false);assert.equal(reversed.error.stage,'RectClipParameters');
+  for(const bad of [reversed,
+    run({...request,mode:'decimal'}),run({...request,paths:[[[0.5,5],[5,5]]]}),
+    run({...request,rect:{...request.rect,min_x:.5}}),
+    run({...request,output:'tree'}),run({...request,simplify:{enabled:true}}),
+  ]){
+    assert.equal(bad.ok,false);assert.throws(()=>resultDocument(request,bad));assert.throws(()=>openResultSvg(bad));
+  }
+});
 test('Boolean calls MoonBit and returns exact Intersection',()=>{
   const request={scene:'boolean',subject:[rect(0,0,10,10)],clip:[rect(5,5,10,10)],params:{operation:'Intersection',fill_rule:'EvenOdd'}};
   const r=exact(request,[rect(5,5,5,5)]);const doc=resultDocument(request,r);assert.deepEqual(doc.request,request);assert.deepEqual(doc.result.paths,r.paths);assert.match(resultSvg(r.paths),/viewBox=/);assert.throws(()=>resultDocument(request,{ok:false}));

@@ -6,8 +6,8 @@ cd "$repo_root"
 
 scope=full
 if [[ $# -ne 0 ]]; then
-  if [[ $# -ne 2 || "$1" != --scope || ( "$2" != full && "$2" != stroke-batch && "$2" != minkowski-decimal && "$2" != tree-locate ) ]]; then
-    printf 'Usage: bash scripts/check.sh [--scope full|stroke-batch|minkowski-decimal|tree-locate]\n' >&2
+  if [[ $# -ne 2 || "$1" != --scope || ( "$2" != full && "$2" != stroke-batch && "$2" != minkowski-decimal && "$2" != tree-locate && "$2" != demo-rectclip ) ]]; then
+    printf 'Usage: bash scripts/check.sh [--scope full|stroke-batch|minkowski-decimal|tree-locate|demo-rectclip]\n' >&2
     exit 2
   fi
   scope="$2"
@@ -26,6 +26,15 @@ untracked_interfaces="$(git ls-files --others --exclude-standard -- '*.mbti')"
 if [[ -n "$untracked_interfaces" ]]; then
   printf 'Untracked public interfaces; review and stage them:\n%s\n' "$untracked_interfaces" >&2
   exit 1
+fi
+if [[ "$scope" == demo-rectclip ]]; then
+  moon check --target js --deny-warn
+  mkdir -p _build/demo-rectclip
+  (cd demo && npm run build && node --test --test-reporter=tap --test-name-pattern='demo rectclip:' smoke.test.mjs) | tee _build/demo-rectclip/tests.log
+  grep -Fxq '# pass 3' _build/demo-rectclip/tests.log
+  grep -Fxq '# fail 0' _build/demo-rectclip/tests.log
+  git diff --check
+  exit 0
 fi
 if [[ "$scope" == stroke-batch || "$scope" == minkowski-decimal || "$scope" == tree-locate ]]; then
   selection='stroke batch: *'

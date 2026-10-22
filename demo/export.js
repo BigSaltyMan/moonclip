@@ -13,6 +13,15 @@ export function resultSvg(paths){
 }
 export function resultDocument(request,response){
   if(!response?.ok)throw new Error('No valid result to export');
+  if(response.geometry==='open-paths')return {format:'MoonClipDemo',version:3,kernel:'MoonBit',request:structuredClone(request),result:{geometry:'open-paths',paths:structuredClone(response.paths)}};
   const tree=response.output==='tree';
   return {format:'MoonClipDemo',version:tree?2:1,kernel:'MoonBit',request:structuredClone(request),result:{paths:structuredClone(response.paths),mode:response.mode,precision:response.precision,...(tree?{output:'tree',tree:structuredClone(response.tree)}:{})},simplification:structuredClone(response.simplification)};
+}
+
+// Open output is rendered from kernel coordinates, never reconstructed from SVG.
+export const openPathData=paths=>paths.filter(p=>p.length).map(p=>'M'+p.map(q=>q.join(',')).join('L')).join(' ');
+export function openResultSvg(response){
+  if(!response?.ok||response.geometry!=='open-paths')throw new Error('No valid open-path result to export');
+  const v=viewFor(response.paths);
+  return `<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" viewBox="${v.x} ${v.y} ${v.w} ${v.h}" width="1000" height="700"><title>MoonClip open-path result</title><g transform="scale(1,-1)"><path d="${openPathData(response.paths)}" fill="none" stroke="#087f72" stroke-width="2" vector-effect="non-scaling-stroke"/></g></svg>`;
 }

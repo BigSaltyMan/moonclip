@@ -8,6 +8,10 @@ export const patterns={
 };
 const base={version:1,mode:'integer',precision:3,simplify:{enabled:false,epsilon:.5}};
 export const cases={
+  rectclip:[
+    {id:'cross',label:'穿过窗口 · 保留中间顶点',version:1,scene:'rectclip',mode:'integer',output:'paths',rect:{min_x:0,min_y:0,max_x:10,max_y:10},paths:[[[-10,5],[5,5],[20,5]]],simplify:{enabled:false}},
+    {id:'reentry',label:'先出后入 · 两个片段',version:1,scene:'rectclip',mode:'integer',output:'paths',rect:{min_x:0,min_y:0,max_x:10,max_y:10},paths:[[[2,2],[12,2],[12,8],[2,8]]],simplify:{enabled:false}},
+  ],
   boolean:[
     {id:'overlap',label:'交叠矩形 · 负坐标',...base,scene:'boolean',subject:[rect(-48,-28,62,52)],clip:[rect(-10,-8,60,48)],params:{operation:'Intersection',fill_rule:'EvenOdd'}},
     {id:'hole',label:'孔洞与交叠区域',...base,scene:'boolean',subject:[rect(-50,-32,100,64),[[-18,-14],[-18,14],[18,14],[18,-14]]],clip:[rect(-8,-40,32,80)],params:{operation:'Difference',fill_rule:'NonZero'}},

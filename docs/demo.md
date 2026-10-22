@@ -1,5 +1,15 @@
 # MoonClip 交互演示
 
+## Commit 30：窗口裁剪（Unreleased）
+
+从“路线实验”进入“窗口裁剪”，选择案例或编辑多路线 `Paths` 数组和 min_x、min_y、max_x、max_y，点击计算。只接受整数开放路线；隐藏宽度、连接、端点、填充、Precision、树和简化选项。每条路线独立，不连接端点。窗口用紫色虚线、输入用橙色、结果用绿色表示，可切换输入／结果显示、缩放及自适应；视图范围包含窗口、输入和结果，统计输入路线数、输出片段数和顶点数。
+
+桥接独立分派 `scene: "rectclip"`，真实调用 `rect_clip_lines`，响应标记 `geometry: "open-paths"`。窗口和路线复用整数解析，小数坐标、小数模式、树或启用简化均拒绝。输入修改、切换场景或失败会清除结果并禁用导出；请求编号继续阻止迟到响应恢复旧结果。
+
+SVG 仅导出真实结果，使用开放 M/L 与 fill="none"，不闭合或补点，y 向上；空结果使用默认视图生成合法空 SVG。JSON 为 MoonClipDemo v3，记录完整原始 request 与开放路径 result；重新提交 request 即可复现。旧区域 v1、树 v2 格式不变，不新增导入界面。两个案例分别为保留中间点的穿越和先出后入的分段输入。
+
+本笔本地只运行 `npm run dev` 构建一次，然后在 demo 中复用产物执行 `node --test --test-name-pattern="demo rectclip:" smoke.test.mjs`。普通 CI 使用 `bash scripts/check.sh --scope demo-rectclip`，只进行格式／接口、JS 静态检查、一次静态构建及 3 项定向测试；不执行下文历史全套验收入口。浏览器记录见[增量验收](demo-acceptance.md#commit-30窗口裁剪增量验收)。其他三项增量的演示接入另行安排，未发布新版本。
+
 本文的六个树入口均自 **0.2.0** 提供，见[正式发布记录](release-0.2.0.md)。演示从仓库启动；旧锚点继续兼容已有链接，截图和验收记录保留原提交归属。
 
 ## 本地启动与静态构建

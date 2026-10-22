@@ -65,3 +65,16 @@
 ![描边孔洞选择](https://raw.githubusercontent.com/BigSaltyMan/moonclip/fd047569a3d649fd6b2f08e07985ce364da8150a/docs/demo-screenshots/tree-stroke.jpg)
 
 ![窄屏层级列表](https://raw.githubusercontent.com/BigSaltyMan/moonclip/fd047569a3d649fd6b2f08e07985ce364da8150a/docs/demo-screenshots/tree-narrow.jpg)
+
+## Commit 30：窗口裁剪增量验收
+
+2026-10-22，Windows，Codex 内置浏览器，先用 `npm run dev` 启动 http://127.0.0.1:4173。只验收新增“窗口裁剪”页签，没有重验旧场景。复用这次唯一构建产物的 `demo rectclip:` 定向测试 **3/3**；JS 静态检查、前端语法及根公开接口检查通过。新增桥接／导出测试为 3 项，原有 20 项未执行。
+
+- 默认窗口 [0,0]—[10,10]，输入 (-10,5)→(5,5)→(20,5)，真实结果为 (0,5)→(5,5)→(10,5)。DOM 路径为 M0,5L5,5L10,5，输入也未闭合；窗口为紫色虚线，结果覆盖在输入上方以便区分。
+- max_x 改为 8，修改时立即禁用导出，计算结果终点更新为 (8,5)。min_x 改为 11 后返回 RectClipParameters / InvalidInput，当前结果清除，SVG／JSON 都禁用；恢复合法窗口后可再次计算。
+- 实际点击下载 SVG 和 JSON，保存副本至 `_build/commit30/moonclip-rectclip.svg`、`_build/commit30/moonclip-rectclip.json`。SVG 经 HTTP 重新打开，只有开放线条、fill="none"、scale(1,-1)；JSON version=3，包含原窗口和路线，其 request 重新调用真实 MoonBit 桥接后逐点一致。
+- 390×844 视口检查：四字段处于视口内，文档宽度 375 ≤ 390，max_x 可编辑并重新计算；新增页签控制台无 warning/error。临时视口覆盖已恢复。
+
+下载 SVG SHA-256：`0b06c002ef863cd77f4d60d18c48d93eb8a93f2d908c89e66fb0be4eeb0456b6`。JSON SHA-256：`fedcc61d51dfdae3693597129777a8200eeee24a36d8ce102ce042eb221d61fe`。
+
+仅保存一张新增页签截图：[窗口裁剪](demo-screenshots/rectclip.jpg)。这份记录属于本地浏览器和下载验收；同 SHA Linux CI 的轻量构建／测试结果另行核对，不把历史全量、参考、性能或注册表证据算成本笔结果。根几何算法、公开 API、旧参考、版本及发布标签未变，新功能为 Unreleased。
