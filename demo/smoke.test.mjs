@@ -202,3 +202,40 @@ test('demo stroke batch: closed region export and replay',()=>{
   assert.deepEqual(canonical(doc.result.paths),canonical([rect(0,-1,15,2)]));assert.deepEqual(run(doc.request).paths,r.paths);
   const svg=resultSvg(r.paths);assert.match(svg,/[zZ]" fill=/);assert.match(svg,/fill-rule="nonzero"/);
 });
+
+
+test('demo tree locate: statuses identify complete outer hole and island nodes',()=>{
+  const request=cases.boolean.find(c=>c.id==='locate-nesting');
+  for(const [point,status,contour,depth] of [
+    [[-1,1],'Outside',null,0],[[2,2],'Inside',rect(0,0,20,20),1],
+    [[6,6],'InHole',rect(4,4,12,12).reverse(),2],[[10,10],'Inside',rect(8,8,4,4),3],
+  ]){
+    const r=run({...request,query:{point}});assert.equal(r.ok,true,JSON.stringify(r));
+    assert.deepEqual(r.query.point,point);assert.equal(r.query.status,status);assert.equal(r.query.node_indices.length,contour?1:0);
+    if(contour){const i=r.query.node_indices[0];assert.deepEqual(canonical([r.paths[i]]),canonical([contour]));assert.equal(r.tree.nodes[i].depth,depth);assert.equal(r.tree.nodes[i].is_hole,depth%2===0);}
+  }
+});
+
+test('demo tree locate: all touching boundaries and complete query errors',()=>{
+  const request={scene:'boolean',mode:'integer',output:'tree',subject:[rect(0,0,10,10),rect(10,10,10,10)],clip:[],params:{operation:'Union'},query:{point:[10,10]}};
+  const r=run(request);assert.equal(r.ok,true);assert.equal(r.query.status,'OnBoundary');assert.equal(new Set(r.query.node_indices).size,2);
+  assert.deepEqual(canonical(r.query.node_indices.map(i=>r.paths[i])),canonical(request.subject));
+  for(const i of r.query.node_indices){assert.equal(r.tree.nodes[i].depth,1);assert.equal(r.tree.nodes[i].is_hole,false);}
+  const outside=run({...request,query:{point:[1000000001,0]}});
+  assert.equal(outside.ok,false);assert.equal(outside.error.kind,'CoordinateOutOfRange');assert.equal(outside.error.stage,'PolyTreeQuery');
+  assert.equal(outside.error.path_index,null);assert.equal(outside.paths,undefined);
+  for(const invalid of [{...request,mode:'decimal'},{...request,output:'paths'},{...request,scene:'offset'}, {...request,query:{point:[.5,0]}}]){
+    const bad=run(invalid);assert.equal(bad.ok,false);assert.equal(bad.error.stage,'BridgeInput');assert.equal(bad.paths,undefined);
+  }
+});
+
+test('demo tree locate: v2 JSON query replay and absent-query compatibility',()=>{
+  const request=structuredClone(cases.boolean.find(c=>c.id==='locate-nesting')),r=run(request),doc=resultDocument(request,r);
+  assert.equal(doc.version,2);assert.deepEqual(doc.request.query,{point:[6,6]});assert.deepEqual(doc.result.query,r.query);
+  const replay=run(doc.request);assert.equal(replay.ok,true);assert.equal(replay.query.status,'InHole');
+  const hits=response=>response.query.node_indices.map(i=>({contour:response.paths[i],depth:response.tree.nodes[i].depth,is_hole:response.tree.nodes[i].is_hole}));
+  assert.deepEqual(hits(replay),hits(r));assert.deepEqual(canonical([hits(replay)[0].contour]),canonical([rect(4,4,12,12).reverse()]));assert.equal(hits(replay)[0].depth,2);
+  delete request.query;const plain=run(request),plainDoc=resultDocument(request,plain);
+  assert.equal(plain.ok,true);assert.equal(Object.hasOwn(plain,'query'),false);assert.equal(Object.hasOwn(plainDoc.result,'query'),false);
+  assert.deepEqual(Object.keys(plainDoc.result),['paths','mode','precision','output','tree']);
+});

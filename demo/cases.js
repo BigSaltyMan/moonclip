@@ -20,6 +20,7 @@ export const cases={
     {id:'overlap',label:'交叠矩形 · 负坐标',...base,scene:'boolean',subject:[rect(-48,-28,62,52)],clip:[rect(-10,-8,60,48)],params:{operation:'Intersection',fill_rule:'EvenOdd'}},
     {id:'hole',label:'孔洞与交叠区域',...base,scene:'boolean',subject:[rect(-50,-32,100,64),[[-18,-14],[-18,14],[18,14],[18,-14]]],clip:[rect(-8,-40,32,80)],params:{operation:'Difference',fill_rule:'NonZero'}},
     {id:'tree-island',label:'层级查看 · 外轮廓 / 孔洞 / 岛',...base,scene:'boolean',output:'tree',subject:[rect(0,0,60,60),rect(10,10,40,40).reverse(),rect(20,20,20,20)],clip:[],params:{operation:'Union',fill_rule:'NonZero'}},
+    {id:'locate-nesting',label:'点定位 · 外轮廓 / 孔洞 / 岛',...base,scene:'boolean',output:'tree',subject:[rect(0,0,20,20),rect(4,4,12,12).reverse(),rect(8,8,4,4)],clip:[],params:{operation:'Union',fill_rule:'NonZero'},query:{point:[6,6]}},
   ],
   offset:[
     {id:'courtyard',label:'带孔矩形 · 内外边界',...base,scene:'offset',subject:[rect(-48,-32,96,64),[[-16,-12],[-16,12],[16,12],[16,-12]]],params:{delta:5,fill_rule:'NonZero',join:'Miter',miter_limit:2,arc_tolerance:.25}},

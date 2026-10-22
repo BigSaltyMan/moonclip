@@ -1,5 +1,17 @@
 # MoonClip 交互演示
 
+## Commit 33：整数 Boolean 树点定位（Unreleased）
+
+选择整数 Boolean 的 Tree 输出后可见“启用点定位”，默认关闭。新增“点定位 · 外轮廓 / 孔洞 / 岛”案例只保存三层矩形、参数及默认点 (6,6)。开启后编辑整数 x、y，用现有“计算结果”按钮提交；没有画布取点、悬停、拖动或缓存查询。其他模式／场景出现 query 字段时桥接明确拒绝；页面切换到这些模式会隐藏并关闭开关。
+
+每次提交构建一次整数树，并对同一棵树调用一次 `locate`，再编码展示数据。匹配使用完整点序列、深度和孔洞标记，不循环移位、不反向、不删点；每个命中必须唯一对应展示节点，缺失或歧义返回桥接错误。展示索引不等于库内部编号，只对本次响应有效。没有前端点包含算法，也不从平铺结果构造第二棵树。树构建和公开定位调用分别使用各自的核心预算；节点快照和 JSON 编码不计入核心预算。
+
+状态 Outside、Inside、InHole、OnBoundary 分别显示外部、区域内部、孔洞内部、边界。内部返回最深节点；边界显示全部命中，不承诺几何排序。页面显示命中编号、深度及孔洞标记，紫色虚线为查询高亮，橙色实线仍是独立手动选择，品红点标记查询位置；外部不保留旧高亮。输入、参数或查询点修改会清空旧结论、辅助绘图和有效导出，迟到响应继续受请求编号约束。越界点由核心返回 PolyTreeQuery 错误，失败无可导出的部分树。
+
+树 JSON 沿用 v2，查询开启时额外保存 `result.query` 的 point、status、node_indices，原始查询请求仍在 request 中；重放会重新构树和定位，核对命中快照而不是跨次索引。关闭时响应与导出无 query 字段。查询信息保存在 JSON，SVG 只导出区域结果，不带点或高亮；v1 平铺和 v3 开放导出不变。
+
+本地开发服务只构建一次，复用产物执行 `node --test --test-name-pattern="demo tree locate:" smoke.test.mjs`。普通 CI 使用 `bash scripts/check.sh --scope demo-tree-locate`，只做格式／接口、JS 静态检查、一次构建和 3 项定向检查。见[增量验收](demo-acceptance.md#commit-33整数树点定位增量验收)。不接小数、Offset／Stroke、批量点、索引或最近边查询，未调整版本或发布。
+
 ## Commit 32：多路线批量加宽（Unreleased）
 
 “路线实验 → 批量加宽”一次提交 `Paths` 中的多条独立开放路线，桥接只调用一次 `stroke_polylines`。全部路线共享完整宽度、端点、连接、MiterLimit 与 ArcTolerance，由核心统一清理重叠区域。仅支持整数坐标和平铺输出，width 仍是 Double 完整宽度，可以包含小数；不提供小数坐标模式、树或简化。原有单路线页签仍独立保留。
@@ -8,7 +20,7 @@
 
 修改坐标、宽度或样式以及场景切换都会清除有效结果、禁用导出，迟到响应仍受请求编号约束。SVG 导出真实合并区域，JSON 沿用 v1，保存完整原始路线和共享样式，request 可直接重放，不使用裁剪页签的开放输出协议。
 
-本地开发服务只构建一次，复用产物执行 `node --test --test-name-pattern="demo stroke batch:" smoke.test.mjs`。普通 CI 使用 `bash scripts/check.sh --scope demo-stroke-batch`，只执行格式／接口、JS 静态检查、一次构建及 3 项定向检查。浏览器、下载与重放见[增量验收](demo-acceptance.md#commit-32批量加宽增量验收)。未接批量小数、批量树、逐路线样式或树点定位，未发布新版本。
+本地开发服务只构建一次，复用产物执行 `node --test --test-name-pattern="demo stroke batch:" smoke.test.mjs`。普通 CI 使用 `bash scripts/check.sh --scope demo-stroke-batch`，只执行格式／接口、JS 静态检查、一次构建及 3 项定向检查。浏览器、下载与重放见[增量验收](demo-acceptance.md#commit-32批量加宽增量验收)。Commit 32 未接批量小数、批量树、逐路线样式或树点定位；整数 Boolean 树查询见上方 Commit 33，仍未发布。
 
 ## Commit 31：小数图案扫掠（Unreleased）
 
@@ -111,7 +123,7 @@ SVG只导出当前有效结果，包含独立viewBox、白色背景、数学坐�
 
 平铺 JSON 格式为 MoonClipDemo 版本 1，包含kernel、完整原始request（场景、两操作数/路线/图案、模式、参数、precision、简化选项）、result.paths及simplification统计。可把导出的request再次传给compute复现；结果不从SVG字符串或像素反推。整数结果precision为null；request中的precision在整数模式下不参与量化。
 
-树 JSON 为 MoonClipDemo 版本 2，result 同时包含 output、mode、precision、paths 与 tree；顶层 request 仍是可直接重放的版本 1 桥接请求，simplification 保留统计。所有数组、节点、输入参数与简化报告都独立复制。SVG 仍只输出结果轮廓，不输出输入层、节点列表或高亮。
+树 JSON 为 MoonClipDemo 版本 2，result 同时包含 output、mode、precision、paths 与 tree，可选 query 只用于整数 Boolean 树点定位；顶层 request 仍是可直接重放的版本 1 桥接请求，simplification 保留统计。所有数组、节点、输入参数与简化报告都独立复制。SVG 仍只输出结果轮廓，不输出输入层、节点列表或高亮。
 
 启用简化时先显式简化，再调用所选树入口；简化与几何是两次公开调用，各自建立核心预算。单个树入口内沿用核心累计预算，桥接 JSON 序列化、公开访问器副本和 UI 绘制不计入核心预算。编辑输入、输出模式、精度或参数立即清空摘要、树与选择，禁用导出；错误不会自动改为平铺重算，迟到响应不能重新启用导出。
 

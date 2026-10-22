@@ -15,7 +15,7 @@ export function resultDocument(request,response){
   if(!response?.ok)throw new Error('No valid result to export');
   if(response.geometry==='open-paths')return {format:'MoonClipDemo',version:3,kernel:'MoonBit',request:structuredClone(request),result:{geometry:'open-paths',paths:structuredClone(response.paths)}};
   const tree=response.output==='tree';
-  return {format:'MoonClipDemo',version:tree?2:1,kernel:'MoonBit',request:structuredClone(request),result:{paths:structuredClone(response.paths),mode:response.mode,precision:response.precision,...(tree?{output:'tree',tree:structuredClone(response.tree)}:{})},simplification:structuredClone(response.simplification)};
+  return {format:'MoonClipDemo',version:tree?2:1,kernel:'MoonBit',request:structuredClone(request),result:{paths:structuredClone(response.paths),mode:response.mode,precision:response.precision,...(tree?{output:'tree',tree:structuredClone(response.tree),...(response.query?{query:structuredClone(response.query)}:{})}:{})},simplification:structuredClone(response.simplification)};
 }
 
 // Open output is rendered from kernel coordinates, never reconstructed from SVG.

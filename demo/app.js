@@ -15,8 +15,15 @@ worker.onmessage=({data})=>{
   $('status').textContent='计算完成';const units=input.mode==='decimal'?'小数 Precision '+input.precision:'整数';$('result-detail').textContent=scene==='rectclip'?'仅整数 · 开放折线 · 窗口裁剪':scene==='stroke-batch'?`整数批量加宽 · 完整宽度 ${input.params.width} · ${input.params.cap} / ${input.params.join} · 重叠区域统一合并`:scene==='minkowski'?`${units} · 图案扫掠 · NonZero · 保留共线点`:scene==='stroke'?`${units} · 完整宽度 ${input.params.width} · ${input.params.cap} / ${input.params.join}`:scene==='offset'?`${units} · 偏移 ${input.params.delta} · ${input.params.join} / ${input.params.fill_rule}`:`${units} · ${input.params.operation} / ${input.params.fill_rule}`;
   $('contours').textContent=r.paths.length;$('vertices').textContent=r.paths.reduce((n,p)=>n+p.length,0);$('elapsed').textContent=data.elapsed.toFixed(2);$('removed').textContent=['rectclip','stroke-batch'].includes(scene)?input.paths.length:(r.simplification?.removed_vertices??0);
   $('error').hidden=true;$('export-svg').disabled=false;$('export-json').disabled=false;
-  renderTree();fit();
+  renderTree();renderQuery();fit();
 };
+function clearQuery(){$('query-result').hidden=true;$('query-status').textContent='';$('query-hits').textContent='';}
+function renderQuery(){
+  clearQuery();const q=valid?.response.query;if(!q)return;
+  const names={Outside:'外部',Inside:'区域内部',InHole:'孔洞内部',OnBoundary:'边界'};
+  $('query-result').hidden=false;$('query-status').textContent=`${names[q.status]} · 点 (${q.point.join(', ')})`;
+  $('query-hits').textContent=q.node_indices.length?q.node_indices.map(i=>{const n=valid.response.tree.nodes[i];return `#${i} · 深度 ${n.depth} · ${n.is_hole?'孔洞':'填充节点'}`;}).join('；'):'没有命中节点';
+}
 function clearTree(){selectedNode=null;$('tree-panel').hidden=true;$('tree-list').replaceChildren();$('tree-summary').textContent='';$('selection-detail').textContent='点击节点，定位对应轮廓。';$('clear-selection').disabled=true;}
 function selectNode(index){selectedNode=index;for(const b of $('tree-list').querySelectorAll('[data-node-index]'))b.setAttribute('aria-pressed',String(Number(b.dataset.nodeIndex)===index));$('clear-selection').disabled=index===null;$('selection-detail').textContent=index===null?'点击节点，定位对应轮廓。':`已选择 #${index} · ${valid.response.tree.nodes[index].is_hole?'孔洞':'外轮廓'} · 仅高亮边界`;draw();}
 function renderTree(){
@@ -36,13 +43,14 @@ function renderTree(){
   }
 }
 function showReport(report){$('simplification').hidden=!report;if(report)$('simplification-data').textContent=JSON.stringify(report,null,2);}
-function invalidate(){requestId++;valid=null;clearTree();$('export-svg').disabled=true;$('export-json').disabled=true;$('status').textContent='输入已更新 · 待计算';$('result-detail').textContent='当前没有有效结果，计算后才可导出';for(const id of ['contours','vertices','elapsed','removed'])$(id).textContent='—';$('error').hidden=true;showReport(null);$('compute').disabled=false;draw();}
-function showError(error,report){valid=null;clearTree();$('export-svg').disabled=true;$('export-json').disabled=true;$('compute').disabled=false;$('status').textContent='计算未完成';$('result-detail').textContent='检查错误信息，修正后重新计算';$('error').hidden=false;$('error').textContent=JSON.stringify(error,null,2);showReport(report);for(const id of ['contours','vertices','elapsed'])$(id).textContent='—';$('removed').textContent=report?.removed_vertices??'—';draw();}
+function invalidate(){requestId++;valid=null;clearTree();clearQuery();$('export-svg').disabled=true;$('export-json').disabled=true;$('status').textContent='输入已更新 · 待计算';$('result-detail').textContent='当前没有有效结果，计算后才可导出';for(const id of ['contours','vertices','elapsed','removed'])$(id).textContent='—';$('error').hidden=true;showReport(null);$('compute').disabled=false;draw();}
+function showError(error,report){valid=null;clearTree();clearQuery();$('export-svg').disabled=true;$('export-json').disabled=true;$('compute').disabled=false;$('status').textContent='计算未完成';$('result-detail').textContent='检查错误信息，修正后重新计算';$('error').hidden=false;$('error').textContent=JSON.stringify(error,null,2);showReport(report);for(const id of ['contours','vertices','elapsed'])$(id).textContent='—';$('removed').textContent=report?.removed_vertices??'—';draw();}
 function numeric(id){const value=$(id).value.trim();if(value==='')throw new Error('参数不能为空: '+id);const n=Number(value);if(!Number.isFinite(n))throw new Error('参数必须是有限数值: '+id);return n;}
 function readRequest(){
   if(scene==='stroke-batch')return {version:1,scene,mode:'integer',output:'paths',paths:JSON.parse($('input-a').value),params:{width:numeric('width'),cap:$('cap').value,join:$('join').value,miter_limit:numeric('miter-limit'),arc_tolerance:numeric('arc-tolerance')},simplify:{enabled:false}};
   if(scene==='rectclip')return {version:1,scene,mode:'integer',output:'paths',paths:JSON.parse($('input-a').value),rect:{min_x:numeric('min-x'),min_y:numeric('min-y'),max_x:numeric('max-x'),max_y:numeric('max-y')},simplify:{enabled:false}};
   const r={version:1,scene,output:$('output').value,mode:$('mode').value,precision:numeric('precision'),params:{operation:$('operation').value,fill_rule:$('fill-rule').value,delta:numeric('delta'),width:numeric('width'),join:$('join').value,cap:$('cap').value,miter_limit:numeric('miter-limit'),arc_tolerance:numeric('arc-tolerance'),path_is_closed:$('closed').checked},simplify:{enabled:$('simplify').checked,epsilon:numeric('epsilon')}};
+  if(scene==='boolean'&&r.mode==='integer'&&r.output==='tree'&&$('query-enabled').checked)r.query={point:[numeric('query-x'),numeric('query-y')]};
   const a=JSON.parse($('input-a').value);
   if(scene==='boolean'){r.subject=a;r.clip=JSON.parse($('input-b').value);}
   else if(scene==='offset')r.subject=a;
@@ -55,6 +63,9 @@ function calculate(){
   catch(error){showError({kind:'InvalidInput',stage:'Editor',message:String(error.message)});}
 }
 function setVisibility(){
+  const querySupported=scene==='boolean'&&$('mode').value==='integer'&&$('output').value==='tree';
+  $('query-controls').hidden=!querySupported;if(!querySupported)$('query-enabled').checked=false;
+  $('query-fields').hidden=!$('query-enabled').checked;
   document.querySelectorAll('[data-for]').forEach(el=>{el.hidden=!el.dataset.for.split(' ').includes(scene);});
   $('route-tabs').hidden=!['stroke','minkowski','rectclip','stroke-batch'].includes(scene);
   $('rectclip-tab').classList.toggle('selected',scene==='rectclip');$('batch-tab').classList.toggle('selected',scene==='stroke-batch');
@@ -75,6 +86,7 @@ function setVisibility(){
 function loadCase(){
   const c=structuredClone(cases[scene].find(c=>c.id===$('case').value)??cases[scene][0]);
   $('output').value=c.output??'paths';$('mode').value=c.mode;$('precision').value=String(c.precision??3);$('simplify').checked=false;$('epsilon').value=.5;
+  $('query-enabled').checked=false;$('query-x').value=String(c.query?.point?.[0]??6);$('query-y').value=String(c.query?.point?.[1]??6);
   const p=c.params??{};
   if(scene==='rectclip')for(const [id,key] of [['min-x','min_x'],['min-y','min_y'],['max-x','max_x'],['max-y','max_y']])$(id).value=String(c.rect[key]);
   for(const [id,key,fallback] of [['operation','operation','Intersection'],['fill-rule','fill_rule','EvenOdd'],['delta','delta',5],['width','width',12],['join','join','Miter'],['cap','cap','Butt'],['miter-limit','miter_limit',2],['arc-tolerance','arc_tolerance',.25]])$(id).value=p[key]??fallback;
@@ -94,7 +106,7 @@ function inputLayers(){
   if(scene==='minkowski')layers.push({name:'图案 / 局部原点',paths:[r.pattern],color:'#8265a6',closed:true});
   return safe(layers);
 }
-function fit(){const layers=inputLayers();view=viewFor([...layers.flatMap(l=>l.paths),...(valid?.response.paths??[])]);draw();}
+function fit(){const layers=inputLayers();view=viewFor([...layers.flatMap(l=>l.paths),...(valid?.response.paths??[]),...(valid?.response.query?[[valid.response.query.point]]:[])]);draw();}
 function zoom(factor){if(!view)return;view={x:view.x+view.w*(1-factor)/2,y:view.y+view.h*(1-factor)/2,w:view.w*factor,h:view.h*factor};draw();}
 function draw(){
   const svg=$('drawing');const layers=inputLayers();if(!view)view=viewFor(layers.flatMap(l=>l.paths));
@@ -114,6 +126,11 @@ function draw(){
   }
   if($('show-result').checked&&valid?.response.geometry==='open-paths')objects.push(`<path d="${openPathData(valid.response.paths)}" fill="none" stroke="#087f72" stroke-width="3" vector-effect="non-scaling-stroke"/>`);
   if($('show-result').checked&&valid&&selectedNode!==null)objects.push(`<path data-selected-contour="${selectedNode}" d="${contourData([valid.response.paths[selectedNode]])}" fill="none" stroke="#d65a25" stroke-width="4" vector-effect="non-scaling-stroke"/>`);
+  const query=valid?.response.query;
+  if(query){
+    if($('show-result').checked)for(const i of query.node_indices)objects.push(`<path data-query-node="${i}" d="${contourData([valid.response.paths[i]])}" fill="none" stroke="#9b3ca6" stroke-width="3" stroke-dasharray="6 3" vector-effect="non-scaling-stroke"/>`);
+    const [x,y]=query.point;objects.push(`<circle data-query-point="true" cx="${x}" cy="${y}" r="${view.w/120}" fill="#ae2471" stroke="white" stroke-width="1.5" vector-effect="non-scaling-stroke"/>`);
+  }
   svg.innerHTML=`<g transform="scale(1,-1)">${objects.join('')}</g>`;
   $('legend').replaceChildren(...[...layers,{name:'MoonBit 结果',color:'#087f72'}].map(l=>{const span=document.createElement('span');const i=document.createElement('i');i.style.background=l.color;span.append(i,document.createTextNode(l.name));return span;}));
   $('view-label').textContent=`x: ${view.x.toFixed(1)} … ${(view.x+view.w).toFixed(1)} · y 向上`;
@@ -125,9 +142,9 @@ $('rectclip-tab').onclick=()=>switchScene('rectclip');
 $('stroke-tab').onclick=()=>switchScene('stroke');$('sweep-tab').onclick=()=>switchScene('minkowski');
 $('pattern-select').replaceChildren(new Option('案例／自定义图案','custom'),...Object.entries(patterns).map(([id,p])=>new Option(p.label,id)));
 $('pattern-select').onchange=()=>{if($('pattern-select').value==='custom')return;$('input-b').value=JSON.stringify(patterns[$('pattern-select').value].points,null,2);invalidate();fit();calculate();};
-$('output').onchange=calculate;$('clear-selection').onclick=()=>selectNode(null);
+$('output').onchange=()=>{setVisibility();calculate();};$('clear-selection').onclick=()=>selectNode(null);
 $('case').onchange=loadCase;$('compute').onclick=calculate;
-for(const id of ['mode','precision','operation','fill-rule','delta','width','join','cap','miter-limit','arc-tolerance','closed','simplify','epsilon','input-a','input-b','min-x','min-y','max-x','max-y'])$(id).addEventListener('input',()=>{if(id==='input-b'&&scene==='minkowski')$('pattern-select').value='custom';invalidate();setVisibility();draw();});
+for(const id of ['mode','precision','operation','fill-rule','delta','width','join','cap','miter-limit','arc-tolerance','closed','simplify','epsilon','input-a','input-b','min-x','min-y','max-x','max-y','query-enabled','query-x','query-y'])$(id).addEventListener('input',()=>{if(id==='input-b'&&scene==='minkowski')$('pattern-select').value='custom';invalidate();setVisibility();draw();});
 for(const id of ['show-input','show-result'])$(id).onchange=draw;
 $('zoom-in').onclick=()=>zoom(.8);$('zoom-out').onclick=()=>zoom(1.25);$('fit').onclick=fit;
 $('drawing').addEventListener('wheel',e=>{e.preventDefault();zoom(e.deltaY>0?1.12:1/1.12);},{passive:false});

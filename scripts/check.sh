@@ -6,8 +6,8 @@ cd "$repo_root"
 
 scope=full
 if [[ $# -ne 0 ]]; then
-  if [[ $# -ne 2 || "$1" != --scope || ( "$2" != full && "$2" != stroke-batch && "$2" != minkowski-decimal && "$2" != tree-locate && "$2" != demo-rectclip && "$2" != demo-minkowski-decimal && "$2" != demo-stroke-batch ) ]]; then
-    printf 'Usage: bash scripts/check.sh [--scope full|stroke-batch|minkowski-decimal|tree-locate|demo-rectclip|demo-minkowski-decimal|demo-stroke-batch]\n' >&2
+  if [[ $# -ne 2 || "$1" != --scope || ( "$2" != full && "$2" != stroke-batch && "$2" != minkowski-decimal && "$2" != tree-locate && "$2" != demo-rectclip && "$2" != demo-minkowski-decimal && "$2" != demo-stroke-batch && "$2" != demo-tree-locate ) ]]; then
+    printf 'Usage: bash scripts/check.sh [--scope full|stroke-batch|minkowski-decimal|tree-locate|demo-rectclip|demo-minkowski-decimal|demo-stroke-batch|demo-tree-locate]\n' >&2
     exit 2
   fi
   scope="$2"
@@ -27,13 +27,16 @@ if [[ -n "$untracked_interfaces" ]]; then
   printf 'Untracked public interfaces; review and stage them:\n%s\n' "$untracked_interfaces" >&2
   exit 1
 fi
-if [[ "$scope" == demo-rectclip || "$scope" == demo-minkowski-decimal || "$scope" == demo-stroke-batch ]]; then
+if [[ "$scope" == demo-rectclip || "$scope" == demo-minkowski-decimal || "$scope" == demo-stroke-batch || "$scope" == demo-tree-locate ]]; then
   selection='demo rectclip:'
   if [[ "$scope" == demo-minkowski-decimal ]]; then
     selection='demo decimal minkowski:'
   fi
   if [[ "$scope" == demo-stroke-batch ]]; then
     selection='demo stroke batch:'
+  fi
+  if [[ "$scope" == demo-tree-locate ]]; then
+    selection='demo tree locate:'
   fi
   moon check --target js --deny-warn
   mkdir -p "_build/$scope"

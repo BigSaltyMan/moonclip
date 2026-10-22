@@ -202,6 +202,62 @@ fn encode_tree_d(tree : @moonclip.PolyTreeD) -> (Json, Json) {
 }
 
 ///|
+// Match public snapshots to this response's breadth-first display indices.
+// These indices are never interpreted as kernel node IDs.
+fn encode_tree_query(
+  point : @moonclip.Point64,
+  located : @moonclip.TreePointLocation64,
+  encoded : (Json, Json),
+) -> Json raise DemoError {
+  guard encoded.0 is Array(paths) else {
+    raise Input("Missing encoded contours", None, None)
+  }
+  guard object(encoded.1).get("nodes") is Some(Array(nodes)) else {
+    raise Input("Missing encoded nodes", None, None)
+  }
+  if paths.length() != nodes.length() {
+    raise Input("Unaligned encoded nodes", None, None)
+  }
+  let (status, hits) : (String, Array[@moonclip.PolyNode64]) = match located {
+    @moonclip.Outside => ("Outside", [])
+    @moonclip.Inside(node) => ("Inside", [node])
+    @moonclip.InHole(node) => ("InHole", [node])
+    @moonclip.OnBoundary(nodes) => ("OnBoundary", nodes)
+  }
+  let indices : Array[Int] = []
+  for hit in hits {
+    let contour = hit
+      .contour()
+      .map(fn(p) { [p.x.to_int(), p.y.to_int()] })
+      .to_json()
+    let mut found : Int? = None
+    for i = 0; i < paths.length(); i = i + 1 {
+      let node = object(nodes[i])
+      if paths[i] == contour &&
+        node.get("depth") == Some(hit.depth().to_json()) &&
+        node.get("is_hole") == Some(hit.is_hole().to_json()) {
+        if found is Some(_) {
+          raise Input("Ambiguous query node snapshot", None, None)
+        }
+        found = Some(i)
+      }
+    }
+    guard found is Some(index) else {
+      raise Input("Query node snapshot not found", None, None)
+    }
+    if indices.contains(index) {
+      raise Input("Duplicate query node snapshot", None, None)
+    }
+    indices.push(index)
+  }
+  Json::object({
+    "point": [point.x.to_int(), point.y.to_int()].to_json(),
+    "status": status.to_json(),
+    "node_indices": indices.to_json(),
+  })
+}
+
+///|
 fn stats(
   removed : Int,
   per_path : Array[Int],
@@ -346,6 +402,23 @@ fn execute(request : Json) -> Json raise DemoError {
     raise Input("Unknown demo bridge version", None, None)
   }
   let scene = text(r, "scene", "boolean")
+  if r.get("query") is Some(_) &&
+    (
+      scene != "boolean" ||
+      text(r, "mode", "integer") != "integer" ||
+      text(r, "output", "paths") != "tree"
+    ) {
+    raise Input("Point query requires integer Boolean tree output", None, None)
+  }
+  let query_point = match r.get("query") {
+    None => None
+    Some(query) => {
+      let point = object(query).get("point").unwrap_or(Json::null())
+      Some(
+        integer_paths(coordinates(Json::array([Json::array([point])])))[0][0],
+      )
+    }
+  }
   // Open paths must bypass closed-region preparation and all unrelated parameters.
   if scene == "rectclip" {
     return execute_rectclip(r)
@@ -457,6 +530,7 @@ fn execute(request : Json) -> Json raise DemoError {
   }
   let mut report = Json::null()
   let mut tree = Json::null()
+  let mut query_result : Json? = None
   let paths = if mode == "decimal" {
     let prepared = if enabled {
       let simple = value(
@@ -598,31 +672,37 @@ fn execute(request : Json) -> Json raise DemoError {
     let a = prepared.iter().take(split).collect()
     let b = prepared.iter().drop(split).collect()
     if output == "tree" {
-      let encoded = encode_tree(
-        match scene {
-          "boolean" =>
-            value(@moonclip.boolean_tree(a, b, operation, fill_rule=rule))
-          "offset" =>
-            value(
-              @moonclip.offset_tree(
-                a,
-                number(params, "delta", 4.0),
-                fill_rule=rule,
-                options~,
-              ),
-            )
-          "stroke" =>
-            value(
-              @moonclip.stroke_tree(
-                a[0],
-                number(params, "width", 8.0),
-                cap~,
-                options~,
-              ),
-            )
-          _ => raise Input("Unknown integer scene", None, None)
-        },
-      )
+      let computed = match scene {
+        "boolean" =>
+          value(@moonclip.boolean_tree(a, b, operation, fill_rule=rule))
+        "offset" =>
+          value(
+            @moonclip.offset_tree(
+              a,
+              number(params, "delta", 4.0),
+              fill_rule=rule,
+              options~,
+            ),
+          )
+        "stroke" =>
+          value(
+            @moonclip.stroke_tree(
+              a[0],
+              number(params, "width", 8.0),
+              cap~,
+              options~,
+            ),
+          )
+        _ => raise Input("Unknown integer scene", None, None)
+      }
+      let located = match query_point {
+        Some(point) => Some(value(computed.locate(point)))
+        None => None
+      }
+      let encoded = encode_tree(computed)
+      if query_point is Some(point) && located is Some(result) {
+        query_result = Some(encode_tree_query(point, result, encoded))
+      }
       tree = encoded.1
       encoded.0
     } else {
@@ -681,6 +761,9 @@ fn execute(request : Json) -> Json raise DemoError {
   }
   if output == "tree" {
     response["tree"] = tree
+  }
+  if query_result is Some(query) {
+    response["query"] = query
   }
   Json::object(response)
 }
