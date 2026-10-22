@@ -342,55 +342,71 @@ fn library_error(error : @moonclip.ClipError) -> Json {
 
 ///|
 fn execute_rectclip(r : Map[String, Json]) -> Json raise DemoError {
-  if text(r, "mode", "integer") != "integer" ||
-    text(r, "output", "paths") != "paths" {
-    raise Input("RectClip supports integer open paths only", None, None)
+  let mode = text(r, "mode", "integer")
+  if mode != "integer" && mode != "decimal" {
+    raise Input("Unknown coordinate mode", None, None)
+  }
+  if text(r, "output", "paths") != "paths" {
+    raise Input("RectClip supports open paths only", None, None)
   }
   let simplify = object(r.get("simplify").unwrap_or(Json::object({})))
   if flag(simplify, "enabled", false) {
     raise Input("RectClip does not apply simplification", None, None)
   }
-  let rect = object(r.get("rect").unwrap_or(Json::null()))
+  let digits = number(r, "precision", 3.0)
+  if digits < 0.0 || digits > 6.0 || digits.to_int().to_double() != digits {
+    raise Input("Precision must be an integer from 0 to 6", None, None)
+  }
+  let precision = value(@moonclip.Precision::new(digits.to_int()))
+  let fields = object(r.get("rect").unwrap_or(Json::null()))
   for key in ["min_x", "min_y", "max_x", "max_y"] {
-    if rect.get(key) is None {
+    if fields.get(key) is None {
       raise Input("Missing window field: " + key, None, None)
     }
   }
-  let corners = integer_paths([
-      [
-        @moonclip.PointD::new(
-          number(rect, "min_x", 0.0),
-          number(rect, "min_y", 0.0),
+  let rect : @moonclip.BoundsD = {
+    min_x: number(fields, "min_x", 0.0),
+    min_y: number(fields, "min_y", 0.0),
+    max_x: number(fields, "max_x", 0.0),
+    max_y: number(fields, "max_y", 0.0),
+  }
+  let paths = coordinates(r.get("paths").unwrap_or(Json::array([])))
+  let result = if mode == "decimal" {
+    encode_decimal(value(@moonclip.rect_clip_lines_d(rect, paths, precision~)))
+  } else {
+    let corners = integer_paths([
+        [
+          @moonclip.PointD::new(rect.min_x, rect.min_y),
+          @moonclip.PointD::new(rect.max_x, rect.max_y),
+        ],
+      ])[0]
+    encode_paths(
+      value(
+        @moonclip.rect_clip_lines(
+          {
+            min_x: corners[0].x,
+            min_y: corners[0].y,
+            max_x: corners[1].x,
+            max_y: corners[1].y,
+          },
+          integer_paths(paths),
         ),
-        @moonclip.PointD::new(
-          number(rect, "max_x", 0.0),
-          number(rect, "max_y", 0.0),
-        ),
-      ],
-    ])[0]
-  let paths = integer_paths(
-    coordinates(r.get("paths").unwrap_or(Json::array([]))),
-  )
-  let result = value(
-    @moonclip.rect_clip_lines(
-      {
-        min_x: corners[0].x,
-        min_y: corners[0].y,
-        max_x: corners[1].x,
-        max_y: corners[1].y,
-      },
-      paths,
-    ),
-  )
+      ),
+    )
+  }
   Json::object({
     "ok": true.to_json(),
     "kernel": "MoonBit".to_json(),
     "scene": "rectclip".to_json(),
-    "mode": "integer".to_json(),
+    "mode": mode.to_json(),
     "output": "paths".to_json(),
-    "precision": Json::null(),
+    "precision": if mode == "decimal" {
+      digits.to_json()
+    } else {
+      Json::null()
+    },
     "geometry": "open-paths".to_json(),
-    "paths": encode_paths(result),
+    "paths": result,
     "simplification": Json::null(),
   })
 }

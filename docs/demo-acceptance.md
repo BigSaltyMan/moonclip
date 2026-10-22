@@ -122,3 +122,21 @@
 下载 JSON SHA-256：`c0b33ae4e7f9a2caf7a48bcb53b0723a8393611f0cbc358068901c9a16f88555`。仅保存一张完整页面截图：[整数树点定位](demo-screenshots/tree-locate.jpg)。
 
 这份记录归属本地浏览器和下载重放；同 SHA Linux CI 的轻量构建及 3 项检查另行核对。根 `.mbti`、库算法与树存储、旧参考、规划书、申报书、版本和发布标签保持不变。新演示为 Unreleased，不扩展其他树的查询界面。
+
+
+## Commit 38：小数矩形折线裁剪增量验收
+
+2026-10-22，Windows，本地 `npm run dev` 构建一次后，通过 Codex 内置浏览器访问 http://127.0.0.1:4173/。只检查新增小数流程，原有 3 项 `demo rectclip:` 扩展后 3/3 通过，没有新增测试块。根 `.mbti` 无变化；Linux 同 SHA CI 另行核对，不把本地浏览器记录当作 Linux 证据。
+
+| 操作 | 实际结果 |
+|---|---|
+| 小数案例 Precision=2 | 窗口和输入正确显示，1 个片段、3 个顶点，完整结果 (-1.25,0.25)→(0.5,0.25)→(2.75,0.25) |
+| 修改 max_x=2.25、Precision=3 | 结果末点更新为 (2.25,0.25)，共线中间点保留 |
+| min_x=0.1、max_x=0.2、Precision=0 | 核心 DecimalQuantize / QuantizationFailure，旧结果清除，SVG／JSON 导出禁用 |
+| 实际下载并打开 SVG | 开放 d 为 M-1.25,0.25L0.5,0.25L2.75,0.25，fill=none，无 Z，仅结果线条 |
+| 实际下载 v3 JSON 并重放 | 原始窗口、路线、mode=decimal、precision=2 完整保留；request 重放逐点一致 |
+| 小数切回整数 | 原窗口和路线保留，Precision 禁用，BridgeInput 明确拒绝小数，导出禁用 |
+| 窄屏 | 390×844 同源 iframe 容器中页签换行，模式／精度和窗口参数可操作，未改产品页面布局或引入依赖 |
+| 控制台 | 主页面 error／warn 为 0；窄屏容器记录 1 条无源码位置的 MutationObserver observe 异常，页面仍正常操作和计算。演示源文件未包含该调用，异常归因未确认，不宣称窄屏控制台完全无异常 |
+
+浏览器视口 override 未改变实际 1280×720 尺寸，因此改用忽略目录中的同源 iframe 创建真实 390×844 内容视口；已清除 override 并关闭临时容器。截图仅保存[小数裁剪页签](demo-screenshots/commit38-decimal-rectclip.png)。浏览器实际下载原件复制在忽略目录 `demo/.qa/commit38/result.svg` 与 `result.json`，Node 使用生成的真实 MoonBit 桥接重放 JSON。截图计时不是性能测量。未复测其他场景、完整桥接、根库、参考、性能或候选包；未调整版本或发布。

@@ -12,28 +12,39 @@ function exact(request,expected){const r=run(request);assert.equal(r.ok,true,JSO
 test('demo rectclip: complete ordered open bridge result',()=>{
   const r=run(cases.rectclip[0]);
   assert.equal(r.ok,true,JSON.stringify(r));assert.equal(r.kernel,'MoonBit');
-  assert.equal(r.geometry,'open-paths');
+  assert.equal(r.geometry,'open-paths');assert.equal(r.mode,'integer');assert.equal(r.precision,null);
   assert.deepEqual(r.paths,[[[0,5],[5,5],[10,5]]]);
+  const decimal=run(cases.rectclip.find(c=>c.id==='decimal-cross'));
+  assert.equal(decimal.ok,true,JSON.stringify(decimal));assert.equal(decimal.geometry,'open-paths');
+  assert.equal(decimal.mode,'decimal');assert.equal(decimal.precision,2);
+  assert.deepEqual(decimal.paths,[[[-1.25,.25],[.5,.25],[2.75,.25]]]);
 });
 
 test('demo rectclip: open SVG and replayable v3 JSON',()=>{
-  const request=structuredClone(cases.rectclip[0]),response=run(request);
-  const svg=openResultSvg(response),d=svg.match(/<path d="([^"]*)"/)[1];
-  assert.equal(/[zZ]/.test(d),false);assert.match(svg,/fill="none"/);
-  assert.equal(d,'M0,5L5,5L10,5');
-  const doc=resultDocument(request,response);
-  assert.equal(doc.version,3);assert.equal(doc.result.geometry,'open-paths');
-  assert.deepEqual(doc.request,request);assert.deepEqual(doc.result.paths,response.paths);
-  assert.deepEqual(run(doc.request).paths,doc.result.paths);
-  assert.match(openResultSvg({...response,paths:[]}),/viewBox="-10 -10 20 20"/);
+  for(const input of [cases.rectclip[0],cases.rectclip.find(c=>c.id==='decimal-cross')]){
+    const request=structuredClone(input),response=run(request);
+    assert.equal(response.ok,true,JSON.stringify(response));
+    const svg=openResultSvg(response),d=svg.match(/<path d="([^"]*)"/)[1];
+    assert.equal(/[zZ]/.test(d),false);assert.match(svg,/fill="none"/);
+    assert.equal(d,request.mode==='decimal'?'M-1.25,0.25L0.5,0.25L2.75,0.25':'M0,5L5,5L10,5');
+    const doc=resultDocument(request,response);
+    assert.equal(doc.version,3);assert.equal(doc.result.geometry,'open-paths');
+    assert.equal(doc.result.mode,request.mode);assert.equal(doc.result.precision,request.mode==='decimal'?2:null);
+    assert.deepEqual(doc.request,request);assert.deepEqual(doc.result.paths,response.paths);
+    assert.deepEqual(run(doc.request).paths,doc.result.paths);
+    assert.match(openResultSvg({...response,paths:[]}),/viewBox="-10 -10 20 20"/);
+  }
 });
 
 test('demo rectclip: invalid requests cannot export a result',()=>{
-  const request=cases.rectclip[0];
+  const request=cases.rectclip[0],decimal=cases.rectclip.find(c=>c.id==='decimal-cross');
   const reversed=run({...request,rect:{...request.rect,min_x:11}});
   assert.equal(reversed.ok,false);assert.equal(reversed.error.stage,'RectClipParameters');
-  for(const bad of [reversed,
-    run({...request,mode:'decimal'}),run({...request,paths:[[[0.5,5],[5,5]]]}),
+  const collapsed=run({...decimal,precision:0,rect:{min_x:.1,min_y:0,max_x:.2,max_y:1}});
+  assert.equal(collapsed.ok,false);assert.equal(collapsed.error.kind,'QuantizationFailure');assert.equal(collapsed.error.stage,'DecimalQuantize');
+  for(const bad of [reversed,collapsed,
+    run({...request,mode:'unknown'}),run({...decimal,precision:7}),
+    run({...request,paths:[[[0.5,5],[5,5]]]}),
     run({...request,rect:{...request.rect,min_x:.5}}),
     run({...request,output:'tree'}),run({...request,simplify:{enabled:true}}),
   ]){
