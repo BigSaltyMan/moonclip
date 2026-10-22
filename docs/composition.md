@@ -1,10 +1,16 @@
 # Composition and cumulative resource protection
 
+## Decimal batch stroke (Unreleased)
+
+`stroke_polylines_d` quantizes all independent open routes together, calls the integer batch executor once and decodes the merged closed region. Full width and ArcTolerance scale with Precision; MiterLimit remains dimensionless. Defaults are Precision 3 (0–6), Butt caps and existing join options. Output can contain holes and has no per-route correspondence. Input and output storage are independent, including aliased input route arrays.
+
+One ledger covers raw checks, common-grid collision detection, route preparation, generation, one Positive Union cleanup, extraction and decoding. Zero width still validates and quantizes every route. Separate public calls each create a ledger and clean their own region. There is no batch tree output, automatic simplification or per-route styling.
+
 ## Integer batch stroke (Unreleased)
 
 `stroke_polylines` validates the entire raw `Paths64` before preparing any route. Each route keeps the single-route open endpoint and consecutive-duplicate rules, including an explicit return to its start. All routes share full width, cap, join, MiterLimit and ArcTolerance. The existing generator emits their rings into one accumulator; a single Positive Union cleanup returns the covered closed region. Output can contain holes and has no per-route correspondence. Input and output storage are independent; failure returns no partial region.
 
-One ledger covers original counts and coordinates, route preparation, generation, accumulator slots and cleanup. Empty routes still count as paths, duplicate vertices count before preparation, and width below one still validates all raw input. Empty and ineffective routes generate no area. This entry offers integer flat output only. Existing single-route, tree and decimal execution paths are unchanged. Use `bash scripts/check.sh --scope stroke-batch` for its three focused tests on each target and the CLI example; `--scope full` retains complete acceptance checks. The lightweight run does not establish a new full-suite or reference result.
+One ledger covers original counts and coordinates, route preparation, generation, accumulator slots and cleanup. Empty routes still count as paths, duplicate vertices count before preparation, and width below one still validates all raw input. Empty and ineffective routes generate no area. This entry offers integer flat output; `stroke_polylines_d` provides the decimal counterpart described above. Existing single-route, tree and decimal execution paths are unchanged. Use `bash scripts/check.sh --scope stroke-batch` for its three focused tests on each target and the CLI example; `--scope full` retains complete acceptance checks. The lightweight run does not establish a new full-suite or reference result.
 
 The tree APIs below are available since **0.2.0**; see the [release record](release-0.2.0.md). Legacy anchors remain valid, and earlier acceptance evidence retains its original commit attribution.
 

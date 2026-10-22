@@ -801,3 +801,74 @@ pub fn minkowski_sum_d(
     max_work: 5000000,
   })
 }
+
+///|
+fn decimal_stroke_batch_execute(
+  paths : PathsD,
+  width : Double,
+  precision : Precision,
+  cap : CapType,
+  options : OffsetOptions,
+  limits : ScanLimits,
+  budget? : CallBudget,
+) -> Result[PathsD, ClipError] {
+  let budget = match budget {
+    Some(value) => value
+    None =>
+      new_call_budget(
+        limits,
+        generate_stage=StrokeGenerate,
+        cleanup_stage=StrokeCleanup,
+      )
+  }
+  try {
+    if width.is_nan() || width.is_inf() || width < 0.0 {
+      raise ScanAbort(
+        InvalidInput(
+          location(DecimalParameters, None, None),
+          "Stroke width must be finite and non-negative",
+        ),
+      )
+    }
+    if offset_options_error(options, DecimalParameters) is Some(error) {
+      raise ScanAbort(error)
+    }
+    decimal_precheck(paths, [], precision, budget)
+    // All open routes share one collision map, including zero-width calls.
+    let (grid, _) = decimal_quantize(paths, [], precision, false, budget)
+    let scaled_width = decimal_parameter(width, precision)
+    let scaled_options = decimal_scaled_options(options, precision)
+    match
+      stroke_batch_execute(
+        grid,
+        scaled_width,
+        cap,
+        scaled_options,
+        budget.limits,
+        budget~,
+      ) {
+      Ok(region) => Ok(decimal_output(region, precision, budget))
+      Err(error) => Err(decimal_error(error, precision))
+    }
+  } catch {
+    ScanAbort(error) => Err(decimal_error(error, precision))
+  }
+}
+
+///|
+/// Unreleased: quantize all open routes on one grid, then merge their strokes once.
+/// Width and ArcTolerance use original units; every phase shares one budget.
+pub fn stroke_polylines_d(
+  paths : PathsD,
+  width : Double,
+  precision? : Precision = Default::default(),
+  cap? : CapType = Butt,
+  options? : OffsetOptions = Default::default(),
+  limits? : Limits = Default::default(),
+) -> Result[PathsD, ClipError] {
+  decimal_stroke_batch_execute(paths, width, precision, cap, options, {
+    input: limits,
+    max_nodes: 500000,
+    max_work: 5000000,
+  })
+}

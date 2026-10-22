@@ -2,6 +2,7 @@
 fn run_foundation_example() -> Unit raise {
   run_rectclip_example()
   run_stroke_batch_example()
+  run_decimal_stroke_batch_example()
   run_decimal_minkowski_example()
   run_tree_locate_example()
   let path : @moonclip.Path64 = [
@@ -95,6 +96,20 @@ fn run_stroke_batch_example() -> Unit raise {
   ]
   let region = @moonclip.stroke_polylines(paths, 2.0).unwrap()
   example_result(region, [example_rect(0L, -1L, 15L, 2L)])
+}
+
+///|
+fn run_decimal_stroke_batch_example() -> Unit raise {
+  let paths = [
+    [@moonclip.PointD::new(-1.0, 0.0), @moonclip.PointD::new(1.0, 0.0)],
+    [@moonclip.PointD::new(0.0, 0.0), @moonclip.PointD::new(2.0, 0.0)],
+  ]
+  let result = @moonclip.stroke_polylines_d(
+    paths,
+    0.5,
+    precision=@moonclip.Precision::new(2).unwrap(),
+  ).unwrap()
+  example_decimal_rectangle(result, -1.0, -0.25, 2.0, 0.25)
 }
 
 ///|

@@ -14,13 +14,13 @@ moon add BigSaltyMan/moonclip@0.2.1
 
 在包的 moon.pkg 中导入 `BigSaltyMan/moonclip`，配置见下文。0.2.1 已完成独立 native／JS 注册表消费者验证；本次只修正文档，运行库与公开接口和 0.2.0 保持一致。数值与预算边界按 [scope.md](docs/scope.md) 解释。
 
-## Unreleased：小数扫掠、整数批量描边与矩形折线裁剪
+## Unreleased：小数扫掠、批量描边与矩形折线裁剪
 
 整数 `PolyTree64::locate(point, limits=)` 返回 `Outside`、`Inside(node)`、`InHole(node)` 或 `OnBoundary(nodes)`，供区域查询和命中测试使用。内部结果对应最深节点，边界优先并保留全部命中；最坏线性访问所有轮廓顶点。这是尚未发布的整数树能力，详见[树点定位](docs/polytree-query.md)。
 
 开发源码新增 `minkowski_sum_d(pattern, path, path_is_closed, precision=, limits=) -> Result[PathsD, ClipError]`，与整数 `minkowski_sum` 采用相同图案锚点及开闭语义。默认 3 位小数，图案和路线先共同量化再作整数求和；生成、清理及解码共享预算。仅提供单图案、单路线的平铺区域。此入口尚未发布，详见[扫掠契约](docs/minkowski.md)。
 
-开发源码另新增整数批量描边 `stroke_polylines(paths, width, cap=, options=, limits=) -> Result[Paths64, ClipError]`。每条路线保持开放端点语义，整批共用样式和预算，生成后一次合并为闭合区域；重叠部分合并，输出不与输入逐条对应。仅提供整数平铺结果，0.2.1 尚未包含此入口。详见[组合说明](docs/composition.md)。
+开发源码另新增整数批量描边 `stroke_polylines(paths, width, cap=, options=, limits=) -> Result[Paths64, ClipError]`。每条路线保持开放端点语义，整批共用样式和预算，生成后一次合并为闭合区域；重叠部分合并，输出不与输入逐条对应。另有小数入口 `stroke_polylines_d(paths, width, precision=, cap=, options=, limits=) -> Result[PathsD, ClipError]`，Precision 默认 3（0—6），整批共同量化、统一清理并解码，width 使用原单位完整宽度。两者均提供平铺区域，暂不提供批量树；0.2.1 尚未包含这些入口。详见[组合说明](docs/composition.md)。
 
 开发源码新增 `rect_clip_lines(rect, paths, limits=)`，返回开放折线片段 `Result[Paths64, ClipError]`。使用 `Bounds64` 表示窗口；保留输入路线、片段顺序、方向和共线中间点，不隐式闭合，不生成填充区域或孔洞树。交点遵循固定 Clipper2 普通精度路线的向零截断，贴边行为与行进历史有关，详见[矩形折线裁剪契约](docs/rectclip.md)。**已发布的 0.2.1 不包含此新入口；本笔没有发布新版本。**
 
