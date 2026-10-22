@@ -178,3 +178,27 @@ test('demo decimal minkowski: closed area export and request replay',()=>{
   assert.match(svg,/[zZ]" fill=/);assert.match(svg,/fill-rule="nonzero"/);
   assert.match(svg,/-0\.25/);assert.match(svg,/,0\.25/);
 });
+
+
+test('demo stroke batch: complete merged rectangle',()=>{
+  const r=exact(cases['stroke-batch'][0],[rect(0,-1,15,2)]);
+  assert.equal(r.mode,'integer');assert.equal(r.output,'paths');assert.equal(r.geometry,undefined);
+});
+
+test('demo stroke batch: subsequent route error and unsupported requests',()=>{
+  const request=cases['stroke-batch'][0];
+  const later=run({...request,paths:[request.paths[0],[[5,0],[1000000001,0]]]});
+  assert.equal(later.ok,false);assert.equal(later.error.kind,'CoordinateOutOfRange');
+  assert.equal(later.error.stage,'StrokeGenerate');assert.equal(later.error.path_index,1);assert.equal(later.error.vertex_index,1);
+  for(const bad of [later,run({...request,mode:'decimal'}),run({...request,output:'tree'}),run({...request,simplify:{enabled:true}})]){
+    assert.equal(bad.ok,false);assert.throws(()=>resultDocument(request,bad));
+  }
+});
+
+test('demo stroke batch: closed region export and replay',()=>{
+  const request=structuredClone(cases['stroke-batch'][0]),r=run(request),doc=resultDocument(request,r);
+  assert.equal(doc.version,1);assert.deepEqual(doc.request,request);assert.deepEqual(doc.request.paths,[[[0,0],[10,0]],[[5,0],[15,0]]]);
+  assert.deepEqual(doc.request.params,{width:2,cap:'Butt',join:'Miter',miter_limit:2,arc_tolerance:0});
+  assert.deepEqual(canonical(doc.result.paths),canonical([rect(0,-1,15,2)]));assert.deepEqual(run(doc.request).paths,r.paths);
+  const svg=resultSvg(r.paths);assert.match(svg,/[zZ]" fill=/);assert.match(svg,/fill-rule="nonzero"/);
+});

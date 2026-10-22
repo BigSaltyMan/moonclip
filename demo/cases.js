@@ -8,6 +8,10 @@ export const patterns={
 };
 const base={version:1,mode:'integer',precision:3,simplify:{enabled:false,epsilon:.5}};
 export const cases={
+  'stroke-batch':[
+    {id:'overlap-lines',label:'两条直线 · 重叠合并',version:1,scene:'stroke-batch',mode:'integer',output:'paths',paths:[[[0,0],[10,0]],[[5,0],[15,0]]],params:{width:2,cap:'Butt',join:'Miter',miter_limit:2,arc_tolerance:0},simplify:{enabled:false}},
+    {id:'two-turns',label:'两条转角路线 · 共享样式',version:1,scene:'stroke-batch',mode:'integer',output:'paths',paths:[[[0,0],[10,0],[10,10]],[[5,-5],[5,5],[15,5]]],params:{width:2,cap:'Butt',join:'Miter',miter_limit:2,arc_tolerance:0},simplify:{enabled:false}},
+  ],
   rectclip:[
     {id:'cross',label:'穿过窗口 · 保留中间顶点',version:1,scene:'rectclip',mode:'integer',output:'paths',rect:{min_x:0,min_y:0,max_x:10,max_y:10},paths:[[[-10,5],[5,5],[20,5]]],simplify:{enabled:false}},
     {id:'reentry',label:'先出后入 · 两个片段',version:1,scene:'rectclip',mode:'integer',output:'paths',rect:{min_x:0,min_y:0,max_x:10,max_y:10},paths:[[[2,2],[12,2],[12,8],[2,8]]],simplify:{enabled:false}},

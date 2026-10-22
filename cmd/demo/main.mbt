@@ -361,9 +361,15 @@ fn execute(request : Json) -> Json raise DemoError {
   if mode != "integer" && mode != "decimal" {
     raise Input("Unknown coordinate mode", None, None)
   }
+  if scene == "stroke-batch" && (mode != "integer" || output != "paths") {
+    raise Input("Batch stroke supports integer paths output only", None, None)
+  }
   let params = object(r.get("params").unwrap_or(Json::object({})))
   let simplify = object(r.get("simplify").unwrap_or(Json::object({})))
   let enabled = flag(simplify, "enabled", false)
+  if enabled && scene == "stroke-batch" {
+    raise Input("Batch stroke does not apply simplification", None, None)
+  }
   if enabled && scene == "minkowski" {
     raise Input("Minkowski does not apply implicit simplification", None, None)
   }
@@ -402,6 +408,29 @@ fn execute(request : Json) -> Json raise DemoError {
     miter_limit=number(params, "miter_limit", 2.0),
     arc_tolerance=number(params, "arc_tolerance", 0.0),
   )
+  if scene == "stroke-batch" {
+    let paths = integer_paths(
+      coordinates(r.get("paths").unwrap_or(Json::array([]))),
+    )
+    let result = value(
+      @moonclip.stroke_polylines(
+        paths,
+        number(params, "width", 8.0),
+        cap~,
+        options~,
+      ),
+    )
+    return Json::object({
+      "ok": true.to_json(),
+      "kernel": "MoonBit".to_json(),
+      "scene": scene.to_json(),
+      "mode": mode.to_json(),
+      "output": output.to_json(),
+      "precision": Json::null(),
+      "paths": encode_paths(result),
+      "simplification": Json::null(),
+    })
+  }
   let empty = Json::array([])
   let first_json = if scene == "stroke" || scene == "minkowski" {
     Json::array([r.get("path").unwrap_or(empty)])

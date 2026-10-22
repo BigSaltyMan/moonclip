@@ -92,3 +92,18 @@
 下载 SVG SHA-256：`299a58dac9bc21036d1d8f3b7b7357031133b069207464b9215da2ae19219dda`。JSON SHA-256：`3d138c36a6490163b8458f72d613bf18adc6a85e54da42e46405261876e0072d`。
 
 仅保存一张截图：[小数扫掠](demo-screenshots/minkowski-decimal.jpg)。本记录属于本地浏览器和下载验收，同 SHA Linux CI 轻量结果另行核对。根 API、整数扫掠及小数量化契约、旧参考、版本、标签和申报书未改动；本笔不接批量描边或点定位演示，保持 Unreleased。
+
+## Commit 32：批量加宽增量验收
+
+2026-10-22，Windows，Codex 内置浏览器；先重启本会话开发服务，`npm run dev` 唯一构建完成后通过 http://127.0.0.1:4173 验收新增页签。本地 JS 静态检查、格式和接口差异检查通过；复用产物的 `demo stroke batch:` **3/3** 通过。未运行全套桥接、库或工具测试，没有追加构建。
+
+- 重叠直线案例的输入路径为 M0,0L10,0 M5,0L15,0，fill=none，两条独立开放子路径没有额外连接。真实输出为 M15,1L0,1L0,-1L15,-1Z，完整矩形 [0,-1]—[15,1]；统计为 2 条输入、1 条输出、4 个输出顶点。
+- 将完整宽度改为 3.5、端点改为 Square 后重算成功，确认宽度仍按 Double 参数处理，修改时立即禁用导出。
+- 第二条路线顶点设为 (1000000001,0)，返回 StrokeGenerate / CoordinateOutOfRange，path_index=1、vertex_index=1。旧结果层被清除，SVG／JSON 均禁用；恢复合法输入后计算和导出恢复。
+- 恢复原案例后实际点击下载 SVG、JSON，副本保留在 `_build/commit32/moonclip-stroke-batch.svg` 和 `_build/commit32/moonclip-stroke-batch.json`。SVG 通过 HTTP 重新打开，显示闭合填充矩形，保留 Z 和 NonZero。JSON 为 v1，完整保存两条原始路线、width=2、Butt、Miter、MiterLimit=2、ArcTolerance=0；用下载的 request 重新调用真实桥接，结果逐点一致。
+- 390×844 视口中四页签按两列显示，宽度、端点、连接和两个辅助参数均在横向可见范围内，文档宽度 375 ≤ 390；控制台无 warning/error，临时视口已恢复。
+- 切回原“路线加宽”，坐标模式可见、结果结构重新可选、简化控件恢复，默认完整宽度恢复为 12。仅核对控件恢复，没有重验其他场景的操作矩阵。
+
+下载 SVG SHA-256：`8f1b4d4b753fa13af888d1f98663660858e0f9919aa59aac6bc19f1c3021187f`。JSON SHA-256：`685409c067ec7fd2ef77e20383c41ddace6c4f45b04ce176915e026786bf4f44`。
+
+仅保存一张新增页签截图：[批量加宽](demo-screenshots/stroke-batch.jpg)。本记录归属本地浏览器和下载验收；同 SHA Linux CI 只核对本笔轻量构建与 3 项检查，另行报告。根 `.mbti`、库算法、旧参考、规划书、申报书、版本和发布标签未变，功能保持 Unreleased。
