@@ -4,6 +4,15 @@ set -euo pipefail
 repo_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
 
+scope=full
+if [[ $# -ne 0 ]]; then
+  if [[ $# -ne 2 || "$1" != --scope || ( "$2" != full && "$2" != stroke-batch ) ]]; then
+    printf 'Usage: bash scripts/check.sh [--scope full|stroke-batch]\n' >&2
+    exit 2
+  fi
+  scope="$2"
+fi
+
 versions="$(moon version --all)"
 printf '%s\n' "$versions"
 grep -Fq 'moon 0.1.20260915 (2e1a46d 2026-09-15)' <<< "$versions"
@@ -18,18 +27,29 @@ if [[ -n "$untracked_interfaces" ]]; then
   printf 'Untracked public interfaces; review and stage them:\n%s\n' "$untracked_interfaces" >&2
   exit 1
 fi
+if [[ "$scope" == stroke-batch ]]; then
+  mkdir -p _build/stroke-batch
+  for target in native js; do
+    moon check --target "$target" --deny-warn
+    moon test --target "$target" --filter 'stroke batch: *' | tee "_build/stroke-batch/$target.log"
+    grep -Fxq 'Total tests: 3, passed: 3, failed: 0.' "_build/stroke-batch/$target.log"
+  done
+  moon run --target native cmd/example
+  git diff --check
+  exit 0
+fi
 printf 'Checking native target\n'
 moon check --target native --deny-warn
 mkdir -p _build/conformance
 moon test --target native | tee _build/conformance/all-native.log
-grep -Fxq "Total tests: 2370, passed: 2370, failed: 0." _build/conformance/all-native.log
+grep -Fxq "Total tests: 2373, passed: 2373, failed: 0." _build/conformance/all-native.log
 moon build --target native
 moon run --target native cmd/example
 printf 'Checking JS target\n'
 node --version
 moon check --target js --deny-warn
 moon test --target js | tee _build/conformance/all-js.log
-grep -Fxq "Total tests: 2370, passed: 2370, failed: 0." _build/conformance/all-js.log
+grep -Fxq "Total tests: 2373, passed: 2373, failed: 0." _build/conformance/all-js.log
 moon fmt --check
 mkdir -p _build/conformance
 for target in native js; do

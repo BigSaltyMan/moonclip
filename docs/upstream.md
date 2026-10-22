@@ -1,5 +1,9 @@
 # 上游来源与移植记录
 
+## Commit 27：整数批量描边（Unreleased）
+
+`stroke_polylines` 复用现有 `stroke_generate`、连接／端点辅助和 Positive Union Boolean 清理引擎，没有新增算法移植或上游依赖。整批预检、逐路线调度、汇集容器和共享预算适配由 MoonClip 自行实现；既有 Clipper2 描边／Boolean 的版权与 BSL-1.0 来源声明继续适用。
+
 ## Commit 26：整数矩形开放折线裁剪（Unreleased）
 
 固定 Clipper2_2.0.1 / `21ebba05db8894f0c7217ad35ea518080f324946`，BSL-1.0；新增 `rectclip.mbt` 适配 C++ `clipper.rectclip.cpp` 中 RectClipLines64::ExecuteInternal / GetPath、GetLocation、GetNextLocation、GetIntersection、GetSegmentIntersection，并核对 `clipper.core.h` 的普通精度 GetLineIntersectPt。保留 Angus Johnson 2010—2025 版权。只移植开放线段路线，不包含闭合 RectClip64 的边缘拓扑整理。

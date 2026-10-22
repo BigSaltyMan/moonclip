@@ -61,6 +61,8 @@ pub fn stroke_polyline(Array[Point64], Double, cap? : CapType, options? : Offset
 
 pub fn stroke_polyline_d(Array[PointD], Double, precision? : Precision, cap? : CapType, options? : OffsetOptions, limits? : Limits) -> Result[Array[Array[PointD]], ClipError]
 
+pub fn stroke_polylines(Array[Array[Point64]], Double, cap? : CapType, options? : OffsetOptions, limits? : Limits) -> Result[Array[Array[Point64]], ClipError]
+
 pub fn stroke_tree(Array[Point64], Double, cap? : CapType, options? : OffsetOptions, limits? : Limits) -> Result[PolyTree64, ClipError]
 
 pub fn stroke_tree_d(Array[PointD], Double, precision? : Precision, cap? : CapType, options? : OffsetOptions, limits? : Limits) -> Result[PolyTreeD, ClipError]

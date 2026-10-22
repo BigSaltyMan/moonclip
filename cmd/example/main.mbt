@@ -1,6 +1,7 @@
 ///|
 fn run_foundation_example() -> Unit raise {
   run_rectclip_example()
+  run_stroke_batch_example()
   let path : @moonclip.Path64 = [
     @moonclip.Point64::new(-10L, 0L),
     @moonclip.Point64::new(10L, 0L),
@@ -82,6 +83,16 @@ fn run_foundation_example() -> Unit raise {
     @moonclip.normalize_paths([contour, []], @moonclip.Closed, limits~)
     is Err(ResourceLimitExceeded(_, InputPaths, 1)),
   )
+}
+
+///|
+fn run_stroke_batch_example() -> Unit raise {
+  let paths = [
+    [@moonclip.Point64::new(0L, 0L), @moonclip.Point64::new(10L, 0L)],
+    [@moonclip.Point64::new(5L, 0L), @moonclip.Point64::new(15L, 0L)],
+  ]
+  let region = @moonclip.stroke_polylines(paths, 2.0).unwrap()
+  example_result(region, [example_rect(0L, -1L, 15L, 2L)])
 }
 
 ///|

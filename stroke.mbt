@@ -304,3 +304,134 @@ pub fn stroke_polyline(
     max_work: 5000000,
   })
 }
+
+///|
+// The batch preflight has already checked every original coordinate and count.
+fn stroke_batch_prepare(
+  path : Path64,
+  budget : CallBudget,
+) -> Path64 raise ScanAbort {
+  // One route container, one visit per input point, one slot per retained point.
+  offset_spend(budget, 1, 0)
+  let output : Path64 = []
+  for point in path {
+    offset_spend(budget, 0, 1)
+    if output.is_empty() || output[output.length() - 1] != point {
+      offset_spend(budget, 1, 1)
+      output.push(point)
+    }
+  }
+  output
+}
+
+///|
+fn stroke_batch_execute(
+  paths : Paths64,
+  width : Double,
+  cap : CapType,
+  options : OffsetOptions,
+  limits : ScanLimits,
+  budget? : CallBudget,
+) -> Result[Paths64, ClipError] {
+  if width.is_nan() || width.is_inf() || width < 0.0 {
+    return Err(
+      InvalidInput(
+        location(StrokeParameters, None, None),
+        "Stroke width must be finite and non-negative",
+      ),
+    )
+  }
+  if offset_options_error(options, StrokeParameters) is Some(error) {
+    return Err(error)
+  }
+  let budget = match budget {
+    Some(value) => value
+    None =>
+      new_call_budget(
+        limits,
+        generate_stage=StrokeGenerate,
+        cleanup_stage=StrokeCleanup,
+      )
+  }
+  if budget.limits.input.max_input_paths < 0 ||
+    budget.limits.input.max_input_vertices < 0 ||
+    budget.limits.max_nodes < 0 ||
+    budget.limits.max_work < 0 {
+    return Err(
+      InvalidInput(
+        location(StrokeParameters, None, None),
+        "Stroke limits must be non-negative",
+      ),
+    )
+  }
+  let generated : Paths64 = try {
+    let work = match
+      scan_check_inputs(
+        paths,
+        [],
+        budget.limits,
+        spent_work=budget.stats.work,
+        raw_stage=StrokeGenerate,
+      ) {
+      Ok(work) => work
+      Err(error) => raise ScanAbort(error)
+    }
+    // Charge the batch container even for empty/sub-grid output, after raw validation.
+    offset_spend(budget, 1, work)
+    let output : Paths64 = []
+    if width >= 1.0 {
+      for path in paths {
+        let prepared = stroke_batch_prepare(path, budget)
+        if prepared.length() >= 2 {
+          let rings = stroke_generate(
+            prepared,
+            width / 2.0,
+            cap,
+            options,
+            budget,
+          )
+          for ring in rings {
+            // Existing generation owns each ring; this accumulator adds one slot.
+            offset_spend(budget, 1, 1)
+            output.push(ring)
+          }
+        }
+      }
+    }
+    output
+  } catch {
+    ScanAbort(error) => return Err(error)
+  }
+  if generated.is_empty() {
+    return Ok(generated)
+  }
+  boolean_compute(
+    generated,
+    [],
+    Union,
+    budget.limits,
+    Positive,
+    fn(state) raise ScanAbort {
+      output_extract(state, preserve_collinear=false)
+    },
+    budget~,
+    internal_input=true,
+  )
+}
+
+///|
+/// Stroke independent open routes with one shared style and full width.
+/// Unreleased: all generated regions are merged in one cleanup with a shared budget.
+pub fn stroke_polylines(
+  paths : Paths64,
+  width : Double,
+  cap? : CapType = Butt,
+  options? : OffsetOptions = Default::default(),
+  limits? : Limits = Default::default(),
+) -> Result[Paths64, ClipError] {
+  stroke_batch_execute(paths, width, cap, options, {
+    input: limits,
+    max_nodes: 500000,
+    max_work: 5000000,
+  })
+}
