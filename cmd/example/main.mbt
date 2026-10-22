@@ -3,6 +3,7 @@ fn run_foundation_example() -> Unit raise {
   run_rectclip_example()
   run_stroke_batch_example()
   run_decimal_minkowski_example()
+  run_tree_locate_example()
   let path : @moonclip.Path64 = [
     @moonclip.Point64::new(-10L, 0L),
     @moonclip.Point64::new(10L, 0L),
@@ -105,6 +106,35 @@ fn run_decimal_minkowski_example() -> Unit raise {
   let path = [@moonclip.PointD::new(-1.0, 0.0), @moonclip.PointD::new(1.0, 0.0)]
   let result = @moonclip.minkowski_sum_d(pattern, path, false).unwrap()
   example_decimal_rectangle(result, -1.0, -0.25, 1.0, 0.25)
+}
+
+///|
+fn run_tree_locate_example() -> Unit raise {
+  let tree = @moonclip.boolean_tree(
+    [
+      example_rect(0L, 0L, 20L, 20L),
+      example_rect(4L, 4L, 12L, 12L),
+      example_rect(8L, 8L, 4L, 4L),
+    ],
+    [],
+    Union,
+  ).unwrap()
+  guard tree.locate(@moonclip.Point64::new(6L, 6L)) is Ok(InHole(hole)) else {
+    fail("Expected hole query")
+  }
+  assert_eq(hole.depth(), 2)
+  assert_true(hole.is_hole())
+  guard tree.locate(@moonclip.Point64::new(10L, 10L)) is Ok(Inside(island)) else {
+    fail("Expected island query")
+  }
+  assert_eq(island.depth(), 3)
+  assert_true(!island.is_hole())
+  guard tree.locate(@moonclip.Point64::new(4L, 6L)) is Ok(OnBoundary(nodes)) else {
+    fail("Boundary is a separate query result")
+  }
+  assert_eq(nodes.length(), 1)
+  assert_eq(nodes[0].depth(), 2)
+  assert_true(nodes[0].is_hole())
 }
 
 ///|

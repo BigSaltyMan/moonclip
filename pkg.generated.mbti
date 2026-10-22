@@ -190,6 +190,7 @@ pub fn PolyNodeD::is_hole(Self) -> Bool
 pub struct PolyTree64 {
   // private fields
 }
+pub fn PolyTree64::locate(Self, Point64, limits? : Limits) -> Result[TreePointLocation64, ClipError]
 pub fn PolyTree64::roots(Self) -> Array[PolyNode64]
 pub fn PolyTree64::to_paths(Self) -> Array[Array[Point64]]
 
@@ -260,6 +261,7 @@ pub(all) enum Stage {
   OutputTopology
   BooleanOp
   PolyTree
+  PolyTreeQuery
   OffsetParameters
   OffsetGenerate
   OffsetCleanup
@@ -280,6 +282,13 @@ pub(all) enum Stage {
   RectClipEvaluate
   RectClipOutput
 } derive(Eq, @debug.Debug)
+
+pub(all) enum TreePointLocation64 {
+  Outside
+  Inside(PolyNode64)
+  InHole(PolyNode64)
+  OnBoundary(Array[PolyNode64])
+}
 
 // Type aliases
 pub type Path64 = Array[Point64]

@@ -25,6 +25,7 @@ pub(all) enum Stage {
   OutputTopology
   BooleanOp
   PolyTree
+  PolyTreeQuery
   OffsetParameters
   OffsetGenerate
   OffsetCleanup
