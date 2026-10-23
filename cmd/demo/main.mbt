@@ -258,6 +258,25 @@ fn encode_tree_query(
 }
 
 ///|
+// Locate and encode the same immutable tree. Query failure publishes no response.
+fn encode_integer_tree_result(
+  tree : @moonclip.PolyTree64,
+  point : @moonclip.Point64?,
+) -> (Json, Json, Json?) raise DemoError {
+  let located = match point {
+    Some(point) => Some(value(tree.locate(point)))
+    None => None
+  }
+  let encoded = encode_tree(tree)
+  let query = match (point, located) {
+    (Some(point), Some(result)) =>
+      Some(encode_tree_query(point, result, encoded))
+    _ => None
+  }
+  (encoded.0, encoded.1, query)
+}
+
+///|
 fn stats(
   removed : Int,
   per_path : Array[Int],
@@ -341,7 +360,10 @@ fn library_error(error : @moonclip.ClipError) -> Json {
 }
 
 ///|
-fn execute_rectclip(r : Map[String, Json]) -> Json raise DemoError {
+fn execute_rectclip(
+  r : Map[String, Json],
+  query_point : @moonclip.Point64?,
+) -> Json raise DemoError {
   let kind = text(r, "input_kind", "lines")
   if kind != "lines" && kind != "polygons" {
     raise Input("Unknown RectClip input kind", None, None)
@@ -390,6 +412,7 @@ fn execute_rectclip(r : Map[String, Json]) -> Json raise DemoError {
   }
   let paths = coordinates(r.get("paths").unwrap_or(Json::array([])))
   let mut tree = Json::null()
+  let mut query_result : Json? = None
   let result = if mode == "decimal" {
     if output == "tree" {
       let (encoded_paths, encoded_tree) = encode_tree_d(
@@ -435,11 +458,13 @@ fn execute_rectclip(r : Map[String, Json]) -> Json raise DemoError {
     }
     let grid = integer_paths(paths)
     if output == "tree" {
-      let (encoded_paths, encoded_tree) = encode_tree(
+      let encoded = encode_integer_tree_result(
         value(@moonclip.rect_clip_polygons_tree(window, grid, fill_rule=rule)),
+        query_point,
       )
-      tree = encoded_tree
-      encoded_paths
+      tree = encoded.1
+      query_result = encoded.2
+      encoded.0
     } else if kind == "polygons" {
       encode_paths(
         value(@moonclip.rect_clip_polygons(window, grid, fill_rule=rule)),
@@ -470,6 +495,9 @@ fn execute_rectclip(r : Map[String, Json]) -> Json raise DemoError {
   if output == "tree" {
     response["tree"] = tree
   }
+  if query_result is Some(query) {
+    response["query"] = query
+  }
   Json::object(response)
 }
 
@@ -482,11 +510,20 @@ fn execute(request : Json) -> Json raise DemoError {
   let scene = text(r, "scene", "boolean")
   if r.get("query") is Some(_) &&
     (
-      scene != "boolean" ||
+      !(scene == "boolean" ||
+      scene == "offset" ||
+      scene == "stroke" ||
+      scene == "stroke-batch" ||
+      scene == "minkowski" ||
+      (scene == "rectclip" && text(r, "input_kind", "lines") == "polygons")) ||
       text(r, "mode", "integer") != "integer" ||
       text(r, "output", "paths") != "tree"
     ) {
-    raise Input("Point query requires integer Boolean tree output", None, None)
+    raise Input(
+      "Point query requires supported integer region tree output",
+      None,
+      None,
+    )
   }
   let query_point = match r.get("query") {
     None => None
@@ -499,7 +536,7 @@ fn execute(request : Json) -> Json raise DemoError {
   }
   // Open paths must bypass closed-region preparation and all unrelated parameters.
   if scene == "rectclip" {
-    return execute_rectclip(r)
+    return execute_rectclip(r, query_point)
   }
   let mode = text(r, "mode", "integer")
   let output = text(r, "output", "paths")
@@ -557,6 +594,7 @@ fn execute(request : Json) -> Json raise DemoError {
     let paths = coordinates(r.get("paths").unwrap_or(Json::array([])))
     let width = number(params, "width", 8.0)
     let mut tree = Json::null()
+    let mut query_result : Json? = None
     let result = if output == "tree" {
       let (encoded_paths, encoded_tree) = if mode == "decimal" {
         encode_tree_d(
@@ -571,7 +609,7 @@ fn execute(request : Json) -> Json raise DemoError {
           ),
         )
       } else {
-        encode_tree(
+        let encoded = encode_integer_tree_result(
           value(
             @moonclip.stroke_polylines_tree(
               integer_paths(paths),
@@ -580,7 +618,10 @@ fn execute(request : Json) -> Json raise DemoError {
               options~,
             ),
           ),
+          query_point,
         )
+        query_result = encoded.2
+        (encoded.0, encoded.1)
       }
       tree = encoded_tree
       encoded_paths
@@ -618,6 +659,9 @@ fn execute(request : Json) -> Json raise DemoError {
     }
     if output == "tree" {
       response["tree"] = tree
+    }
+    if query_result is Some(query) {
+      response["query"] = query
     }
     return Json::object(response)
   }
@@ -838,14 +882,8 @@ fn execute(request : Json) -> Json raise DemoError {
         }
         _ => raise Input("Unknown integer scene", None, None)
       }
-      let located = match query_point {
-        Some(point) => Some(value(computed.locate(point)))
-        None => None
-      }
-      let encoded = encode_tree(computed)
-      if query_point is Some(point) && located is Some(result) {
-        query_result = Some(encode_tree_query(point, result, encoded))
-      }
+      let encoded = encode_integer_tree_result(computed, query_point)
+      query_result = encoded.2
       tree = encoded.1
       encoded.0
     } else {

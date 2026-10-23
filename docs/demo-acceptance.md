@@ -255,3 +255,23 @@ Uncaught TypeError: Failed to execute 'observe' on 'MutationObserver': parameter
 仅新增一张[小数扫掠树孔洞高亮截图](demo-screenshots/commit46-minkowski-tree.png)，计时不作为性能证据。实际下载和重放材料保存在忽略目录 `demo/.qa/commit46/result.svg`、`result.json`、`flat-result.json`；诊断为同目录 `main-observation.json`、`narrow-observation.json`。诊断只加入临时 HTML 副本，未混入产品页面。
 
 根 `.mbti` 无变化，树编码和导出辅助直接复用；未修改根库、公开接口、树存储、算法、依赖、版本或标签，规划书、申报书及 `.vscode/` 原有改动保留。未运行库全量、全部工具／桥接、参考重建、性能、基准或候选验收；未发布，保持 Unreleased。普通 CI 使用已有 `demo-minkowski-decimal`，以最终源码 SHA 的轻量结果为准。
+
+
+## Commit 47：扩展整数树点定位增量验收
+
+2026-10-23，Windows，`moon info`、`moon fmt`、根接口差异及 JS 静态检查通过。桥接构建一次成功，启动服务时发现端口已有服务，先复用该服务；会话续接后服务退出，使用 `node build.mjs --dev --reuse` 仅重新启动 HTTP 服务，没有再次构建。原有 `demo tree locate:` 三项调整后 **3/3** 通过，没有新增测试块、scope 或案例。Linux 同 SHA 轻量 CI 单独核对，本地浏览器记录不作为 Linux 浏览器验收。
+
+| 操作 | 实际结果 |
+|---|---|
+| 批量方框树，查询 (5,5) | InHole，命中深度 2 的孔洞，完整轮廓为 (1,1)→(1,9)→(9,9)→(9,1)；紫色查询边界与手动选择根节点的橙色边界可同时显示 |
+| 闭合窗口树，查询 (4,5) | 窗口 [0,0]—[10,10] 时为 InHole；max_x 改为 5 后重新计算为 Outside，显示“没有命中节点”，查询命中高亮为零，区域变为单根八点凹口 |
+| 切换小数、平铺、开放路线 | 查询控件隐藏且开关关闭，旧查询及命中清除；模式／输入类型编辑禁用旧导出。平铺结构选择沿用既有自动重新计算，完成后仅新平铺结果可导出；开放路线强制 paths |
+| 实际 v2 JSON 下载与重放 | 从批量整数方框查询下载 `moonclip-stroke-batch (4).json`，保存原始路线、样式和 query。通过生成的真实 MoonBit 桥接重放为 InHole，命中完整四点孔洞、深度 2、is_hole=true 与导出一致；按完整快照核对，不依赖永久索引 |
+| 主页面 | 内容视口实测 1280×720，error／warn 日志为空 |
+| 一次窄屏对照 | 同源临时 iframe 实测 390×844、scrollWidth=375；同一批量方框查询返回“孔洞内部 · 点 (5,5)”，模式、结果结构、查询坐标控件可操作 |
+
+窄屏容器再次出现 `Uncaught TypeError: Failed to execute 'observe' on 'MutationObserver': parameter 1 is not of type 'Node'.`，时间 **2026-10-23T14:00:29.512Z**，早于 load **14:00:29.614Z** 及进入批量页签。日志未提供来源地址或堆栈；子页 error／unhandledrejection 记录为空。**归因仍未确认，不定性为页面布局缺陷**，不宣称窄屏控制台完全无异常。只进行一次有限对照，没有据此更改产品布局或浏览器环境，临时容器已关闭。
+
+仅新增一张[整数批量树定位与独立手动选择截图](demo-screenshots/commit47-integer-tree-query.png)，其中计时不作为性能证据。下载重放摘要和窄屏诊断位于忽略目录 `demo/.qa/commit47/download-replay.json`、`narrow-observation.json`，诊断只注入临时 HTML 副本。原三项检查还保留 Boolean 多边界、越界点及不支持组合检查，删除 query 后响应和导出均无残留。
+
+根 `.mbti` 无变化，没有修改根库、公开接口、树存储、定位算法、依赖、版本或标签；规划书、申报书及 `.vscode/` 原有改动保留。未运行库全量、全部工具／桥接、参考重建、性能、基准或候选验收，未发布。普通 CI 使用已有 `demo-tree-locate`，以最终源码 SHA 的运行记录为准。

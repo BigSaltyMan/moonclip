@@ -47,16 +47,22 @@ function showReport(report){$('simplification').hidden=!report;if(report)$('simp
 function invalidate(){requestId++;valid=null;clearTree();clearQuery();$('export-svg').disabled=true;$('export-json').disabled=true;$('status').textContent='输入已更新 · 待计算';$('result-detail').textContent='当前没有有效结果，计算后才可导出';for(const id of ['contours','vertices','elapsed','removed'])$(id).textContent='—';$('error').hidden=true;showReport(null);$('compute').disabled=false;draw();}
 function showError(error,report){valid=null;clearTree();clearQuery();$('export-svg').disabled=true;$('export-json').disabled=true;$('compute').disabled=false;$('status').textContent='计算未完成';$('result-detail').textContent='检查错误信息，修正后重新计算';$('error').hidden=false;$('error').textContent=JSON.stringify(error,null,2);showReport(report);for(const id of ['contours','vertices','elapsed'])$(id).textContent='—';$('removed').textContent=report?.removed_vertices??'—';draw();}
 function numeric(id){const value=$(id).value.trim();if(value==='')throw new Error('参数不能为空: '+id);const n=Number(value);if(!Number.isFinite(n))throw new Error('参数必须是有限数值: '+id);return n;}
+function treeQuerySupported(){
+  return $('mode').value==='integer'&&$('output').value==='tree'&&(['boolean','offset','stroke','stroke-batch','minkowski'].includes(scene)||(scene==='rectclip'&&$('input-kind').value==='polygons'));
+}
+function withTreeQuery(request){
+  if(treeQuerySupported()&&$('query-enabled').checked)request.query={point:[numeric('query-x'),numeric('query-y')]};
+  return request;
+}
 function readRequest(){
-  if(scene==='stroke-batch')return {version:1,scene,mode:$('mode').value,precision:numeric('precision'),output:$('output').value,paths:JSON.parse($('input-a').value),params:{width:numeric('width'),cap:$('cap').value,join:$('join').value,miter_limit:numeric('miter-limit'),arc_tolerance:numeric('arc-tolerance')},simplify:{enabled:false}};
-  if(scene==='rectclip')return {version:1,scene,input_kind:$('input-kind').value,...($('input-kind').value==='polygons'?{params:{fill_rule:$('fill-rule').value}}:{}),mode:$('mode').value,precision:numeric('precision'),output:$('output').value,paths:JSON.parse($('input-a').value),rect:{min_x:numeric('min-x'),min_y:numeric('min-y'),max_x:numeric('max-x'),max_y:numeric('max-y')},simplify:{enabled:false}};
+  if(scene==='stroke-batch')return withTreeQuery({version:1,scene,mode:$('mode').value,precision:numeric('precision'),output:$('output').value,paths:JSON.parse($('input-a').value),params:{width:numeric('width'),cap:$('cap').value,join:$('join').value,miter_limit:numeric('miter-limit'),arc_tolerance:numeric('arc-tolerance')},simplify:{enabled:false}});
+  if(scene==='rectclip')return withTreeQuery({version:1,scene,input_kind:$('input-kind').value,...($('input-kind').value==='polygons'?{params:{fill_rule:$('fill-rule').value}}:{}),mode:$('mode').value,precision:numeric('precision'),output:$('output').value,paths:JSON.parse($('input-a').value),rect:{min_x:numeric('min-x'),min_y:numeric('min-y'),max_x:numeric('max-x'),max_y:numeric('max-y')},simplify:{enabled:false}});
   const r={version:1,scene,output:$('output').value,mode:$('mode').value,precision:numeric('precision'),params:{operation:$('operation').value,fill_rule:$('fill-rule').value,delta:numeric('delta'),width:numeric('width'),join:$('join').value,cap:$('cap').value,miter_limit:numeric('miter-limit'),arc_tolerance:numeric('arc-tolerance'),path_is_closed:$('closed').checked},simplify:{enabled:$('simplify').checked,epsilon:numeric('epsilon')}};
-  if(scene==='boolean'&&r.mode==='integer'&&r.output==='tree'&&$('query-enabled').checked)r.query={point:[numeric('query-x'),numeric('query-y')]};
   const a=JSON.parse($('input-a').value);
   if(scene==='boolean'){r.subject=a;r.clip=JSON.parse($('input-b').value);}
   else if(scene==='offset')r.subject=a;
   else {r.path=a;if(scene==='minkowski')r.pattern=JSON.parse($('input-b').value);}
-  return r;
+  return withTreeQuery(r);
 }
 function calculate(){
   invalidate();
@@ -64,7 +70,7 @@ function calculate(){
   catch(error){showError({kind:'InvalidInput',stage:'Editor',message:String(error.message)});}
 }
 function setVisibility(){
-  const querySupported=scene==='boolean'&&$('mode').value==='integer'&&$('output').value==='tree';
+  const querySupported=treeQuerySupported();
   $('query-controls').hidden=!querySupported;if(!querySupported)$('query-enabled').checked=false;
   $('query-fields').hidden=!$('query-enabled').checked;
   document.querySelectorAll('[data-for]').forEach(el=>{el.hidden=!el.dataset.for.split(' ').includes(scene);});
