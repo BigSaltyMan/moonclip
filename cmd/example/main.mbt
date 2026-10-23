@@ -5,6 +5,7 @@ fn run_foundation_example() -> Unit raise {
   run_rectclip_polygons_example()
   run_decimal_rectclip_polygons_example()
   run_stroke_batch_example()
+  run_stroke_batch_tree_example()
   run_decimal_stroke_batch_example()
   run_decimal_minkowski_example()
   run_tree_locate_example()
@@ -1176,4 +1177,28 @@ fn run_decimal_rectclip_lines_example() -> Unit raise {
       @moonclip.PointD::new(2.75, 0.25),
     ],
   ])
+}
+
+///|
+fn run_stroke_batch_tree_example() -> Unit raise {
+  let paths = [
+    [@moonclip.Point64::new(0L, 0L), @moonclip.Point64::new(10L, 0L)],
+    [@moonclip.Point64::new(10L, 0L), @moonclip.Point64::new(10L, 10L)],
+    [@moonclip.Point64::new(10L, 10L), @moonclip.Point64::new(0L, 10L)],
+    [@moonclip.Point64::new(0L, 10L), @moonclip.Point64::new(0L, 0L)],
+  ]
+  let tree = @moonclip.stroke_polylines_tree(paths, 2.0, cap=Square).unwrap()
+  let roots = tree.roots()
+  assert_eq(roots.length(), 1)
+  assert_eq(roots[0].depth(), 1)
+  assert_eq(roots[0].is_hole(), false)
+  example_result([roots[0].contour()], [example_rect(-1L, -1L, 12L, 12L)])
+  let children = roots[0].children()
+  assert_eq(children.length(), 1)
+  assert_eq(children[0].depth(), 2)
+  assert_eq(children[0].is_hole(), true)
+  example_result([children[0].contour()], [
+    example_reverse(example_rect(1L, 1L, 8L, 8L)),
+  ])
+  assert_eq(children[0].children().length(), 0)
 }

@@ -325,14 +325,16 @@ fn stroke_batch_prepare(
 }
 
 ///|
-fn stroke_batch_execute(
+fn[T] stroke_batch_compute(
   paths : Paths64,
   width : Double,
   cap : CapType,
   options : OffsetOptions,
   limits : ScanLimits,
+  extract : (ScanState) -> T raise ScanAbort,
+  empty : (Paths64, CallBudget) -> T raise ScanAbort,
   budget? : CallBudget,
-) -> Result[Paths64, ClipError] {
+) -> Result[T, ClipError] {
   if width.is_nan() || width.is_inf() || width < 0.0 {
     return Err(
       InvalidInput(
@@ -403,7 +405,7 @@ fn stroke_batch_execute(
     ScanAbort(error) => return Err(error)
   }
   if generated.is_empty() {
-    return Ok(generated)
+    return Ok(empty(generated, budget)) catch { ScanAbort(error) => Err(error) }
   }
   boolean_compute(
     generated,
@@ -411,11 +413,53 @@ fn stroke_batch_execute(
     Union,
     budget.limits,
     Positive,
+    extract,
+    budget~,
+    internal_input=true,
+  )
+}
+
+///|
+fn stroke_batch_execute(
+  paths : Paths64,
+  width : Double,
+  cap : CapType,
+  options : OffsetOptions,
+  limits : ScanLimits,
+  budget? : CallBudget,
+) -> Result[Paths64, ClipError] {
+  stroke_batch_compute(
+    paths,
+    width,
+    cap,
+    options,
+    limits,
     fn(state) raise ScanAbort {
       output_extract(state, preserve_collinear=false)
     },
-    budget~,
-    internal_input=true,
+    fn(generated, _) { generated },
+    budget?,
+  )
+}
+
+///|
+fn stroke_batch_tree_execute(
+  paths : Paths64,
+  width : Double,
+  cap : CapType,
+  options : OffsetOptions,
+  limits : ScanLimits,
+  budget? : CallBudget,
+) -> Result[PolyTree64, ClipError] {
+  stroke_batch_compute(
+    paths,
+    width,
+    cap,
+    options,
+    limits,
+    tree_build,
+    fn(_, budget) raise ScanAbort { tree_empty(budget) },
+    budget?,
   )
 }
 
@@ -433,5 +477,20 @@ pub fn stroke_polylines(
     input: limits,
     max_nodes: 500000,
     max_work: 5000000,
+  })
+}
+
+///|
+/// Unreleased: final merged hierarchy of independent open routes with one shared style.
+pub fn stroke_polylines_tree(
+  paths : Paths64,
+  width : Double,
+  cap? : CapType = Butt,
+  options? : OffsetOptions = Default::default(),
+  limits? : Limits = Default::default(),
+) -> Result[PolyTree64, ClipError] {
+  stroke_batch_tree_execute(paths, width, cap, options, {
+    ..Default::default(),
+    input: limits,
   })
 }

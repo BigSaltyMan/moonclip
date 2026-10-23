@@ -24,7 +24,7 @@ moon add BigSaltyMan/moonclip@0.2.1
 
 开发源码新增 `minkowski_sum_d(pattern, path, path_is_closed, precision=, limits=) -> Result[PathsD, ClipError]`，与整数 `minkowski_sum` 采用相同图案锚点及开闭语义。默认 3 位小数，图案和路线先共同量化再作整数求和；生成、清理及解码共享预算。仅提供单图案、单路线的平铺区域。此入口尚未发布，详见[扫掠契约](docs/minkowski.md)。
 
-开发源码另新增整数批量描边 `stroke_polylines(paths, width, cap=, options=, limits=) -> Result[Paths64, ClipError]`。每条路线保持开放端点语义，整批共用样式和预算，生成后一次合并为闭合区域；重叠部分合并，输出不与输入逐条对应。另有小数入口 `stroke_polylines_d(paths, width, precision=, cap=, options=, limits=) -> Result[PathsD, ClipError]`，Precision 默认 3（0—6），整批共同量化、统一清理并解码，width 使用原单位完整宽度。两者均提供平铺区域，暂不提供批量树；0.2.1 尚未包含这些入口。详见[组合说明](docs/composition.md)。
+开发源码另新增整数批量描边 `stroke_polylines(paths, width, cap=, options=, limits=) -> Result[Paths64, ClipError]`。每条路线保持开放端点语义，整批共用样式和预算，生成后一次合并为闭合区域；重叠部分合并，输出不与输入逐条对应。另有小数入口 `stroke_polylines_d(paths, width, precision=, cap=, options=, limits=) -> Result[PathsD, ClipError]`，Precision 默认 3（0—6），整批共同量化、统一清理并解码，width 使用原单位完整宽度。平铺入口返回合并轮廓，另有 `stroke_polylines_tree`／`stroke_polylines_tree_d` 直接返回统一覆盖区域的整数／小数孔洞树，共享生成、清理、构树及转换预算；0.2.1 尚未包含这些入口。详见[组合说明](docs/composition.md)。
 
 开发源码新增 `rect_clip_lines(rect, paths, limits=)`，返回开放折线片段 `Result[Paths64, ClipError]`。使用 `Bounds64` 表示窗口；保留输入路线、片段顺序、方向和共线中间点，不隐式闭合，不生成填充区域或孔洞树。交点遵循固定 Clipper2 普通精度路线的向零截断，贴边行为与行进历史有关，详见[矩形折线裁剪契约](docs/rectclip.md)。**已发布的 0.2.1 不包含此新入口；本笔没有发布新版本。**
 

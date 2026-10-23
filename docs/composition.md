@@ -1,10 +1,20 @@
 # Composition and cumulative resource protection
 
+## Batch stroke trees (Unreleased)
+
+`stroke_polylines_tree` and `stroke_polylines_tree_d` return the hierarchy of the final merged coverage of multiple independent open routes. Single-route `stroke_tree` / `stroke_tree_d` accept one route. All batch routes share full width, caps, joins, MiterLimit and ArcTolerance; they do not connect endpoints across routes. Roots have depth one; holes and islands follow existing tree conventions. Nodes have no source-route ownership, and input order does not determine hierarchy. Overlap can merge and holes can appear or disappear.
+
+The private batch computation generates in the existing order, performs one Positive Union cleanup, and calls `tree_build` directly inside its extraction callback. Decimal conversion runs in that callback as well, so failure follows scan cleanup. No public flat result is sent through another Boolean operation. One ledger covers quantization, preparation, generation, cleanup, integer tree construction and decimal tree storage. Injected limits and prior consumption remain authoritative. Generated rings do not consume raw input quotas again.
+
+The flat wrapper still uses `output_extract` with its original cleanup and fees; its empty callback returns the already allocated array without tree fees. An empty tree keeps that array's spent allocation and separately charges existing `tree_empty` storage (4 logical nodes, 1 work), then decimal conversion where applicable. Empty success never bypasses input/parameter/quantization checks. No refunds or default-budget increases. Tree construction errors use PolyTree, decimal storage uses DecimalOutput, and output positions have no fabricated input indices.
+
+Tree accessors preserve existing copy isolation. `to_paths()` returns independent flat contours and loses explicit parent-child relationships. There is no per-route style, automatic simplification, provenance tracking or batch-tree demo in this commit.
+
 ## Decimal batch stroke (Unreleased)
 
 `stroke_polylines_d` quantizes all independent open routes together, calls the integer batch executor once and decodes the merged closed region. Full width and ArcTolerance scale with Precision; MiterLimit remains dimensionless. Defaults are Precision 3 (0–6), Butt caps and existing join options. Output can contain holes and has no per-route correspondence. Input and output storage are independent, including aliased input route arrays.
 
-One ledger covers raw checks, common-grid collision detection, route preparation, generation, one Positive Union cleanup, extraction and decoding. Zero width still validates and quantizes every route. Separate public calls each create a ledger and clean their own region. There is no batch tree output, automatic simplification or per-route styling.
+One ledger covers raw checks, common-grid collision detection, route preparation, generation, one Positive Union cleanup, extraction and decoding. Zero width still validates and quantizes every route. Separate public calls each create a ledger and clean their own region. Batch tree output uses the separate entries above; there is no automatic simplification or per-route styling.
 
 ## Integer batch stroke (Unreleased)
 

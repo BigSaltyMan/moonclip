@@ -1040,3 +1040,77 @@ pub fn rect_clip_lines_d(
     input: limits,
   })
 }
+
+///|
+fn decimal_stroke_batch_tree_execute(
+  paths : PathsD,
+  width : Double,
+  precision : Precision,
+  cap : CapType,
+  options : OffsetOptions,
+  limits : ScanLimits,
+  budget? : CallBudget,
+) -> Result[PolyTreeD, ClipError] {
+  let budget = match budget {
+    Some(value) => value
+    None =>
+      new_call_budget(
+        limits,
+        generate_stage=StrokeGenerate,
+        cleanup_stage=StrokeCleanup,
+      )
+  }
+  try {
+    if width.is_nan() || width.is_inf() || width < 0.0 {
+      raise ScanAbort(
+        InvalidInput(
+          location(DecimalParameters, None, None),
+          "Stroke width must be finite and non-negative",
+        ),
+      )
+    }
+    if offset_options_error(options, DecimalParameters) is Some(error) {
+      raise ScanAbort(error)
+    }
+    decimal_precheck(paths, [], precision, budget)
+    let (grid, _) = decimal_quantize(paths, [], precision, false, budget)
+    let scaled_width = decimal_parameter(width, precision)
+    let scaled_options = decimal_scaled_options(options, precision)
+    match
+      stroke_batch_compute(
+        grid,
+        scaled_width,
+        cap,
+        scaled_options,
+        budget.limits,
+        fn(state) raise ScanAbort {
+          decimal_tree_output(tree_build(state), precision, budget)
+        },
+        fn(_, budget) raise ScanAbort {
+          decimal_tree_output(tree_empty(budget), precision, budget)
+        },
+        budget~,
+      ) {
+      Ok(tree) => Ok(tree)
+      Err(error) => Err(decimal_error(error, precision))
+    }
+  } catch {
+    ScanAbort(error) => Err(decimal_error(error, precision))
+  }
+}
+
+///|
+/// Unreleased: shared-grid batch stroke hierarchy; conversion stays inside scan cleanup.
+pub fn stroke_polylines_tree_d(
+  paths : PathsD,
+  width : Double,
+  precision? : Precision = Default::default(),
+  cap? : CapType = Butt,
+  options? : OffsetOptions = Default::default(),
+  limits? : Limits = Default::default(),
+) -> Result[PolyTreeD, ClipError] {
+  decimal_stroke_batch_tree_execute(paths, width, precision, cap, options, {
+    ..Default::default(),
+    input: limits,
+  })
+}

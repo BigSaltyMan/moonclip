@@ -1,5 +1,9 @@
 # 上游来源与移植记录
 
+## Commit 41：批量描边孔洞树适配（Unreleased）
+
+`stroke_polylines_tree`／`stroke_polylines_tree_d` 复用现有描边生成、Positive Union 清理、整数树构建和小数树转换，没有新增上游算法移植或依赖。新增的是 MoonClip 批量提取回调与空结果适配，沿用既有版权及 BSL-1.0 来源记录；未重构单路线、偏移或 Boolean 入口。
+
 ## Commit 37：小数开放矩形裁剪适配（Unreleased）
 
 `rect_clip_lines_d` 复用既有 BoundsD 参数／量化辅助、开放路线量化、整数 RectClipLines 适配和解码。新增小数执行衔接及预算适配由 MoonClip 自行实现，没有新增上游算法移植、依赖或来源声明；整数实现既有 Clipper2 版权与 BSL-1.0 记录继续适用，旧窗口辅助与裁剪执行代码未改动。
