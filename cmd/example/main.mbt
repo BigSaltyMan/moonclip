@@ -196,6 +196,7 @@ fn main raise {
   run_decimal_tree_example()
   run_simplify_example()
   run_minkowski_example()
+  run_minkowski_tree_example()
   println(
     "MoonClip geometry, Boolean, PolyTree, offset, stroke, composition, decimal, simplify and Minkowski OK",
   )
@@ -1234,4 +1235,46 @@ fn run_rectclip_tree_example() -> Unit raise {
       @moonclip.Point64::new(0L, 10L),
     ],
   ])
+}
+
+///|
+fn run_minkowski_tree_example() -> Unit raise {
+  let tree = @moonclip.minkowski_sum_tree(
+    example_rect(-2L, -1L, 4L, 2L),
+    example_rect(0L, 0L, 30L, 20L),
+    true,
+  ).unwrap()
+  let expected = [
+    [
+      @moonclip.Point64::new(2L, -1L),
+      @moonclip.Point64::new(28L, -1L),
+      @moonclip.Point64::new(32L, -1L),
+      @moonclip.Point64::new(32L, 1L),
+      @moonclip.Point64::new(32L, 21L),
+      @moonclip.Point64::new(28L, 21L),
+      @moonclip.Point64::new(2L, 21L),
+      @moonclip.Point64::new(-2L, 21L),
+      @moonclip.Point64::new(-2L, 19L),
+      @moonclip.Point64::new(-2L, 1L),
+      @moonclip.Point64::new(-2L, -1L),
+    ],
+    [
+      @moonclip.Point64::new(2L, 19L),
+      @moonclip.Point64::new(28L, 19L),
+      @moonclip.Point64::new(28L, 1L),
+      @moonclip.Point64::new(2L, 1L),
+    ],
+  ]
+  let roots = tree.roots()
+  assert_eq(roots.length(), 1)
+  assert_eq(roots[0].depth(), 1)
+  assert_eq(roots[0].is_hole(), false)
+  assert_eq(roots[0].contour().length(), 11)
+  example_result([roots[0].contour()], [expected[0]])
+  let children = roots[0].children()
+  assert_eq(children.length(), 1)
+  assert_eq(children[0].depth(), 2)
+  assert_eq(children[0].is_hole(), true)
+  assert_eq(children[0].children().length(), 0)
+  example_result([children[0].contour()], [expected[1]])
 }

@@ -1,5 +1,7 @@
 # 支持范围与使用边界
 
+Unreleased：`minkowski_sum_tree`／`minkowski_sum_tree_d` 提供单图案、单路线扫掠的整数／小数孔洞树，最终 Union 回调直接构树，保留完整共线点；旧 Boolean 等树仍清理普通共线中间点。小数层级来自共同网格的整数结果，构树和转换共享预算，不额外填满闭合路线内部。不提供多图案、MinkowskiDiff 或自动简化，新树入口未接网页；详见[扫掠契约](minkowski.md)。
+
 Unreleased：`rect_clip_polygons_tree`／`rect_clip_polygons_tree_d` 提供整数／小数闭合区域窗口树输出，一次求交后直接构树；被窗口切开的孔洞可能变为外轮廓凹口，最终层级不对应输入轮廓。空结果验证后构造已计费空树，扫描、构树和小数转换共享预算。树只表达闭合区域，开放片段不提供孔洞树。未接网页，旧参考不作为新增树入口的逐项覆盖证据。
 
 Unreleased：`rect_clip_lines_d` 提供小数开放路线的矩形窗口裁剪，默认 Precision=3（0—6），输出为有序、保方向的开放片段，普通共线中间点保留，无填充规则或树结构。窗口独立量化、全部路线共同量化并共享预算，网页窗口裁剪已支持整数与小数开放路线；详见[矩形裁剪](rectclip.md)。
@@ -10,7 +12,7 @@ Unreleased：`rect_clip_polygons` 将整数闭合区域与矩形窗口一次求�
 
 Unreleased：整数 `PolyTree64::locate` 返回最深严格包含的填充／孔洞节点，或优先返回全部边界命中。最坏线性访问全部轮廓顶点，Limits 限制被查询树的轮廓和总顶点，合法树也可能被较小查询额度拒绝。空树仍验证参数；不提供小数树或批量点查询。详见[树点定位](polytree-query.md)。
 
-Unreleased：`minkowski_sum_d` 提供小数单图案、单路线的平铺扫掠区域，默认 Precision=3（0—6）。继承整数入口锚点、路线开闭和共线点语义；不提供 MinkowskiDiff、多图案或路线、树、自动简化及演示。图案和路线同网格量化后再作整数求和，生成范围及共享预算见[扫掠契约](minkowski.md)。
+Unreleased：`minkowski_sum_d` 提供小数单图案、单路线的平铺扫掠区域，默认 Precision=3（0—6）。继承整数入口锚点、路线开闭和共线点语义；不提供 MinkowskiDiff、多图案或路线及自动简化；树输出另用 `minkowski_sum_tree_d`，已有小数平铺演示保持原范围。图案和路线同网格量化后再作整数求和，生成范围及共享预算见[扫掠契约](minkowski.md)。
 
 Unreleased：`stroke_polylines` 提供整数多路线批量描边，只返回合并后的平铺闭合区域。width 为完整宽度，整批使用相同端点、连接及圆弧参数；不同路线不相互连接。空路线、单点和连续重复点整理后的短路线不生成区域，但全部原始路径与顶点仍计入额度。width < 1 也先检查全部输入。输出独立于输入，可含孔洞；小数批量入口 `stroke_polylines_d` 同样返回平铺区域，默认 Precision=3（0—6），整批共用量化及执行预算，小宽度按缩放后的完整宽度判断。量化可能改变可表达形状；另有批量树入口 `stroke_polylines_tree`／`stroke_polylines_tree_d`，直接返回统一覆盖区域的层级；不提供逐路线样式，尚未发布。
 

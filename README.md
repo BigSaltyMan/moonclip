@@ -23,7 +23,7 @@ moon add BigSaltyMan/moonclip@0.2.1
 
 整数 `PolyTree64::locate(point, limits=)` 返回 `Outside`、`Inside(node)`、`InHole(node)` 或 `OnBoundary(nodes)`，供区域查询和命中测试使用。内部结果对应最深节点，边界优先并保留全部命中；最坏线性访问所有轮廓顶点。这是尚未发布的整数树能力，详见[树点定位](docs/polytree-query.md)。
 
-开发源码新增 `minkowski_sum_d(pattern, path, path_is_closed, precision=, limits=) -> Result[PathsD, ClipError]`，与整数 `minkowski_sum` 采用相同图案锚点及开闭语义。默认 3 位小数，图案和路线先共同量化再作整数求和；生成、清理及解码共享预算。仅提供单图案、单路线的平铺区域。此入口尚未发布，详见[扫掠契约](docs/minkowski.md)。
+开发源码新增 `minkowski_sum_d(pattern, path, path_is_closed, precision=, limits=) -> Result[PathsD, ClipError]`，与整数 `minkowski_sum` 采用相同图案锚点及开闭语义。默认 3 位小数，图案和路线先共同量化再作整数求和；生成、清理及解码共享预算。仅提供单图案、单路线的平铺区域。此入口尚未发布，详见[扫掠契约](docs/minkowski.md)。整数 `minkowski_sum_tree(pattern, path, path_is_closed, limits=)` 与小数 `minkowski_sum_tree_d(pattern, path, path_is_closed, precision=, limits=)` 分别返回 `PolyTree64`／`PolyTreeD`，在最终 Union 中直接构树，同样保留完整共线点；小数共同量化并共享构树、转换预算。这两个入口均为 Unreleased，尚未接入网页。
 
 开发源码另新增整数批量描边 `stroke_polylines(paths, width, cap=, options=, limits=) -> Result[Paths64, ClipError]`。每条路线保持开放端点语义，整批共用样式和预算，生成后一次合并为闭合区域；重叠部分合并，输出不与输入逐条对应。另有小数入口 `stroke_polylines_d(paths, width, precision=, cap=, options=, limits=) -> Result[PathsD, ClipError]`，Precision 默认 3（0—6），整批共同量化、统一清理并解码，width 使用原单位完整宽度。平铺入口返回合并轮廓，另有 `stroke_polylines_tree`／`stroke_polylines_tree_d` 直接返回统一覆盖区域的整数／小数孔洞树，共享生成、清理、构树及转换预算；0.2.1 尚未包含这些入口。详见[组合说明](docs/composition.md)。
 

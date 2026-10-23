@@ -157,13 +157,14 @@ fn minkowski_quads(
 }
 
 ///|
-fn minkowski_execute(
+fn[T] minkowski_compute(
   pattern : Path64,
   path : Path64,
   closed : Bool,
   limits : ScanLimits,
+  extract : (ScanState) -> T raise ScanAbort,
   budget? : CallBudget,
-) -> Result[Paths64, ClipError] {
+) -> Result[T, ClipError] {
   let budget = match budget {
     Some(value) => value
     None =>
@@ -199,9 +200,7 @@ fn minkowski_execute(
       Union,
       budget.limits,
       SignedNonZero,
-      fn(state) raise ScanAbort {
-        output_extract(state, preserve_collinear=true)
-      },
+      extract,
       budget~,
       internal_input=true,
       preserve_collinear=true,
@@ -209,6 +208,42 @@ fn minkowski_execute(
   } catch {
     ScanAbort(error) => Err(error)
   }
+}
+
+///|
+fn minkowski_execute(
+  pattern : Path64,
+  path : Path64,
+  closed : Bool,
+  limits : ScanLimits,
+  budget? : CallBudget,
+) -> Result[Paths64, ClipError] {
+  minkowski_compute(
+    pattern,
+    path,
+    closed,
+    limits,
+    fn(state) raise ScanAbort { output_extract(state, preserve_collinear=true) },
+    budget?,
+  )
+}
+
+///|
+fn minkowski_tree_execute(
+  pattern : Path64,
+  path : Path64,
+  closed : Bool,
+  limits : ScanLimits,
+  budget? : CallBudget,
+) -> Result[PolyTree64, ClipError] {
+  minkowski_compute(
+    pattern,
+    path,
+    closed,
+    limits,
+    fn(state) raise ScanAbort { tree_build_with_collinear(state, true) },
+    budget?,
+  )
 }
 
 ///|
@@ -220,6 +255,22 @@ pub fn minkowski_sum(
   limits? : Limits = Default::default(),
 ) -> Result[Paths64, ClipError] {
   minkowski_execute(pattern, path, path_is_closed, {
+    input: limits,
+    max_nodes: 500000,
+    max_work: 5000000,
+  })
+}
+
+///|
+/// Unreleased: hierarchy of the final sweep Union, preserving collinear vertices.
+/// Pattern offsets and route closure follow minkowski_sum; no endpoint or interior fill.
+pub fn minkowski_sum_tree(
+  pattern : Path64,
+  path : Path64,
+  path_is_closed : Bool,
+  limits? : Limits = Default::default(),
+) -> Result[PolyTree64, ClipError] {
+  minkowski_tree_execute(pattern, path, path_is_closed, {
     input: limits,
     max_nodes: 500000,
     max_work: 5000000,

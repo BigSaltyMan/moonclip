@@ -1,5 +1,9 @@
 # 上游来源与移植记录
 
+## Commit 45：Minkowski 孔洞树提取适配（Unreleased）
+
+`minkowski_sum_tree`／`minkowski_sum_tree_d` 继续复用固定 Clipper2 来源的平移矩阵与四边形生成，以及既有 Union、孔洞树和小数转换。新增的是 MoonClip 的结果提取、私有共线点选择和小数衔接，没有新增算法移植、依赖或来源声明，既有版权与 BSL-1.0 记录不变。旧树入口和原平铺费用路径保持原样。
+
 ## Commit 43：闭合窗口孔洞树适配（Unreleased）
 
 `rect_clip_polygons_tree`／`rect_clip_polygons_tree_d` 复用既有 Boolean Intersection、整数树构建和小数树转换。本笔新增窗口提取回调与空树适配，由 MoonClip 自行实现；没有新增上游 RectClip 专用算法移植、依赖或来源声明，沿用既有版权与 BSL-1.0 记录。

@@ -278,8 +278,16 @@ fn tree_invariants(data : TreeData) -> Result[Unit, String] {
 
 ///|
 fn tree_build(state : ScanState) -> PolyTree64 raise ScanAbort {
+  tree_build_with_collinear(state, false)
+}
+
+///|
+fn tree_build_with_collinear(
+  state : ScanState,
+  preserve_collinear : Bool,
+) -> PolyTree64 raise ScanAbort {
   // Finalization may append split records. Only now create geometry caches.
-  let ids = output_finalize(state, false)
+  let ids = output_finalize(state, preserve_collinear)
   let paths = output_snapshot(state, ids)
   let n = ids.length()
   tree_spend(state, 4, 0)
