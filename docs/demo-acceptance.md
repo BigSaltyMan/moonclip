@@ -275,3 +275,24 @@ Uncaught TypeError: Failed to execute 'observe' on 'MutationObserver': parameter
 仅新增一张[整数批量树定位与独立手动选择截图](demo-screenshots/commit47-integer-tree-query.png)，其中计时不作为性能证据。下载重放摘要和窄屏诊断位于忽略目录 `demo/.qa/commit47/download-replay.json`、`narrow-observation.json`，诊断只注入临时 HTML 副本。原三项检查还保留 Boolean 多边界、越界点及不支持组合检查，删除 query 后响应和导出均无残留。
 
 根 `.mbti` 无变化，没有修改根库、公开接口、树存储、定位算法、依赖、版本或标签；规划书、申报书及 `.vscode/` 原有改动保留。未运行库全量、全部工具／桥接、参考重建、性能、基准或候选验收，未发布。普通 CI 使用已有 `demo-tree-locate`，以最终源码 SHA 的运行记录为准。
+
+
+## Commit 49：整数树批量点定位增量验收
+
+2026-10-23，Windows，格式、根接口差异及 JS 静态检查通过；`npm run dev` 完成本笔桥接构建一次后发现 4173 端口已有服务，复用原本的本地服务，没有重复构建。复用产物执行扩展后的原有 `demo tree locate:` 三项，**3/3** 通过，未新增测试块、scope 或根库测试。Linux 同 SHA 轻量 CI 另行核对，不把本地浏览器操作算作 Linux 验收。
+
+| 操作 | 实际结果 |
+|---|---|
+| 批量方框树查询五点 | (-2,0)、(0,0)、(5,5)、(1,1)、(1,1) 顺序返回 Outside、Inside、InHole、OnBoundary、OnBoundary；列表为五行，两个重复点独立保留，摘要为外部 1／区域内部 1／孔洞内部 1／边界 2 |
+| 选择外部、孔洞、边界 | 外部无查询边界；孔洞和边界均命中 #1 深度 2 孔洞，完整路径 M1,1L1,9L9,9L9,1Z。五个点位均绘制，选中点单独强调，自适应包含外部点；选择行前后显示耗时均为 4.80 ms，操作只更新展示，未重新求值，计时不作为性能结论 |
+| 后续点非法 | 第五点 x 改为 1000000001，编辑立即清空列表、点位及旧有效导出；计算返回 CoordinateOutOfRange / PolyTreeQuery，path_index=null、vertex_index=4，不保留部分列表 |
+| 实际 v2 下载与重放 | 恢复五点后下载 `moonclip-stroke-batch (5).json`。JSON 保留原始五点及完整结果，真实 MoonBit 桥接重放的所有状态、完整命中轮廓、深度和孔洞标记与导出一致，重复项未合并 |
+| 单点及模式切换 | 切单点显示 x／y 并隐藏数组，旧列表清除、导出禁用；(5,5) 返回原单点 InHole。切小数、平铺均隐藏并关闭查询，不残留批量列表；平铺沿用原自动计算机制 |
+| 空列表 | [] 成功显示“0 个查询结果”，保留方框区域的 2 轮廓及有效导出，未产生虚假选中行或点位 |
+| 主页面与窄屏 | 主内容视口 1280×720，error／warn 日志为空；一次同源临时 iframe 实测 390×844、scrollWidth=375，点数组可编辑、五行结果可操作，选择第五个重复边界点后显示正确边界结论 |
+
+窄屏容器再次出现 `Uncaught TypeError: Failed to execute 'observe' on 'MutationObserver': parameter 1 is not of type 'Node'.`，时间 **2026-10-23T14:46:56.183Z**，早于 load **14:46:56.377Z** 及新增流程操作。日志没有来源地址和堆栈；子页 error／unhandledrejection 监听为空。**归因仍未确认，不定性为页面布局缺陷**，不宣称窄屏控制台完全无异常。未继续排查或修改浏览器环境，临时容器已关闭。
+
+仅新增一张[批量点列表与孔洞命中截图](demo-screenshots/commit49-batch-tree-query.png)。实际下载重放摘要和窄屏诊断保留在忽略目录 `demo/.qa/commit49/download-replay.json`、`narrow-observation.json`；诊断只加入临时 HTML 副本。三项检查同时保留旧单点多边界及无查询兼容，验证导出深复制、不支持组合、互斥格式、32 点上限及后续点错误索引。
+
+根 `.mbti` 无变化，未改根库、树存储、定位算法、依赖、版本或标签，规划书、申报书及 `.vscode/` 的既有改动保留。未运行库全量、全部工具／桥接、参考重建、性能、基准或候选验收，未发布。普通 CI 使用已有 `demo-tree-locate`，以最终源码 SHA 的轻量运行结果为准。

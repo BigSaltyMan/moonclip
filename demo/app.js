@@ -2,7 +2,7 @@ import {cases,patterns} from './cases.js';
 import {viewFor,contourData,openPathData,resultSvg,openResultSvg,resultDocument} from './export.js';
 const $=id=>document.getElementById(id);
 const titles={boolean:'区域布尔',offset:'带孔偏移',stroke:'路线加宽',minkowski:'图案扫掠',rectclip:'窗口裁剪','stroke-batch':'批量加宽'};
-let scene='boolean',input=null,valid=null,requestId=0,view=null,ready=false,selectedNode=null;
+let scene='boolean',input=null,valid=null,requestId=0,view=null,ready=false,selectedNode=null,selectedQuery=null;
 const worker=new Worker(new URL('./worker.js',import.meta.url),{type:'module'});
 worker.onerror=e=>{requestId++;showError({kind:'WorkerError',stage:'BrowserBridge',message:e.message});};
 worker.onmessage=({data})=>{
@@ -18,12 +18,25 @@ worker.onmessage=({data})=>{
   $('error').hidden=true;$('export-svg').disabled=false;$('export-json').disabled=false;
   renderTree();renderQuery();fit();
 };
-function clearQuery(){$('query-result').hidden=true;$('query-status').textContent='';$('query-hits').textContent='';}
+const queryNames={Outside:'外部',Inside:'区域内部',InHole:'孔洞内部',OnBoundary:'边界'};
+function queryResults(){const q=valid?.response.query;return q?(q.mode==='batch'?q.results:[q]):[];}
+function clearQuery(){selectedQuery=null;$('query-result').hidden=true;$('query-summary').textContent='';$('query-status').textContent='';$('query-hits').textContent='';$('query-list').replaceChildren();}
+function queryHitText(q){return q.node_indices.length?q.node_indices.map(i=>{const n=valid.response.tree.nodes[i];return `#${i} · 深度 ${n.depth} · ${n.is_hole?'孔洞':'填充节点'}`;}).join('；'):'没有命中节点';}
+function selectQuery(index){
+  selectedQuery=index;const q=queryResults()[index];
+  for(const button of $('query-list').querySelectorAll('[data-query-index]'))button.setAttribute('aria-pressed',String(Number(button.dataset.queryIndex)===index));
+  $('query-status').textContent=q?`${queryNames[q.status]} · 点 (${q.point.join(', ')})`:'';
+  $('query-hits').textContent=q?queryHitText(q):'';draw();
+}
 function renderQuery(){
   clearQuery();const q=valid?.response.query;if(!q)return;
-  const names={Outside:'外部',Inside:'区域内部',InHole:'孔洞内部',OnBoundary:'边界'};
-  $('query-result').hidden=false;$('query-status').textContent=`${names[q.status]} · 点 (${q.point.join(', ')})`;
-  $('query-hits').textContent=q.node_indices.length?q.node_indices.map(i=>{const n=valid.response.tree.nodes[i];return `#${i} · 深度 ${n.depth} · ${n.is_hole?'孔洞':'填充节点'}`;}).join('；'):'没有命中节点';
+  const results=queryResults();$('query-result').hidden=false;
+  if(q.mode==='batch'){
+    const counts=Object.keys(queryNames).map(status=>`${queryNames[status]} ${results.filter(r=>r.status===status).length}`);
+    $('query-summary').textContent=`${results.length} 个查询结果 · ${counts.join(' / ')}`;
+    results.forEach((result,index)=>{const button=document.createElement('button');button.type='button';button.className='query-row';button.dataset.queryIndex=index;button.textContent=`${index+1}. (${result.point.join(', ')}) · ${result.status} / ${queryNames[result.status]} · ${queryHitText(result)}`;button.onclick=()=>selectQuery(index);$('query-list').append(button);});
+  }
+  if(results.length)selectQuery(0);
 }
 function clearTree(){selectedNode=null;$('tree-panel').hidden=true;$('tree-list').replaceChildren();$('tree-summary').textContent='';$('selection-detail').textContent='点击节点，定位对应轮廓。';$('clear-selection').disabled=true;}
 function selectNode(index){selectedNode=index;for(const b of $('tree-list').querySelectorAll('[data-node-index]'))b.setAttribute('aria-pressed',String(Number(b.dataset.nodeIndex)===index));$('clear-selection').disabled=index===null;$('selection-detail').textContent=index===null?'点击节点，定位对应轮廓。':`已选择 #${index} · ${valid.response.tree.nodes[index].is_hole?'孔洞':'外轮廓'} · 仅高亮边界`;draw();}
@@ -51,7 +64,14 @@ function treeQuerySupported(){
   return $('mode').value==='integer'&&$('output').value==='tree'&&(['boolean','offset','stroke','stroke-batch','minkowski'].includes(scene)||(scene==='rectclip'&&$('input-kind').value==='polygons'));
 }
 function withTreeQuery(request){
-  if(treeQuerySupported()&&$('query-enabled').checked)request.query={point:[numeric('query-x'),numeric('query-y')]};
+  if(treeQuerySupported()&&$('query-enabled').checked){
+    if($('query-mode').value==='batch'){
+      const points=JSON.parse($('query-points').value);
+      if(!Array.isArray(points)||points.length>32)throw new Error('批量查询必须是最多 32 个点的数组');
+      if(!points.every(p=>Array.isArray(p)&&p.length===2&&p.every(Number.isSafeInteger)))throw new Error('查询点必须是 [x,y] 整数坐标');
+      request.query={points};
+    }else request.query={point:[numeric('query-x'),numeric('query-y')]};
+  }
   return request;
 }
 function readRequest(){
@@ -72,7 +92,7 @@ function calculate(){
 function setVisibility(){
   const querySupported=treeQuerySupported();
   $('query-controls').hidden=!querySupported;if(!querySupported)$('query-enabled').checked=false;
-  $('query-fields').hidden=!$('query-enabled').checked;
+  $('query-fields').hidden=!$('query-enabled').checked;$('query-single').hidden=$('query-mode').value==='batch';$('query-batch').hidden=$('query-mode').value!=='batch';
   document.querySelectorAll('[data-for]').forEach(el=>{el.hidden=!el.dataset.for.split(' ').includes(scene);});
   if(scene==='rectclip')$('fill-controls').hidden=$('input-kind').value!=='polygons';
   $('route-tabs').hidden=!['stroke','minkowski','rectclip','stroke-batch'].includes(scene);
@@ -95,7 +115,7 @@ function setVisibility(){
 function loadCase(){
   const c=structuredClone(cases[scene].find(c=>c.id===$('case').value)??cases[scene][0]);
   $('output').value=c.output??'paths';$('mode').value=c.mode;$('precision').value=String(c.precision??3);$('simplify').checked=false;$('epsilon').value=.5;
-  $('query-enabled').checked=false;$('query-x').value=String(c.query?.point?.[0]??6);$('query-y').value=String(c.query?.point?.[1]??6);
+  $('query-mode').value='single';$('query-enabled').checked=false;$('query-x').value=String(c.query?.point?.[0]??6);$('query-y').value=String(c.query?.point?.[1]??6);
   const p=c.params??{};
   if(scene==='rectclip'){$('input-kind').value=c.input_kind??'lines';updateRectclipCases(false);$('case').value=c.id;}
   if(scene==='rectclip')for(const [id,key] of [['min-x','min_x'],['min-y','min_y'],['max-x','max_x'],['max-y','max_y']])$(id).value=String(c.rect[key]);
@@ -121,7 +141,7 @@ function inputLayers(){
   if(scene==='minkowski')layers.push({name:'图案 / 局部原点',paths:[r.pattern],color:'#8265a6',closed:true});
   return safe(layers);
 }
-function fit(){const layers=inputLayers();view=viewFor([...layers.flatMap(l=>l.paths),...(valid?.response.paths??[]),...(valid?.response.query?[[valid.response.query.point]]:[])]);draw();}
+function fit(){const layers=inputLayers();view=viewFor([...layers.flatMap(l=>l.paths),...(valid?.response.paths??[]),...queryResults().map(q=>[q.point])]);draw();}
 function zoom(factor){if(!view)return;view={x:view.x+view.w*(1-factor)/2,y:view.y+view.h*(1-factor)/2,w:view.w*factor,h:view.h*factor};draw();}
 function draw(){
   const svg=$('drawing');const layers=inputLayers();if(!view)view=viewFor(layers.flatMap(l=>l.paths));
@@ -141,10 +161,13 @@ function draw(){
   }
   if($('show-result').checked&&valid?.response.geometry==='open-paths')objects.push(`<path d="${openPathData(valid.response.paths)}" fill="none" stroke="#087f72" stroke-width="3" vector-effect="non-scaling-stroke"/>`);
   if($('show-result').checked&&valid&&selectedNode!==null)objects.push(`<path data-selected-contour="${selectedNode}" d="${contourData([valid.response.paths[selectedNode]])}" fill="none" stroke="#d65a25" stroke-width="4" vector-effect="non-scaling-stroke"/>`);
-  const query=valid?.response.query;
+  const results=queryResults(),query=selectedQuery===null?null:results[selectedQuery];
   if(query){
     if($('show-result').checked)for(const i of query.node_indices)objects.push(`<path data-query-node="${i}" d="${contourData([valid.response.paths[i]])}" fill="none" stroke="#9b3ca6" stroke-width="3" stroke-dasharray="6 3" vector-effect="non-scaling-stroke"/>`);
-    const [x,y]=query.point;objects.push(`<circle data-query-point="true" cx="${x}" cy="${y}" r="${view.w/120}" fill="#ae2471" stroke="white" stroke-width="1.5" vector-effect="non-scaling-stroke"/>`);
+  }
+  for(let index=0;index<results.length;index++){
+    const [x,y]=results[index].point,active=index===selectedQuery;
+    objects.push(`<circle data-query-point="true" data-query-index="${index}" data-query-selected="${active}" cx="${x}" cy="${y}" r="${view.w/(active?100:160)}" fill="${active?'#ae2471':'#bc9cbd'}" stroke="white" stroke-width="${active?2:1}" vector-effect="non-scaling-stroke"/>`);
   }
   svg.innerHTML=`<g transform="scale(1,-1)">${objects.join('')}</g>`;
   $('legend').replaceChildren(...[...layers,{name:'MoonBit 结果',color:'#087f72'}].map(l=>{const span=document.createElement('span');const i=document.createElement('i');i.style.background=l.color;span.append(i,document.createTextNode(l.name));return span;}));
@@ -160,7 +183,7 @@ $('pattern-select').onchange=()=>{if($('pattern-select').value==='custom')return
 $('output').onchange=()=>{setVisibility();calculate();};$('clear-selection').onclick=()=>selectNode(null);
 $('input-kind').onchange=()=>{updateRectclipCases(true);invalidate();setVisibility();draw();};
 $('case').onchange=()=>{if($('case').value)loadCase();};$('compute').onclick=calculate;
-for(const id of ['mode','precision','operation','fill-rule','delta','width','join','cap','miter-limit','arc-tolerance','closed','simplify','epsilon','input-a','input-b','min-x','min-y','max-x','max-y','query-enabled','query-x','query-y'])$(id).addEventListener('input',()=>{if(id==='input-b'&&scene==='minkowski')$('pattern-select').value='custom';invalidate();setVisibility();draw();});
+for(const id of ['mode','precision','operation','fill-rule','delta','width','join','cap','miter-limit','arc-tolerance','closed','simplify','epsilon','input-a','input-b','min-x','min-y','max-x','max-y','query-enabled','query-mode','query-points','query-x','query-y'])$(id).addEventListener('input',()=>{if(id==='input-b'&&scene==='minkowski')$('pattern-select').value='custom';invalidate();setVisibility();draw();});
 for(const id of ['show-input','show-result'])$(id).onchange=draw;
 $('zoom-in').onclick=()=>zoom(.8);$('zoom-out').onclick=()=>zoom(1.25);$('fit').onclick=fit;
 $('drawing').addEventListener('wheel',e=>{e.preventDefault();zoom(e.deltaY>0?1.12:1/1.12);},{passive:false});

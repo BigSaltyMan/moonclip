@@ -258,20 +258,69 @@ fn encode_tree_query(
 }
 
 ///|
+priv enum TreeQuery {
+  QueryPoint(@moonclip.Point64)
+  QueryPoints(Array[@moonclip.Point64])
+}
+
+///|
+fn parse_tree_query(query : Json) -> TreeQuery raise DemoError {
+  let q = object(query)
+  match (q.get("point"), q.get("points")) {
+    (Some(point), None) =>
+      QueryPoint(
+        integer_paths(coordinates(Json::array([Json::array([point])])))[0][0],
+      )
+    (None, Some(Array(points))) => {
+      if points.length() > 32 {
+        raise Input("Demo batch query accepts at most 32 points", None, None)
+      }
+      QueryPoints(
+        integer_paths(coordinates(Json::array([Json::array(points)])))[0],
+      )
+    }
+    _ =>
+      raise Input(
+        "Query requires exactly one of point or points; points must be an array",
+        None,
+        None,
+      )
+  }
+}
+
+///|
 // Locate and encode the same immutable tree. Query failure publishes no response.
 fn encode_integer_tree_result(
   tree : @moonclip.PolyTree64,
-  point : @moonclip.Point64?,
+  request : TreeQuery?,
 ) -> (Json, Json, Json?) raise DemoError {
-  let located = match point {
-    Some(point) => Some(value(tree.locate(point)))
+  let located = match request {
+    Some(QueryPoint(point)) => Some([value(tree.locate(point))])
+    Some(QueryPoints(points)) => Some(value(tree.locate_many(points)))
     None => None
   }
   let encoded = encode_tree(tree)
-  let query = match (point, located) {
-    (Some(point), Some(result)) =>
+  let query = match (request, located) {
+    (Some(QueryPoint(point)), Some([result])) =>
       Some(encode_tree_query(point, result, encoded))
-    _ => None
+    (Some(QueryPoints(points)), Some(results)) => {
+      if points.length() != results.length() {
+        raise Input("Unaligned batch query results", None, None)
+      }
+      let encoded_results = []
+      for i = 0; i < points.length(); i = i + 1 {
+        encoded_results.push(encode_tree_query(points[i], results[i], encoded))
+      }
+      Some(
+        Json::object({
+          "mode": "batch".to_json(),
+          "points": points.map(fn(p) { [p.x.to_int(), p.y.to_int()] }).to_json(),
+          "results": Json::array(encoded_results),
+        }),
+      )
+    }
+    (None, None) => None
+    _ => raise Input("Missing query results", None, None)
   }
   (encoded.0, encoded.1, query)
 }
@@ -362,7 +411,7 @@ fn library_error(error : @moonclip.ClipError) -> Json {
 ///|
 fn execute_rectclip(
   r : Map[String, Json],
-  query_point : @moonclip.Point64?,
+  query_request : TreeQuery?,
 ) -> Json raise DemoError {
   let kind = text(r, "input_kind", "lines")
   if kind != "lines" && kind != "polygons" {
@@ -460,7 +509,7 @@ fn execute_rectclip(
     if output == "tree" {
       let encoded = encode_integer_tree_result(
         value(@moonclip.rect_clip_polygons_tree(window, grid, fill_rule=rule)),
-        query_point,
+        query_request,
       )
       tree = encoded.1
       query_result = encoded.2
@@ -525,18 +574,13 @@ fn execute(request : Json) -> Json raise DemoError {
       None,
     )
   }
-  let query_point = match r.get("query") {
+  let query_request = match r.get("query") {
     None => None
-    Some(query) => {
-      let point = object(query).get("point").unwrap_or(Json::null())
-      Some(
-        integer_paths(coordinates(Json::array([Json::array([point])])))[0][0],
-      )
-    }
+    Some(query) => Some(parse_tree_query(query))
   }
   // Open paths must bypass closed-region preparation and all unrelated parameters.
   if scene == "rectclip" {
-    return execute_rectclip(r, query_point)
+    return execute_rectclip(r, query_request)
   }
   let mode = text(r, "mode", "integer")
   let output = text(r, "output", "paths")
@@ -618,7 +662,7 @@ fn execute(request : Json) -> Json raise DemoError {
               options~,
             ),
           ),
-          query_point,
+          query_request,
         )
         query_result = encoded.2
         (encoded.0, encoded.1)
@@ -882,7 +926,7 @@ fn execute(request : Json) -> Json raise DemoError {
         }
         _ => raise Input("Unknown integer scene", None, None)
       }
-      let encoded = encode_integer_tree_result(computed, query_point)
+      let encoded = encode_integer_tree_result(computed, query_request)
       query_result = encoded.2
       tree = encoded.1
       encoded.0
