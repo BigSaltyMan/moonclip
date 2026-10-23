@@ -1,5 +1,15 @@
 # MoonClip 交互演示
 
+## Commit 42：批量描边孔洞树（Unreleased）
+
+“路线实验 → 批量加宽”现在可以选择“平铺轮廓／孔洞层级”。整数平铺、整数树、小数平铺、小数树分别一次调用 `stroke_polylines`、`stroke_polylines_tree`、`stroke_polylines_d`、`stroke_polylines_tree_d`，树直接来自这次核心求值，不从平铺结果重新构建。未指定 output 的旧请求仍返回 paths；未知输出和启用简化明确拒绝。
+
+树模式复用现有面板，显示根数、轮廓数、最大深度和父子关系，可展开、折叠、选择边界及清除选择。选择只高亮边界，完整填充区域始终保留。输入路线独立开放，层级描述最终合并区域，不对应单条路线；空树显示零根、零轮廓和提示，仍是可导出的有效结果。修改输入、宽度、样式、模式或结构时清除旧树和选择，失败禁用导出，迟到响应继续受请求编号保护。点定位仍只支持整数 Boolean Tree。
+
+新增整数、小数方框两个输入案例，各由四条独立边组成，使用 Square 端点。树沿用 v2 JSON，保存完整原请求、轮廓和父子索引；平铺继续使用 v1。SVG 只导出完整 NonZero 区域，不包含路线、选择高亮或页面辅助元素。树节点和 paths 使用同一次广度编码，索引仅在本次响应内有效。
+
+本地复用开发服务的一次构建，扩展原有 `demo stroke batch:` 三项检查；同 SHA CI 使用已有 `demo-stroke-batch`。未新增测试块、scope、依赖或公开接口。实际下载、重放、空树及窄屏观察见[增量验收](demo-acceptance.md#commit-42批量描边孔洞树增量验收)。下面各 Commit 节保留各自历史范围，本笔保持 Unreleased。
+
 ## Commit 40：闭合区域窗口裁剪（Unreleased）
 
 窗口裁剪页签增加“开放路线／闭合区域”。请求 `input_kind` 为 lines 或 polygons，省略时仍按 lines 处理；未知类型明确拒绝。两种输入类型均支持整数／小数，分别一次调用 `rect_clip_lines`、`rect_clip_lines_d`、`rect_clip_polygons` 或 `rect_clip_polygons_d`。闭合模式默认 EvenOdd，也支持 NonZero；树输出和简化继续拒绝。前端不求交、修复拓扑或逐轮廓拼接。

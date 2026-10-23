@@ -187,3 +187,26 @@ Uncaught TypeError: Failed to execute 'observe' on 'MutationObserver': parameter
 下载原件及重放材料保留在忽略目录 `demo/.qa/commit40/result.svg`、`result.json`、`open-result.json`；主页面／窄屏诊断保留在同目录 `main-observation.json`、`narrow-observation.json`。诊断仅位于临时 HTML 副本，未混入产品；容器已关闭。仅新增一张[区域窗口裁剪截图](demo-screenshots/commit40-rectclip-regions.png)，计时不作为性能证据。
 
 未运行库全量、全部工具／桥接、参考重建、性能、基准或候选验收；原规划书、申报书、版本和标签不变，新演示保持 Unreleased。
+
+
+## Commit 42：批量描边孔洞树增量验收
+
+2026-10-23，Windows，`npm run dev` 构建一次后，通过 Codex 内置浏览器访问 http://127.0.0.1:4173/。扩展已有 `demo stroke batch:` 三项，最终 **3/3** 通过，未新增测试块或 scope；格式、接口及 JS 静态检查通过，根 `.mbti` 无变化。首次 SVG 断言误将描述文字 NonZero 的 Z 计入闭合命令，已将断言限定到 path 的 d 属性后复核三项，不改导出实现。Linux 同 SHA 轻量 CI 单独核对，不把本地浏览器操作记作 Linux 验收。
+
+| 操作 | 实际结果 |
+|---|---|
+| 整数方框树，width=2、Square | 四条路线独立开放，外轮廓 [-1,-1]—[11,11]，孔洞 [1,1]—[9,9]；1 根、2 轮廓、8 点，深度 1／2，父子索引与 paths 对应 |
+| 展开／折叠、选择孔洞、清除选择 | 可折叠与重新展开；孔洞选择显示“仅高亮边界”，完整区域和孔洞保留；清除恢复未选择提示 |
+| 整数 width=4 | 输入修改立即隐藏旧树并禁用导出；计算后外轮廓 [-2,-2]—[12,12]，孔洞 [2,2]—[8,8]，旧选择不保留 |
+| width=0 | 0 根、0 轮廓、最大深度 0，明确显示没有可选择的轮廓；有效空结果可导出 |
+| 小数方框，width=0.5、Precision=2 | 外轮廓 [-0.25,-0.25]—[2.75,2.75]，孔洞 [0.25,0.25]—[2.25,2.25]，1 根、1 孩子，深度和孔洞标记正确；点定位控件隐藏 |
+| 非法后续路线 | 第 2 条路线的第 2 点 x=10000001，返回 DecimalCoordinateOutOfRange / DecimalQuantize，path=1、vertex=1；树、选择与有效导出清除 |
+| 实际 SVG／v2 JSON 下载 | SVG 通过 HTTP 打开，外轮廓和孔洞可见，两个闭合轮廓、NonZero 填充，无输入和选择辅助。v2 JSON 保留全部路线、mode=decimal、precision=2、原单位样式和完整层级；真实 MoonBit 桥接重放后 paths 与 tree 逐项一致 |
+| 切回平铺与其他场景 | 平铺隐藏树面板，实际下载 JSON 为 v1；原单路线页签恢复自己的控件、默认平铺与简化开关，不携带批量选择 |
+| 窄屏抽查 | 临时同源 iframe 内脚本实测 390×844、scrollWidth=375；批量页签、结构、模式／精度和样式可操作，树计算和孔洞选择正常 |
+
+主页面 error／warn 日志为空。临时窄屏容器再次出现 `Uncaught TypeError: Failed to execute 'observe' on 'MutationObserver': parameter 1 is not of type 'Node'.`，时间 **2026-10-23T03:35:25.857Z**，早于容器 load **03:35:25.948Z**，即进入批量页签之前。日志无来源地址和堆栈，记录为 null；子页 error／unhandledrejection 监听记录为空。**归因仍未确认，不定性为页面布局缺陷**，不宣称窄屏控制台完全无异常。只做一次有限抽查，未据此修改布局或浏览器环境。
+
+仅新增一张[小数批量树孔洞高亮截图](demo-screenshots/commit42-batch-tree.png)，计时不作为性能证据。实际下载及重放材料在忽略目录 `demo/.qa/commit42/result.svg`、`result.json`、`flat-result.json`，窄屏诊断为同目录 `narrow-observation.json`；诊断只加入临时 HTML 副本，未混入产品，容器已关闭。
+
+未运行库全量、完整工具／桥接、参考重建、性能、基准或候选验收；没有增加依赖、修改根库、公开接口、树存储、版本或发布标签，规划书和申报书的原有改动保留，未发布。CI 使用已有 `demo-stroke-batch` 轻量模式，结果以最终源码 SHA 的运行记录为准。

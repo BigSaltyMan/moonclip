@@ -212,6 +212,17 @@ test('demo stroke batch: complete merged rectangle',()=>{
   assert.equal(r.mode,'integer');assert.equal(r.precision,null);assert.equal(r.output,'paths');assert.equal(r.geometry,undefined);
   const decimal=exact(cases['stroke-batch'].find(c=>c.id==='decimal-overlap'),[rect(-1.25,.25,3,.5)]);
   assert.equal(decimal.mode,'decimal');assert.equal(decimal.precision,2);assert.equal(decimal.output,'paths');assert.equal(decimal.geometry,undefined);
+  assert.equal(r.tree,undefined);assert.equal(run({...cases['stroke-batch'][0],output:undefined}).output,'paths');
+  for(const [id,outer,hole] of [
+    ['batch-tree-frame',rect(-1,-1,12,12),rect(1,1,8,8).reverse()],
+    ['batch-tree-frame-d',rect(-.25,-.25,3,3),rect(.25,.25,2,2).reverse()],
+  ]){
+    const input=cases['stroke-batch'].find(c=>c.id===id),tree=exact(input,[outer,hole]);
+    assert.equal(tree.output,'tree');assert.equal(tree.mode,input.mode);assert.equal(tree.precision,input.mode==='decimal'?2:null);
+    assert.deepEqual(tree.tree,{roots:[0],nodes:[{parent:null,children:[1],depth:1,is_hole:false},{parent:0,children:[],depth:2,is_hole:true}]});
+    assert.deepEqual(canonical([tree.paths[0]]),canonical([outer]));assert.deepEqual(canonical([tree.paths[1]]),canonical([hole]));
+    assert.equal(tree.query,undefined);
+  }
 });
 
 test('demo stroke batch: subsequent route error and unsupported requests',()=>{
@@ -219,12 +230,12 @@ test('demo stroke batch: subsequent route error and unsupported requests',()=>{
   const later=run({...request,paths:[request.paths[0],[[5,0],[1000000001,0]]]});
   assert.equal(later.ok,false);assert.equal(later.error.kind,'CoordinateOutOfRange');
   assert.equal(later.error.stage,'StrokeGenerate');assert.equal(later.error.path_index,1);assert.equal(later.error.vertex_index,1);
-  const collision=run({...decimal,paths:[[[.001,0],[1,0]],[[.002,0],[2,0]]]});
+  const collision=run({...decimal,output:'tree',paths:[[[.001,0],[1,0]],[[.002,0],[2,0]]]});
   assert.equal(collision.ok,false);assert.equal(collision.error.kind,'QuantizationFailure');assert.equal(collision.error.stage,'DecimalQuantize');
   assert.equal(collision.error.path_index,1);assert.equal(collision.error.vertex_index,0);
   assert.equal(collision.error.related.path_index,0);assert.equal(collision.error.related.vertex_index,0);
-  for(const bad of [later,collision,run({...request,mode:'unknown'}),run({...request,paths:decimal.paths}),run({...request,output:'tree'}),run({...request,simplify:{enabled:true}})]){
-    assert.equal(bad.ok,false);assert.throws(()=>resultDocument(request,bad));
+  for(const bad of [later,collision,run({...request,mode:'unknown'}),run({...request,paths:decimal.paths}),run({...request,output:'unknown'}),run({...request,simplify:{enabled:true}})]){
+    assert.equal(bad.ok,false);assert.equal(bad.tree,undefined);assert.equal(bad.paths,undefined);assert.throws(()=>resultDocument(request,bad));
   }
 });
 
@@ -239,6 +250,17 @@ test('demo stroke batch: closed region export and replay',()=>{
     const svg=resultSvg(r.paths);assert.match(svg,/[zZ]" fill=/);assert.match(svg,/fill-rule="nonzero"/);
     if(input.mode==='decimal')for(const [x,y] of expected)assert.ok(svg.includes(`${x},${y}`));
   }
+  const request=structuredClone(cases['stroke-batch'].find(c=>c.id==='batch-tree-frame-d'));
+  const response=run(request),doc=resultDocument(request,response);
+  assert.equal(response.ok,true,JSON.stringify(response));assert.equal(doc.version,2);assert.equal(doc.result.output,'tree');
+  assert.deepEqual(doc.request,request);assert.deepEqual(doc.request.paths,request.paths);assert.deepEqual(doc.request.params,request.params);
+  assert.equal(doc.result.mode,'decimal');assert.equal(doc.result.precision,2);
+  assert.deepEqual(doc.result.paths,response.paths);assert.deepEqual(doc.result.tree,response.tree);
+  const replay=run(doc.request);assert.deepEqual(replay.paths,doc.result.paths);assert.deepEqual(replay.tree,doc.result.tree);
+  const svg=resultSvg(response.paths);assert.match(svg,/fill-rule="nonzero"/);
+  assert.equal((svg.match(/<path d="([^"]*)"/)[1].match(/Z/g)||[]).length,2);
+  for(const contour of response.paths)for(const [x,y] of contour)assert.ok(svg.includes(`${x},${y}`));
+
 });
 
 test('demo tree locate: statuses identify complete outer hole and island nodes',()=>{

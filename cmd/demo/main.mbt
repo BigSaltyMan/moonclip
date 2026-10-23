@@ -484,9 +484,6 @@ fn execute(request : Json) -> Json raise DemoError {
   if mode != "integer" && mode != "decimal" {
     raise Input("Unknown coordinate mode", None, None)
   }
-  if scene == "stroke-batch" && output != "paths" {
-    raise Input("Batch stroke supports paths output only", None, None)
-  }
   let params = object(r.get("params").unwrap_or(Json::object({})))
   let simplify = object(r.get("simplify").unwrap_or(Json::object({})))
   let enabled = flag(simplify, "enabled", false)
@@ -534,7 +531,35 @@ fn execute(request : Json) -> Json raise DemoError {
   if scene == "stroke-batch" {
     let paths = coordinates(r.get("paths").unwrap_or(Json::array([])))
     let width = number(params, "width", 8.0)
-    let result = if mode == "decimal" {
+    let mut tree = Json::null()
+    let result = if output == "tree" {
+      let (encoded_paths, encoded_tree) = if mode == "decimal" {
+        encode_tree_d(
+          value(
+            @moonclip.stroke_polylines_tree_d(
+              paths,
+              width,
+              precision~,
+              cap~,
+              options~,
+            ),
+          ),
+        )
+      } else {
+        encode_tree(
+          value(
+            @moonclip.stroke_polylines_tree(
+              integer_paths(paths),
+              width,
+              cap~,
+              options~,
+            ),
+          ),
+        )
+      }
+      tree = encoded_tree
+      encoded_paths
+    } else if mode == "decimal" {
       encode_decimal(
         value(
           @moonclip.stroke_polylines_d(paths, width, precision~, cap~, options~),
@@ -552,7 +577,7 @@ fn execute(request : Json) -> Json raise DemoError {
         ),
       )
     }
-    return Json::object({
+    let response = {
       "ok": true.to_json(),
       "kernel": "MoonBit".to_json(),
       "scene": scene.to_json(),
@@ -565,7 +590,11 @@ fn execute(request : Json) -> Json raise DemoError {
       },
       "paths": result,
       "simplification": Json::null(),
-    })
+    }
+    if output == "tree" {
+      response["tree"] = tree
+    }
+    return Json::object(response)
   }
 
   let empty = Json::array([])
