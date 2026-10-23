@@ -155,6 +155,24 @@ fn run_tree_locate_example() -> Unit raise {
   assert_eq(nodes.length(), 1)
   assert_eq(nodes[0].depth(), 2)
   assert_true(nodes[0].is_hole())
+  // Batch results preserve the input order: outside, hole, island, boundary.
+  let results = tree
+    .locate_many([
+      @moonclip.Point64::new(-1L, 1L),
+      @moonclip.Point64::new(6L, 6L),
+      @moonclip.Point64::new(10L, 10L),
+      @moonclip.Point64::new(4L, 6L),
+    ])
+    .unwrap()
+  assert_eq(results.length(), 4)
+  assert_true(results[0] is Outside)
+  guard results[1] is InHole(node) else { fail("Batch hole order") }
+  assert_eq(node.depth(), 2)
+  guard results[2] is Inside(node) else { fail("Batch island order") }
+  assert_eq(node.depth(), 3)
+  guard results[3] is OnBoundary(nodes) else { fail("Batch boundary order") }
+  assert_eq(nodes.length(), 1)
+  assert_eq(nodes[0].depth(), 2)
 }
 
 ///|

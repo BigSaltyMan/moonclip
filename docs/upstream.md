@@ -1,5 +1,9 @@
 # 上游来源与移植记录
 
+## Commit 48：整数树批量点定位（Unreleased）
+
+`PolyTree64::locate_many` 的批量调度、一次规模预检、共享预算及结果隔离由 MoonClip 自行实现；复用已有单点的整数精确谓词、半开射线和深度选择，未新增上游算法移植、依赖或来源声明。旧单点校验顺序、位置和计费保持原样，无空间索引或性能测量结论。
+
 ## Commit 45：Minkowski 孔洞树提取适配（Unreleased）
 
 `minkowski_sum_tree`／`minkowski_sum_tree_d` 继续复用固定 Clipper2 来源的平移矩阵与四边形生成，以及既有 Union、孔洞树和小数转换。新增的是 MoonClip 的结果提取、私有共线点选择和小数衔接，没有新增算法移植、依赖或来源声明，既有版权与 BSL-1.0 记录不变。旧树入口和原平铺费用路径保持原样。

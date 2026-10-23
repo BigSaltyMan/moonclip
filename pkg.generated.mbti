@@ -218,6 +218,7 @@ pub struct PolyTree64 {
   // private fields
 }
 pub fn PolyTree64::locate(Self, Point64, limits? : Limits) -> Result[TreePointLocation64, ClipError]
+pub fn PolyTree64::locate_many(Self, Array[Point64], limits? : Limits) -> Result[Array[TreePointLocation64], ClipError]
 pub fn PolyTree64::roots(Self) -> Array[PolyNode64]
 pub fn PolyTree64::to_paths(Self) -> Array[Array[Point64]]
 
