@@ -1114,3 +1114,64 @@ pub fn stroke_polylines_tree_d(
     input: limits,
   })
 }
+
+///|
+fn decimal_rect_clip_polygons_tree_execute(
+  rect : BoundsD,
+  paths : PathsD,
+  precision : Precision,
+  fill_rule : FillRule,
+  limits : ScanLimits,
+  budget? : CallBudget,
+) -> Result[PolyTreeD, ClipError] {
+  let budget = match budget {
+    Some(value) => value
+    None =>
+      new_call_budget(
+        limits,
+        generate_stage=RectClipEvaluate,
+        cleanup_stage=RectClipEvaluate,
+      )
+  }
+  try {
+    decimal_rect_parameters(rect, precision, budget)
+    decimal_precheck(paths, [], precision, budget)
+    let window = decimal_rect_quantize(rect, precision, budget)
+    let (grid, _) = decimal_quantize(paths, [], precision, true, budget)
+    match
+      rect_clip_polygons_compute(
+        window,
+        grid,
+        fill_rule,
+        budget.limits,
+        fn(state) raise ScanAbort {
+          decimal_tree_output(tree_build(state), precision, budget)
+        },
+        fn(budget) raise ScanAbort {
+          decimal_tree_output(tree_empty(budget), precision, budget)
+        },
+        budget~,
+      ) {
+      Ok(tree) => Ok(tree)
+      Err(error) => Err(decimal_error(error, precision))
+    }
+  } catch {
+    ScanAbort(error) => Err(decimal_error(error, precision))
+  }
+}
+
+///|
+/// Unreleased: clip on one decimal grid and decode the resulting integer hierarchy.
+/// Window, intersection, tree construction and conversion share one budget.
+pub fn rect_clip_polygons_tree_d(
+  rect : BoundsD,
+  paths : PathsD,
+  precision? : Precision = Default::default(),
+  fill_rule? : FillRule = EvenOdd,
+  limits? : Limits = Default::default(),
+) -> Result[PolyTreeD, ClipError] {
+  decimal_rect_clip_polygons_tree_execute(rect, paths, precision, fill_rule, {
+    ..Default::default(),
+    input: limits,
+  })
+}

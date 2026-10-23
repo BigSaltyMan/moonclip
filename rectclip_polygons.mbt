@@ -1,13 +1,15 @@
 // Copyright (c) 2026 BigSaltyMan. BSL-1.0; see LICENSE.
 
 ///|
-fn rect_clip_polygons_execute(
+fn[T] rect_clip_polygons_compute(
   rect : Bounds64,
   paths : Paths64,
   fill_rule : FillRule,
   limits : ScanLimits,
+  extract : (ScanState) -> T raise ScanAbort,
+  empty : (CallBudget) -> T raise ScanAbort,
   budget? : CallBudget,
-) -> Result[Paths64, ClipError] {
+) -> Result[T, ClipError] {
   let budget = match budget {
     Some(value) => value
     None =>
@@ -47,9 +49,8 @@ fn rect_clip_polygons_execute(
   try {
     budget_spend(budget, 0, work, loc)
     if paths.is_empty() || rect.min_x == rect.max_x || rect.min_y == rect.max_y {
-      // One empty result container; no window or scan allocation.
-      budget_spend(budget, 1, 1, location(RectClipOutput, None, None))
-      return Ok([])
+      // Output-specific empty storage; no window or scan allocation.
+      return Ok(empty(budget))
     }
     // Four immutable points + four slots + ring container + operand container/slot.
     // Four corner constructions and two container constructions: 11 nodes / 6 work.
@@ -71,15 +72,57 @@ fn rect_clip_polygons_execute(
         EvenOdd => Parity
         NonZero => SignedNonZero
       },
-      fn(state) raise ScanAbort {
-        output_extract(state, preserve_collinear=false)
-      },
+      extract,
       budget~,
       internal_input=true,
     )
   } catch {
     ScanAbort(error) => Err(error)
   }
+}
+
+///|
+fn rect_clip_polygons_execute(
+  rect : Bounds64,
+  paths : Paths64,
+  fill_rule : FillRule,
+  limits : ScanLimits,
+  budget? : CallBudget,
+) -> Result[Paths64, ClipError] {
+  rect_clip_polygons_compute(
+    rect,
+    paths,
+    fill_rule,
+    limits,
+    fn(state) raise ScanAbort {
+      output_extract(state, preserve_collinear=false)
+    },
+    fn(budget) raise ScanAbort {
+      // Preserve the flat shortcut's one result container and work unit.
+      budget_spend(budget, 1, 1, location(RectClipOutput, None, None))
+      []
+    },
+    budget?,
+  )
+}
+
+///|
+fn rect_clip_polygons_tree_execute(
+  rect : Bounds64,
+  paths : Paths64,
+  fill_rule : FillRule,
+  limits : ScanLimits,
+  budget? : CallBudget,
+) -> Result[PolyTree64, ClipError] {
+  rect_clip_polygons_compute(
+    rect,
+    paths,
+    fill_rule,
+    limits,
+    tree_build,
+    tree_empty,
+    budget?,
+  )
 }
 
 ///|
@@ -92,6 +135,21 @@ pub fn rect_clip_polygons(
   limits? : Limits = Default::default(),
 ) -> Result[Paths64, ClipError] {
   rect_clip_polygons_execute(rect, paths, fill_rule, {
+    ..Default::default(),
+    input: limits,
+  })
+}
+
+///|
+/// Unreleased: hierarchy of the region after window intersection, built in one scan.
+/// A hole cut open by the window becomes part of the outer contour.
+pub fn rect_clip_polygons_tree(
+  rect : Bounds64,
+  paths : Paths64,
+  fill_rule? : FillRule = EvenOdd,
+  limits? : Limits = Default::default(),
+) -> Result[PolyTree64, ClipError] {
+  rect_clip_polygons_tree_execute(rect, paths, fill_rule, {
     ..Default::default(),
     input: limits,
   })

@@ -1,10 +1,12 @@
 # 支持范围与使用边界
 
+Unreleased：`rect_clip_polygons_tree`／`rect_clip_polygons_tree_d` 提供整数／小数闭合区域窗口树输出，一次求交后直接构树；被窗口切开的孔洞可能变为外轮廓凹口，最终层级不对应输入轮廓。空结果验证后构造已计费空树，扫描、构树和小数转换共享预算。树只表达闭合区域，开放片段不提供孔洞树。未接网页，旧参考不作为新增树入口的逐项覆盖证据。
+
 Unreleased：`rect_clip_lines_d` 提供小数开放路线的矩形窗口裁剪，默认 Precision=3（0—6），输出为有序、保方向的开放片段，普通共线中间点保留，无填充规则或树结构。窗口独立量化、全部路线共同量化并共享预算，网页窗口裁剪已支持整数与小数开放路线；详见[矩形裁剪](rectclip.md)。
 
-Unreleased：`rect_clip_polygons_d` 配合不可变 `BoundsD` 提供小数闭合区域窗口裁剪，Precision 默认 3（0—6），支持 EvenOdd／NonZero，仅返回平铺区域。窗口独立量化但使用同一网格，不占原始路径额度；原始空窗口与量化塌缩区别处理。不提供树包装；小数开放折线另用 `rect_clip_lines_d`。
+Unreleased：`rect_clip_polygons_d` 配合不可变 `BoundsD` 提供小数闭合区域窗口裁剪，Precision 默认 3（0—6），支持 EvenOdd／NonZero，平铺入口返回平铺区域。窗口独立量化但使用同一网格，不占原始路径额度；原始空窗口与量化塌缩区别处理。树输出另用 `rect_clip_polygons_tree_d`；小数开放折线另用 `rect_clip_lines_d`。
 
-Unreleased：`rect_clip_polygons` 将整数闭合区域与矩形窗口一次求交，支持 EvenOdd／NonZero，返回可含孔洞的平铺区域。复用 Boolean 数值与预算契约，没有矩形专用优化或树包装；详见[矩形裁剪](rectclip.md)。
+Unreleased：`rect_clip_polygons` 将整数闭合区域与矩形窗口一次求交，支持 EvenOdd／NonZero，返回可含孔洞的平铺区域。复用 Boolean 数值与预算契约，没有矩形专用优化，树输出另用 `rect_clip_polygons_tree`；详见[矩形裁剪](rectclip.md)。
 
 Unreleased：整数 `PolyTree64::locate` 返回最深严格包含的填充／孔洞节点，或优先返回全部边界命中。最坏线性访问全部轮廓顶点，Limits 限制被查询树的轮廓和总顶点，合法树也可能被较小查询额度拒绝。空树仍验证参数；不提供小数树或批量点查询。详见[树点定位](polytree-query.md)。
 

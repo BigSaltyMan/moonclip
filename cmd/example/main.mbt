@@ -3,6 +3,7 @@ fn run_foundation_example() -> Unit raise {
   run_rectclip_example()
   run_decimal_rectclip_lines_example()
   run_rectclip_polygons_example()
+  run_rectclip_tree_example()
   run_decimal_rectclip_polygons_example()
   run_stroke_batch_example()
   run_stroke_batch_tree_example()
@@ -1201,4 +1202,36 @@ fn run_stroke_batch_tree_example() -> Unit raise {
     example_reverse(example_rect(1L, 1L, 8L, 8L)),
   ])
   assert_eq(children[0].children().length(), 0)
+}
+
+///|
+fn run_rectclip_tree_example() -> Unit raise {
+  let rect : @moonclip.Bounds64 = {
+    min_x: 0L,
+    min_y: 0L,
+    max_x: 5L,
+    max_y: 10L,
+  }
+  let tree = @moonclip.rect_clip_polygons_tree(rect, [
+    example_rect(-2L, -2L, 14L, 14L),
+    example_rect(3L, 3L, 4L, 4L),
+  ]).unwrap()
+  let roots = tree.roots()
+  assert_eq(roots.length(), 1)
+  assert_eq(roots[0].depth(), 1)
+  assert_eq(roots[0].is_hole(), false)
+  assert_eq(roots[0].children().length(), 0)
+  // The window cuts the hole open: it is now a notch, not a separate child.
+  example_result([roots[0].contour()], [
+    [
+      @moonclip.Point64::new(0L, 0L),
+      @moonclip.Point64::new(5L, 0L),
+      @moonclip.Point64::new(5L, 3L),
+      @moonclip.Point64::new(3L, 3L),
+      @moonclip.Point64::new(3L, 7L),
+      @moonclip.Point64::new(5L, 7L),
+      @moonclip.Point64::new(5L, 10L),
+      @moonclip.Point64::new(0L, 10L),
+    ],
+  ])
 }

@@ -1,5 +1,9 @@
 # 上游来源与移植记录
 
+## Commit 43：闭合窗口孔洞树适配（Unreleased）
+
+`rect_clip_polygons_tree`／`rect_clip_polygons_tree_d` 复用既有 Boolean Intersection、整数树构建和小数树转换。本笔新增窗口提取回调与空树适配，由 MoonClip 自行实现；没有新增上游 RectClip 专用算法移植、依赖或来源声明，沿用既有版权与 BSL-1.0 记录。
+
 ## Commit 41：批量描边孔洞树适配（Unreleased）
 
 `stroke_polylines_tree`／`stroke_polylines_tree_d` 复用现有描边生成、Positive Union 清理、整数树构建和小数树转换，没有新增上游算法移植或依赖。新增的是 MoonClip 批量提取回调与空结果适配，沿用既有版权及 BSL-1.0 来源记录；未重构单路线、偏移或 Boolean 入口。

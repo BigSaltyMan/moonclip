@@ -61,6 +61,10 @@ pub fn rect_clip_polygons(Bounds64, Array[Array[Point64]], fill_rule? : FillRule
 
 pub fn rect_clip_polygons_d(BoundsD, Array[Array[PointD]], precision? : Precision, fill_rule? : FillRule, limits? : Limits) -> Result[Array[Array[PointD]], ClipError]
 
+pub fn rect_clip_polygons_tree(Bounds64, Array[Array[Point64]], fill_rule? : FillRule, limits? : Limits) -> Result[PolyTree64, ClipError]
+
+pub fn rect_clip_polygons_tree_d(BoundsD, Array[Array[PointD]], precision? : Precision, fill_rule? : FillRule, limits? : Limits) -> Result[PolyTreeD, ClipError]
+
 pub fn simplify_paths(Array[Array[Point64]], options? : SimplifyOptions, limits? : Limits) -> Result[SimplifyResult, ClipError]
 
 pub fn simplify_paths_d(Array[Array[PointD]], precision? : Precision, options? : SimplifyOptions, limits? : Limits) -> Result[SimplifyResultD, ClipError]
