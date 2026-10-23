@@ -42,5 +42,7 @@ export const cases={
     {id:'open',label:'开放折线 · 图案直接相加',...base,scene:'minkowski',path:[[-45,-20],[-10,22],[40,-12]],pattern:patterns.rectangle.points,params:{path_is_closed:false}},
     {id:'closed',label:'闭合矩形 · 扫掠保留孔洞',...base,scene:'minkowski',path:rect(-36,-24,72,48),pattern:patterns.rectangle.points,params:{path_is_closed:true}},
     {id:'decimal-grid',label:'小数扫掠 · 两点图案',...base,scene:'minkowski',mode:'decimal',precision:2,path:[[-1,0],[1,0]],pattern:[[0,-.25],[0,.25]],params:{path_is_closed:false}},
+    {id:'tree-rectangle',label:'整数闭合扫掠 · 11 点外轮廓与孔洞',...base,scene:'minkowski',output:'tree',path:rect(0,0,30,20),pattern:rect(-2,-1,4,2),params:{path_is_closed:true}},
+    {id:'tree-rectangle-d',label:'小数闭合扫掠 · 四分之一网格',...base,scene:'minkowski',mode:'decimal',precision:2,output:'tree',path:rect(0,0,7.5,5),pattern:rect(-.5,-.25,1,.5),params:{path_is_closed:true}},
   ],
 };

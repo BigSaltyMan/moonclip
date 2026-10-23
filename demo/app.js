@@ -75,13 +75,13 @@ function setVisibility(){
   $('contours-label').textContent=scene==='rectclip'&&$('input-kind').value==='lines'?'输出片段':'结果轮廓';$('removed-label').textContent=scene==='rectclip'&&$('input-kind').value==='polygons'?'输入轮廓':['rectclip','stroke-batch'].includes(scene)?'输入路线':'简化删点';
   $('stroke-tab').classList.toggle('selected',scene==='stroke');$('sweep-tab').classList.toggle('selected',scene==='minkowski');
   $('scene-title').textContent=titles[scene];
-  $('output').disabled=scene==='minkowski';if(scene==='minkowski')$('output').value='paths';
+  $('output').disabled=false;
   $('mode').disabled=false;if(scene==='minkowski')$('simplify').checked=false;
   $('precision').disabled=$('mode').value==='integer';$('simplify-control').hidden=['minkowski','rectclip','stroke-batch'].includes(scene);
   if(scene==='rectclip'&&$('input-kind').value==='lines')$('output').value='paths';
   if(['rectclip','stroke-batch'].includes(scene)){$('simplify').checked=false;$('closed').checked=false;}
   $('mode-badge').textContent=scene==='rectclip'?`${$('mode').value==='decimal'?'小数':'整数'} · ${$('input-kind').value==='polygons'?'闭合区域':'开放折线'}`:$('mode').value==='decimal'?'小数':'整数';
-  $('mode-note').textContent=scene==='stroke-batch'?'整批共享样式，重叠区域统一合并。小数模式使用共同精度网格，宽度和圆弧容差采用原始坐标单位。输入路线独立开放，输出为闭合区域。孔洞层级描述最终合并区域，不对应单条输入路线。':scene==='rectclip'?`${$('input-kind').value==='polygons'?'末点与首点按闭合区域解释。树描述裁剪后的区域；孔洞被窗口切开后，可能成为外边界凹口。':'输入与输出均为开放路线，不隐式连接末点与首点。'}同一组点在两种类型下含义不同；切换类型保留点数组，选择案例才会替换。小数按共同精度网格计算，有面积窗口可能因精度过粗而塌缩报错。`:scene==='minkowski'?'图案与路线单位相同；小数由 MoonBit 公共入口量化。Precision 影响细节，合并可能报错；图案不自动居中，不额外补满端点。':$('mode').value==='decimal'?'Precision 0—6；距离与 epsilon 使用原始小数单位。':'整数坐标 ±10⁹；距离与宽度使用相同单位。';
+  $('mode-note').textContent=scene==='stroke-batch'?'整批共享样式，重叠区域统一合并。小数模式使用共同精度网格，宽度和圆弧容差采用原始坐标单位。输入路线独立开放，输出为闭合区域。孔洞层级描述最终合并区域，不对应单条输入路线。':scene==='rectclip'?`${$('input-kind').value==='polygons'?'末点与首点按闭合区域解释。树描述裁剪后的区域；孔洞被窗口切开后，可能成为外边界凹口。':'输入与输出均为开放路线，不隐式连接末点与首点。'}同一组点在两种类型下含义不同；切换类型保留点数组，选择案例才会替换。小数按共同精度网格计算，有面积窗口可能因精度过粗而塌缩报错。`:scene==='minkowski'?'图案按相对锚点直接相加，不自动居中或补满端点。树描述最终扫掠区域，不对应生成四边形；闭合路线可能留孔，不代表填满内部。输出保留共线点，节点可能多于四点。小数使用共同网格，Precision 过粗可能报错。':$('mode').value==='decimal'?'Precision 0—6；距离与 epsilon 使用原始小数单位。':'整数坐标 ±10⁹；距离与宽度使用相同单位。';
   $('input-a-label').textContent=scene==='rectclip'&&$('input-kind').value==='polygons'?'闭合区域轮廓集合 · Paths':['rectclip','stroke-batch'].includes(scene)?'开放路线集合 · Paths':scene==='boolean'?'操作数 A · Paths':scene==='offset'?'区域与孔洞 · Paths':'开放/闭合路线 · Path';
   $('editor-b').hidden=scene!=='boolean'&&scene!=='minkowski';$('input-b-label').textContent=scene==='minkowski'?'图案 · Path（相对锚点）':'操作数 B · Paths';
   $('epsilon-row').hidden=!$('simplify').checked;
@@ -95,7 +95,7 @@ function loadCase(){
   if(scene==='rectclip')for(const [id,key] of [['min-x','min_x'],['min-y','min_y'],['max-x','max_x'],['max-y','max_y']])$(id).value=String(c.rect[key]);
   for(const [id,key,fallback] of [['operation','operation','Intersection'],['fill-rule','fill_rule','EvenOdd'],['delta','delta',5],['width','width',12],['join','join','Miter'],['cap','cap','Butt'],['miter-limit','miter_limit',2],['arc-tolerance','arc_tolerance',.25]])$(id).value=p[key]??fallback;
   $('closed').checked=p.path_is_closed??false;$('input-a').value=JSON.stringify(c.paths??c.subject??c.path,null,2);$('input-b').value=JSON.stringify(c.clip??c.pattern??[],null,2);
-  if(scene==='minkowski')$('pattern-select').value=c.id==='decimal-grid'?'custom':'rectangle';
+  if(scene==='minkowski')$('pattern-select').value=Object.entries(patterns).find(([,p])=>JSON.stringify(p.points)===JSON.stringify(c.pattern))?.[0]??'custom';
   input=c;setVisibility();view=null;invalidate();fit();if(ready)calculate();
 }
 function updateRectclipCases(preserveInput){

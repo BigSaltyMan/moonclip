@@ -5,6 +5,8 @@ import {compute} from './generated/moonclip.js';
 import {resultSvg,resultDocument,openResultSvg} from './export.js';
 import {cases} from './cases.js';
 const rect=(x,y,w,h)=>[[x,y],[x+w,y],[x+w,y+h],[x,y+h]];
+// Complete locked minkowski_rectangle_rectangle_closed_forward contours; keep collinear vertices.
+const minkowskiTreeExpected=[[[2,-1],[28,-1],[32,-1],[32,1],[32,21],[28,21],[2,21],[-2,21],[-2,19],[-2,1],[-2,-1]],[[2,19],[28,19],[28,1],[2,1]]];
 const canonical=paths=>paths.map(p=>p.map((_,i)=>JSON.stringify(p.slice(i).concat(p.slice(0,i)))).sort()[0]).sort();
 function run(request){return JSON.parse(compute(JSON.stringify({version:1,mode:'integer',precision:3,...request})));}
 function exact(request,expected){const r=run(request);assert.equal(r.ok,true,JSON.stringify(r));assert.equal(r.kernel,'MoonBit');assert.deepEqual(canonical(r.paths),canonical(expected));return r;}
@@ -107,12 +109,18 @@ test('Explicit simplification reports deletions and stops at degeneracy',()=>{
 });
 test('demo decimal minkowski: structured errors preserve locations',()=>{
   const r=run({scene:'boolean',subject:[[[1000000001,0],[0,10],[0,0]]],clip:[]});assert.equal(r.ok,false);assert.equal(r.error.kind,'CoordinateOutOfRange');assert.equal(r.error.path_index,0);assert.equal(r.error.vertex_index,0);assert.equal(r.error.value,1000000001);
-  const collision=run({scene:'minkowski',mode:'decimal',precision:2,pattern:[[0.001,0]],path:[[0.002,0]],params:{path_is_closed:false}});
+  const collision=run({scene:'minkowski',mode:'decimal',precision:2,output:'tree',pattern:[[0.001,0]],path:[[0.002,0]],params:{path_is_closed:false}});
   assert.equal(collision.ok,false);assert.equal(collision.error.kind,'QuantizationFailure');
   assert.equal(collision.error.stage,'DecimalQuantize');assert.equal(collision.error.path_index,1);assert.equal(collision.error.vertex_index,0);
   assert.deepEqual(collision.error.related,{stage:'DecimalQuantize',path_index:0,vertex_index:0});
   assert.equal(run({scene:'offset',subject:[rect(0,0,10,10)],params:{delta:2,miter_limit:1}}).ok,false);
   assert.equal(JSON.parse(compute('{')).error.kind,'InvalidJSON');
+  const request=cases.minkowski.find(c=>c.id==='decimal-grid');
+  const legacy=run({...request,output:undefined});assert.equal(legacy.ok,true);assert.equal(legacy.output,'paths');assert.equal(legacy.tree,undefined);assert.equal(resultDocument(request,legacy).version,1);
+  for(const bad of [collision,run({...request,output:'unknown'}),run({...request,output:'tree',simplify:{enabled:true}}),run({...request,output:'tree',query:{point:[0,0]}})]){
+    assert.equal(bad.ok,false);assert.equal(bad.paths,undefined);assert.equal(bad.tree,undefined);assert.throws(()=>resultDocument(request,bad));
+  }
+
 });
 
 // Compare each contour without reversing winding or discarding vertices, then
@@ -174,7 +182,6 @@ test('Output selection defaults to the unchanged v1 flat document and rejects in
   assert.deepEqual(implicit,explicit);assert.equal(implicit.tree,undefined);assert.equal(resultDocument(request,implicit).version,1);
   assert.deepEqual(Object.keys(resultDocument(request,implicit).result),['paths','mode','precision']);
   for(const output of ['unknown',null,2]){const r=run({...request,output});assert.equal(r.ok,false);assert.equal(r.error.stage,'BridgeInput');assert.equal(r.tree,undefined);assert.equal(r.paths,undefined);}
-  assert.equal(run({scene:'minkowski',output:'tree'}).error.stage,'BridgeInput');
 });
 test('Tree explicit simplification uses Closed regions and Open routes, aborting degeneracy',()=>{
   for(const mode of ['integer','decimal']){
@@ -209,6 +216,13 @@ test('demo decimal minkowski: complete decimal sweep result',()=>{
   const request=cases.minkowski.find(c=>c.id==='decimal-grid');
   const r=exact(request,[rect(-1,-.25,2,.5)]);
   assert.equal(r.mode,'decimal');assert.equal(r.precision,2);assert.equal(r.output,'paths');assert.equal(r.geometry,undefined);
+  for(const id of ['tree-rectangle','tree-rectangle-d']){
+    const input=cases.minkowski.find(c=>c.id===id),scale=input.mode==='decimal'?4:1;
+    const expected=minkowskiTreeExpected.map(p=>p.map(([x,y])=>[x/scale,y/scale]));
+    const tree=chain(input,expected);assert.equal(tree.mode,input.mode);assert.equal(tree.precision,input.mode==='decimal'?2:null);
+    assert.deepEqual(tree.paths.map(p=>p.length),[11,4]);assert.equal(tree.query,undefined);
+  }
+
 });
 
 test('demo decimal minkowski: closed area export and request replay',()=>{
@@ -222,6 +236,16 @@ test('demo decimal minkowski: closed area export and request replay',()=>{
   assert.deepEqual(run(doc.request).paths,r.paths);
   assert.match(svg,/[zZ]" fill=/);assert.match(svg,/fill-rule="nonzero"/);
   assert.match(svg,/-0\.25/);assert.match(svg,/,0\.25/);
+  const treeRequest=structuredClone(cases.minkowski.find(c=>c.id==='tree-rectangle-d')),tree=run(treeRequest);
+  const treeDoc=resultDocument(treeRequest,tree),treeSvg=resultSvg(tree.paths);
+  assert.equal(tree.ok,true,JSON.stringify(tree));assert.equal(treeDoc.version,2);assert.equal(treeDoc.result.output,'tree');
+  assert.deepEqual(treeDoc.request,treeRequest);assert.equal(treeDoc.result.mode,'decimal');assert.equal(treeDoc.result.precision,2);
+  assert.deepEqual(treeDoc.result.tree,tree.tree);assert.deepEqual(treeDoc.result.paths,tree.paths);
+  const replay=run(treeDoc.request);assert.deepEqual(replay.paths,treeDoc.result.paths);assert.deepEqual(replay.tree,treeDoc.result.tree);
+  const expected=minkowskiTreeExpected.map(p=>p.map(([x,y])=>[x/4,y/4]));assert.deepEqual(canonical(treeDoc.result.paths),canonical(expected));
+  const d=treeSvg.match(/<path d="([^"]*)"/)[1];assert.equal(d,tree.paths.map(p=>'M'+p.map(q=>q.join(',')).join('L')+'Z').join(' '));
+  assert.equal((d.match(/Z/g)||[]).length,2);assert.match(treeSvg,/fill-rule="nonzero"/);assert.deepEqual(tree.paths.map(p=>p.length),[11,4]);
+
 });
 
 

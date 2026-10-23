@@ -1,5 +1,17 @@
 # MoonClip 交互演示
 
+## Commit 46：Minkowski Sum 孔洞树（Unreleased）
+
+“路线实验 → 图案扫掠”现在支持整数／小数、平铺／树四种组合，分别直接调用 `minkowski_sum`、`minkowski_sum_d`、`minkowski_sum_tree`、`minkowski_sum_tree_d`。默认仍为 paths；整数／小数树复用同一次 `encode_tree`／`encode_tree_d`，paths 和展示索引同源，不从平铺结果重新构树，也不排序、反向、去重或简化。未知输出、开启简化和扫掠查询请求明确拒绝，点定位仍只支持整数 Boolean Tree。
+
+树面板复用既有根数、轮廓数、最大深度、节点深度及孔洞标记，还显示完整顶点数，可展开、收起、选择边界及清除选择；空树使用既有摘要。输出结构不再在控件更新时被强制重置。修改模式、Precision、图案、路线或开闭参数立即失效旧树和导出，失败清除选择，迟到响应仍受请求编号保护。图案保持相对锚点直接相加，树描述最终区域，不对应生成四边形；闭合路线可能留孔，不代表填满内部，节点轮廓保留共线点，不一定只有四点。
+
+新增同一闭合矩形构造的整数／小数两个输入案例：整数图案 [-2,-1]—[2,1] 沿 [0,0]—[30,20] 的闭合矩形边界扫掠，小数将图案和路线统一除以 4、Precision=2。案例只保存输入和参数，计算结果均来自 MoonBit。案例加载按完整图案点序列匹配已有预设，否则显示“案例／自定义图案”，不显示与编辑内容不符的预设名。
+
+平铺继续导出 v1 JSON，树沿用 v2，完整保存原始图案、路线、开闭参数、模式、Precision、实际轮廓和层级；SVG 仍只导出闭合 NonZero 区域及孔洞，保留全部轮廓顶点，不包含输入、锚点或选择辅助，不增加格式版本。重放核对完整坐标、顶点数、深度和父子关系，不用包围盒或面积代替。
+
+既有筛选名 `demo decimal minkowski:` 保留，本笔在原有三项中同时覆盖整数／小数树，并保留小数平铺断言；移除另一旧用例中“扫掠树必须拒绝”的过时断言，新的拒绝范围由本笔三项覆盖。未新增测试块或 scope，CI 使用已有 `demo-minkowski-decimal`。实际下载、重放和窄屏观察见[增量验收](demo-acceptance.md#commit-46minkowski-sum-孔洞树增量验收)。未改根库、公开接口、依赖或版本，保持 Unreleased。
+
 ## Commit 44：窗口裁剪孔洞树（Unreleased）
 
 “窗口裁剪 → 闭合区域”现在可以选择“平铺轮廓／孔洞层级”。整数树直接调用 `rect_clip_polygons_tree`，小数树直接调用 `rect_clip_polygons_tree_d`，分别复用 `encode_tree`／`encode_tree_d`。轮廓和节点索引来自同一次编码，不排序、不从平铺结果重新构树；响应保留 `geometry: closed-regions`，树输出附带 `output: tree` 及完整 tree。缺省 input_kind 仍为 lines，缺省 output 仍为 paths；开放路线拒绝树输出，未知输出和窗口查询字段明确拒绝。

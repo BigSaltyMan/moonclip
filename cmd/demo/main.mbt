@@ -506,9 +506,6 @@ fn execute(request : Json) -> Json raise DemoError {
   if output != "paths" && output != "tree" {
     raise Input("Unknown output mode", None, None)
   }
-  if scene == "minkowski" && output == "tree" {
-    raise Input("Minkowski supports paths output only", None, None)
-  }
   if mode != "integer" && mode != "decimal" {
     raise Input("Unknown coordinate mode", None, None)
   }
@@ -711,6 +708,19 @@ fn execute(request : Json) -> Json raise DemoError {
                 options~,
               ),
             )
+          "minkowski" => {
+            let pattern = coordinates(
+              Json::array([r.get("pattern").unwrap_or(empty)]),
+            )
+            value(
+              @moonclip.minkowski_sum_tree_d(
+                pattern[0],
+                a[0],
+                flag(params, "path_is_closed", false),
+                precision~,
+              ),
+            )
+          }
           _ => raise Input("Unknown decimal scene", None, None)
         },
       )
@@ -814,6 +824,18 @@ fn execute(request : Json) -> Json raise DemoError {
               options~,
             ),
           )
+        "minkowski" => {
+          let pattern = integer_paths(
+            coordinates(Json::array([r.get("pattern").unwrap_or(empty)])),
+          )
+          value(
+            @moonclip.minkowski_sum_tree(
+              pattern[0],
+              a[0],
+              flag(params, "path_is_closed", false),
+            ),
+          )
+        }
         _ => raise Input("Unknown integer scene", None, None)
       }
       let located = match query_point {

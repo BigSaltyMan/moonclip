@@ -233,3 +233,25 @@ Uncaught TypeError: Failed to execute 'observe' on 'MutationObserver': parameter
 仅新增一张[小数窗口树孔洞高亮截图](demo-screenshots/commit44-window-tree.png)，计时不作为性能证据。实际下载及重放材料保留在忽略目录 `demo/.qa/commit44/result.svg`、`result.json`、`flat-result.json`、`open-result.json`，主页面和窄屏观察保存在同目录 `main-observation.json`、`narrow-observation.json`。诊断只位于临时 HTML 副本，不混入产品；临时容器在会话续接时已关闭，未重复验收。
 
 本笔不修改根库、公开接口、树存储、版本或发布标签，规划书、申报书及 `.vscode/` 的既有改动保留。未运行库全量、全部工具／桥接、参考重建、性能、基准或候选验收；保持 Unreleased，未发布。普通 CI 使用已有 `demo-rectclip`，以最终源码 SHA 的轻量运行记录为准。
+
+
+## Commit 46：Minkowski Sum 孔洞树增量验收
+
+2026-10-23，Windows，格式、接口差异及 JS 静态检查通过；`npm run dev` 对本笔桥接构建一次，复用产物执行调整后的原有 `demo decimal minkowski:` 三项，**3/3** 通过。筛选名称保留，实际同时覆盖整数／小数树和既有小数平铺，未新增测试块或 scope。通过 Codex 内置浏览器访问 http://127.0.0.1:4173/，只验收新增扫掠树流程。Linux 同 SHA 轻量 CI 单独核对，不把本地浏览器操作算作 Linux 验收。
+
+| 操作 | 实际结果 |
+|---|---|
+| 整数闭合矩形扫掠 | 一根、一孔洞，深度 1／2；外轮廓完整 11 点、孔洞 4 点，共 15 点，孔洞选择只高亮边界，内部保持空白 |
+| 关闭路线闭合 | 修改立即隐藏旧树、禁用导出且保留 output=tree；计算后为单根、无孩子、深度 1 的 13 点轮廓，未补满内部，选择已清除 |
+| 小数四分之一网格案例 | Precision=2，完整 11／4 点与整数参考统一除以 4 的预期一致；图案实际为 (-0.5,-0.25)、(0.5,-0.25)、(0.5,0.25)、(-0.5,0.25)，选择框为“案例／自定义图案”，不误标为现有居中矩形预设 |
+| Precision 改为 0 | 返回 DecimalQuantize / QuantizationFailure，path=0、vertex=2，related 为 path=0、vertex=1；树、选择与有效导出清除，模式和图案原值保留 |
+| 恢复 Precision=2，实际下载 | SVG 打开后孔洞正常，两个闭合轮廓、NonZero 填充；path 数据与下载 JSON 的全部 11／4 点序列逐点一致，不包含路线、图案、锚点或高亮 |
+| v2 JSON 真实重放 | 保存完整图案、路线、path_is_closed=true、mode=decimal、precision=2、output=tree 和层级。生成的真实 MoonBit 桥接重放后 paths 和 tree 完全一致，顶点数仍为 11／4 |
+| 清除选择、切回平铺 | 未选择提示恢复，树面板隐藏；实际下载 JSON 为 v1，重放的完整 11／4 点仍一致 |
+| 窄屏 | 临时同源 iframe 脚本实测 390×844、scrollWidth=375；可选择新增小数树案例，结构、精度和开闭控件可用，1 根、1 孩子及 11／4 点显示正常，孔洞选择可操作 |
+
+主页面 error／warn 日志为空。临时窄屏容器再次出现 `Uncaught TypeError: Failed to execute 'observe' on 'MutationObserver': parameter 1 is not of type 'Node'.`，时间 **2026-10-23T09:20:35.603Z**，早于容器 load **09:20:35.683Z**，即进入扫掠页签之前。未提供来源地址或堆栈，记录为 null；子页 error／unhandledrejection 监听为空。**归因仍未确认，不定性为页面布局缺陷**，不宣称窄屏控制台完全无异常。只做一次有限抽查，没有修改浏览器环境或据此更改布局，临时容器已关闭。
+
+仅新增一张[小数扫掠树孔洞高亮截图](demo-screenshots/commit46-minkowski-tree.png)，计时不作为性能证据。实际下载和重放材料保存在忽略目录 `demo/.qa/commit46/result.svg`、`result.json`、`flat-result.json`；诊断为同目录 `main-observation.json`、`narrow-observation.json`。诊断只加入临时 HTML 副本，未混入产品页面。
+
+根 `.mbti` 无变化，树编码和导出辅助直接复用；未修改根库、公开接口、树存储、算法、依赖、版本或标签，规划书、申报书及 `.vscode/` 原有改动保留。未运行库全量、全部工具／桥接、参考重建、性能、基准或候选验收；未发布，保持 Unreleased。普通 CI 使用已有 `demo-minkowski-decimal`，以最终源码 SHA 的轻量结果为准。
