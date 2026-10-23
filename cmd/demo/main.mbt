@@ -360,8 +360,12 @@ fn execute_rectclip(r : Map[String, Json]) -> Json raise DemoError {
   if mode != "integer" && mode != "decimal" {
     raise Input("Unknown coordinate mode", None, None)
   }
-  if text(r, "output", "paths") != "paths" {
-    raise Input("RectClip supports paths output only", None, None)
+  let output = text(r, "output", "paths")
+  if output != "paths" && output != "tree" {
+    raise Input("Unknown output mode", None, None)
+  }
+  if kind == "lines" && output != "paths" {
+    raise Input("Open RectClip supports paths output only", None, None)
   }
   let simplify = object(r.get("simplify").unwrap_or(Json::object({})))
   if flag(simplify, "enabled", false) {
@@ -385,8 +389,22 @@ fn execute_rectclip(r : Map[String, Json]) -> Json raise DemoError {
     max_y: number(fields, "max_y", 0.0),
   }
   let paths = coordinates(r.get("paths").unwrap_or(Json::array([])))
+  let mut tree = Json::null()
   let result = if mode == "decimal" {
-    if kind == "polygons" {
+    if output == "tree" {
+      let (encoded_paths, encoded_tree) = encode_tree_d(
+        value(
+          @moonclip.rect_clip_polygons_tree_d(
+            rect,
+            paths,
+            precision~,
+            fill_rule=rule,
+          ),
+        ),
+      )
+      tree = encoded_tree
+      encoded_paths
+    } else if kind == "polygons" {
       encode_decimal(
         value(
           @moonclip.rect_clip_polygons_d(
@@ -416,7 +434,13 @@ fn execute_rectclip(r : Map[String, Json]) -> Json raise DemoError {
       max_y: corners[1].y,
     }
     let grid = integer_paths(paths)
-    if kind == "polygons" {
+    if output == "tree" {
+      let (encoded_paths, encoded_tree) = encode_tree(
+        value(@moonclip.rect_clip_polygons_tree(window, grid, fill_rule=rule)),
+      )
+      tree = encoded_tree
+      encoded_paths
+    } else if kind == "polygons" {
       encode_paths(
         value(@moonclip.rect_clip_polygons(window, grid, fill_rule=rule)),
       )
@@ -424,12 +448,12 @@ fn execute_rectclip(r : Map[String, Json]) -> Json raise DemoError {
       encode_paths(value(@moonclip.rect_clip_lines(window, grid)))
     }
   }
-  Json::object({
+  let response = {
     "ok": true.to_json(),
     "kernel": "MoonBit".to_json(),
     "scene": "rectclip".to_json(),
     "mode": mode.to_json(),
-    "output": "paths".to_json(),
+    "output": output.to_json(),
     "precision": if mode == "decimal" {
       digits.to_json()
     } else {
@@ -442,7 +466,11 @@ fn execute_rectclip(r : Map[String, Json]) -> Json raise DemoError {
     }).to_json(),
     "paths": result,
     "simplification": Json::null(),
-  })
+  }
+  if output == "tree" {
+    response["tree"] = tree
+  }
+  Json::object(response)
 }
 
 ///|

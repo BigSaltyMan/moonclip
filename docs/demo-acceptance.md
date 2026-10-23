@@ -210,3 +210,26 @@ Uncaught TypeError: Failed to execute 'observe' on 'MutationObserver': parameter
 仅新增一张[小数批量树孔洞高亮截图](demo-screenshots/commit42-batch-tree.png)，计时不作为性能证据。实际下载及重放材料在忽略目录 `demo/.qa/commit42/result.svg`、`result.json`、`flat-result.json`，窄屏诊断为同目录 `narrow-observation.json`；诊断只加入临时 HTML 副本，未混入产品，容器已关闭。
 
 未运行库全量、完整工具／桥接、参考重建、性能、基准或候选验收；没有增加依赖、修改根库、公开接口、树存储、版本或发布标签，规划书和申报书的原有改动保留，未发布。CI 使用已有 `demo-stroke-batch` 轻量模式，结果以最终源码 SHA 的运行记录为准。
+
+
+## Commit 44：窗口裁剪孔洞树增量验收
+
+2026-10-23，Windows，更新格式和接口并通过 JS 静态检查；`npm run dev` 对本笔桥接构建一次后，在 Codex 内置浏览器访问 http://127.0.0.1:4173/。复用产物执行调整后的原有 `demo rectclip:` 三项，**3/3** 通过，没有新增测试块、scope 或案例，根 `.mbti` 无变化。Linux 同 SHA 轻量 CI 另行核对，本地浏览器操作不计为 Linux 验收。
+
+| 操作 | 实际结果 |
+|---|---|
+| 现有整数区域，EvenOdd、tree | 窗口 [0,0]—[10,10]，1 根、1 孔洞、深度 1／2，2 轮廓／8 点；可折叠、展开并选择孔洞边界，填充仍保留孔洞 |
+| max_x 改为 5 | 旧树、选择和有效导出立即清除；重新计算为 1 根、无孩子、深度 1 的八点凹口。完整结果与 (0,0)→(5,0)→(5,3)→(3,3)→(3,7)→(5,7)→(5,10)→(0,10) 同向、仅起点不同 |
+| 现有小数区域，Precision=2、tree | 外轮廓 [-1.25,-0.5]—[2.75,2.5]，孔洞 [0,0]—[1,1]，1 根、1 孩子，深度 1／2 |
+| 修改 Precision=3、填充规则 | output 始终保留 tree；精度修改先失效再计算。切到 NonZero 后，同向内轮廓不再形成孔洞，显示单根；查询控件仍隐藏 |
+| 合法空窗口 | 小数 max_x=min_x=-1.25，0 根、0 轮廓、最大深度 0，明确提示空区域，没有虚假节点；有效导出可用 |
+| 反向窗口 | max_x=-2 小于 min_x=-1.25，返回 RectClipParameters / InvalidInput，位置为 None，树和有效导出清除 |
+| 实际 v2 JSON／SVG 下载 | 恢复小数 EvenOdd 手算案例后下载，JSON 保存完整原窗口、轮廓、input_kind=polygons、mode=decimal、precision=2、fill_rule=EvenOdd、output=tree 和完整层级。真实 MoonBit 桥接重放 paths 与 tree 逐项一致；SVG 通过 HTTP 打开，闭合 NonZero 区域的孔洞可见，无窗口、输入和选择辅助 |
+| 切回平铺、开放路线 | 平铺隐藏树，清除选择后实际下载 JSON 为 v1；切回 lines 强制 paths，隐藏结构选择及树，禁用旧导出。选择现有小数开放案例后，实际下载为 v3，完整三点片段保持开放、fill=none；v1／v3 请求也已真实重放逐点一致 |
+| 窄屏抽查 | 临时同源 iframe 脚本实测 390×844、scrollWidth=375；可切换窗口输入类型、案例、模式和输出结构，小数闭合树计算得到 1 根、2 轮廓、最大深度 2，控件可用 |
+
+主页面 error／warn 日志为空。临时窄屏容器再次记录 `Uncaught TypeError: Failed to execute 'observe' on 'MutationObserver': parameter 1 is not of type 'Node'.`，时间 **2026-10-23T04:05:17.221Z**，早于容器 load **04:05:17.382Z**，即进入窗口页签之前。没有来源地址或堆栈，记录为 null；子页 error／unhandledrejection 监听记录为空。**归因仍未确认，不定性为页面布局缺陷**，不宣称窄屏控制台完全无异常。只进行一次有限抽查，没有据此修改布局或浏览器环境。
+
+仅新增一张[小数窗口树孔洞高亮截图](demo-screenshots/commit44-window-tree.png)，计时不作为性能证据。实际下载及重放材料保留在忽略目录 `demo/.qa/commit44/result.svg`、`result.json`、`flat-result.json`、`open-result.json`，主页面和窄屏观察保存在同目录 `main-observation.json`、`narrow-observation.json`。诊断只位于临时 HTML 副本，不混入产品；临时容器在会话续接时已关闭，未重复验收。
+
+本笔不修改根库、公开接口、树存储、版本或发布标签，规划书、申报书及 `.vscode/` 的既有改动保留。未运行库全量、全部工具／桥接、参考重建、性能、基准或候选验收；保持 Unreleased，未发布。普通 CI 使用已有 `demo-rectclip`，以最终源码 SHA 的轻量运行记录为准。

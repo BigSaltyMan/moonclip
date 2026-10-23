@@ -1,5 +1,15 @@
 # MoonClip 交互演示
 
+## Commit 44：窗口裁剪孔洞树（Unreleased）
+
+“窗口裁剪 → 闭合区域”现在可以选择“平铺轮廓／孔洞层级”。整数树直接调用 `rect_clip_polygons_tree`，小数树直接调用 `rect_clip_polygons_tree_d`，分别复用 `encode_tree`／`encode_tree_d`。轮廓和节点索引来自同一次编码，不排序、不从平铺结果重新构树；响应保留 `geometry: closed-regions`，树输出附带 `output: tree` 及完整 tree。缺省 input_kind 仍为 lines，缺省 output 仍为 paths；开放路线拒绝树输出，未知输出和窗口查询字段明确拒绝。
+
+闭合树复用已有层级面板，可查看根数、轮廓数、深度及孔洞标记，展开、折叠、选择边界或清除选择。树表示裁剪后的区域：孔洞完全在窗口内可以保留，被窗口切开后可能变成外边界凹口。区域始终完整填充，选择只高亮边界；窗口仍单独虚线显示，空树显示明确摘要且可导出。修改精度或填充规则保留树选择，编辑内容使旧结果立即失效；切回开放路线强制 paths，隐藏树并清除选择。失败和迟到响应继续沿用现有清理与请求编号保护，点定位仅在整数 Boolean Tree 显示。
+
+导出直接复用现有格式：开放片段为 v3 JSON／开放 SVG，闭合平铺为 v1 JSON，闭合树为 v2 JSON；两类闭合 SVG 都只导出完整区域及孔洞，不带窗口、输入或选择。树 JSON 保存原始窗口、轮廓、input_kind、mode、Precision、fill_rule 和 output，以及实际轮廓和父子关系；重放核对完整轮廓与层级，节点索引不是跨计算永久标识。
+
+本笔使用已有案例，调整原有 `demo rectclip:` 三项检查，没有新增测试块、scope、案例、依赖或公开接口。同 SHA CI 使用已有 `demo-rectclip`；实际下载、重放、凹口、空树和窄屏观察见[增量验收](demo-acceptance.md#commit-44窗口裁剪孔洞树增量验收)。下面各 Commit 节保留对应历史范围，新演示保持 Unreleased。
+
 ## Commit 42：批量描边孔洞树（Unreleased）
 
 “路线实验 → 批量加宽”现在可以选择“平铺轮廓／孔洞层级”。整数平铺、整数树、小数平铺、小数树分别一次调用 `stroke_polylines`、`stroke_polylines_tree`、`stroke_polylines_d`、`stroke_polylines_tree_d`，树直接来自这次核心求值，不从平铺结果重新构建。未指定 output 的旧请求仍返回 paths；未知输出和启用简化明确拒绝。

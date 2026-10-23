@@ -18,10 +18,15 @@ test('demo rectclip: complete ordered open bridge result',()=>{
   assert.equal(decimal.ok,true,JSON.stringify(decimal));assert.equal(decimal.geometry,'open-paths');
   assert.equal(decimal.mode,'decimal');assert.equal(decimal.precision,2);
   assert.deepEqual(decimal.paths,[[[-1.25,.25],[.5,.25],[2.75,.25]]]);
-  const integerRegion=exact({...cases.rectclip.find(c=>c.id==='integer-region'),params:{fill_rule:'NonZero'}},[rect(0,0,10,10)]);
-  assert.equal(integerRegion.geometry,'closed-regions');assert.equal(integerRegion.mode,'integer');
-  const decimalRegion=exact(cases.rectclip.find(c=>c.id==='decimal-region'),[rect(-1.25,-.5,4,3),rect(0,0,1,1).reverse()]);
-  assert.equal(decimalRegion.geometry,'closed-regions');assert.equal(decimalRegion.mode,'decimal');assert.equal(decimalRegion.precision,2);
+  const integerRegion=exact({...cases.rectclip.find(c=>c.id==='integer-region'),output:'tree',params:{fill_rule:'NonZero'}},[rect(0,0,10,10)]);
+  assert.equal(integerRegion.geometry,'closed-regions');assert.equal(integerRegion.mode,'integer');assert.equal(integerRegion.output,'tree');
+  assert.deepEqual(integerRegion.tree,{roots:[0],nodes:[{parent:null,children:[],depth:1,is_hole:false}]});
+  assert.deepEqual(canonical([integerRegion.paths[0]]),canonical([rect(0,0,10,10)]));
+  const decimalRegion=exact({...cases.rectclip.find(c=>c.id==='decimal-region'),output:'tree'},[rect(-1.25,-.5,4,3),rect(0,0,1,1).reverse()]);
+  assert.equal(decimalRegion.geometry,'closed-regions');assert.equal(decimalRegion.mode,'decimal');assert.equal(decimalRegion.precision,2);assert.equal(decimalRegion.output,'tree');
+  assert.deepEqual(decimalRegion.tree,{roots:[0],nodes:[{parent:null,children:[1],depth:1,is_hole:false},{parent:0,children:[],depth:2,is_hole:true}]});
+  assert.deepEqual(canonical([decimalRegion.paths[0]]),canonical([rect(-1.25,-.5,4,3)]));
+  assert.deepEqual(canonical([decimalRegion.paths[1]]),canonical([rect(0,0,1,1).reverse()]));
 });
 
 test('demo rectclip: open SVG and replayable v3 JSON',()=>{
@@ -47,6 +52,17 @@ test('demo rectclip: open SVG and replayable v3 JSON',()=>{
   const svg=resultSvg(response.paths),d=svg.match(/<path d="([^"]*)"/)[1];
   assert.equal((d.match(/Z/g)??[]).length,2);assert.match(svg,/fill-rule="nonzero"/);
   assert.ok(d.includes('0,0'));assert.ok(d.includes('-1.25,-0.5'));
+  const treeRequest={...request,output:'tree'},treeResponse=run(treeRequest),treeDoc=resultDocument(treeRequest,treeResponse);
+  assert.equal(treeResponse.ok,true,JSON.stringify(treeResponse));assert.equal(treeDoc.version,2);
+  assert.deepEqual(treeDoc.request,treeRequest);assert.equal(treeDoc.request.output,'tree');
+  assert.deepEqual(treeDoc.result.paths,treeResponse.paths);assert.deepEqual(treeDoc.result.tree,treeResponse.tree);
+  assert.equal(treeDoc.result.mode,'decimal');assert.equal(treeDoc.result.precision,2);
+  const replay=run(treeDoc.request);assert.deepEqual(replay.paths,treeDoc.result.paths);assert.deepEqual(replay.tree,treeDoc.result.tree);
+  const treeSvg=resultSvg(treeResponse.paths),treeD=treeSvg.match(/<path d="([^"]*)"/)[1];
+  assert.equal((treeD.match(/Z/g)??[]).length,2);assert.match(treeSvg,/fill-rule="nonzero"/);
+  assert.deepEqual(canonical(treeDoc.result.paths),canonical(expected));
+  for(const contour of treeResponse.paths)for(const [x,y] of contour)assert.ok(treeD.includes(`${x},${y}`));
+
 
 });
 
@@ -54,17 +70,19 @@ test('demo rectclip: invalid requests cannot export a result',()=>{
   const request=cases.rectclip[0],decimal=cases.rectclip.find(c=>c.id==='decimal-cross');
   const reversed=run({...request,rect:{...request.rect,min_x:11}});
   assert.equal(reversed.ok,false);assert.equal(reversed.error.stage,'RectClipParameters');
-  const collapsed=run({...decimal,precision:0,rect:{min_x:.1,min_y:0,max_x:.2,max_y:1}});
+  const collapsed=run({...decimal,input_kind:'polygons',output:'tree',precision:0,rect:{min_x:.1,min_y:0,max_x:.2,max_y:1}});
   assert.equal(collapsed.ok,false);assert.equal(collapsed.error.kind,'QuantizationFailure');assert.equal(collapsed.error.stage,'DecimalQuantize');
-  assert.equal(Object.hasOwn(request,'input_kind'),false);assert.equal(run(request).geometry,'open-paths');assert.deepEqual(run(request).paths,[[[0,5],[5,5],[10,5]]]);
+  assert.equal(Object.hasOwn(request,'input_kind'),false);
+  const legacy=run({...request,output:undefined});assert.equal(legacy.geometry,'open-paths');assert.equal(legacy.output,'paths');assert.equal(legacy.tree,undefined);assert.deepEqual(legacy.paths,[[[0,5],[5,5],[10,5]]]);
   for(const bad of [reversed,collapsed,
-    run({...request,input_kind:'unknown'}),run({...cases.rectclip.find(c=>c.id==='integer-region'),params:{fill_rule:'invalid'}}),
+    run({...request,input_kind:'unknown'}),run({...request,input_kind:'polygons',output:'unknown'}),
+    run({...request,input_kind:'polygons',output:'tree',query:{point:[1,1]}}),run({...cases.rectclip.find(c=>c.id==='integer-region'),params:{fill_rule:'invalid'}}),
     run({...request,mode:'unknown'}),run({...decimal,precision:7}),
     run({...request,paths:[[[0.5,5],[5,5]]]}),
     run({...request,rect:{...request.rect,min_x:.5}}),
     run({...request,output:'tree'}),run({...request,simplify:{enabled:true}}),
   ]){
-    assert.equal(bad.ok,false);assert.throws(()=>resultDocument(request,bad));assert.throws(()=>openResultSvg(bad));
+    assert.equal(bad.ok,false);assert.equal(bad.paths,undefined);assert.equal(bad.tree,undefined);assert.throws(()=>resultDocument(request,bad));assert.throws(()=>openResultSvg(bad));
   }
 });
 test('Boolean calls MoonBit and returns exact Intersection',()=>{
