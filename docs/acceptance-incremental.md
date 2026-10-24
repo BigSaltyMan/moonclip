@@ -102,6 +102,16 @@ native、JS 各运行一次原消费者，基础检查、六个旧树入口、�
 
 当前发布状态文档另行提交，只运行 docs scope；状态提交 SHA、同 SHA docs CI、完整清单和各阶段日志归属写入提交后 `_build/release-0.3.0/publication-final-delivery.json`，不将状态提交冒充发布源码。详情见[正式发布记录](release-0.3.0.md)。
 
+## 0.3.1 文档修正版发布与注册表验收
+
+发布源码：[`adad8bb47be1a136c59247d491d6607919253c83`](https://github.com/BigSaltyMan/moonclip/commit/adad8bb47be1a136c59247d491d6607919253c83)。Commit 55 只修正文档、17 行公开注释和版本配置；非文档执行行、根公开接口、依赖及固定工具链与 0.3.0 一致。候选的 Windows／Linux 工具各 10/10、native／JS 各一次消费者及逐文件一致性，属于[同 SHA package CI](https://github.com/BigSaltyMan/moonclip/actions/runs/40108249728)和原候选记录，没有在正式发布时重复运行。
+
+2026-10-24 正式上传 Windows 冻结 ZIP 后，全新仓库外消费者从 registry 安装精确 0.3.1，没有 moon.work 或本地替换。native、JS 各运行一次原夹具，基础检查、六个旧树入口、整数窗口及三个增量流程全部通过。61 个实际下载文件逐字节对应候选与发布源码，编译后保持不变。实际上传归档为 292345 字节，SHA-256 `358e746892f9ae5e661e34f101e7046e04c5bbb6a9c721e3195a93a99a4e8fc4`，服务端校验和相同。
+
+[Mooncakes 主文档页](https://mooncakes.io/docs/BigSaltyMan/moonclip@0.3.1/)的版本、README 安装命令、文档修正版介绍和 since-0.3.0 公开注释已实际核验。[v0.3.1 Release](https://github.com/BigSaltyMan/moonclip/releases/tag/v0.3.1)三个附件已重新下载核对，标签精确指向发布源码。专题原始 Markdown 链接返回 text/markdown、未声明 charset；抽查三份内容均与冻结 ZIP 相同且为有效 UTF-8，用户报告浏览器乱码，GitHub 阅读正常。此限制单独记录，不冒充外链渲染全部通过，详见[发布记录](release-0.3.1.md)。
+
+本次新增库测试 0、执行库测试 0，没有全量、参考重建、性能、演示浏览器验收或赛事申报。2406 仍仅为完整入口配置期望。后续状态提交只运行 docs scope，完整 SHA、同 SHA docs CI 和最终回执放在 `_build/release-0.3.1/publication-final-delivery.json`，不移动发布标签。
+
 ## Commit 52 文档检查的边界
 
 `bash scripts/check.sh --scope docs` 在工具链检查前进入文档分支，检查指定文档的常规本地 Markdown 文件和图片链接目标，去除片段后解析相对路径，并运行 `git diff --check`。它不访问外网、不递归扫描全仓、不验证全部标题锚点；锚点仅人工抽查。

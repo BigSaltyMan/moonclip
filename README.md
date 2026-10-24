@@ -8,7 +8,7 @@ MoonClip 是用 MoonBit 实现的二维多边形几何库，提供整数和十�
 moon add BigSaltyMan/moonclip@0.3.1
 ```
 
-**0.3.1 是文档修正版**，修正注册表文档中的候选状态、安装说明和接口描述。运行库行为、公开接口、依赖及工具链与 0.3.0 保持一致。下表能力自 0.3.0 提供；该版本的发布源码、registry 消费者和文档页核验保留在 [0.3.0 发布记录](docs/release-0.3.0.md)，不转记为 0.3.1 的注册表安装证据。各版本变化见 [CHANGELOG](CHANGELOG.md)。
+**0.3.1 是文档修正版**，修正注册表文档中的候选状态、安装说明和接口描述。运行库行为、公开接口、依赖及工具链与 0.3.0 保持一致。下表能力自 0.3.0 提供；该版本的发布源码、registry 消费者和文档页核验保留在 [0.3.0 发布记录](docs/release-0.3.0.md)，不转记为 0.3.1 的注册表安装证据。各版本变化见 [CHANGELOG](CHANGELOG.md)。 0.3.1 已于 2026-10-24 正式发布，独立 registry 消费者 native／JS 及主文档页核验通过，见 [0.3.1 发布记录](docs/release-0.3.1.md)。Mooncakes 原始 Markdown 外链若出现中文乱码，可使用 [v0.3.1 GitHub 专题文档](https://github.com/BigSaltyMan/moonclip/tree/v0.3.1/docs)。
 
 在包的 `moon.pkg` 中导入 `BigSaltyMan/moonclip`；可参考受检的[示例配置](cmd/example/moon.pkg)和 [CLI 示例](cmd/example/main.mbt)。已发布的 Boolean、Offset、单路线 Stroke、显式简化及基础几何见[支持范围](docs/scope.md)；0.2.0 增加的树接口见[旧树接口升级说明](docs/upgrade-trees.md)。
 

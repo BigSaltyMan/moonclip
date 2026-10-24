@@ -1,5 +1,7 @@
 # 0.3.0 升级说明
 
+0.3.1 文档修正版已完成正式发布及独立 registry 验证，运行库行为与公开接口不变，见[0.3.1 发布记录](release-0.3.1.md)。以下功能与 0.3.0 的证据仍保留原提交归属。
+
 本文以 Commit 51（`52692624a4ef717d2b462b854cf0ea72390196be`）为功能基线整理的增量，已于 **2026-10-24 随 0.3.0 正式发布**。使用 `moon add BigSaltyMan/moonclip@0.3.0` 安装；独立 registry 消费者 native／JS 验证及下载内容核对已通过。发布源码、冻结候选历史与验证范围见[发布记录](release-0.3.0.md)。本文为发布后的状态更新，注册表包内同名文档仍保留候选阶段文字。
 
 现有 Boolean、Offset、单路线 Stroke 及其树入口继续使用原契约，见[支持范围](scope.md)和[旧树升级说明](upgrade-trees.md)。新增调用优先参考受检的 [CLI 示例](../cmd/example/main.mbt)及[生成接口](../pkg.generated.mbti)，无需复制一套独立示例。各组实际检查范围见[定向验收索引](acceptance-incremental.md)。
