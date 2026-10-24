@@ -1,5 +1,7 @@
 # 小数坐标与统一十进制网格
 
+当前新增能力已归入 **0.3.0 待发布候选**，尚未正式发布。下文 Unreleased 标记保留开发阶段归属，候选范围与验证见[候选说明](release-0.3.0.md)。
+
 ## Unreleased：小数 Minkowski 孔洞树
 
 `minkowski_sum_tree_d(pattern, path, path_is_closed, precision=, limits=)` 默认 Precision=3（0—6），复用两输入共同预检、开放规则量化和碰撞表。原始索引固定为图案 0、路线 1，不先分别量化，不调用 `decimal_closed`，不根据有向面积丢弃图案。图案与路线按同一网格求和，生成坐标继续检查整数核心范围；参数锚点、路线开闭及不额外填满端点／内部的语义不变。

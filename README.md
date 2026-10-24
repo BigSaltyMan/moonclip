@@ -8,11 +8,11 @@ MoonClip 是用 MoonBit 实现的二维多边形几何库，提供整数和十�
 moon add BigSaltyMan/moonclip@0.2.1
 ```
 
-该命令安装已发布的 **0.2.1**。下表中的后续新增能力目前只在开发源码中提供，标为 **Unreleased**；源码 `moon.mod` 仍为 0.2.1，不表示新增接口已经上传注册表。0.2.1 的运行库与 0.2.0 相同，具体包内容、注册表消费者和页面核验见 [0.2.1 发布记录](docs/release-0.2.1.md)与 [GitHub Release](https://github.com/BigSaltyMan/moonclip/releases/tag/v0.2.1)。
+该命令安装注册表当前可用的 **0.2.1**。当前源码候选版本为 **0.3.0，尚未发布**；下表增量已归入该候选，`moon.mod` 的 0.3.0 不表示注册表可安装。候选范围、验证和冻结方法见 [0.3.0 待发布说明](docs/release-0.3.0.md)。0.2.1 的运行库与 0.2.0 相同，具体包内容、注册表消费者和页面核验见 [0.2.1 发布记录](docs/release-0.2.1.md)与 [GitHub Release](https://github.com/BigSaltyMan/moonclip/releases/tag/v0.2.1)。
 
 在包的 `moon.pkg` 中导入 `BigSaltyMan/moonclip`；可参考受检的[示例配置](cmd/example/moon.pkg)和 [CLI 示例](cmd/example/main.mbt)。已发布的 Boolean、Offset、单路线 Stroke、显式简化及基础几何见[支持范围](docs/scope.md)；0.2.0 增加的树接口见[旧树接口升级说明](docs/upgrade-trees.md)。
 
-## 开发源码能力（Unreleased）
+## 0.3.0 候选能力（待发布）
 
 | 开发源码能力 | 整数 | 小数 | 输出 | 使用说明 |
 | --- | --- | --- | --- | --- |
@@ -53,7 +53,7 @@ npm run dev
 
 [增量验收索引](docs/acceptance-incremental.md)区分历史完整回归、各次定向检查、浏览器操作和发布证据。Commit 26 的历史完整回归为 native **2370/2370**、JS **2370/2370**；当前完整入口的 **2406** 是配置期望数，未据此宣称当前源码已全量通过。参考目录为 **1416 个案例、2308 项能力检查**，不代表所有新增接口都有逐项上游对照。
 
-普通 CI 按 `CHECK_SCOPE` 选择文档、核心、演示或开发源码包检查范围；一次成功不自动代表完整验收。完整检查入口仍保留，需显式选择；当前执行范围见[工作流](https://github.com/BigSaltyMan/moonclip/blob/main/.github/workflows/ci.yml)与[检查脚本](https://github.com/BigSaltyMan/moonclip/blob/main/scripts/check.sh)。文档检查只验证指定材料的本地链接目标存在和差异空白，不构建或执行几何：
+普通 CI 按 `CHECK_SCOPE` 选择文档、核心、演示或包检查范围；当前 0.3.0 候选使用 package，一次成功不自动代表完整验收。完整检查入口仍保留，需显式选择；当前执行范围见[工作流](https://github.com/BigSaltyMan/moonclip/blob/main/.github/workflows/ci.yml)与[检查脚本](https://github.com/BigSaltyMan/moonclip/blob/main/scripts/check.sh)。文档检查只验证指定材料的本地链接目标存在和差异空白，不构建或执行几何：
 
 ```bash
 bash scripts/check.sh --scope docs

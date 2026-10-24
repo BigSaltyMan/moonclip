@@ -1,6 +1,6 @@
 # 0.2.1 之后的增量验收索引
 
-功能基线为 Commit 51：[`52692624a4ef717d2b462b854cf0ea72390196be`](https://github.com/BigSaltyMan/moonclip/commit/52692624a4ef717d2b462b854cf0ea72390196be)。本文整理既有记录和同 SHA CI，不重新运行历史检查。能力均按开发源码 **Unreleased** 解释，不构成新版本发布或赛事申报验收。
+以下历史功能证据以 Commit 51 为基线；这些增量现已归入[0.3.0 待发布候选](release-0.3.0.md)，尚未上传。原功能基线为 Commit 51：[`52692624a4ef717d2b462b854cf0ea72390196be`](https://github.com/BigSaltyMan/moonclip/commit/52692624a4ef717d2b462b854cf0ea72390196be)。本文整理既有记录和同 SHA CI，不重新运行历史检查。能力均按开发源码 **Unreleased** 解释，不构成新版本发布或赛事申报验收。
 
 ## 统计口径
 
@@ -66,7 +66,7 @@ Commit 26：[`cff654190fdbb5bbb47c5cb11b208a6a9f209deb`](https://github.com/BigS
 - [性能基线](benchmarks.md)属于 Commit 18：`6a116b45600cbe8ecd577664a71b50fdfa8ce5c0`，指定 Windows x64／native release 环境的 11 个案例。没有为本轮新增接口重测，也没有 JS 性能结论。
 - [0.1.0 发布](release-0.1.0.md)的源码为 `10a9a1012d5fb07a333936ea83ce22e1f98a03d5`；[0.2.0 发布](release-0.2.0.md)的源码为 `e0ef766b34562bcad2b3f3e0d50002adf7b05912`。历史候选清单、哈希、完整 CI 和消费者结果仍按原记录解释。
 - [0.2.1 发布](release-0.2.1.md)的源码为 `02a6043692c966b3687996f9eb5197470712aca0`，独立 registry 消费者 native／JS 已在当时验证；状态文档提交不能冒充发布源码。该发布没有包含本文所列后续增量。
-- [旧树接口验收](acceptance-trees.md)与旧候选包只证明当时范围。Commit 52 整理时尚未进行增量接口包级验收；后续开发源码包验证见下节，增量接口的注册表消费者仍**未执行**。没有新增版本、候选冻结或发布结论。
+- [旧树接口验收](acceptance-trees.md)与旧候选包只证明当时范围。Commit 52 整理时尚未进行增量接口包级验收；后续开发源码包验证见下节，增量接口的注册表消费者仍**未执行**。截至 Commit 53 没有新增版本、候选冻结或发布结论；后续 0.3.0 候选见下节。
 
 ## 开发源码包外部消费者验证（Commit 53）
 
@@ -80,7 +80,17 @@ Commit 26：[`cff654190fdbb5bbb47c5cb11b208a6a9f209deb`](https://github.com/BigS
 
 本笔未选择下一版版本号、未冻结发布候选、未发布或覆盖注册表 0.2.1，原发布记录和校验和保持原样。执行方法和产物位置见[开发源码包清单](release-checklist.md)。
 
-## 本次文档检查的边界
+## 0.3.0 发布候选验收（Commit 54）
+
+以 Commit 53（`85c5815497652507678ce8c178d7c76d81ef5111`）为基线，将既有增量归入 0.3.0 待发布候选。重新执行 moon package 是为验证版本及文字分发内容变化，不是给旧 ZIP 改名；旧开发快照和校验和保留。
+
+复用原消费者及三个增量流程，不增加几何 API、库测试或参数组合；库测试新增 0 项、执行 0 项。只运行 package scope，工具检查沿用既有 10 项，native／JS 各一次真实归档外部消费者，不追加其他 scope、演示、全量、参考重建或性能测量。2406 继续仅为完整入口配置期望。
+
+版本预检、候选方法及未执行项目见[0.3.0 说明](release-0.3.0.md)。实际工具结果、两平台 ZIP 清单及校验和、最终候选 SHA、同 SHA CI 和冻结核对放在提交后的 `_build/release-0.3.0/delivery.json`，不在本文提前填入当前提交 SHA。
+
+本笔止于候选冻结，尚未上传 Mooncakes、创建 v0.3.0 或 GitHub Release，也没有从注册表验证 0.3.0。历史性能、浏览器及注册表证据不转记到候选提交。
+
+## Commit 52 文档检查的边界
 
 `bash scripts/check.sh --scope docs` 在工具链检查前进入文档分支，检查指定文档的常规本地 Markdown 文件和图片链接目标，去除片段后解析相对路径，并运行 `git diff --check`。它不访问外网、不递归扫描全仓、不验证全部标题锚点；锚点仅人工抽查。
 

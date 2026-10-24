@@ -1,5 +1,7 @@
 # Minkowski Sum 图案扫掠
 
+当前新增能力已归入 **0.3.0 待发布候选**，尚未正式发布。下文 Unreleased 标记保留开发阶段归属，候选范围与验证见[候选说明](release-0.3.0.md)。
+
 ## Unreleased：保留共线点的整数／小数孔洞树
 
 `minkowski_sum_tree(pattern, path, path_is_closed, limits=)` 返回 PolyTree64；`minkowski_sum_tree_d(pattern, path, path_is_closed, precision=, limits=)` 返回 PolyTreeD，Precision 默认 3、范围 0—6。单图案、单路线语义与平铺入口一致：图案是直接相加的相对偏移，不居中；图案末首连接，路线是否闭合由参数决定；不填满端点图案或闭合路线内部，不替换成描边或包围盒扩张。

@@ -1,6 +1,6 @@
-# 0.2.1 之后的源码升级说明（Unreleased）
+# 0.3.0 候选升级说明（待发布）
 
-本文以 Commit 51（`52692624a4ef717d2b462b854cf0ea72390196be`）为功能基线。以下增量来自开发源码，尚未作为新版本发布；`moon add BigSaltyMan/moonclip@0.2.1` 安装的是历史发布包。源码 `moon.mod` 仍写 0.2.1，不能据此判断新增接口已在注册表可用。
+本文以 Commit 51（`52692624a4ef717d2b462b854cf0ea72390196be`）为功能基线。以下增量已归入 **0.3.0 待发布候选**，尚未上传注册表；`moon add BigSaltyMan/moonclip@0.2.1` 仍安装已发布包。源码 `moon.mod` 已改为 0.3.0，候选内容、验证范围及冻结规则见[候选说明](release-0.3.0.md)，不据此宣称注册表安装可用。
 
 现有 Boolean、Offset、单路线 Stroke 及其树入口继续使用原契约，见[支持范围](scope.md)和[旧树升级说明](upgrade-trees.md)。新增调用优先参考受检的 [CLI 示例](../cmd/example/main.mbt)及[生成接口](../pkg.generated.mbti)，无需复制一套独立示例。各组实际检查范围见[定向验收索引](acceptance-incremental.md)。
 

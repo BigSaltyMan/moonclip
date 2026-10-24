@@ -63,10 +63,10 @@ jobs:
       - name: Audit real candidate package and external native/JS consumers
         if: env.CHECK_SCOPE == 'full'
         run: python scripts/check_release.py --report _build/release/report.json
-      - name: Save development snapshot and external consumer evidence
+      - name: Save 0.3.0 release candidate and external consumer evidence
         if: always() && env.CHECK_SCOPE == 'package'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: incremental-package-linux
-          path: _build/incremental-package/
+          name: release-0.3.0-linux
+          path: _build/release-0.3.0/
           if-no-files-found: error

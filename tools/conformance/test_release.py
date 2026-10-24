@@ -69,12 +69,12 @@ class ReleaseTreeMarkers(unittest.TestCase):
             with self.subTest(marker=marker), self.assertRaises(ValueError):
                 release.consumer_incremental_apis(complete().replace("INCREMENTAL_API_OK rectclip\n", marker + "\n"))
 
-    def test_development_snapshot_report_fields(self):
+    def test_release_candidate_report_fields(self):
         source = dict(commit="f" * 40, worktree_dirty=True)
         report = release.snapshot_report(source)
-        self.assertEqual(report["metadata_version"], "0.2.1")
+        self.assertEqual(report["metadata_version"], "0.3.0")
         self.assertEqual(report["version"], report["metadata_version"])
-        self.assertEqual(report["publication_status"], "unpublished-development-snapshot")
+        self.assertEqual(report["publication_status"], "unpublished-release-candidate")
         self.assertEqual(report["source"], source)
         self.assertEqual(report["consumers"], {})
         self.assertEqual(set(report["platform"]), {"system", "machine"})

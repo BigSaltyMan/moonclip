@@ -16,7 +16,7 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 MODULE = "BigSaltyMan/moonclip"
-VERSION = "0.2.1"
+VERSION = "0.3.0"
 EXPECTED = {
     "name": MODULE, "version": VERSION, "readme": "README.md", "license": "BSL-1.0",
     "repository": "https://github.com/BigSaltyMan/moonclip",
@@ -97,7 +97,7 @@ def run_consumer(target, consumer, report_dir):
 
 def snapshot_report(source):
     return dict(schema_version=1, status="running", module=MODULE, version=VERSION,
-                metadata_version=VERSION, publication_status="unpublished-development-snapshot",
+                metadata_version=VERSION, publication_status="unpublished-release-candidate",
                 recorded_at_utc=datetime.now(timezone.utc).isoformat(),
                 platform=dict(system=platform.system(), machine=platform.machine()),
                 source=source, consumers={}, commands=[])
@@ -177,7 +177,7 @@ def audit(archive, expected):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--report", type=Path, default=Path("_build/release/report.json"))
+    parser.add_argument("--report", type=Path, default=Path("_build/release-0.3.0/report.json"))
     args = parser.parse_args()
     report_path = (ROOT / args.report).resolve()
     report_path.parent.mkdir(parents=True, exist_ok=True)
@@ -212,13 +212,13 @@ def main():
             (report_path.parent / "package.log").write_text(package_log, encoding="utf-8")
             archives = list((source / "_build/publish").glob("*.zip"))
             require(len(archives) == 1, "Expected exactly one official package ZIP")
-            archive = report_path.parent / f"moonclip-{VERSION}-development-snapshot.zip"
+            archive = report_path.parent / f"moonclip-{VERSION}.zip"
             shutil.copy2(archives[0], archive)
             files, payload = audit(archive, expected)
             report["archive"] = dict(path=str(archive), sha256=sha(archive.read_bytes()),
                                      size=archive.stat().st_size, file_count=len(files), files=files,
                                      payload_sha256=sha(json.dumps(files, sort_keys=True).encode()))
-            print(f"Unpublished development snapshot: {MODULE}; metadata_version={VERSION}; files={len(files)}; bytes={archive.stat().st_size}; SHA256={report['archive']['sha256']}", flush=True)
+            print(f"Unpublished release candidate: {MODULE}; metadata_version={VERSION}; files={len(files)}; bytes={archive.stat().st_size}; SHA256={report['archive']['sha256']}", flush=True)
             for record in files:
                 print(f"  {record['path']}  {record['size']} bytes  {record['sha256']}")
             workspace = work / "consumer-workspace"
@@ -233,7 +233,11 @@ def main():
             shutil.copytree(ROOT / "tools/release-consumer", consumer,
                             ignore=shutil.ignore_patterns("_build", ".mooncakes", "moon.work", "moon.work.json"))
             (workspace / "moon.work").write_text('members = [ "library", "consumer" ]\n', encoding="utf-8")
+            consumer_metadata = (consumer / "moon.mod").read_text(encoding="utf-8")
+            require(f'"{MODULE}@{VERSION}"' in consumer_metadata,
+                    "External consumer must declare the exact candidate dependency version")
             report["consumer_dependency"] = dict(method="moon.work members", library="audited ZIP extraction",
+                                                 declared_module=MODULE, declared_version=VERSION,
                                                  development_checkout_dependency=False,
                                                  external_workspace=True)
             for target in ("native", "js"):

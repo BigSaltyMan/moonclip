@@ -1,6 +1,16 @@
 # 源码包审计与发布检查清单
 
-## 当前开发源码包审计（Commit 53，Unreleased）
+## 当前 0.3.0 发布候选（Commit 54，待发布）
+
+当前 package scope 为 0.3.0 重新生成 `_build/release-0.3.0/moonclip-0.3.0.zip`，报告为 `metadata_version=0.3.0`、`publication_status=unpublished-release-candidate`。沿用下方 Commit 53 的同一份消费者与 10 项发布工具检查，不增加案例；不预先构建根库，不运行库测试、全量、参考、性能或浏览器验收。
+
+执行 `moon info && moon fmt`、`bash scripts/check.sh --scope package` 和 `git diff --check`；核对实际归档、仓库外 native／JS 各一次消费者及同 SHA Linux CI。提交后以两个 ZIP 的逐文件路径、大小、内容哈希及最终提交字节一致为冻结条件，各存自己的 ZIP 校验和。完整步骤、版本预检来源和发布授权边界见[0.3.0 候选说明](release-0.3.0.md)。
+
+Commit 53 的开发快照、报告及下文历史数字保持原样；其旧输出目录不是当前 package scope 的目标。正式上传需另行授权，不能用候选验证代替注册表安装验证。
+
+<a id="当前开发源码包审计commit-53unreleased"></a>
+
+## 历史开发源码包审计（Commit 53，Unreleased）
 
 本轮不选择新版本号。模块元数据仍为 **0.2.1**，实际产物是含 Unreleased 内容的开发源码包，报告明确写入 `metadata_version: 0.2.1`、`publication_status: unpublished-development-snapshot`。它不是注册表已发布的 0.2.1，也不是下一版冻结候选；原发布 ZIP、校验和、标签及记录保持原样。
 

@@ -1,5 +1,7 @@
 # MoonClip 交互演示
 
+当前新增能力已归入 **0.3.0 待发布候选**，尚未正式发布。下文 Unreleased 标记保留开发阶段归属，候选范围与验证见[候选说明](release-0.3.0.md)。
+
 ## 当前操作入口（开发源码，Unreleased）
 
 使用[固定工具链](toolchain.md)和 Node.js 20 以上，在仓库 `demo` 目录运行 `npm run dev`，服务启动后访问 **http://127.0.0.1:4173/**。没有 npm 依赖，不需要 npm install。演示调用真实 MoonBit 核心，前端不自行缩放、量化或求交；源码能力不等于 Mooncakes 0.2.1 发布包范围。
