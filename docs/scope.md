@@ -1,30 +1,20 @@
 # 支持范围与使用边界
 
-Unreleased：`minkowski_sum_tree`／`minkowski_sum_tree_d` 提供单图案、单路线扫掠的整数／小数孔洞树，最终 Union 回调直接构树，保留完整共线点；旧 Boolean 等树仍清理普通共线中间点。小数层级来自共同网格的整数结果，构树和转换共享预算，不额外填满闭合路线内部。不提供多图案、MinkowskiDiff 或自动简化，新树入口未接网页；详见[扫掠契约](minkowski.md)。
+已发布版为 **0.2.1**，其运行库和公开接口与 0.2.0 相同，发布事实见[0.2.1 记录](release-0.2.1.md)。当前开发源码另含 **Unreleased** 增量；`moon.mod` 仍为 0.2.1，不表示这些入口已发布。旧版本内容见 [0.1.0](release-0.1.0.md)、[0.2.0](release-0.2.0.md)。
 
-Unreleased：`rect_clip_polygons_tree`／`rect_clip_polygons_tree_d` 提供整数／小数闭合区域窗口树输出，一次求交后直接构树；被窗口切开的孔洞可能变为外轮廓凹口，最终层级不对应输入轮廓。空结果验证后构造已计费空树，扫描、构树和小数转换共享预算。树只表达闭合区域，开放片段不提供孔洞树。未接网页，旧参考不作为新增树入口的逐项覆盖证据。
+| 开发源码能力 | 整数／小数 | 输出与查询范围 |
+| --- | --- | --- |
+| 开放折线窗口裁剪 | 均支持 | 有序开放片段，无填充或树查询 |
+| 闭合区域窗口裁剪 | 均支持 | 平铺／孔洞树 |
+| 多路线批量描边 | 均支持 | 共享样式，统一覆盖区域的平铺／树 |
+| Minkowski Sum | 均支持 | 单图案、单路线，平铺／树；整数平铺为既有发布能力 |
+| 树单点／批量定位 | 均支持 | 最深填充／孔洞节点，或全部边界命中 |
 
-Unreleased：`rect_clip_lines_d` 提供小数开放路线的矩形窗口裁剪，默认 Precision=3（0—6），输出为有序、保方向的开放片段，普通共线中间点保留，无填充规则或树结构。窗口独立量化、全部路线共同量化并共享预算，网页窗口裁剪已支持整数与小数开放路线；详见[矩形裁剪](rectclip.md)。
-
-Unreleased：`rect_clip_polygons_d` 配合不可变 `BoundsD` 提供小数闭合区域窗口裁剪，Precision 默认 3（0—6），支持 EvenOdd／NonZero，平铺入口返回平铺区域。窗口独立量化但使用同一网格，不占原始路径额度；原始空窗口与量化塌缩区别处理。树输出另用 `rect_clip_polygons_tree_d`；小数开放折线另用 `rect_clip_lines_d`。
-
-Unreleased：`rect_clip_polygons` 将整数闭合区域与矩形窗口一次求交，支持 EvenOdd／NonZero，返回可含孔洞的平铺区域。复用 Boolean 数值与预算契约，没有矩形专用优化，树输出另用 `rect_clip_polygons_tree`；详见[矩形裁剪](rectclip.md)。
-
-Unreleased：整数 `PolyTree64::locate` 返回最深严格包含的填充／孔洞节点，或优先返回全部边界命中。最坏线性访问全部轮廓顶点，Limits 限制被查询树的轮廓和总顶点，合法树也可能被较小查询额度拒绝。`locate_many` 提供同语义的整数树批量查询，树规模预检一次、整批共用预算并保持输入顺序，任一点错误则整批失败；vertex_index 表示查询点索引。空列表及空树仍验证相应参数和输入；小数树另提供 `PolyTreeD::locate`／`locate_many`，按树原 Precision 量化查询并恢复一次临时整数视图，返回原小数节点；没有空间索引，网页仅接整数单点／批量。详见[树点定位](polytree-query.md)。
-
-Unreleased：`minkowski_sum_d` 提供小数单图案、单路线的平铺扫掠区域，默认 Precision=3（0—6）。继承整数入口锚点、路线开闭和共线点语义；不提供 MinkowskiDiff、多图案或路线及自动简化；树输出另用 `minkowski_sum_tree_d`，已有小数平铺演示保持原范围。图案和路线同网格量化后再作整数求和，生成范围及共享预算见[扫掠契约](minkowski.md)。
-
-Unreleased：`stroke_polylines` 提供整数多路线批量描边，只返回合并后的平铺闭合区域。width 为完整宽度，整批使用相同端点、连接及圆弧参数；不同路线不相互连接。空路线、单点和连续重复点整理后的短路线不生成区域，但全部原始路径与顶点仍计入额度。width < 1 也先检查全部输入。输出独立于输入，可含孔洞；小数批量入口 `stroke_polylines_d` 同样返回平铺区域，默认 Precision=3（0—6），整批共用量化及执行预算，小宽度按缩放后的完整宽度判断。量化可能改变可表达形状；另有批量树入口 `stroke_polylines_tree`／`stroke_polylines_tree_d`，直接返回统一覆盖区域的层级；不提供逐路线样式，尚未发布。
-
-Unreleased 开发源码另有整数 `rect_clip_lines`，用于矩形窗口内的开放折线片段。它不是填充区域 Boolean；顺序、贴边、截断和预算契约见[矩形折线裁剪](rectclip.md)，0.2.1 不包含此入口。
-
-当前补丁版为 **0.2.1**，仅修正文档，运行库和公开接口与 0.2.0 相同；注册表消费者和实际页面核验见[0.2.1 发布记录](release-0.2.1.md)。下文的 0.2.0 标记表示接口首次提供的版本。
-
-0.1.0 已于 2026-10-20 发布，[注册表与 Release 验收](release-0.1.0.md)已完成。0.2.0 已于 2026-10-21 正式发布，新增小数 Boolean 树及整数／小数偏移树、描边树，见[0.2.0 发布记录](release-0.2.0.md)；这些增量均未随 0.1.0 发布。当前源码公开契约以[生成接口](../pkg.generated.mbti)及下列专题文档为准；历史发布与提交记录描述的是当时状态。
+上述树能力均已接入开发网页。Boolean、Offset、单路线 Stroke、批量 Stroke、闭合窗口、Minkowski 六类区域树可在整数／小数模式查询；平铺与开放片段不能查询。小数查询使用原建树 Precision，批量核心不限 32 点，演示最多 32 点。查询线性访问顶点，没有空间索引。详细迁移边界见[增量升级说明](upgrade-incremental.md)，接口以[生成接口](../pkg.generated.mbti)为准。
 
 ## 入口与返回值
 
-相对首版新增的是小数 Boolean 树与整数／小数偏移树、描边树，共 5 个库入口；整数 `boolean_tree` 已在 0.1.0 中提供。选择平铺、树或 `to_paths()` 的迁移方法见[升级说明](upgrade-trees.md)，各提交的测试与消费者口径见[增量验收](acceptance-trees.md)。开发演示另提供六入口层级查看、边界高亮与 v2 JSON，属于 0.2.0。
+0.2.0 相对首版新增的是小数 Boolean 树与整数／小数偏移树、描边树，共 5 个库入口；整数 `boolean_tree` 已在 0.1.0 中提供。选择平铺、树或 `to_paths()` 的迁移方法见[升级说明](upgrade-trees.md)，各提交的测试与消费者口径见[增量验收](acceptance-trees.md)。开发演示另提供六入口层级查看、边界高亮与 v2 JSON，属于 0.2.0。
 
 所有计算入口返回 `Result[成功类型, ClipError]`。`Ok([])` 可表示真实的空区域；`Err` 不能替换为空区域。Point 构造、复制与只读访问器不属于计算错误入口。
 
@@ -37,7 +27,7 @@ Unreleased 开发源码另有整数 `rect_clip_lines`，用于矩形窗口内的
 | 开放描边 | `stroke_polyline` / `Paths64` | `stroke_polyline_d` / `PathsD` | width 是完整宽度，两侧各半；Butt 默认，另有 Square / Round 端点 |
 | 描边孔洞树 | **0.2.0**：`stroke_tree` / `PolyTree64` | **0.2.0**：`stroke_tree_d` / `PolyTreeD` | 同样的完整宽度、三种端点和四种连接；单条开放路线，无填充规则参数，返回最终区域层级 |
 | 显式简化 | `simplify_paths` / `SimplifyResult` | `simplify_paths_d` / `SimplifyResultD` | 默认 Closed、epsilon=0；报告保留退化路径，不自行过滤 |
-| 单图案扫掠 | `minkowski_sum` / `Paths64` | 尚无 | 必须指定路线开闭；图案总是闭合；结果保留共线点 |
+| 单图案扫掠 | `minkowski_sum` / `Paths64` | Unreleased：`minkowski_sum_d` / `PathsD` | 必须指定路线开闭；图案总是闭合；平铺与树均保留共线点，树另用 `minkowski_sum_tree`／`minkowski_sum_tree_d` |
 
 OffsetOptions 默认 Miter、MiterLimit=2、ArcTolerance=0。连接可选 Miter / Bevel / Square / Round；Miter 超限回退 Square。MiterLimit 必须有限且至少 2，ArcTolerance 必须有限且非负；0 为自动圆弧精度。正负 delta 分别扩张 / 收缩区域；收缩可能消灭区域。负 width、非有限参数返回错误；整数 0≤width<1、空路线、单点路线为成功空区域，仍先验证全部输入与参数。详见 [数值路线](numerics.md)与[组合流程](composition.md)。
 
@@ -45,7 +35,7 @@ OffsetOptions 默认 Miter、MiterLimit=2、ArcTolerance=0。连接可选 Miter 
 
 Point64 完整保存 Int64，但计算接受每轴 ±10^9，含边界；不对任意 Int64 先取绝对值，不截断或钳制超限输入。精确叉积与方向、BigInt 面积不代表所有几何步骤都是精确有理数：扫描投影、交点网格转换和偏移生成各有固定数值路线。
 
-PointD 保存 Double，Precision 支持 0—6、默认 3，以 10^digits 为倍率；原单位坐标范围为 ±10^9 / 10^digits。输入先检查原单位范围，量化采用半整数远离零，输出解码回 Double。不同原始位置合并到同一网格点会报错，非空闭合退化输入会报错（简化入口另有报告契约）。半格的局部舍入界不等于整个运算的误差或拓扑保证。距离、完整宽度、正容差随倍率缩放，MiterLimit 不缩放。详细表格、严格合并诊断及与 ClipperD 的差异仅维护于 [decimal.md](decimal.md)。
+PointD 保存 Double，Precision 支持 0—6、默认 3，以 10^digits 为倍率；原单位坐标范围为 ±10^9 / 10^digits。输入先检查原单位范围，量化采用半整数远离零，输出解码回 Double。几何输入的不同原始位置合并到同一网格点会报错；查询点量化重合允许发生。非空闭合退化输入会报错（简化入口另有报告契约）。半格的局部舍入界不等于整个运算的误差或拓扑保证。距离、完整宽度、正容差随倍率缩放，MiterLimit 不缩放。详细表格、严格合并诊断及与 ClipperD 的差异仅维护于 [decimal.md](decimal.md)。
 
 错误包括 InvalidInput、CoordinateOutOfRange、DecimalCoordinateOutOfRange、QuantizationFailure、NumericFailure、ResourceLimitExceeded、ExecutionFailure。携带英文说明、真实阶段及可用的原始路径 / 顶点索引；坐标错误有轴和值，资源错误有类别和限制。无法唯一映射到原始位置时索引为 None，不伪造定位。失败不修改输入，不返回部分结果，下一次独立调用重新建账。
 
@@ -63,7 +53,7 @@ Boolean / Offset / Stroke 的平铺输出采用外轮廓正向、孔洞负向，
 
 简化必须显式调用，Boolean / Offset / Stroke 不自动简化。epsilon=0 仅进行约定的无损重复点整理；正阈值使用局部直线距离选择。Open 保留两个端点，Closed 处理接缝。结果报告删点总数、每路径删点和原有退化 / 最终退化 / 新塌缩索引。调用方检查报告后决定下一步，不沿用旧孔洞树。简化不保证拓扑保持，epsilon 不是全局 Hausdorff 距离或面积变化上限，详见 [simplify.md](simplify.md)。
 
-Minkowski 图案坐标直接与路线坐标相加，原点就是锚点，不自动居中。图案末首始终相连；路线仅由 path_is_closed 控制闭合，重复首点不能代替参数。保留原始重复点；连接面作 NonZero Union，结果保留共线点。它不额外插入完整端点图案，因此短路线可能留缝，闭合边界扫掠可留下孔洞。只有单个整数图案与单条路线，不等同于任意带孔面域的集合 Minkowski 运算，详见 [minkowski.md](minkowski.md)。
+Minkowski 图案坐标直接与路线坐标相加，原点就是锚点，不自动居中。图案末首始终相连；路线仅由 path_is_closed 控制闭合，重复首点不能代替参数。保留原始重复点；连接面作 NonZero Union，结果保留共线点。它不额外插入完整端点图案，因此短路线可能留缝，闭合边界扫掠可留下孔洞。整数／小数均只处理单个图案与单条路线，不等同于任意带孔面域的集合 Minkowski 运算，详见 [minkowski.md](minkowski.md)。
 
 ## 预算与复杂输入
 
@@ -75,6 +65,12 @@ Minkowski 图案坐标直接与路线坐标相加，原点就是锚点，不自�
 
 ## 当前范围以外
 
-没有公开 Positive / Negative、开放路径参与 Boolean、多路线或闭合模式描边、小数 Minkowski、MinkowskiDiff、带孔图案集合、三角剖分、SVG 输入解析、GIS 投影、三维几何、可变宽度回调或一般拓扑修复。演示 SVG 是结果导出，不意味着库能解析任意 SVG。
+没有公开 Positive / Negative、开放路径参与 Boolean、闭合模式描边、每路线独立样式、MinkowskiDiff、带孔图案集合、三角剖分、SVG 输入解析、GIS 投影、三维几何、可变宽度回调或一般拓扑修复。演示 SVG 是结果导出，不意味着库能解析任意 SVG。
 
-0.1.0 的 native 与 JS 正确性证据为同一批 2234 项测试。0.2.0 新增 33 项小数 Boolean 树、27 项偏移树和 29 项描边树定向测试，矩形裁剪另新增 47 项后，源码完整回归为 2370 项，两目标分别记录。旧 1384 条参考在[兼容报告](compatibility.md)中按 2276 项能力检查分开记录；新增矩形裁剪 32 个案例后合计 1416 个案例、2308 项能力检查；旧参考没有扩展到新树入口，也不是对任意输入兼容全部 Clipper2 的证明。性能仍为原测量提交的指定 Windows native 基线，本笔未重测，JS 性能未测量。
+## 验证证据与执行范围
+
+Commit 26 的历史完整回归为 native **2370/2370**、JS **2370/2370**。当前完整入口配置期望为 **2406**，未据此宣称当前功能基线已执行全量。后续核心按 native／JS 分别记录定向结果；演示三项检查反复扩展复用，不能累加成新增独立库测试。
+
+参考目录为 **1416 个案例、2308 项能力检查**，其中原 1384 个案例对应 2276 项检查，整数开放矩形裁剪增加 32 个案例。它们不逐项覆盖所有增量入口，也不是任意输入兼容全部 Clipper2 的证明。性能、候选及注册表消费者保留原提交归属。
+
+普通 CI 由 CHECK_SCOPE 选择，本笔使用 docs，仅检查指定文档本地链接与差异空白；功能轻量和 full 入口仍保留，不能把一次普通 CI 成功解释为完整验收。各提交、同 SHA CI、浏览器记录与未核实项见[增量验收索引](acceptance-incremental.md)，旧发布树证据见[历史验收](acceptance-trees.md)。

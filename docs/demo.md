@@ -1,5 +1,28 @@
 # MoonClip 交互演示
 
+## 当前操作入口（开发源码，Unreleased）
+
+使用[固定工具链](toolchain.md)和 Node.js 20 以上，在仓库 `demo` 目录运行 `npm run dev`，服务启动后访问 **http://127.0.0.1:4173/**。没有 npm 依赖，不需要 npm install。演示调用真实 MoonBit 核心，前端不自行缩放、量化或求交；源码能力不等于 Mooncakes 0.2.1 发布包范围。
+
+| 操作 | 坐标模式 | 结果结构 | 点定位 |
+| --- | --- | --- | --- |
+| Boolean、Offset、单路线加宽 | 整数／小数 | 平铺／树 | 树可单点／批量查询 |
+| 批量加宽、图案扫掠 | 整数／小数 | 平铺／树 | 树可单点／批量查询 |
+| 窗口裁剪：闭合区域 | 整数／小数 | 平铺／树 | 树可单点／批量查询 |
+| 窗口裁剪：开放路线 | 整数／小数 | 有序开放片段 | 不支持 |
+
+选择场景、坐标模式及案例，编辑点数组和参数后点击计算。需要层级时选择孔洞树，可展开节点并独立选择边界高亮；空树也是有效结果。修改输入、精度或参数立即失效旧结果并禁用导出，失败不保留部分树或查询，迟到响应受请求编号保护。
+
+六类区域树都可启用单点或批量定位，每批最多 32 点，允许空列表并保留重复项。选择结果行只更新查询点强调和命中高亮，不重新计算；手动树选择与查询高亮独立。小数查询使用本次建树 Precision，先量化再判断，靠近边界的点可能量化到边界；图中标记和列表保留原始输入坐标，不代表量化后的判定位置。
+
+区域 SVG 使用闭合轮廓和 NonZero 填充，开放片段 SVG 不闭合且无填充；均只导出结果。JSON 保存真实请求和结果：平铺区域 v1、树及可选查询 v2、开放片段 v3。重放时重新提交 request，不读取导出结果冒充计算。详细契约见[增量升级说明](upgrade-incremental.md)，各阶段的下载重放、截图和窄屏观察见[验收索引](acceptance-incremental.md#演示与浏览器证据)。
+
+本笔普通 CI 为 docs 文档范围，不构建演示或执行桥接检查。功能验收按各自 scope 运行；查询、窗口、批量描边、扫掠各自复用三项定向检查，不累加为新增独立测试总数。临时窄屏容器异常仍为归因未确认，记录见[Commit 51 验收](demo-acceptance.md#commit-51小数树单点与批量定位增量验收)。
+
+## 历史增量记录
+
+以下 Commit 章节描述各笔当时的支持范围与执行记录；其中“仅整数”“未接网页”等限制不用于判断当前能力。当前用法以本文顶部及下方通用操作说明为准。
+
 ## Commit 51：小数树单点与批量定位（Unreleased）
 
 六类区域树现均支持整数／小数查询：Boolean、Offset、单路线 Stroke、批量 Stroke、闭合窗口裁剪及 Minkowski Sum。开放窗口裁剪及平铺仍拒绝 query，未知坐标模式明确拒绝。单点 point 与批量 points 二选一、批量最多 32 点且允许空列表的演示约定不变；整数仍检查安全整数，小数接受有限数值，不缩放或舍入输入。无查询请求和旧整数响应保持原格式。
@@ -163,7 +186,7 @@ npm run build -- --reuse
 npm run build
 ```
 
-build生成demo/dist，包含HTML、CSS、案例输入、界面/导出/worker脚本和MoonBit JS。dist、generated、node_modules及本地.qa导出材料均被忽略，不提交编译JS。build_demo.sh可从任意调用目录运行，只构建JS桥接包，不运行整套库测试。npm test仅执行20项桥接/导出冒烟，不增加几何对照矩阵。
+build生成demo/dist，包含HTML、CSS、案例输入、界面/导出/worker脚本和MoonBit JS。dist、generated、node_modules及本地.qa导出材料均被忽略，不提交编译JS。build_demo.sh可从任意调用目录运行，只构建JS桥接包，不运行整套库测试。npm test 是整套桥接／导出检查入口，数量随演示演进，不在本文固定为历史 20 项；定向验收按对应筛选运行，避免重复构建。
 
 ## 场景与参数
 
@@ -174,20 +197,21 @@ build生成demo/dist，包含HTML、CSS、案例输入、界面/导出/worker脚
 | 路线加宽 | 单条开放路线；完整width；Butt/Square/Round端点；四种Join | 整数或小数 |
 | 图案扫掠 | 一个图案、一条路线；显式开闭；图案直接相加 | 整数／小数，开发演示 Unreleased |
 | 批量加宽 | 多条独立开放路线、共享样式、一次合并覆盖区域 | 整数／小数，开发演示 Unreleased |
+| 窗口裁剪 | 开放路线／闭合区域、矩形窗口；闭合支持填充规则 | 整数／小数，开发演示 Unreleased |
 
 整数坐标要求合法JSON整数，桥接只接受可精确表示的安全整数，之后由库检查几何范围±10^9；小数直接构造PointD并传入Precision0—6。没有前端自行缩放的小数扫掠。距离、完整宽度、正ArcTolerance及epsilon都使用当前输入坐标的原始单位；MiterLimit无量纲且至少2，ArcTolerance0保留库的自动策略。允许负偏移，参数错误原样显示库错误和位置。
 
-案例文件只含输入与参数，取材于已有矩形、孔洞、凹轮廓、折线和整数图案构型，不链接参考预期作为结果。点数组编辑器：Boolean/Offset为Paths（多层数组），Stroke/Minkowski路线为Path，图案也为Path；批量加宽为Paths。闭合轮廓一般不重复首点；路线末尾返回首点不替代扫掠的显式闭合开关。
+案例文件只含输入与参数，取材于已有矩形、孔洞、凹轮廓、折线和整数图案构型，不链接参考预期作为结果。点数组编辑器：Boolean/Offset为Paths（多层数组），Stroke/Minkowski路线为Path，图案也为Path；批量加宽及窗口裁剪为Paths。闭合轮廓一般不重复首点；路线末尾返回首点不替代扫掠的显式闭合开关。
 
-图形按数学坐标系显示，x向右、y向上。蓝色为输入区域/操作数A，橙色为操作数B或路线，紫色为局部图案及原点十字，绿色为真实结果。扫掠图案绘于局部原点，路线各顶点对应平移位置；偏置图案不会自动居中。可显隐输入/结果、自适应、按钮/滚轮缩放、拖动平移。绘制通过SVG坐标变换处理y轴，不改变核心语义。结果按NonZero复合路径绘制孔洞。
+图形按数学坐标系显示，x向右、y向上。蓝色为输入区域/操作数A，橙色为操作数B或路线，紫色为局部图案及原点十字，绿色为真实结果。扫掠图案绘于局部原点，路线各顶点对应平移位置；偏置图案不会自动居中。可显隐输入/结果、自适应、按钮/滚轮缩放、拖动平移。绘制通过SVG坐标变换处理y轴，不改变核心语义。区域结果按NonZero复合路径绘制孔洞；开放窗口输入和结果不追加闭合命令、无填充，窗口使用独立虚线。
 
 <a id="unreleased-孔洞层级查看与桥接协议"></a>
 
-## 孔洞层级查看与桥接协议（自 0.2.0）
+## 孔洞层级查看与桥接协议
 
-结果结构默认 `paths`；切换为 `tree` 后重新计算，Boolean、Offset、Stroke 根据整数／小数模式分别调用 `boolean_tree` / `boolean_tree_d`、`offset_tree` / `offset_tree_d`、`stroke_tree` / `stroke_tree_d`。每次只运行选中的一个几何入口。Minkowski 禁用层级输出并重置为平铺，切换时清空树与选择。演示从仓库运行，所调用的新增库入口已随 Mooncakes 0.2.0 发布，0.1.0 不包含它们。
+结果结构默认 `paths`；六类区域操作均可选择 `tree`，按整数／小数及操作直接调用对应树入口，每次只运行一个几何入口，不先平铺再构树。开放窗口路线只接受 paths。Boolean、Offset、单路线 Stroke 的六入口自 0.2.0 提供，批量描边、闭合窗口和 Minkowski 树属于 Unreleased。切换不支持的组合时清空树、选择及查询。
 
-桥接请求仍为 `version: 1`，可选 `output: "paths" | "tree"`，省略时为 `paths`。未知值或 Minkowski 的 tree 请求返回 `BridgeInput` 错误。成功响应保留 paths，并标记 output；只有树响应包含 tree：
+桥接请求仍为 `version: 1`，可选 `output: "paths" | "tree"`，省略时为 `paths`。未知输出或开放窗口的 tree 请求返回 `BridgeInput` 错误。成功响应保留 paths，并标记 output；只有树响应包含 tree：
 
 ```json
 {
@@ -223,15 +247,15 @@ SVG只导出当前有效结果，包含独立viewBox、白色背景、数学坐�
 
 平铺 JSON 格式为 MoonClipDemo 版本 1，包含kernel、完整原始request（场景、两操作数/路线/图案、模式、参数、precision、简化选项）、result.paths及simplification统计。可把导出的request再次传给compute复现；结果不从SVG字符串或像素反推。整数结果precision为null；request中的precision在整数模式下不参与量化。
 
-树 JSON 为 MoonClipDemo 版本 2，result 同时包含 output、mode、precision、paths 与 tree，可选 query 只用于整数 Boolean 树点定位；顶层 request 仍是可直接重放的版本 1 桥接请求，simplification 保留统计。所有数组、节点、输入参数与简化报告都独立复制。SVG 仍只输出结果轮廓，不输出输入层、节点列表或高亮。
+树 JSON 为 MoonClipDemo 版本 2，result 同时包含 output、mode、precision、paths 与 tree，可选 query 用于六类整数／小数区域树的单点或批量定位；顶层 request 仍是可直接重放的版本 1 桥接请求，simplification 保留统计。所有数组、节点、输入参数与简化报告都独立复制。SVG 仍只输出结果轮廓，不输出输入层、节点列表或高亮。
 
 启用简化时先显式简化，再调用所选树入口；简化与几何是两次公开调用，各自建立核心预算。单个树入口内沿用核心累计预算，桥接 JSON 序列化、公开访问器副本和 UI 绘制不计入核心预算。编辑输入、输出模式、精度或参数立即清空摘要、树与选择，禁用导出；错误不会自动改为平铺重算，迟到响应不能重新启用导出。
 
-图案扫掠不额外补满完整端点图案，短路线可留空隙，闭合路线可留孔洞。演示不提供开放Boolean、MinkowskiDiff、带孔图案集合、批量小数或批量树描边。页面显示的耗时仅为worker内单次桥接调用时长，不是基准性能结论。
+图案扫掠不额外补满完整端点图案，短路线可留空隙，闭合路线可留孔洞。演示不提供开放Boolean、MinkowskiDiff、带孔图案集合或每路线独立样式。页面显示的耗时仅为worker内单次桥接调用时长，不是基准性能结论。
 
 不依赖浏览器的同类公开调用保留在cmd/example/main.mbt：moon run --target native cmd/example。
 
-## 实际场景截图
+## 历史场景截图（Commit 17／18）
 
 ![区域Boolean](https://raw.githubusercontent.com/BigSaltyMan/moonclip/6a116b45600cbe8ecd577664a71b50fdfa8ce5c0/docs/demo-screenshots/boolean.png)
 
@@ -240,6 +264,6 @@ SVG只导出当前有效结果，包含独立viewBox、白色背景、数学坐�
 ![路线加宽](https://raw.githubusercontent.com/BigSaltyMan/moonclip/6a116b45600cbe8ecd577664a71b50fdfa8ce5c0/docs/demo-screenshots/stroke.png)
 
 
-## 层级查看验收
+## 历史层级查看验收（Commit 23）
 
-Commit 23 的实际交互、导出与窄屏记录见 [浏览器验收](demo-acceptance.md#commit23)。库回归仍为 native／JS 各 2323；20 项桥接／导出测试独立统计。现有 1384 条参考、2276 项能力检查没有扩展，本次不据此宣称新增演示入口已进入上游矩阵。
+Commit 23 的实际交互、导出与窄屏记录见 [浏览器验收](demo-acceptance.md#commit23)。当时的库回归为 native／JS 各 2323；20 项桥接／导出测试独立统计。现有 1384 条参考、2276 项能力检查没有扩展，本次不据此宣称新增演示入口已进入上游矩阵。
