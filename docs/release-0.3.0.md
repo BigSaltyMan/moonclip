@@ -1,4 +1,56 @@
-# MoonClip 0.3.0 待发布候选说明
+# MoonClip 0.3.0 正式发布记录
+
+**0.3.0 已于 2026-10-24 正式发布。** 发布源码与标签固定为 `d21baf6687b5d890392f87574aac48f22cd3d5f0`；本文件属于随后单独提交的发布状态记录，不能冒充包内源码。
+
+## 正式发布结果
+
+| 项目 | 实际结果 |
+| --- | --- |
+| Mooncakes | [BigSaltyMan/moonclip@0.3.0](https://mooncakes.io/docs/BigSaltyMan/moonclip@0.3.0/)，未撤回；服务端校验和与实际上传 ZIP 一致 |
+| 上传时间 | 2026-10-24 15:19:48 UTC（北京时间 23:19:48）；固定工具链 `moon publish` 一次正式请求成功 |
+| GitHub 标签 | [v0.3.0](https://github.com/BigSaltyMan/moonclip/tree/v0.3.0)，精确指向上述冻结源码，不随状态提交移动 |
+| GitHub Release | [MoonClip 0.3.0](https://github.com/BigSaltyMan/moonclip/releases/tag/v0.3.0)，ZIP、SHA256SUMS.txt、去敏验收摘要三个附件均重新下载逐字节核验 |
+| 发布源码 CI | [package CI](https://github.com/BigSaltyMan/moonclip/actions/runs/40088821022)，同 SHA；不代表该 SHA 全量回归 |
+| registry 消费者 | Windows native 一次成功、JS 一次成功；两个目标分别核对标记及三个增量流程 |
+| 下载内容 | 精确版本来源为 registry；61 个文件的路径、大小、SHA-256 和字节与冻结候选及 Git 源码一致；编译后未改变 |
+| 文档页 | build_status=success；实际页面的 0.3.0、README、新窗口/批量/扫掠接口及两种树定位方法可见；文字快照限制见下文 |
+
+```bash
+moon add BigSaltyMan/moonclip@0.3.0
+```
+
+### 实际上传归档
+
+选用 **Windows 冻结候选**。固定工具链不支持指定归档上传，因此从冻结提交在仓库外准备干净源码，执行 `moon package` 核对后正式 `moon publish`。重打包和实际上传 ZIP 与原 Windows 候选完全相同：
+
+- 61 个文件，288641 字节。
+- SHA-256：`31d0e426617f7e6286bac80ddde099ccfa14c71b423c7122e8a24fa8b9de8d71`。
+- 历史 Linux 候选同为 61 文件、288641 字节，SHA-256 `e126af3ec06e9673f33d2cf7d771d36cfcdba8e24b76815a0e53bd5f5c514077`；包内路径与内容相同，该 ZIP 未用于本次上传。
+- 注册表 manifest 的 checksum 与 Windows ZIP 相同，版本未撤回。上传成功、registry 验证成功及 GitHub Release 成功分别留有回执。
+
+### 独立注册表验证与证据归属
+
+仓库外全新消费者声明精确的 0.3.0，执行 `moon add` 和 `moon tree --json`，没有 moon.work、本地路径替换、候选库复制、共享缓存清空或全局配置修改。复用冻结的现有消费者，native／JS 各运行一次：基础检查、六个旧树标记、整数窗口标记及以下三个流程全部通过。
+
+| 增量流程 | 实际公开调用 |
+| --- | --- |
+| 窗口 | rect_clip_lines_d、rect_clip_polygons_tree_d |
+| 批量描边与查询 | stroke_polylines_tree_d、PolyTreeD::locate_many、PolyTree64::locate |
+| 小数扫掠树 | minkowski_sum_tree_d |
+
+它们是代表性包级分发、导入和执行证据，不是全部接口组合矩阵。原 package CI、10 项发布工具、候选消费者和各次定向测试保留原提交归属。本次没有重跑候选消费者、库测试、全量、参考、性能或演示浏览器验收；2406 仍仅为完整入口配置期望。
+
+### 文档快照与状态提交
+
+注册表文档由冻结包生成：版本与新增接口可见，**README、专题及 API 注释仍含候选阶段“待发布／Unreleased”文字和旧安装示例**，已在实际页面核验并如实记录。它们不是尚未上传的依据。为保持用户授权的冻结内容，未修改包、重复发布或移动标签；仓库 README、CHANGELOG 和当前说明在本次独立状态文档提交中更新。未来包的文字整理另行安排。
+
+状态提交只执行 `docs` scope 的本地链接和 `git diff --check`，CI 跳过 MoonBit 安装、core bundle、几何和演示构建。完整状态提交 SHA、同 SHA docs CI、逐文件清单、两目标日志及所有核验结果保存于 `_build/release-0.3.0/publication-final-delivery.json`；Release 附件 `acceptance-summary.json` 提供无本机路径的发布验收摘要。
+
+小数定位仍使用原建树 Precision；批量描边统一样式和合并；Minkowski 为单图案、单路线且保留共线点；查询没有空间索引；简化不保证拓扑保持。详细契约见[升级说明](upgrade-incremental.md)。本次未执行赛事申报。
+
+## 候选准备与冻结记录（Commit 54 历史）
+
+以下段落保留候选阶段的规则查询、验证范围及当时尚未授权上传的事实；它们的时态仅属于 Commit 54，不表示当前发布状态。
 
 **0.3.0 尚未正式发布。** 本笔将已完成增量包级验收的能力归入功能版本，重新生成版本准确的候选。注册表当前可安装版本仍为 0.2.1；候选通过及冻结不等于上传、注册表安装验证或赛事申报。
 

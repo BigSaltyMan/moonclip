@@ -2,11 +2,11 @@
 
 ## Unreleased
 
-0.3.0 候选尚未正式发布；后续变更在本节另行记录，不自动并入已冻结候选。
+后续变更在本节另行记录；已发布的 0.3.0 源码与归档保持冻结。
 
-## 0.3.0 — 待发布
+## 0.3.0 — 2026-10-24
 
-本版集中交付 0.2.1 之后的增量能力，尚未上传注册表或创建标签、Release；不填写发布日期。迁移见[升级说明](docs/upgrade-incremental.md)，当前候选范围与验证方法见[候选说明](docs/release-0.3.0.md)。下方旧版本章节保留各发布时的事实与限制。
+已发布至 [Mooncakes](https://mooncakes.io/docs/BigSaltyMan/moonclip@0.3.0/) 和 [GitHub Release](https://github.com/BigSaltyMan/moonclip/releases/tag/v0.3.0)，集中交付 0.2.1 之后的增量。发布源码为 `d21baf6687b5d890392f87574aac48f22cd3d5f0`；独立 registry 消费者 native／JS 各一次成功，61 个下载文件与冻结候选一致。迁移见[升级说明](docs/upgrade-incremental.md)，候选历史与正式发布证据见[发布记录](docs/release-0.3.0.md)。下方旧版本章节保留各发布时的事实与限制。
 
 ### 窗口裁剪
 
@@ -34,7 +34,7 @@
 
 - 小数树查询按原建树 Precision 量化后判定；批量描边整批共享样式、统一合并，输出不与路线逐条对应。Minkowski 仍限单图案、单路线，树查询没有空间索引，显式简化不保证拓扑保持。
 - 包级证据复用 Commit 53 的三个增量流程及原有检查，0.3.0 候选重新生成准确版本归档，native／JS 分别验证仓库外消费者。增量定向、演示和旧性能证据保留原提交归属，见[验收索引](docs/acceptance-incremental.md)。
-- 当前完整入口的 2406 仍是配置期望，不表示候选提交执行过完整回归；候选实际清单、消费者、工具检查与同 SHA CI 以提交后交付记录为准。
+- 当前完整入口的 2406 仍是配置期望，不表示发布提交执行过完整回归。沿用同 SHA package CI，本次只新增正式上传、registry 消费者、文档页与 Release 附件核验事实；状态文档提交单独运行 docs CI。包内“待发布／Unreleased”文字是冻结快照，不重新上传同一版本。
 
 ## 0.2.1 — 2026-10-21
 

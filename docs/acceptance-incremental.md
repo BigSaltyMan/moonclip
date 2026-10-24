@@ -1,6 +1,6 @@
 # 0.2.1 之后的增量验收索引
 
-以下历史功能证据以 Commit 51 为基线；这些增量现已归入[0.3.0 待发布候选](release-0.3.0.md)，尚未上传。原功能基线为 Commit 51：[`52692624a4ef717d2b462b854cf0ea72390196be`](https://github.com/BigSaltyMan/moonclip/commit/52692624a4ef717d2b462b854cf0ea72390196be)。本文整理既有记录和同 SHA CI，不重新运行历史检查。能力均按开发源码 **Unreleased** 解释，不构成新版本发布或赛事申报验收。
+以下历史功能证据以 Commit 51 为基线；这些增量已于 2026-10-24 随 [0.3.0 正式发布](release-0.3.0.md)。原功能基线为 Commit 51：[`52692624a4ef717d2b462b854cf0ea72390196be`](https://github.com/BigSaltyMan/moonclip/commit/52692624a4ef717d2b462b854cf0ea72390196be)。本文整理既有记录和同 SHA CI，不重新运行历史检查。历史功能行的 **Unreleased** 按当时阶段解释；正式发布事实见下方独立章节，不转记历史测试归属，也不构成赛事申报验收。
 
 ## 统计口径
 
@@ -66,7 +66,7 @@ Commit 26：[`cff654190fdbb5bbb47c5cb11b208a6a9f209deb`](https://github.com/BigS
 - [性能基线](benchmarks.md)属于 Commit 18：`6a116b45600cbe8ecd577664a71b50fdfa8ce5c0`，指定 Windows x64／native release 环境的 11 个案例。没有为本轮新增接口重测，也没有 JS 性能结论。
 - [0.1.0 发布](release-0.1.0.md)的源码为 `10a9a1012d5fb07a333936ea83ce22e1f98a03d5`；[0.2.0 发布](release-0.2.0.md)的源码为 `e0ef766b34562bcad2b3f3e0d50002adf7b05912`。历史候选清单、哈希、完整 CI 和消费者结果仍按原记录解释。
 - [0.2.1 发布](release-0.2.1.md)的源码为 `02a6043692c966b3687996f9eb5197470712aca0`，独立 registry 消费者 native／JS 已在当时验证；状态文档提交不能冒充发布源码。该发布没有包含本文所列后续增量。
-- [旧树接口验收](acceptance-trees.md)与旧候选包只证明当时范围。Commit 52 整理时尚未进行增量接口包级验收；后续开发源码包验证见下节，增量接口的注册表消费者仍**未执行**。截至 Commit 53 没有新增版本、候选冻结或发布结论；后续 0.3.0 候选见下节。
+- [旧树接口验收](acceptance-trees.md)与旧候选包只证明当时范围。Commit 52 整理时尚未进行增量接口包级验收；后续开发源码包验证见下节；截至该阶段增量接口的注册表消费者仍**未执行**，本次 0.3.0 的实际验证另记于下方正式发布章节。截至 Commit 53 没有新增版本、候选冻结或发布结论；后续 0.3.0 候选见下节。
 
 ## 开发源码包外部消费者验证（Commit 53）
 
@@ -88,7 +88,19 @@ Commit 26：[`cff654190fdbb5bbb47c5cb11b208a6a9f209deb`](https://github.com/BigS
 
 版本预检、候选方法及未执行项目见[0.3.0 说明](release-0.3.0.md)。实际工具结果、两平台 ZIP 清单及校验和、最终候选 SHA、同 SHA CI 和冻结核对放在提交后的 `_build/release-0.3.0/delivery.json`，不在本文提前填入当前提交 SHA。
 
-本笔止于候选冻结，尚未上传 Mooncakes、创建 v0.3.0 或 GitHub Release，也没有从注册表验证 0.3.0。历史性能、浏览器及注册表证据不转记到候选提交。
+Commit 54 当时止于候选冻结，未上传 Mooncakes、创建 v0.3.0 或 GitHub Release，也未从注册表验证 0.3.0。随后正式发布见下节；历史性能、浏览器及注册表证据不转记到候选提交。
+
+## 0.3.0 正式发布与注册表消费者验证
+
+发布源码为 [`d21baf6687b5d890392f87574aac48f22cd3d5f0`](https://github.com/BigSaltyMan/moonclip/commit/d21baf6687b5d890392f87574aac48f22cd3d5f0)。2026-10-24 正式上传 Mooncakes 后，仓库外新项目通过 `moon add BigSaltyMan/moonclip@0.3.0` 安装；解析来源为 registry，没有 moon.work、本地路径或复制候选库。
+
+native、JS 各运行一次原消费者，基础检查、六个旧树入口、整数窗口及三个增量流程均成功。实际下载的 61 个文件，其路径、大小、内容哈希与冻结源码及候选一致，编译后保持不变。流程/API 对应关系沿用 Commit 53，不将运行次数或断言数计作库测试。**本次新增库测试 0、执行库测试 0**，不补全量、参考、性能或演示浏览器验收。
+
+实际发布 ZIP 为 Windows 冻结归档，288641 字节，SHA-256 `31d0e426617f7e6286bac80ddde099ccfa14c71b423c7122e8a24fa8b9de8d71`；服务端校验和相同。沿用[发布源码 package CI](https://github.com/BigSaltyMan/moonclip/actions/runs/40088821022)，它不是该 SHA 的完整回归。2406 仍仅为完整入口配置期望。
+
+[Mooncakes 0.3.0 文档](https://mooncakes.io/docs/BigSaltyMan/moonclip@0.3.0/)已生成，版本、README 与新增接口实际可见；包内“待发布／Unreleased”保留冻结快照文字，此状态说明不替换注册表内容。[v0.3.0 Release](https://github.com/BigSaltyMan/moonclip/releases/tag/v0.3.0)及标签固定在上述源码，三个附件已重新下载逐字节核验。
+
+当前发布状态文档另行提交，只运行 docs scope；状态提交 SHA、同 SHA docs CI、完整清单和各阶段日志归属写入提交后 `_build/release-0.3.0/publication-final-delivery.json`，不将状态提交冒充发布源码。详情见[正式发布记录](release-0.3.0.md)。
 
 ## Commit 52 文档检查的边界
 

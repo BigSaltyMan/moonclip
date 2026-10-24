@@ -22,6 +22,9 @@ DOCUMENTS = (
     "docs/rectclip.md",
     "docs/minkowski.md",
     "docs/polytree-query.md",
+    "docs/release-0.3.0.md",
+    "docs/composition.md",
+    "docs/release-checklist.md",
 )
 LINK = re.compile(r"!?\[[^\]\n]*\]\(\s*(?:<([^>\n]+)>|([^\s)]+))(?:\s+[\"'][^\n]*?[\"'])?\s*\)")
 

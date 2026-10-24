@@ -1,8 +1,8 @@
 # 支持范围与使用边界
 
-已发布版为 **0.2.1**，其运行库和公开接口与 0.2.0 相同，发布事实见[0.2.1 记录](release-0.2.1.md)。当前开发源码的增量已归入 **0.3.0 待发布候选**；`moon.mod` 已为 0.3.0，但这些入口尚未在注册表发布，见[候选说明](release-0.3.0.md)。旧版本内容见 [0.1.0](release-0.1.0.md)、[0.2.0](release-0.2.0.md)。
+当前已发布版为 **0.3.0**，本文所列增量均已随该版本交付，独立 registry 消费者 native／JS 验证通过，见[0.3.0 发布记录](release-0.3.0.md)。发布源码和标签固定在 `d21baf6687b5d890392f87574aac48f22cd3d5f0`；当前页面为单独的发布状态更新，注册表包内文字保留冻结候选快照。旧版本事实见 [0.1.0](release-0.1.0.md)、[0.2.0](release-0.2.0.md)及 [0.2.1](release-0.2.1.md)。
 
-| 开发源码能力 | 整数／小数 | 输出与查询范围 |
+| 0.3.0 能力 | 整数／小数 | 输出与查询范围 |
 | --- | --- | --- |
 | 开放折线窗口裁剪 | 均支持 | 有序开放片段，无填充或树查询 |
 | 闭合区域窗口裁剪 | 均支持 | 平铺／孔洞树 |
@@ -27,7 +27,7 @@
 | 开放描边 | `stroke_polyline` / `Paths64` | `stroke_polyline_d` / `PathsD` | width 是完整宽度，两侧各半；Butt 默认，另有 Square / Round 端点 |
 | 描边孔洞树 | **0.2.0**：`stroke_tree` / `PolyTree64` | **0.2.0**：`stroke_tree_d` / `PolyTreeD` | 同样的完整宽度、三种端点和四种连接；单条开放路线，无填充规则参数，返回最终区域层级 |
 | 显式简化 | `simplify_paths` / `SimplifyResult` | `simplify_paths_d` / `SimplifyResultD` | 默认 Closed、epsilon=0；报告保留退化路径，不自行过滤 |
-| 单图案扫掠 | `minkowski_sum` / `Paths64` | Unreleased：`minkowski_sum_d` / `PathsD` | 必须指定路线开闭；图案总是闭合；平铺与树均保留共线点，树另用 `minkowski_sum_tree`／`minkowski_sum_tree_d` |
+| 单图案扫掠 | `minkowski_sum` / `Paths64` | **0.3.0**：`minkowski_sum_d` / `PathsD` | 必须指定路线开闭；图案总是闭合；平铺与树均保留共线点，树另用 `minkowski_sum_tree`／`minkowski_sum_tree_d` |
 
 OffsetOptions 默认 Miter、MiterLimit=2、ArcTolerance=0。连接可选 Miter / Bevel / Square / Round；Miter 超限回退 Square。MiterLimit 必须有限且至少 2，ArcTolerance 必须有限且非负；0 为自动圆弧精度。正负 delta 分别扩张 / 收缩区域；收缩可能消灭区域。负 width、非有限参数返回错误；整数 0≤width<1、空路线、单点路线为成功空区域，仍先验证全部输入与参数。详见 [数值路线](numerics.md)与[组合流程](composition.md)。
 

@@ -1,6 +1,6 @@
-# PolyTree 点定位（Unreleased）
+# PolyTree 点定位（0.3.0）
 
-当前新增能力已归入 **0.3.0 待发布候选**，尚未正式发布。下文 Unreleased 标记保留开发阶段归属，候选范围与验证见[候选说明](release-0.3.0.md)。
+本页新增能力已随 **0.3.0 正式发布**，见[发布记录](release-0.3.0.md)。下文 Unreleased 与 Commit 标记保留各笔开发阶段归属；注册表包内文字是冻结候选快照，本页为发布后的状态更新。
 
 `PolyTree64::locate(point, limits=) -> Result[TreePointLocation64, ClipError]` 查询已有整数树。点每轴必须在 ±1_000_000_000 内，包含端点。空树返回 Outside，仍检查查询点和限制参数。
 

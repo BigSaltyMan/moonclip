@@ -1,10 +1,10 @@
 # MoonClip 交互演示
 
-当前新增能力已归入 **0.3.0 待发布候选**，尚未正式发布。下文 Unreleased 标记保留开发阶段归属，候选范围与验证见[候选说明](release-0.3.0.md)。
+本页新增能力已随 **0.3.0 正式发布**，见[发布记录](release-0.3.0.md)。下文 Unreleased 与 Commit 标记保留各笔开发阶段归属；注册表包内文字是冻结候选快照，本页为发布后的状态更新。
 
-## 当前操作入口（开发源码，Unreleased）
+## 当前操作入口（0.3.0 对应源码）
 
-使用[固定工具链](toolchain.md)和 Node.js 20 以上，在仓库 `demo` 目录运行 `npm run dev`，服务启动后访问 **http://127.0.0.1:4173/**。没有 npm 依赖，不需要 npm install。演示调用真实 MoonBit 核心，前端不自行缩放、量化或求交；源码能力不等于 Mooncakes 0.2.1 发布包范围。
+使用[固定工具链](toolchain.md)和 Node.js 20 以上，在仓库 `demo` 目录运行 `npm run dev`，服务启动后访问 **http://127.0.0.1:4173/**。没有 npm 依赖，不需要 npm install。演示调用真实 MoonBit 核心，前端不自行缩放、量化或求交；下表库能力已随 Mooncakes 0.3.0 提供，演示仍从仓库启动。
 
 | 操作 | 坐标模式 | 结果结构 | 点定位 |
 | --- | --- | --- | --- |
@@ -197,9 +197,9 @@ build生成demo/dist，包含HTML、CSS、案例输入、界面/导出/worker脚
 | 区域Boolean | 两组有序轮廓；Intersection/Union/Difference/Xor；EvenOdd/NonZero | 整数或小数 |
 | 带孔偏移 | 轮廓及孔洞；有符号delta；四种Join；MiterLimit；ArcTolerance | 整数或小数 |
 | 路线加宽 | 单条开放路线；完整width；Butt/Square/Round端点；四种Join | 整数或小数 |
-| 图案扫掠 | 一个图案、一条路线；显式开闭；图案直接相加 | 整数／小数，开发演示 Unreleased |
-| 批量加宽 | 多条独立开放路线、共享样式、一次合并覆盖区域 | 整数／小数，开发演示 Unreleased |
-| 窗口裁剪 | 开放路线／闭合区域、矩形窗口；闭合支持填充规则 | 整数／小数，开发演示 Unreleased |
+| 图案扫掠 | 一个图案、一条路线；显式开闭；图案直接相加 | 整数／小数，0.3.0 对应演示 |
+| 批量加宽 | 多条独立开放路线、共享样式、一次合并覆盖区域 | 整数／小数，0.3.0 对应演示 |
+| 窗口裁剪 | 开放路线／闭合区域、矩形窗口；闭合支持填充规则 | 整数／小数，0.3.0 对应演示 |
 
 整数坐标要求合法JSON整数，桥接只接受可精确表示的安全整数，之后由库检查几何范围±10^9；小数直接构造PointD并传入Precision0—6。没有前端自行缩放的小数扫掠。距离、完整宽度、正ArcTolerance及epsilon都使用当前输入坐标的原始单位；MiterLimit无量纲且至少2，ArcTolerance0保留库的自动策略。允许负偏移，参数错误原样显示库错误和位置。
 
@@ -211,7 +211,7 @@ build生成demo/dist，包含HTML、CSS、案例输入、界面/导出/worker脚
 
 ## 孔洞层级查看与桥接协议
 
-结果结构默认 `paths`；六类区域操作均可选择 `tree`，按整数／小数及操作直接调用对应树入口，每次只运行一个几何入口，不先平铺再构树。开放窗口路线只接受 paths。Boolean、Offset、单路线 Stroke 的六入口自 0.2.0 提供，批量描边、闭合窗口和 Minkowski 树属于 Unreleased。切换不支持的组合时清空树、选择及查询。
+结果结构默认 `paths`；六类区域操作均可选择 `tree`，按整数／小数及操作直接调用对应树入口，每次只运行一个几何入口，不先平铺再构树。开放窗口路线只接受 paths。Boolean、Offset、单路线 Stroke 的六入口自 0.2.0 提供，批量描边、闭合窗口和 Minkowski 树自 0.3.0 提供。切换不支持的组合时清空树、选择及查询。
 
 桥接请求仍为 `version: 1`，可选 `output: "paths" | "tree"`，省略时为 `paths`。未知输出或开放窗口的 tree 请求返回 `BridgeInput` 错误。成功响应保留 paths，并标记 output；只有树响应包含 tree：
 

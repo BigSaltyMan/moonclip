@@ -1,8 +1,12 @@
 # 源码包审计与发布检查清单
 
-## 当前 0.3.0 发布候选（Commit 54，待发布）
+## 0.3.0 当前发布状态
 
-当前 package scope 为 0.3.0 重新生成 `_build/release-0.3.0/moonclip-0.3.0.zip`，报告为 `metadata_version=0.3.0`、`publication_status=unpublished-release-candidate`。沿用下方 Commit 53 的同一份消费者与 10 项发布工具检查，不增加案例；不预先构建根库，不运行库测试、全量、参考、性能或浏览器验收。
+0.3.0 已正式发布，registry 消费者 native／JS 各一次成功，实际归档与冻结候选一致。见[正式发布记录](release-0.3.0.md)。以下是 Commit 54 当时的候选流程，不表示还需重复上传或验收；候选与历史开发包报告保留原样。
+
+## 历史 0.3.0 发布候选（Commit 54）
+
+Commit 54 的 package scope 为 0.3.0 重新生成 `_build/release-0.3.0/moonclip-0.3.0.zip`，报告为 `metadata_version=0.3.0`、`publication_status=unpublished-release-candidate`。沿用下方 Commit 53 的同一份消费者与 10 项发布工具检查，不增加案例；不预先构建根库，不运行库测试、全量、参考、性能或浏览器验收。
 
 执行 `moon info && moon fmt`、`bash scripts/check.sh --scope package` 和 `git diff --check`；核对实际归档、仓库外 native／JS 各一次消费者及同 SHA Linux CI。提交后以两个 ZIP 的逐文件路径、大小、内容哈希及最终提交字节一致为冻结条件，各存自己的 ZIP 校验和。完整步骤、版本预检来源和发布授权边界见[0.3.0 候选说明](release-0.3.0.md)。
 
