@@ -10,7 +10,7 @@ Unreleased：`rect_clip_polygons_d` 配合不可变 `BoundsD` 提供小数闭合
 
 Unreleased：`rect_clip_polygons` 将整数闭合区域与矩形窗口一次求交，支持 EvenOdd／NonZero，返回可含孔洞的平铺区域。复用 Boolean 数值与预算契约，没有矩形专用优化，树输出另用 `rect_clip_polygons_tree`；详见[矩形裁剪](rectclip.md)。
 
-Unreleased：整数 `PolyTree64::locate` 返回最深严格包含的填充／孔洞节点，或优先返回全部边界命中。最坏线性访问全部轮廓顶点，Limits 限制被查询树的轮廓和总顶点，合法树也可能被较小查询额度拒绝。`locate_many` 提供同语义的整数树批量查询，树规模预检一次、整批共用预算并保持输入顺序，任一点错误则整批失败；vertex_index 表示查询点索引。空列表及空树仍验证相应参数和输入；不提供小数树查询或空间索引，网页仍只接单点。详见[树点定位](polytree-query.md)。
+Unreleased：整数 `PolyTree64::locate` 返回最深严格包含的填充／孔洞节点，或优先返回全部边界命中。最坏线性访问全部轮廓顶点，Limits 限制被查询树的轮廓和总顶点，合法树也可能被较小查询额度拒绝。`locate_many` 提供同语义的整数树批量查询，树规模预检一次、整批共用预算并保持输入顺序，任一点错误则整批失败；vertex_index 表示查询点索引。空列表及空树仍验证相应参数和输入；小数树另提供 `PolyTreeD::locate`／`locate_many`，按树原 Precision 量化查询并恢复一次临时整数视图，返回原小数节点；没有空间索引，网页仅接整数单点／批量。详见[树点定位](polytree-query.md)。
 
 Unreleased：`minkowski_sum_d` 提供小数单图案、单路线的平铺扫掠区域，默认 Precision=3（0—6）。继承整数入口锚点、路线开闭和共线点语义；不提供 MinkowskiDiff、多图案或路线及自动简化；树输出另用 `minkowski_sum_tree_d`，已有小数平铺演示保持原范围。图案和路线同网格量化后再作整数求和，生成范围及共享预算见[扫掠契约](minkowski.md)。
 

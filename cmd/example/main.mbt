@@ -10,6 +10,7 @@ fn run_foundation_example() -> Unit raise {
   run_decimal_stroke_batch_example()
   run_decimal_minkowski_example()
   run_tree_locate_example()
+  run_decimal_tree_locate_example()
   let path : @moonclip.Path64 = [
     @moonclip.Point64::new(-10L, 0L),
     @moonclip.Point64::new(10L, 0L),
@@ -1295,4 +1296,43 @@ fn run_minkowski_tree_example() -> Unit raise {
   assert_eq(children[0].is_hole(), true)
   assert_eq(children[0].children().length(), 0)
   example_result([children[0].contour()], [expected[1]])
+}
+
+///|
+fn run_decimal_tree_locate_example() -> Unit raise {
+  let tree = @moonclip.boolean_tree_d(
+    [
+      example_box_d(0.0, 0.0, 2.0, 2.0),
+      example_box_d(0.4, 0.4, 1.6, 1.6),
+      example_box_d(0.8, 0.8, 1.2, 1.2),
+    ],
+    [],
+    Union,
+    precision=@moonclip.Precision::new(2).unwrap(),
+  ).unwrap()
+  guard tree.locate(@moonclip.PointD::new(0.6, 0.6)) is Ok(InHole(hole)) else {
+    fail("Expected decimal hole query")
+  }
+  assert_eq(hole.depth(), 2)
+  let hole_expected = example_box_d(0.4, 0.4, 1.6, 1.6)
+  example_decimal_ring(
+    hole.contour(),
+    Array::makei(4, fn(i) { hole_expected[3 - i] }),
+  )
+  let results = tree
+    .locate_many([
+      @moonclip.PointD::new(0.2, 0.2),
+      @moonclip.PointD::new(-0.004, 1.0),
+      @moonclip.PointD::new(-0.1, 1.0),
+    ])
+    .unwrap()
+  assert_eq(results.length(), 3)
+  guard results[0] is Inside(node) else { fail("Expected decimal inside") }
+  assert_eq(node.depth(), 1)
+  guard results[1] is OnBoundary(nodes) else {
+    fail("Expected quantized boundary")
+  }
+  assert_eq(nodes.length(), 1)
+  assert_eq(nodes[0].depth(), 1)
+  assert_true(results[2] is Outside)
 }

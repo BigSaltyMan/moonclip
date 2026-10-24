@@ -6,8 +6,8 @@ cd "$repo_root"
 
 scope=full
 if [[ $# -ne 0 ]]; then
-  if [[ $# -ne 2 || "$1" != --scope || ( "$2" != full && "$2" != minkowski-tree && "$2" != rectclip-tree && "$2" != stroke-batch-tree && "$2" != rectclip-lines-decimal && "$2" != rectclip-polygons-decimal && "$2" != rectclip-polygons && "$2" != stroke-batch-decimal && "$2" != stroke-batch && "$2" != minkowski-decimal && "$2" != tree-locate && "$2" != tree-locate-batch && "$2" != demo-rectclip && "$2" != demo-minkowski-decimal && "$2" != demo-stroke-batch && "$2" != demo-tree-locate ) ]]; then
-    printf 'Usage: bash scripts/check.sh [--scope full|minkowski-tree|rectclip-tree|stroke-batch-tree|rectclip-lines-decimal|rectclip-polygons-decimal|rectclip-polygons|stroke-batch-decimal|stroke-batch|minkowski-decimal|tree-locate|tree-locate-batch|demo-rectclip|demo-minkowski-decimal|demo-stroke-batch|demo-tree-locate]\n' >&2
+  if [[ $# -ne 2 || "$1" != --scope || ( "$2" != full && "$2" != minkowski-tree && "$2" != rectclip-tree && "$2" != stroke-batch-tree && "$2" != rectclip-lines-decimal && "$2" != rectclip-polygons-decimal && "$2" != rectclip-polygons && "$2" != stroke-batch-decimal && "$2" != stroke-batch && "$2" != minkowski-decimal && "$2" != tree-locate && "$2" != tree-locate-batch && "$2" != tree-locate-decimal && "$2" != demo-rectclip && "$2" != demo-minkowski-decimal && "$2" != demo-stroke-batch && "$2" != demo-tree-locate ) ]]; then
+    printf 'Usage: bash scripts/check.sh [--scope full|minkowski-tree|rectclip-tree|stroke-batch-tree|rectclip-lines-decimal|rectclip-polygons-decimal|rectclip-polygons|stroke-batch-decimal|stroke-batch|minkowski-decimal|tree-locate|tree-locate-batch|tree-locate-decimal|demo-rectclip|demo-minkowski-decimal|demo-stroke-batch|demo-tree-locate]\n' >&2
     exit 2
   fi
   scope="$2"
@@ -46,7 +46,7 @@ if [[ "$scope" == demo-rectclip || "$scope" == demo-minkowski-decimal || "$scope
   git diff --check
   exit 0
 fi
-if [[ "$scope" == minkowski-tree || "$scope" == rectclip-tree || "$scope" == stroke-batch-tree || "$scope" == rectclip-lines-decimal || "$scope" == rectclip-polygons-decimal || "$scope" == rectclip-polygons || "$scope" == stroke-batch-decimal || "$scope" == stroke-batch || "$scope" == minkowski-decimal || "$scope" == tree-locate || "$scope" == tree-locate-batch ]]; then
+if [[ "$scope" == minkowski-tree || "$scope" == rectclip-tree || "$scope" == stroke-batch-tree || "$scope" == rectclip-lines-decimal || "$scope" == rectclip-polygons-decimal || "$scope" == rectclip-polygons || "$scope" == stroke-batch-decimal || "$scope" == stroke-batch || "$scope" == minkowski-decimal || "$scope" == tree-locate || "$scope" == tree-locate-batch || "$scope" == tree-locate-decimal ]]; then
   selection='stroke batch: *'
   if [[ "$scope" == minkowski-tree ]]; then
     selection='minkowski tree: *'
@@ -78,6 +78,9 @@ if [[ "$scope" == minkowski-tree || "$scope" == rectclip-tree || "$scope" == str
   if [[ "$scope" == tree-locate-batch ]]; then
     selection='tree locate batch: *'
   fi
+  if [[ "$scope" == tree-locate-decimal ]]; then
+    selection='decimal tree locate: *'
+  fi
   mkdir -p "_build/$scope"
   for target in native js; do
     moon check --target "$target" --deny-warn
@@ -92,14 +95,14 @@ printf 'Checking native target\n'
 moon check --target native --deny-warn
 mkdir -p _build/conformance
 moon test --target native | tee _build/conformance/all-native.log
-grep -Fxq "Total tests: 2403, passed: 2403, failed: 0." _build/conformance/all-native.log
+grep -Fxq "Total tests: 2406, passed: 2406, failed: 0." _build/conformance/all-native.log
 moon build --target native
 moon run --target native cmd/example
 printf 'Checking JS target\n'
 node --version
 moon check --target js --deny-warn
 moon test --target js | tee _build/conformance/all-js.log
-grep -Fxq "Total tests: 2403, passed: 2403, failed: 0." _build/conformance/all-js.log
+grep -Fxq "Total tests: 2406, passed: 2406, failed: 0." _build/conformance/all-js.log
 moon fmt --check
 mkdir -p _build/conformance
 for target in native js; do

@@ -13,6 +13,7 @@ priv struct TreeNodeD {
 
 ///|
 priv struct TreeDataD {
+  precision : Precision
   nodes : Array[TreeNodeD]
   roots : Array[Int]
 }
@@ -65,7 +66,8 @@ pub fn PolyNodeD::is_hole(self : PolyNodeD) -> Bool {
 
 ///|
 // Logical allocation units (not bytes): 4 + 5*N + 2*V, since the total
-// root/child index count equals N. Work: 1 + 2*N + V. Charge before allocating;
+// root/child index count equals N. Precision is retained in this same data object,
+// with no extra object allocation. Work: 1 + 2*N + V. Charge before allocating;
 // no refund for the integer tree. Every failure uses output, never input indices.
 fn decimal_tree_output(
   tree : PolyTree64,
@@ -104,5 +106,5 @@ fn decimal_tree_output(
     roots.push(index)
   }
   decimal_spend(budget, 2, 1, loc)
-  { data: { nodes, roots, }, }
+  { data: { precision, nodes, roots, }, }
 }

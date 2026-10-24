@@ -225,6 +225,8 @@ pub fn PolyTree64::to_paths(Self) -> Array[Array[Point64]]
 pub struct PolyTreeD {
   // private fields
 }
+pub fn PolyTreeD::locate(Self, PointD, limits? : Limits) -> Result[TreePointLocationD, ClipError]
+pub fn PolyTreeD::locate_many(Self, Array[PointD], limits? : Limits) -> Result[Array[TreePointLocationD], ClipError]
 pub fn PolyTreeD::roots(Self) -> Array[PolyNodeD]
 pub fn PolyTreeD::to_paths(Self) -> Array[Array[PointD]]
 
@@ -316,6 +318,13 @@ pub(all) enum TreePointLocation64 {
   Inside(PolyNode64)
   InHole(PolyNode64)
   OnBoundary(Array[PolyNode64])
+}
+
+pub(all) enum TreePointLocationD {
+  Outside
+  Inside(PolyNodeD)
+  InHole(PolyNodeD)
+  OnBoundary(Array[PolyNodeD])
 }
 
 // Type aliases
