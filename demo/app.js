@@ -61,16 +61,17 @@ function invalidate(){requestId++;valid=null;clearTree();clearQuery();$('export-
 function showError(error,report){valid=null;clearTree();clearQuery();$('export-svg').disabled=true;$('export-json').disabled=true;$('compute').disabled=false;$('status').textContent='计算未完成';$('result-detail').textContent='检查错误信息，修正后重新计算';$('error').hidden=false;$('error').textContent=JSON.stringify(error,null,2);showReport(report);for(const id of ['contours','vertices','elapsed'])$(id).textContent='—';$('removed').textContent=report?.removed_vertices??'—';draw();}
 function numeric(id){const value=$(id).value.trim();if(value==='')throw new Error('参数不能为空: '+id);const n=Number(value);if(!Number.isFinite(n))throw new Error('参数必须是有限数值: '+id);return n;}
 function treeQuerySupported(){
-  return $('mode').value==='integer'&&$('output').value==='tree'&&(['boolean','offset','stroke','stroke-batch','minkowski'].includes(scene)||(scene==='rectclip'&&$('input-kind').value==='polygons'));
+  return ['integer','decimal'].includes($('mode').value)&&$('output').value==='tree'&&(['boolean','offset','stroke','stroke-batch','minkowski'].includes(scene)||(scene==='rectclip'&&$('input-kind').value==='polygons'));
 }
 function withTreeQuery(request){
   if(treeQuerySupported()&&$('query-enabled').checked){
+    const coordinate=$('mode').value==='integer'?Number.isSafeInteger:Number.isFinite;
     if($('query-mode').value==='batch'){
       const points=JSON.parse($('query-points').value);
       if(!Array.isArray(points)||points.length>32)throw new Error('批量查询必须是最多 32 个点的数组');
-      if(!points.every(p=>Array.isArray(p)&&p.length===2&&p.every(Number.isSafeInteger)))throw new Error('查询点必须是 [x,y] 整数坐标');
+      if(!points.every(p=>Array.isArray(p)&&p.length===2&&p.every(coordinate)))throw new Error($('mode').value==='integer'?'查询点必须是 [x,y] 安全整数坐标':'查询点必须是 [x,y] 有限数值');
       request.query={points};
-    }else request.query={point:[numeric('query-x'),numeric('query-y')]};
+    }else {const point=[numeric('query-x'),numeric('query-y')];if(!point.every(coordinate))throw new Error('整数查询点必须是安全整数');request.query={point};}
   }
   return request;
 }
@@ -92,6 +93,8 @@ function calculate(){
 function setVisibility(){
   const querySupported=treeQuerySupported();
   $('query-controls').hidden=!querySupported;if(!querySupported)$('query-enabled').checked=false;
+  for(const id of ['query-x','query-y'])$(id).step=$('mode').value==='decimal'?'any':'1';
+  $('query-semantics').textContent=$('mode').value==='decimal'?'小数查询使用本次建树 Precision。查询点先量化到同一网格，再判断区域位置；靠近边界的点可能量化到边界。图中标记保留原始输入坐标，不表示量化后的判定位置。':'整数查询使用原始整数坐标。';
   $('query-fields').hidden=!$('query-enabled').checked;$('query-single').hidden=$('query-mode').value==='batch';$('query-batch').hidden=$('query-mode').value!=='batch';
   document.querySelectorAll('[data-for]').forEach(el=>{el.hidden=!el.dataset.for.split(' ').includes(scene);});
   if(scene==='rectclip')$('fill-controls').hidden=$('input-kind').value!=='polygons';

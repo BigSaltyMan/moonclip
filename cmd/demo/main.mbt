@@ -326,6 +326,125 @@ fn encode_integer_tree_result(
 }
 
 ///|
+// Match public snapshots to this response's breadth-first display indices.
+// These indices are never interpreted as kernel node IDs.
+fn encode_tree_query_d(
+  point : @moonclip.PointD,
+  located : @moonclip.TreePointLocationD,
+  encoded : (Json, Json),
+) -> Json raise DemoError {
+  guard encoded.0 is Array(paths) else {
+    raise Input("Missing encoded contours", None, None)
+  }
+  guard object(encoded.1).get("nodes") is Some(Array(nodes)) else {
+    raise Input("Missing encoded nodes", None, None)
+  }
+  if paths.length() != nodes.length() {
+    raise Input("Unaligned encoded nodes", None, None)
+  }
+  let (status, hits) : (String, Array[@moonclip.PolyNodeD]) = match located {
+    @moonclip.Outside => ("Outside", [])
+    @moonclip.Inside(node) => ("Inside", [node])
+    @moonclip.InHole(node) => ("InHole", [node])
+    @moonclip.OnBoundary(nodes) => ("OnBoundary", nodes)
+  }
+  let indices : Array[Int] = []
+  for hit in hits {
+    let contour = hit.contour().map(fn(p) { [p.x, p.y] }).to_json()
+    let mut found : Int? = None
+    for i = 0; i < paths.length(); i = i + 1 {
+      let node = object(nodes[i])
+      if paths[i] == contour &&
+        node.get("depth") == Some(hit.depth().to_json()) &&
+        node.get("is_hole") == Some(hit.is_hole().to_json()) {
+        if found is Some(_) {
+          raise Input("Ambiguous query node snapshot", None, None)
+        }
+        found = Some(i)
+      }
+    }
+    guard found is Some(index) else {
+      raise Input("Query node snapshot not found", None, None)
+    }
+    if indices.contains(index) {
+      raise Input("Duplicate query node snapshot", None, None)
+    }
+    indices.push(index)
+  }
+  Json::object({
+    "point": [point.x, point.y].to_json(),
+    "status": status.to_json(),
+    "node_indices": indices.to_json(),
+  })
+}
+
+///|
+priv enum DecimalTreeQuery {
+  DecimalQueryPoint(@moonclip.PointD)
+  DecimalQueryPoints(Array[@moonclip.PointD])
+}
+
+///|
+fn parse_decimal_tree_query(query : Json) -> DecimalTreeQuery raise DemoError {
+  let q = object(query)
+  match (q.get("point"), q.get("points")) {
+    (Some(point), None) =>
+      DecimalQueryPoint(coordinates(Json::array([Json::array([point])]))[0][0])
+    (None, Some(Array(points))) => {
+      if points.length() > 32 {
+        raise Input("Demo batch query accepts at most 32 points", None, None)
+      }
+      DecimalQueryPoints(coordinates(Json::array([Json::array(points)]))[0])
+    }
+    _ =>
+      raise Input(
+        "Query requires exactly one of point or points; points must be an array",
+        None,
+        None,
+      )
+  }
+}
+
+///|
+// Raw query coordinates are preserved; only the kernel applies the tree's Precision.
+fn encode_decimal_tree_result(
+  tree : @moonclip.PolyTreeD,
+  request : DecimalTreeQuery?,
+) -> (Json, Json, Json?) raise DemoError {
+  let located = match request {
+    Some(DecimalQueryPoint(point)) => Some([value(tree.locate(point))])
+    Some(DecimalQueryPoints(points)) => Some(value(tree.locate_many(points)))
+    None => None
+  }
+  let encoded = encode_tree_d(tree)
+  let query = match (request, located) {
+    (Some(DecimalQueryPoint(point)), Some([result])) =>
+      Some(encode_tree_query_d(point, result, encoded))
+    (Some(DecimalQueryPoints(points)), Some(results)) => {
+      if points.length() != results.length() {
+        raise Input("Unaligned batch query results", None, None)
+      }
+      let encoded_results = []
+      for i = 0; i < points.length(); i = i + 1 {
+        encoded_results.push(
+          encode_tree_query_d(points[i], results[i], encoded),
+        )
+      }
+      Some(
+        Json::object({
+          "mode": "batch".to_json(),
+          "points": points.map(fn(p) { [p.x, p.y] }).to_json(),
+          "results": Json::array(encoded_results),
+        }),
+      )
+    }
+    (None, None) => None
+    _ => raise Input("Missing query results", None, None)
+  }
+  (encoded.0, encoded.1, query)
+}
+
+///|
 fn stats(
   removed : Int,
   per_path : Array[Int],
@@ -412,6 +531,7 @@ fn library_error(error : @moonclip.ClipError) -> Json {
 fn execute_rectclip(
   r : Map[String, Json],
   query_request : TreeQuery?,
+  decimal_query_request : DecimalTreeQuery?,
 ) -> Json raise DemoError {
   let kind = text(r, "input_kind", "lines")
   if kind != "lines" && kind != "polygons" {
@@ -464,7 +584,7 @@ fn execute_rectclip(
   let mut query_result : Json? = None
   let result = if mode == "decimal" {
     if output == "tree" {
-      let (encoded_paths, encoded_tree) = encode_tree_d(
+      let encoded = encode_decimal_tree_result(
         value(
           @moonclip.rect_clip_polygons_tree_d(
             rect,
@@ -473,9 +593,11 @@ fn execute_rectclip(
             fill_rule=rule,
           ),
         ),
+        decimal_query_request,
       )
-      tree = encoded_tree
-      encoded_paths
+      tree = encoded.1
+      query_result = encoded.2
+      encoded.0
     } else if kind == "polygons" {
       encode_decimal(
         value(
@@ -557,6 +679,10 @@ fn execute(request : Json) -> Json raise DemoError {
     raise Input("Unknown demo bridge version", None, None)
   }
   let scene = text(r, "scene", "boolean")
+  let mode = text(r, "mode", "integer")
+  if mode != "integer" && mode != "decimal" {
+    raise Input("Unknown coordinate mode", None, None)
+  }
   if r.get("query") is Some(_) &&
     (
       !(scene == "boolean" ||
@@ -565,24 +691,30 @@ fn execute(request : Json) -> Json raise DemoError {
       scene == "stroke-batch" ||
       scene == "minkowski" ||
       (scene == "rectclip" && text(r, "input_kind", "lines") == "polygons")) ||
-      text(r, "mode", "integer") != "integer" ||
       text(r, "output", "paths") != "tree"
     ) {
-    raise Input(
-      "Point query requires supported integer region tree output",
-      None,
-      None,
-    )
+    raise Input("Point query requires supported region tree output", None, None)
   }
-  let query_request = match r.get("query") {
-    None => None
-    Some(query) => Some(parse_tree_query(query))
+  let query_request = if mode == "integer" {
+    match r.get("query") {
+      None => None
+      Some(query) => Some(parse_tree_query(query))
+    }
+  } else {
+    None
+  }
+  let decimal_query_request = if mode == "decimal" {
+    match r.get("query") {
+      None => None
+      Some(query) => Some(parse_decimal_tree_query(query))
+    }
+  } else {
+    None
   }
   // Open paths must bypass closed-region preparation and all unrelated parameters.
   if scene == "rectclip" {
-    return execute_rectclip(r, query_request)
+    return execute_rectclip(r, query_request, decimal_query_request)
   }
-  let mode = text(r, "mode", "integer")
   let output = text(r, "output", "paths")
   if output != "paths" && output != "tree" {
     raise Input("Unknown output mode", None, None)
@@ -641,7 +773,7 @@ fn execute(request : Json) -> Json raise DemoError {
     let mut query_result : Json? = None
     let result = if output == "tree" {
       let (encoded_paths, encoded_tree) = if mode == "decimal" {
-        encode_tree_d(
+        let encoded = encode_decimal_tree_result(
           value(
             @moonclip.stroke_polylines_tree_d(
               paths,
@@ -651,7 +783,10 @@ fn execute(request : Json) -> Json raise DemoError {
               options~,
             ),
           ),
+          decimal_query_request,
         )
+        query_result = encoded.2
+        (encoded.0, encoded.1)
       } else {
         let encoded = encode_integer_tree_result(
           value(
@@ -764,7 +899,7 @@ fn execute(request : Json) -> Json raise DemoError {
     let a = prepared.iter().take(split).collect()
     let b = prepared.iter().drop(split).collect()
     if output == "tree" {
-      let encoded = encode_tree_d(
+      let encoded = encode_decimal_tree_result(
         match scene {
           "boolean" =>
             value(
@@ -811,7 +946,9 @@ fn execute(request : Json) -> Json raise DemoError {
           }
           _ => raise Input("Unknown decimal scene", None, None)
         },
+        decimal_query_request,
       )
+      query_result = encoded.2
       tree = encoded.1
       encoded.0
     } else {

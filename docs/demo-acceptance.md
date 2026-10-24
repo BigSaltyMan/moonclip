@@ -296,3 +296,25 @@ Uncaught TypeError: Failed to execute 'observe' on 'MutationObserver': parameter
 仅新增一张[批量点列表与孔洞命中截图](demo-screenshots/commit49-batch-tree-query.png)。实际下载重放摘要和窄屏诊断保留在忽略目录 `demo/.qa/commit49/download-replay.json`、`narrow-observation.json`；诊断只加入临时 HTML 副本。三项检查同时保留旧单点多边界及无查询兼容，验证导出深复制、不支持组合、互斥格式、32 点上限及后续点错误索引。
 
 根 `.mbti` 无变化，未改根库、树存储、定位算法、依赖、版本或标签，规划书、申报书及 `.vscode/` 的既有改动保留。未运行库全量、全部工具／桥接、参考重建、性能、基准或候选验收，未发布。普通 CI 使用已有 `demo-tree-locate`，以最终源码 SHA 的轻量运行结果为准。
+
+
+## Commit 51：小数树单点与批量定位增量验收
+
+2026-10-24，Windows，先执行 `moon info`、`moon fmt`，再运行既有 `demo-tree-locate` 轻量入口；格式、根接口差异及 JS 静态检查通过，演示构建一次，原有三个查询检查扩展后 **3/3**。随后 `node build.mjs --dev --reuse` 只启动 HTTP 服务，没有重复构建。Linux 同 SHA CI 单独核对，本地浏览器操作不计为 Linux 浏览器验收，三项也不计为新增库回归。
+
+| 操作 | 实际结果 |
+|---|---|
+| 手工小数三层区域 | Boolean Union / EvenOdd，外轮廓 [0,0]—[2,2]、孔洞 [0.4,0.4]—[1.6,1.6]、岛 [0.8,0.8]—[1.2,1.2]，实际得到 3 轮廓／12 点、深度 1／2／3 |
+| 单点与 Precision | 查询点 (-0.004,1) 在 Precision=2 为 OnBoundary，标记 cx 仍为 -0.004，step=any；Precision=3 为 Outside。修改精度立即隐藏旧查询并禁用导出，原输入保留 |
+| 小数批量与行选择 | 四点 (-0.004,1)、(0.6,0.6)、(0.4,0.6)、(0.4,0.6) 顺序为 OnBoundary、InHole、OnBoundary、OnBoundary；保留原坐标及重复项。孔洞命中路径 M0.4,0.4L0.4,1.6L1.6,1.6L1.6,0.4Z，深度 2；选择行前后耗时均为 4.60 ms，不重新求值。孔洞查询高亮与手动选择外轮廓可同时显示，计时不作为性能证据 |
+| 后续点越界 | 第三点改为 (10000001,0)，返回 DecimalCoordinateOutOfRange / PolyTreeQuery，path_index=null、vertex_index=2、precision=2；树和列表清空，导出禁用，无部分成功结果 |
+| 实际下载与重放 | 恢复 Precision=2 后下载 `moonclip-boolean (2).json` 及 `moonclip-boolean (1).svg`。v2 保存原点列表、模式、建树精度和完整结果；真实 MoonBit 桥接重放的原坐标、状态、命中完整轮廓／属性、paths 和 tree 均一致 |
+| SVG 实际打开 | 通过 HTTP 打开下载文件，外轮廓、孔洞及岛正确显示；3 个完整闭合轮廓与 JSON 逐点一致，NonZero 填充，无查询标记、原输入或选择高亮 |
+| 整数模式切回 | 查询点步长恢复 1，旧列表清除、导出禁用；保留的小数查询原值被 Editor 明确拒绝，不静默取整。恢复小数后正常计算 |
+| 主页面及一次窄屏 | 主视口 1280×720，error／warn 日志为空；临时同源 iframe 实测 390×844、scrollWidth=375，小数批量描边树的查询数组、语义提示及结果行可操作，孔洞及重复边界点正常显示 |
+
+窄屏临时容器再次记录 `Uncaught TypeError: Failed to execute 'observe' on 'MutationObserver': parameter 1 is not of type 'Node'.`，时间 **2026-10-24T04:54:30.340Z**，早于 load **04:54:30.423Z** 及新增流程操作。日志无来源地址和堆栈，子页 error／unhandledrejection 记录为空。**归因仍未确认，不定性为页面布局缺陷**，不宣称窄屏控制台完全无异常；没有进一步重复排查或修改浏览器环境，临时容器已关闭。
+
+仅新增一张[小数查询与原始点位截图](demo-screenshots/commit51-decimal-tree-query.png)。实际导出副本及重放、诊断记录保存在忽略目录 `demo/.qa/commit51/result.json`、`result.svg`、`replay.json`、`narrow-observation.json`，临时诊断不混入产品。三项检查保留整数单点／批量、无 query 兼容及错误检查；旧测试中“小数树查询必须失败”改为仍不支持的平铺查询，未运行整套旧桥接检查。
+
+代码审查确认公共 Boolean／Offset／Stroke／Minkowski 小数树、批量描边及闭合窗口小数树三条路由均使用统一小数查询辅助，同棵树先查询后编码；后四类未增加独立参数测试矩阵。根 `.mbti` 无变化，脚本与总数不变；根库、树存储、公开接口、参考、版本及发布标签未改。规划书、申报书和 `.vscode/` 原有改动保留，未运行库全量、全部工具测试、参考重建、性能、候选或发布验收，保持 Unreleased。
