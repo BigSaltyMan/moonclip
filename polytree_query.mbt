@@ -181,7 +181,7 @@ fn tree_locate_execute(
 }
 
 ///|
-/// Unreleased: locate an integer point using existing contour depths.
+/// Since 0.3.0: locate an integer point using existing contour depths.
 /// Limits count tree contours/vertices; worst-case linear in all contour vertices.
 pub fn PolyTree64::locate(
   self : PolyTree64,
@@ -238,7 +238,7 @@ fn tree_locate_many_execute(
 }
 
 ///|
-/// Unreleased: locate integer points in input order with one shared query budget.
+/// Since 0.3.0: locate integer points in input order with one shared query budget.
 /// Limits count tree contours/vertices; error vertex_index identifies the query point.
 pub fn PolyTree64::locate_many(
   self : PolyTree64,

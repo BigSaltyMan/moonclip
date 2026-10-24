@@ -445,7 +445,7 @@ fn rect_clip_execute(
 ///|
 /// Clip open integer routes to an axis-aligned window. Preserves fragment order,
 /// direction and collinear vertices; no implicit closing edge or fill semantics.
-/// Unreleased. Intersections follow the pinned low-precision C++ truncation rule.
+/// Since 0.3.0. Intersections follow the pinned low-precision C++ truncation rule.
 pub fn rect_clip_lines(
   rect : Bounds64,
   paths : Paths64,

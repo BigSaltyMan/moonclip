@@ -25,6 +25,10 @@ DOCUMENTS = (
     "docs/release-0.3.0.md",
     "docs/composition.md",
     "docs/release-checklist.md",
+    "docs/numerics.md",
+    "docs/related-work.md",
+    "docs/upstream.md",
+    "docs/upgrade-trees.md",
 )
 LINK = re.compile(r"!?\[[^\]\n]*\]\(\s*(?:<([^>\n]+)>|([^\s)]+))(?:\s+[\"'][^\n]*?[\"'])?\s*\)")
 

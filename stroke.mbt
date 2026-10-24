@@ -465,7 +465,7 @@ fn stroke_batch_tree_execute(
 
 ///|
 /// Stroke independent open routes with one shared style and full width.
-/// Unreleased: all generated regions are merged in one cleanup with a shared budget.
+/// Since 0.3.0: all generated regions are merged in one cleanup with a shared budget.
 pub fn stroke_polylines(
   paths : Paths64,
   width : Double,
@@ -481,7 +481,7 @@ pub fn stroke_polylines(
 }
 
 ///|
-/// Unreleased: final merged hierarchy of independent open routes with one shared style.
+/// Since 0.3.0: final merged hierarchy of independent open routes with one shared style.
 pub fn stroke_polylines_tree(
   paths : Paths64,
   width : Double,

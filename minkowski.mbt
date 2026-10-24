@@ -262,7 +262,7 @@ pub fn minkowski_sum(
 }
 
 ///|
-/// Unreleased: hierarchy of the final sweep Union, preserving collinear vertices.
+/// Since 0.3.0: hierarchy of the final sweep Union, preserving collinear vertices.
 /// Pattern offsets and route closure follow minkowski_sum; no endpoint or interior fill.
 pub fn minkowski_sum_tree(
   pattern : Path64,

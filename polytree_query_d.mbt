@@ -240,7 +240,7 @@ fn decimal_tree_locate_many_execute(
 }
 
 ///|
-/// Unreleased: quantize a point with this tree's original Precision, then locate exactly.
+/// Since 0.3.0: quantize a point with this tree's original Precision, then locate exactly.
 pub fn PolyTreeD::locate(
   self : PolyTreeD,
   point : PointD,
@@ -254,7 +254,7 @@ pub fn PolyTreeD::locate(
 }
 
 ///|
-/// Unreleased: ordered queries share one temporary grid view and budget.
+/// Since 0.3.0: ordered queries share one temporary grid view and budget.
 /// Query points may quantize together; error vertex_index identifies the query point.
 pub fn PolyTreeD::locate_many(
   self : PolyTreeD,

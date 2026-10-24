@@ -1,8 +1,8 @@
 # Minkowski Sum 图案扫掠
 
-本页新增能力已随 **0.3.0 正式发布**，见[发布记录](release-0.3.0.md)。下文 Unreleased 与 Commit 标记保留各笔开发阶段归属；注册表包内文字是冻结候选快照，本页为发布后的状态更新。
+下述增量能力自 **0.3.0** 提供，见[发布记录](release-0.3.0.md)。0.3.1 只修正文档表述，不改变运行库行为或接口；带 Commit 编号的验收记录按原阶段解释。
 
-## Unreleased：保留共线点的整数／小数孔洞树
+## 保留共线点的整数／小数孔洞树（自 0.3.0）
 
 `minkowski_sum_tree(pattern, path, path_is_closed, limits=)` 返回 PolyTree64；`minkowski_sum_tree_d(pattern, path, path_is_closed, precision=, limits=)` 返回 PolyTreeD，Precision 默认 3、范围 0—6。单图案、单路线语义与平铺入口一致：图案是直接相加的相对偏移，不居中；图案末首连接，路线是否闭合由参数决定；不填满端点图案或闭合路线内部，不替换成描边或包围盒扩张。
 
@@ -14,11 +14,11 @@
 
 空输入不新增快捷路径，沿用生成与 Union 流程后提取空树。访问器复制隔离不变，`to_paths()` 丢失显式父子关系。新入口自 0.3.0 提供，网页已接入整数／小数平铺与树，见[演示说明](demo.md)；Commit 45 只有 3 项定向测试，不把旧清单视为已执行新增树能力，也不重建参考。暂不支持多图案、MinkowskiDiff 或自动简化。
 
-## Unreleased：共同网格的小数入口
+## 共同网格的小数入口（自 0.3.0）
 
 `minkowski_sum_d(pattern, path, path_is_closed, precision=, limits=)` 复用整数求值，返回 `PathsD` 平铺闭合区域。图案是相对路线位置的偏移，不自动居中或改变锚点；图案始终连接末首，路线只由 `path_is_closed` 决定，重复首点不切换模式。不去重、不简化、不预先合并输入，不额外填入端点图案或路线内部。两点图案、空及退化输入沿用整数行为，但先完成原始数量、坐标及量化检查。输出保留整数共线点规则，内外数组与输入独立。
 
-两输入共用倍率 scale=10^precision，默认 precision=3、支持 0—6。每轴原单位范围为 ±1_000_000_000/scale；分别量化后作整数加法，生成点仍须满足整数每轴 ±1_000_000_000。输入分别合法并不保证生成合法。共同量化的碰撞诊断和累计解码预算见[小数契约](decimal.md)。这是未发布的单图案、单路线入口；历史整数参考数量及证据归属不变，不能视为已直接验证小数入口。
+两输入共用倍率 scale=10^precision，默认 precision=3、支持 0—6。每轴原单位范围为 ±1_000_000_000/scale；分别量化后作整数加法，生成点仍须满足整数每轴 ±1_000_000_000。输入分别合法并不保证生成合法。共同量化的碰撞诊断和累计解码预算见[小数契约](decimal.md)。这是自 0.3.0 提供的单图案、单路线入口；历史整数参考数量及证据归属不变，不能视为已直接验证小数入口。
 
 公开 `minkowski_sum(pattern: Path64, path: Path64, path_is_closed: Bool, limits?: Limits) -> Result[Paths64, ClipError]`。对应固定 Clipper2_2.0.1 的单图案 MinkowskiSum，运行库纯MoonBit，无新增依赖。
 

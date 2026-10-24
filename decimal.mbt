@@ -786,7 +786,7 @@ fn decimal_minkowski_execute(
 }
 
 ///|
-/// Unreleased: quantize pattern offsets and route on one grid before integer sums.
+/// Since 0.3.0: quantize pattern offsets and route on one grid before integer sums.
 /// Preserves the integer sweep's anchor, closure and collinear-output rules.
 pub fn minkowski_sum_d(
   pattern : PathD,
@@ -856,7 +856,7 @@ fn decimal_stroke_batch_execute(
 }
 
 ///|
-/// Unreleased: quantize all open routes on one grid, then merge their strokes once.
+/// Since 0.3.0: quantize all open routes on one grid, then merge their strokes once.
 /// Width and ArcTolerance use original units; every phase shares one budget.
 pub fn stroke_polylines_d(
   paths : PathsD,
@@ -979,7 +979,7 @@ fn decimal_rect_clip_polygons_execute(
 }
 
 ///|
-/// Unreleased: clip a decimal closed region using one precision grid and budget.
+/// Since 0.3.0: clip a decimal closed region using one precision grid and budget.
 /// Window parameters do not consume raw path quotas or join the collision map.
 pub fn rect_clip_polygons_d(
   rect : BoundsD,
@@ -1027,7 +1027,7 @@ fn decimal_rect_clip_lines_execute(
 }
 
 ///|
-/// Unreleased: clip independent decimal open routes on a common precision grid.
+/// Since 0.3.0: clip independent decimal open routes on a common precision grid.
 /// Preserves integer clipping's fragment order, direction and collinear vertices.
 pub fn rect_clip_lines_d(
   rect : BoundsD,
@@ -1100,7 +1100,7 @@ fn decimal_stroke_batch_tree_execute(
 }
 
 ///|
-/// Unreleased: shared-grid batch stroke hierarchy; conversion stays inside scan cleanup.
+/// Since 0.3.0: shared-grid batch stroke hierarchy; conversion stays inside scan cleanup.
 pub fn stroke_polylines_tree_d(
   paths : PathsD,
   width : Double,
@@ -1161,7 +1161,7 @@ fn decimal_rect_clip_polygons_tree_execute(
 }
 
 ///|
-/// Unreleased: clip on one decimal grid and decode the resulting integer hierarchy.
+/// Since 0.3.0: clip on one decimal grid and decode the resulting integer hierarchy.
 /// Window, intersection, tree construction and conversion share one budget.
 pub fn rect_clip_polygons_tree_d(
   rect : BoundsD,
@@ -1227,7 +1227,7 @@ fn decimal_minkowski_tree_execute(
 }
 
 ///|
-/// Unreleased: quantize both inputs together, then decode the same sweep hierarchy.
+/// Since 0.3.0: quantize both inputs together, then decode the same sweep hierarchy.
 /// Preserves collinear output; generation, tree construction and decoding share a budget.
 pub fn minkowski_sum_tree_d(
   pattern : PathD,

@@ -15,7 +15,7 @@ C# 源码是主要引擎阅读与移植参考，偏移、简化、扫掠等实�
 | 偏移／描边树（0.2.0） | 整数与小数入口返回最终区域父子层级，沿用单次累计预算 | 复用既有生成、清理、树构建及解码；定向测试与六入口候选消费者见[增量验收](acceptance-trees.md)，无新增算法移植声明 |
 | 小数入口 | 固定 10^precision 网格，0—6 | ClipperD 使用二进制倍率；DecimalGrid 与 ClipperDCommonGrid 是不同参考路线，不能互相替代 |
 | 简化 | 显式入口、完整报告，epsilon=0 只去约定重复点 | 正 epsilon 的有序轮廓与独立统计有严格参考；零阈值及三类退化报告属于 MoonClip 契约 |
-| Minkowski Sum | 单个整数图案、单路线、显式开闭、保留共线点 | 真实调用固定 C++ MinkowskiSum 对照；没有小数 / Diff / 带孔图案集合入口 |
+| Minkowski Sum | 单个整数／小数图案、单路线、显式开闭，支持平铺／树并保留共线点 | 旧固定 C++ MinkowskiSum 对照归属于整数参考；小数与树另有定向及消费者证据，不扩大旧矩阵。没有 Diff 或带孔图案集合入口 |
 | 精确基础及边界 | ±10^9、统一精确行列式、BigInt 面积、Result 和累计预算 | MoonClip 自行实现或加强的契约；不是照搬上游全部类型和值域 |
 | 容器及层级所有权 | 不可变点、数组显式复制、树访问器副本 | MoonBit 所有权与隔离设计，自有行为测试验证 |
 
@@ -23,9 +23,9 @@ C# 源码是主要引擎阅读与移植参考，偏移、简化、扫掠等实�
 
 ## 严格比较能说明什么
 
-当前新增五个库入口及交互层级的版本归属见[升级说明](upgrade-trees.md)。本笔只补充 MoonClip 当前范围，保留下文 MoonGeoKit 固定来源、核对日期和原有结论，没有重新扩展外部项目调研。
+0.2.0 新增五个库入口及交互层级的版本归属见[旧树升级说明](upgrade-trees.md)；0.3.0 增量见[升级说明](upgrade-incremental.md)。本笔只补充 MoonClip 当前范围，保留下文 MoonGeoKit 固定来源、核对日期和原有结论，没有重新扩展外部项目调研。
 
-[兼容报告](compatibility.md)从八类清单提取覆盖：Boolean 200、Offset 272、Stroke 276、Composition 24、Decimal 220、Simplify 224、Minkowski 144、Random 24，合计 **1384 个独立输入案例**。
+以下为旧八类参考的历史统计；现有目录的 1416 案例／2308 能力检查及新增接口证据归属见[增量验收索引](acceptance-incremental.md)。旧[兼容报告](compatibility.md)从八类清单提取覆盖：Boolean 200、Offset 272、Stroke 276、Composition 24、Decimal 220、Simplify 224、Minkowski 144、Random 24，合计 **1384 个独立输入案例**。
 
 这些案例对应 **2276 项被选择的能力检查**。例如一个 Boolean 输入分别求平铺与树，组合流程还检查中间结果和最终结果；同一输入仍只有一个案例。字段出现次数描述覆盖，不代表每种参数的笛卡尔积都被执行。native 与 JS 对同一批输入分别执行，也不能将两目标相加为独立案例数。
 

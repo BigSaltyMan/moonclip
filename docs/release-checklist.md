@@ -78,7 +78,7 @@ ZIP、report.json、package.log、consumer-native.log、consumer-js.log 位于 `
 
 1. Mooncakes 的版本规则、账号 / 模块名归属及 BigSaltyMan/moonclip@0.1.0 占用情况；准备阶段版本号不构成预留。
 2. 候选与拟发布提交一致，许可、元数据和实际归档审计通过。
-3. 上传成功后，在干净外部项目从注册表获取指定版本并运行消费者，成功后才能补安装命令及“Mooncakes 安装验证通过”。
+3. 上传成功后，在干净外部项目从注册表获取指定版本并运行消费者，目标版本安装命令可以作为用法示例提前列出；只有真实 registry 消费者成功后才能写“Mooncakes 安装验证通过”。
 4. 公开 Release、申报提交及人员字段分别按授权和事实完成。
 
 [官方版本说明](https://docs.moonbitlang.com/en/stable/toolchain/moon/package-manage-tour.html)描述 SemVer 格式。本次核对账号 BigSaltyMan、模块 / 版本发布前 404、服务端 dry-run 202 接受，随后正式上传 200；未来版本仍须重新核对实时规则与占用。

@@ -126,7 +126,7 @@ fn rect_clip_polygons_tree_execute(
 }
 
 ///|
-/// Unreleased: intersect a closed integer region with an axis-aligned window.
+/// Since 0.3.0: intersect a closed integer region with an axis-aligned window.
 /// Uses Boolean filling and grid rules; only caller paths count toward input limits.
 pub fn rect_clip_polygons(
   rect : Bounds64,
@@ -141,7 +141,7 @@ pub fn rect_clip_polygons(
 }
 
 ///|
-/// Unreleased: hierarchy of the region after window intersection, built in one scan.
+/// Since 0.3.0: hierarchy of the region after window intersection, built in one scan.
 /// A hole cut open by the window becomes part of the outer contour.
 pub fn rect_clip_polygons_tree(
   rect : Bounds64,

@@ -16,7 +16,7 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 MODULE = "BigSaltyMan/moonclip"
-VERSION = "0.3.0"
+VERSION = "0.3.1"
 EXPECTED = {
     "name": MODULE, "version": VERSION, "readme": "README.md", "license": "BSL-1.0",
     "repository": "https://github.com/BigSaltyMan/moonclip",
@@ -177,7 +177,7 @@ def audit(archive, expected):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--report", type=Path, default=Path("_build/release-0.3.0/report.json"))
+    parser.add_argument("--report", type=Path, default=Path("_build/release-0.3.1/report.json"))
     args = parser.parse_args()
     report_path = (ROOT / args.report).resolve()
     report_path.parent.mkdir(parents=True, exist_ok=True)

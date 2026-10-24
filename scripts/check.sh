@@ -34,9 +34,9 @@ if [[ -n "$untracked_interfaces" ]]; then
   exit 1
 fi
 if [[ "$scope" == package ]]; then
-  mkdir -p _build/release-0.3.0
-  python -m unittest discover -s tools/conformance -p test_release.py -v 2>&1 | tee _build/release-0.3.0/tool-tests.log
-  python scripts/check_release.py --report _build/release-0.3.0/report.json
+  mkdir -p _build/release-0.3.1
+  python -m unittest discover -s tools/conformance -p test_release.py -v 2>&1 | tee _build/release-0.3.1/tool-tests.log
+  python scripts/check_release.py --report _build/release-0.3.1/report.json
   git diff --check
   exit 0
 fi

@@ -1,8 +1,8 @@
 # Composition and cumulative resource protection
 
-本页新增能力已随 **0.3.0 正式发布**，见[发布记录](release-0.3.0.md)。下文 Unreleased 与 Commit 标记保留各笔开发阶段归属；注册表包内文字是冻结候选快照，本页为发布后的状态更新。
+下述增量能力自 **0.3.0** 提供，见[发布记录](release-0.3.0.md)。0.3.1 只修正文档表述，不改变运行库行为或接口；带 Commit 编号的验收记录按原阶段解释。
 
-## Batch stroke trees (Unreleased)
+## Batch stroke trees (since 0.3.0)
 
 `stroke_polylines_tree` and `stroke_polylines_tree_d` return the hierarchy of the final merged coverage of multiple independent open routes. Single-route `stroke_tree` / `stroke_tree_d` accept one route. All batch routes share full width, caps, joins, MiterLimit and ArcTolerance; they do not connect endpoints across routes. Roots have depth one; holes and islands follow existing tree conventions. Nodes have no source-route ownership, and input order does not determine hierarchy. Overlap can merge and holes can appear or disappear.
 
@@ -10,15 +10,15 @@ The private batch computation generates in the existing order, performs one Posi
 
 The flat wrapper still uses `output_extract` with its original cleanup and fees; its empty callback returns the already allocated array without tree fees. An empty tree keeps that array's spent allocation and separately charges existing `tree_empty` storage (4 logical nodes, 1 work), then decimal conversion where applicable. Empty success never bypasses input/parameter/quantization checks. No refunds or default-budget increases. Tree construction errors use PolyTree, decimal storage uses DecimalOutput, and output positions have no fabricated input indices.
 
-Tree accessors preserve existing copy isolation. `to_paths()` returns independent flat contours and loses explicit parent-child relationships. There is no per-route style, automatic simplification, provenance tracking or batch-tree demo in this commit.
+Tree accessors preserve existing copy isolation. `to_paths()` returns independent flat contours and loses explicit parent-child relationships. There is no per-route style, automatic simplification or provenance tracking. The demo supports integer and decimal batch trees and queries; see [demo.md](demo.md).
 
-## Decimal batch stroke (Unreleased)
+## Decimal batch stroke (since 0.3.0)
 
 `stroke_polylines_d` quantizes all independent open routes together, calls the integer batch executor once and decodes the merged closed region. Full width and ArcTolerance scale with Precision; MiterLimit remains dimensionless. Defaults are Precision 3 (0–6), Butt caps and existing join options. Output can contain holes and has no per-route correspondence. Input and output storage are independent, including aliased input route arrays.
 
 One ledger covers raw checks, common-grid collision detection, route preparation, generation, one Positive Union cleanup, extraction and decoding. Zero width still validates and quantizes every route. Separate public calls each create a ledger and clean their own region. Batch tree output uses the separate entries above; there is no automatic simplification or per-route styling.
 
-## Integer batch stroke (Unreleased)
+## Integer batch stroke (since 0.3.0)
 
 `stroke_polylines` validates the entire raw `Paths64` before preparing any route. Each route keeps the single-route open endpoint and consecutive-duplicate rules, including an explicit return to its start. All routes share full width, cap, join, MiterLimit and ArcTolerance. The existing generator emits their rings into one accumulator; a single Positive Union cleanup returns the covered closed region. Output can contain holes and has no per-route correspondence. Input and output storage are independent; failure returns no partial region.
 

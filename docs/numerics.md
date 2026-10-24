@@ -1,6 +1,6 @@
 # 整数几何与输入契约
 
-Unreleased `rect_clip_lines` 复用整数输入的 ±10^9 边界，分支采用精确 Int64 叉积；一般求交单独遵循固定 C++ CLIPPER2_HI_PRECISION=0 的 Double 参数及向零截断，不复用扫描投影或十进制半离零舍入。端点约束、半格和边界示例见[矩形折线裁剪](rectclip.md#贴边与数值)。
+自 0.3.0 提供的 `rect_clip_lines` 复用整数输入的 ±10^9 边界，分支采用精确 Int64 叉积；一般求交单独遵循固定 C++ CLIPPER2_HI_PRECISION=0 的 Double 参数及向零截断，不复用扫描投影或十进制半离零舍入。端点约束、半格和边界示例见[矩形折线裁剪](rectclip.md#贴边与数值)。
 
 ## 范围与预检
 

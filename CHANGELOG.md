@@ -4,6 +4,12 @@
 
 后续变更在本节另行记录；已发布的 0.3.0 源码与归档保持冻结。
 
+## 0.3.1 — 待发布
+
+- 修正随包 README 的安装示例、当前能力状态，以及小数窗口树、批量描边树、Minkowski 树和整数／小数单点／批量查询的专题说明。
+- 将这些已由 0.3.0 提供的公开 API 文档注释改为明确的引入版本；历史候选、验收和发布事实保留原提交归属。
+- 仅同步 0.3.1 版本及候选审计元数据。运行库执行代码、公开接口、默认值、精度、错误、预算、依赖和工具链均与 0.3.0 一致；不新增功能或库测试。
+
 ## 0.3.0 — 2026-10-24
 
 已发布至 [Mooncakes](https://mooncakes.io/docs/BigSaltyMan/moonclip@0.3.0/) 和 [GitHub Release](https://github.com/BigSaltyMan/moonclip/releases/tag/v0.3.0)，集中交付 0.2.1 之后的增量。发布源码为 `d21baf6687b5d890392f87574aac48f22cd3d5f0`；独立 registry 消费者 native／JS 各一次成功，61 个下载文件与冻结候选一致。迁移见[升级说明](docs/upgrade-incremental.md)，候选历史与正式发布证据见[发布记录](docs/release-0.3.0.md)。下方旧版本章节保留各发布时的事实与限制。

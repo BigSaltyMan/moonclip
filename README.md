@@ -2,13 +2,13 @@
 
 MoonClip 是用 MoonBit 实现的二维多边形几何库，提供整数和十进制网格上的小数运算。运行库不依赖 C++ 或其他几何运行时。
 
-## 安装已发布版
+## 安装与使用
 
 ```bash
-moon add BigSaltyMan/moonclip@0.3.0
+moon add BigSaltyMan/moonclip@0.3.1
 ```
 
-该命令安装已于 **2026-10-24** 正式发布的 **0.3.0**。仓库外 registry 消费者 native、JS 各运行一次并通过，下载的 61 个文件与冻结源码逐字节一致。发布源码固定为 `d21baf6687b5d890392f87574aac48f22cd3d5f0`，见 [0.3.0 发布记录](docs/release-0.3.0.md)和 [GitHub Release](https://github.com/BigSaltyMan/moonclip/releases/tag/v0.3.0)。本页属于发布后的状态更新；注册表包内 README 及 API 注释仍保留冻结候选的“待发布／Unreleased”快照，包内容不因状态更新而替换。旧版本事实见 [0.2.1 发布记录](docs/release-0.2.1.md)。
+**0.3.1 是文档修正版**，修正注册表文档中的候选状态、安装说明和接口描述。运行库行为、公开接口、依赖及工具链与 0.3.0 保持一致。下表能力自 0.3.0 提供；该版本的发布源码、registry 消费者和文档页核验保留在 [0.3.0 发布记录](docs/release-0.3.0.md)，不转记为 0.3.1 的注册表安装证据。各版本变化见 [CHANGELOG](CHANGELOG.md)。
 
 在包的 `moon.pkg` 中导入 `BigSaltyMan/moonclip`；可参考受检的[示例配置](cmd/example/moon.pkg)和 [CLI 示例](cmd/example/main.mbt)。已发布的 Boolean、Offset、单路线 Stroke、显式简化及基础几何见[支持范围](docs/scope.md)；0.2.0 增加的树接口见[旧树接口升级说明](docs/upgrade-trees.md)。
 
@@ -53,7 +53,7 @@ npm run dev
 
 [增量验收索引](docs/acceptance-incremental.md)区分历史完整回归、各次定向检查、浏览器操作和发布证据。Commit 26 的历史完整回归为 native **2370/2370**、JS **2370/2370**；当前完整入口的 **2406** 是配置期望数，未据此宣称当前源码已全量通过。参考目录为 **1416 个案例、2308 项能力检查**，不代表所有新增接口都有逐项上游对照。
 
-普通 CI 按 `CHECK_SCOPE` 选择文档、核心、演示或包检查范围；发布源码的 CI 使用 package，本次状态文档 CI 使用 docs；两者均不代表该 SHA 完整回归通过。完整检查入口仍保留，需显式选择；当前执行范围见[工作流](https://github.com/BigSaltyMan/moonclip/blob/main/.github/workflows/ci.yml)与[检查脚本](https://github.com/BigSaltyMan/moonclip/blob/main/scripts/check.sh)。文档检查只验证指定材料的本地链接目标存在和差异空白，不构建或执行几何：
+普通 CI 按 `CHECK_SCOPE` 选择文档、核心、演示或包检查范围；发布源码、状态文档和文档修正版候选的证据按各自提交与 scope 记录，package 或 docs 成功均不表示完整回归通过。完整检查入口仍保留，需显式选择；实际执行范围见[工作流](https://github.com/BigSaltyMan/moonclip/blob/main/.github/workflows/ci.yml)与[检查脚本](https://github.com/BigSaltyMan/moonclip/blob/main/scripts/check.sh)。文档检查只验证指定材料的本地链接目标存在和差异空白，不构建或执行几何：
 
 ```bash
 bash scripts/check.sh --scope docs
