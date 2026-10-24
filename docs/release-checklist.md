@@ -1,4 +1,36 @@
-# 0.1.0 发布候选检查清单
+# 源码包审计与发布检查清单
+
+## 当前开发源码包审计（Commit 53，Unreleased）
+
+本轮不选择新版本号。模块元数据仍为 **0.2.1**，实际产物是含 Unreleased 内容的开发源码包，报告明确写入 `metadata_version: 0.2.1`、`publication_status: unpublished-development-snapshot`。它不是注册表已发布的 0.2.1，也不是下一版冻结候选；原发布 ZIP、校验和、标签及记录保持原样。
+
+```bash
+moon info && moon fmt
+bash scripts/check.sh --scope package
+git diff --check
+```
+
+package scope 只核对固定工具链、格式与接口，运行 `tools/conformance/test_release.py`，再调用一次 `check_release.py --report _build/incremental-package/report.json`。不预先构建根库、不运行库测试或 CLI 示例；构建由打包和外部消费者按需完成。普通 CI 使用同一 package scope，演示、基准、完整工具与全量回归步骤跳过。
+
+审计继续走现有流程：仓库外临时源码快照 → `moon package` → 审计真实 ZIP → 仓库外解压 → `moon.work` 本地解析 → native／JS 各一次消费者运行。实际文件集合、逐文件字节与哈希、重复成员、路径穿越、许可、来源和相对文档链接都检查；根运行库与 `.mbti`、升级说明及验收索引按分发规则入包，截图和工具仍排除。非分发材料使用仓库链接，不改写打包后的文件来掩盖链接缺失。
+
+消费者保留基础检查、六个 `TREE_API_OK` 及整数 `RECTCLIP_API_OK`，增加三个小流程：
+
+| 流程标记 | 实际增量调用 |
+| --- | --- |
+| `INCREMENTAL_API_OK rectclip` | `rect_clip_lines_d`、`rect_clip_polygons_tree_d` |
+| `INCREMENTAL_API_OK batch_stroke_query` | `stroke_polylines_tree_d`、同树 `PolyTreeD::locate_many`、原整数 Boolean 树的 `PolyTree64::locate` |
+| `INCREMENTAL_API_OK minkowski_tree` | `minkowski_sum_tree_d` |
+
+每个标记在完整坐标、层级或定位断言完成后输出。各目标分别拒绝缺失、重复、未知增量标记及缺失／重复总体成功标记；报告逐目标保存实际 API 名单、流程状态、日志路径，以及编译后解压库与归档仍一致的核对结果。三个流程是包级导入调用证据，不计作新增库测试，也不宣称覆盖所有新增 API。
+
+产物位于 `_build/incremental-package/`：`moonclip-0.2.1-development-snapshot.zip`、`report.json`、打包日志、两个消费者日志和工具检查日志。Linux CI 保存同目录的工作流附件供双平台对照。文件数、大小和 ZIP SHA-256 按实际结果填写，Windows／Linux 分别记录；两平台比较逐文件路径和内容哈希，不要求 ZIP 时间戳或压缩字节相同。
+
+提交前报告保留基线 SHA 和 dirty 状态。最终提交后以逐文件哈希对应应分发的提交字节，并将完整 SHA、两平台报告和校验和、同 SHA CI 放在 `_build/commit53/delivery.json`，不为填写自身 SHA 再补提交。验证结果归属见[增量验收索引](acceptance-incremental.md#开发源码包外部消费者验证commit-53)。本轮不执行注册表安装、publish、服务端 dry-run、登录、标签、Release 或赛事申报。
+
+## 历史：0.1.0 发布候选检查清单
+
+以下保留 0.1.0 及后续 0.2.0 的原阶段流程和数字，不作为当前开发源码包的新发布结论。
 
 状态：**0.1.0 已于 2026-10-20 正式发布**，注册表消费者与 GitHub Release 已完成，见 [发布记录](release-0.1.0.md)。下文保留候选审计方法和通用发布前检查；正式赛事申报未执行。
 

@@ -77,7 +77,7 @@
 
 下载 SVG SHA-256：`0b06c002ef863cd77f4d60d18c48d93eb8a93f2d908c89e66fb0be4eeb0456b6`。JSON SHA-256：`fedcc61d51dfdae3693597129777a8200eeee24a36d8ce102ce042eb221d61fe`。
 
-仅保存一张新增页签截图：[窗口裁剪](demo-screenshots/rectclip.jpg)。这份记录属于本地浏览器和下载验收；同 SHA Linux CI 的轻量构建／测试结果另行核对，不把历史全量、参考、性能或注册表证据算成本笔结果。根几何算法、公开 API、旧参考、版本及发布标签未变，新功能为 Unreleased。
+仅保存一张新增页签截图：[窗口裁剪](https://raw.githubusercontent.com/BigSaltyMan/moonclip/52692624a4ef717d2b462b854cf0ea72390196be/docs/demo-screenshots/rectclip.jpg)。这份记录属于本地浏览器和下载验收；同 SHA Linux CI 的轻量构建／测试结果另行核对，不把历史全量、参考、性能或注册表证据算成本笔结果。根几何算法、公开 API、旧参考、版本及发布标签未变，新功能为 Unreleased。
 
 ## Commit 31：小数扫掠增量验收
 
@@ -91,7 +91,7 @@
 
 下载 SVG SHA-256：`299a58dac9bc21036d1d8f3b7b7357031133b069207464b9215da2ae19219dda`。JSON SHA-256：`3d138c36a6490163b8458f72d613bf18adc6a85e54da42e46405261876e0072d`。
 
-仅保存一张截图：[小数扫掠](demo-screenshots/minkowski-decimal.jpg)。本记录属于本地浏览器和下载验收，同 SHA Linux CI 轻量结果另行核对。根 API、整数扫掠及小数量化契约、旧参考、版本、标签和申报书未改动；本笔不接批量描边或点定位演示，保持 Unreleased。
+仅保存一张截图：[小数扫掠](https://raw.githubusercontent.com/BigSaltyMan/moonclip/52692624a4ef717d2b462b854cf0ea72390196be/docs/demo-screenshots/minkowski-decimal.jpg)。本记录属于本地浏览器和下载验收，同 SHA Linux CI 轻量结果另行核对。根 API、整数扫掠及小数量化契约、旧参考、版本、标签和申报书未改动；本笔不接批量描边或点定位演示，保持 Unreleased。
 
 ## Commit 32：批量加宽增量验收
 
@@ -106,7 +106,7 @@
 
 下载 SVG SHA-256：`8f1b4d4b753fa13af888d1f98663660858e0f9919aa59aac6bc19f1c3021187f`。JSON SHA-256：`685409c067ec7fd2ef77e20383c41ddace6c4f45b04ce176915e026786bf4f44`。
 
-仅保存一张新增页签截图：[批量加宽](demo-screenshots/stroke-batch.jpg)。本记录归属本地浏览器和下载验收；同 SHA Linux CI 只核对本笔轻量构建与 3 项检查，另行报告。根 `.mbti`、库算法、旧参考、规划书、申报书、版本和发布标签未变，功能保持 Unreleased。
+仅保存一张新增页签截图：[批量加宽](https://raw.githubusercontent.com/BigSaltyMan/moonclip/52692624a4ef717d2b462b854cf0ea72390196be/docs/demo-screenshots/stroke-batch.jpg)。本记录归属本地浏览器和下载验收；同 SHA Linux CI 只核对本笔轻量构建与 3 项检查，另行报告。根 `.mbti`、库算法、旧参考、规划书、申报书、版本和发布标签未变，功能保持 Unreleased。
 
 ## Commit 33：整数树点定位增量验收
 
@@ -119,7 +119,7 @@
 - 关闭查询并重算后不显示查询结果或点标记；切换小数或平铺模式后控件隐藏且开关关闭。恢复整数 Tree 后可再次显式开启。
 - 390×844 视口中 x、y 字段均处于横向可见范围，文档宽度 375 ≤ 390；孔洞结论和节点信息可显示，控制台无 warning/error，临时视口已恢复。
 
-下载 JSON SHA-256：`c0b33ae4e7f9a2caf7a48bcb53b0723a8393611f0cbc358068901c9a16f88555`。仅保存一张完整页面截图：[整数树点定位](demo-screenshots/tree-locate.jpg)。
+下载 JSON SHA-256：`c0b33ae4e7f9a2caf7a48bcb53b0723a8393611f0cbc358068901c9a16f88555`。仅保存一张完整页面截图：[整数树点定位](https://raw.githubusercontent.com/BigSaltyMan/moonclip/52692624a4ef717d2b462b854cf0ea72390196be/docs/demo-screenshots/tree-locate.jpg)。
 
 这份记录归属本地浏览器和下载重放；同 SHA Linux CI 的轻量构建及 3 项检查另行核对。根 `.mbti`、库算法与树存储、旧参考、规划书、申报书、版本和发布标签保持不变。新演示为 Unreleased，不扩展其他树的查询界面。
 
@@ -139,7 +139,7 @@
 | 窄屏 | 390×844 同源 iframe 容器中页签换行，模式／精度和窗口参数可操作，未改产品页面布局或引入依赖 |
 | 控制台 | 主页面 error／warn 为 0；窄屏容器记录 1 条无源码位置的 MutationObserver observe 异常，页面仍正常操作和计算。演示源文件未包含该调用，异常归因未确认，不宣称窄屏控制台完全无异常 |
 
-浏览器视口 override 未改变实际 1280×720 尺寸，因此改用忽略目录中的同源 iframe 创建真实 390×844 内容视口；已清除 override 并关闭临时容器。截图仅保存[小数裁剪页签](demo-screenshots/commit38-decimal-rectclip.png)。浏览器实际下载原件复制在忽略目录 `demo/.qa/commit38/result.svg` 与 `result.json`，Node 使用生成的真实 MoonBit 桥接重放 JSON。截图计时不是性能测量。未复测其他场景、完整桥接、根库、参考、性能或候选包；未调整版本或发布。
+浏览器视口 override 未改变实际 1280×720 尺寸，因此改用忽略目录中的同源 iframe 创建真实 390×844 内容视口；已清除 override 并关闭临时容器。截图仅保存[小数裁剪页签](https://raw.githubusercontent.com/BigSaltyMan/moonclip/52692624a4ef717d2b462b854cf0ea72390196be/docs/demo-screenshots/commit38-decimal-rectclip.png)。浏览器实际下载原件复制在忽略目录 `demo/.qa/commit38/result.svg` 与 `result.json`，Node 使用生成的真实 MoonBit 桥接重放 JSON。截图计时不是性能测量。未复测其他场景、完整桥接、根库、参考、性能或候选包；未调整版本或发布。
 
 
 ## Commit 39：小数多路线批量描边增量验收
@@ -165,7 +165,7 @@ Uncaught TypeError: Failed to execute 'observe' on 'MutationObserver': parameter
 
 诊断仅在忽略目录中的 HTML 副本加入监听和 base 地址，不改产品页面；实际视口数据由子页通过同源 postMessage 报告，不使用设置目标值冒充测量结果。完整本地诊断位于 `demo/.qa/commit39/main-observation.json`、`narrow-observation.json`；实际下载原件为同目录 `result.svg`、`result.json`。临时容器已关闭，未设置浏览器 viewport override。
 
-仅保存一张[小数批量加宽截图](demo-screenshots/commit39-decimal-stroke-batch.png)，截图计时不代表性能结论。未运行库全量、完整工具／桥接、参考重建、性能、基准或候选验收；未修改消费者、版本和发布标签，保持 Unreleased。
+仅保存一张[小数批量加宽截图](https://raw.githubusercontent.com/BigSaltyMan/moonclip/52692624a4ef717d2b462b854cf0ea72390196be/docs/demo-screenshots/commit39-decimal-stroke-batch.png)，截图计时不代表性能结论。未运行库全量、完整工具／桥接、参考重建、性能、基准或候选验收；未修改消费者、版本和发布标签，保持 Unreleased。
 
 
 ## Commit 40：闭合区域窗口裁剪增量验收
@@ -184,7 +184,7 @@ Uncaught TypeError: Failed to execute 'observe' on 'MutationObserver': parameter
 
 主页面控制台 error／warn 为 0。临时窄屏容器仍记录一条 `Uncaught TypeError: Failed to execute 'observe' on 'MutationObserver': parameter 1 is not of type 'Node'.`，时间为 **2026-10-22T15:32:58.259Z**，早于容器 load 记录 **15:32:58.406Z**。来源地址及堆栈未提供，局部 error／unhandledrejection 监听记录为空；**归因继续未确认，不定性为页面布局缺陷**，不宣称窄屏控制台完全无异常。本笔只做一次抽查，没有修改浏览器环境、重复排查或据此更改布局。
 
-下载原件及重放材料保留在忽略目录 `demo/.qa/commit40/result.svg`、`result.json`、`open-result.json`；主页面／窄屏诊断保留在同目录 `main-observation.json`、`narrow-observation.json`。诊断仅位于临时 HTML 副本，未混入产品；容器已关闭。仅新增一张[区域窗口裁剪截图](demo-screenshots/commit40-rectclip-regions.png)，计时不作为性能证据。
+下载原件及重放材料保留在忽略目录 `demo/.qa/commit40/result.svg`、`result.json`、`open-result.json`；主页面／窄屏诊断保留在同目录 `main-observation.json`、`narrow-observation.json`。诊断仅位于临时 HTML 副本，未混入产品；容器已关闭。仅新增一张[区域窗口裁剪截图](https://raw.githubusercontent.com/BigSaltyMan/moonclip/52692624a4ef717d2b462b854cf0ea72390196be/docs/demo-screenshots/commit40-rectclip-regions.png)，计时不作为性能证据。
 
 未运行库全量、全部工具／桥接、参考重建、性能、基准或候选验收；原规划书、申报书、版本和标签不变，新演示保持 Unreleased。
 
@@ -207,7 +207,7 @@ Uncaught TypeError: Failed to execute 'observe' on 'MutationObserver': parameter
 
 主页面 error／warn 日志为空。临时窄屏容器再次出现 `Uncaught TypeError: Failed to execute 'observe' on 'MutationObserver': parameter 1 is not of type 'Node'.`，时间 **2026-10-23T03:35:25.857Z**，早于容器 load **03:35:25.948Z**，即进入批量页签之前。日志无来源地址和堆栈，记录为 null；子页 error／unhandledrejection 监听记录为空。**归因仍未确认，不定性为页面布局缺陷**，不宣称窄屏控制台完全无异常。只做一次有限抽查，未据此修改布局或浏览器环境。
 
-仅新增一张[小数批量树孔洞高亮截图](demo-screenshots/commit42-batch-tree.png)，计时不作为性能证据。实际下载及重放材料在忽略目录 `demo/.qa/commit42/result.svg`、`result.json`、`flat-result.json`，窄屏诊断为同目录 `narrow-observation.json`；诊断只加入临时 HTML 副本，未混入产品，容器已关闭。
+仅新增一张[小数批量树孔洞高亮截图](https://raw.githubusercontent.com/BigSaltyMan/moonclip/52692624a4ef717d2b462b854cf0ea72390196be/docs/demo-screenshots/commit42-batch-tree.png)，计时不作为性能证据。实际下载及重放材料在忽略目录 `demo/.qa/commit42/result.svg`、`result.json`、`flat-result.json`，窄屏诊断为同目录 `narrow-observation.json`；诊断只加入临时 HTML 副本，未混入产品，容器已关闭。
 
 未运行库全量、完整工具／桥接、参考重建、性能、基准或候选验收；没有增加依赖、修改根库、公开接口、树存储、版本或发布标签，规划书和申报书的原有改动保留，未发布。CI 使用已有 `demo-stroke-batch` 轻量模式，结果以最终源码 SHA 的运行记录为准。
 
@@ -230,7 +230,7 @@ Uncaught TypeError: Failed to execute 'observe' on 'MutationObserver': parameter
 
 主页面 error／warn 日志为空。临时窄屏容器再次记录 `Uncaught TypeError: Failed to execute 'observe' on 'MutationObserver': parameter 1 is not of type 'Node'.`，时间 **2026-10-23T04:05:17.221Z**，早于容器 load **04:05:17.382Z**，即进入窗口页签之前。没有来源地址或堆栈，记录为 null；子页 error／unhandledrejection 监听记录为空。**归因仍未确认，不定性为页面布局缺陷**，不宣称窄屏控制台完全无异常。只进行一次有限抽查，没有据此修改布局或浏览器环境。
 
-仅新增一张[小数窗口树孔洞高亮截图](demo-screenshots/commit44-window-tree.png)，计时不作为性能证据。实际下载及重放材料保留在忽略目录 `demo/.qa/commit44/result.svg`、`result.json`、`flat-result.json`、`open-result.json`，主页面和窄屏观察保存在同目录 `main-observation.json`、`narrow-observation.json`。诊断只位于临时 HTML 副本，不混入产品；临时容器在会话续接时已关闭，未重复验收。
+仅新增一张[小数窗口树孔洞高亮截图](https://raw.githubusercontent.com/BigSaltyMan/moonclip/52692624a4ef717d2b462b854cf0ea72390196be/docs/demo-screenshots/commit44-window-tree.png)，计时不作为性能证据。实际下载及重放材料保留在忽略目录 `demo/.qa/commit44/result.svg`、`result.json`、`flat-result.json`、`open-result.json`，主页面和窄屏观察保存在同目录 `main-observation.json`、`narrow-observation.json`。诊断只位于临时 HTML 副本，不混入产品；临时容器在会话续接时已关闭，未重复验收。
 
 本笔不修改根库、公开接口、树存储、版本或发布标签，规划书、申报书及 `.vscode/` 的既有改动保留。未运行库全量、全部工具／桥接、参考重建、性能、基准或候选验收；保持 Unreleased，未发布。普通 CI 使用已有 `demo-rectclip`，以最终源码 SHA 的轻量运行记录为准。
 
@@ -252,7 +252,7 @@ Uncaught TypeError: Failed to execute 'observe' on 'MutationObserver': parameter
 
 主页面 error／warn 日志为空。临时窄屏容器再次出现 `Uncaught TypeError: Failed to execute 'observe' on 'MutationObserver': parameter 1 is not of type 'Node'.`，时间 **2026-10-23T09:20:35.603Z**，早于容器 load **09:20:35.683Z**，即进入扫掠页签之前。未提供来源地址或堆栈，记录为 null；子页 error／unhandledrejection 监听为空。**归因仍未确认，不定性为页面布局缺陷**，不宣称窄屏控制台完全无异常。只做一次有限抽查，没有修改浏览器环境或据此更改布局，临时容器已关闭。
 
-仅新增一张[小数扫掠树孔洞高亮截图](demo-screenshots/commit46-minkowski-tree.png)，计时不作为性能证据。实际下载和重放材料保存在忽略目录 `demo/.qa/commit46/result.svg`、`result.json`、`flat-result.json`；诊断为同目录 `main-observation.json`、`narrow-observation.json`。诊断只加入临时 HTML 副本，未混入产品页面。
+仅新增一张[小数扫掠树孔洞高亮截图](https://raw.githubusercontent.com/BigSaltyMan/moonclip/52692624a4ef717d2b462b854cf0ea72390196be/docs/demo-screenshots/commit46-minkowski-tree.png)，计时不作为性能证据。实际下载和重放材料保存在忽略目录 `demo/.qa/commit46/result.svg`、`result.json`、`flat-result.json`；诊断为同目录 `main-observation.json`、`narrow-observation.json`。诊断只加入临时 HTML 副本，未混入产品页面。
 
 根 `.mbti` 无变化，树编码和导出辅助直接复用；未修改根库、公开接口、树存储、算法、依赖、版本或标签，规划书、申报书及 `.vscode/` 原有改动保留。未运行库全量、全部工具／桥接、参考重建、性能、基准或候选验收；未发布，保持 Unreleased。普通 CI 使用已有 `demo-minkowski-decimal`，以最终源码 SHA 的轻量结果为准。
 
@@ -272,7 +272,7 @@ Uncaught TypeError: Failed to execute 'observe' on 'MutationObserver': parameter
 
 窄屏容器再次出现 `Uncaught TypeError: Failed to execute 'observe' on 'MutationObserver': parameter 1 is not of type 'Node'.`，时间 **2026-10-23T14:00:29.512Z**，早于 load **14:00:29.614Z** 及进入批量页签。日志未提供来源地址或堆栈；子页 error／unhandledrejection 记录为空。**归因仍未确认，不定性为页面布局缺陷**，不宣称窄屏控制台完全无异常。只进行一次有限对照，没有据此更改产品布局或浏览器环境，临时容器已关闭。
 
-仅新增一张[整数批量树定位与独立手动选择截图](demo-screenshots/commit47-integer-tree-query.png)，其中计时不作为性能证据。下载重放摘要和窄屏诊断位于忽略目录 `demo/.qa/commit47/download-replay.json`、`narrow-observation.json`，诊断只注入临时 HTML 副本。原三项检查还保留 Boolean 多边界、越界点及不支持组合检查，删除 query 后响应和导出均无残留。
+仅新增一张[整数批量树定位与独立手动选择截图](https://raw.githubusercontent.com/BigSaltyMan/moonclip/52692624a4ef717d2b462b854cf0ea72390196be/docs/demo-screenshots/commit47-integer-tree-query.png)，其中计时不作为性能证据。下载重放摘要和窄屏诊断位于忽略目录 `demo/.qa/commit47/download-replay.json`、`narrow-observation.json`，诊断只注入临时 HTML 副本。原三项检查还保留 Boolean 多边界、越界点及不支持组合检查，删除 query 后响应和导出均无残留。
 
 根 `.mbti` 无变化，没有修改根库、公开接口、树存储、定位算法、依赖、版本或标签；规划书、申报书及 `.vscode/` 原有改动保留。未运行库全量、全部工具／桥接、参考重建、性能、基准或候选验收，未发布。普通 CI 使用已有 `demo-tree-locate`，以最终源码 SHA 的运行记录为准。
 
@@ -293,7 +293,7 @@ Uncaught TypeError: Failed to execute 'observe' on 'MutationObserver': parameter
 
 窄屏容器再次出现 `Uncaught TypeError: Failed to execute 'observe' on 'MutationObserver': parameter 1 is not of type 'Node'.`，时间 **2026-10-23T14:46:56.183Z**，早于 load **14:46:56.377Z** 及新增流程操作。日志没有来源地址和堆栈；子页 error／unhandledrejection 监听为空。**归因仍未确认，不定性为页面布局缺陷**，不宣称窄屏控制台完全无异常。未继续排查或修改浏览器环境，临时容器已关闭。
 
-仅新增一张[批量点列表与孔洞命中截图](demo-screenshots/commit49-batch-tree-query.png)。实际下载重放摘要和窄屏诊断保留在忽略目录 `demo/.qa/commit49/download-replay.json`、`narrow-observation.json`；诊断只加入临时 HTML 副本。三项检查同时保留旧单点多边界及无查询兼容，验证导出深复制、不支持组合、互斥格式、32 点上限及后续点错误索引。
+仅新增一张[批量点列表与孔洞命中截图](https://raw.githubusercontent.com/BigSaltyMan/moonclip/52692624a4ef717d2b462b854cf0ea72390196be/docs/demo-screenshots/commit49-batch-tree-query.png)。实际下载重放摘要和窄屏诊断保留在忽略目录 `demo/.qa/commit49/download-replay.json`、`narrow-observation.json`；诊断只加入临时 HTML 副本。三项检查同时保留旧单点多边界及无查询兼容，验证导出深复制、不支持组合、互斥格式、32 点上限及后续点错误索引。
 
 根 `.mbti` 无变化，未改根库、树存储、定位算法、依赖、版本或标签，规划书、申报书及 `.vscode/` 的既有改动保留。未运行库全量、全部工具／桥接、参考重建、性能、基准或候选验收，未发布。普通 CI 使用已有 `demo-tree-locate`，以最终源码 SHA 的轻量运行结果为准。
 
@@ -315,6 +315,6 @@ Uncaught TypeError: Failed to execute 'observe' on 'MutationObserver': parameter
 
 窄屏临时容器再次记录 `Uncaught TypeError: Failed to execute 'observe' on 'MutationObserver': parameter 1 is not of type 'Node'.`，时间 **2026-10-24T04:54:30.340Z**，早于 load **04:54:30.423Z** 及新增流程操作。日志无来源地址和堆栈，子页 error／unhandledrejection 记录为空。**归因仍未确认，不定性为页面布局缺陷**，不宣称窄屏控制台完全无异常；没有进一步重复排查或修改浏览器环境，临时容器已关闭。
 
-仅新增一张[小数查询与原始点位截图](demo-screenshots/commit51-decimal-tree-query.png)。实际导出副本及重放、诊断记录保存在忽略目录 `demo/.qa/commit51/result.json`、`result.svg`、`replay.json`、`narrow-observation.json`，临时诊断不混入产品。三项检查保留整数单点／批量、无 query 兼容及错误检查；旧测试中“小数树查询必须失败”改为仍不支持的平铺查询，未运行整套旧桥接检查。
+仅新增一张[小数查询与原始点位截图](https://raw.githubusercontent.com/BigSaltyMan/moonclip/52692624a4ef717d2b462b854cf0ea72390196be/docs/demo-screenshots/commit51-decimal-tree-query.png)。实际导出副本及重放、诊断记录保存在忽略目录 `demo/.qa/commit51/result.json`、`result.svg`、`replay.json`、`narrow-observation.json`，临时诊断不混入产品。三项检查保留整数单点／批量、无 query 兼容及错误检查；旧测试中“小数树查询必须失败”改为仍不支持的平铺查询，未运行整套旧桥接检查。
 
 代码审查确认公共 Boolean／Offset／Stroke／Minkowski 小数树、批量描边及闭合窗口小数树三条路由均使用统一小数查询辅助，同棵树先查询后编码；后四类未增加独立参数测试矩阵。根 `.mbti` 无变化，脚本与总数不变；根库、树存储、公开接口、参考、版本及发布标签未改。规划书、申报书和 `.vscode/` 原有改动保留，未运行库全量、全部工具测试、参考重建、性能、候选或发布验收，保持 Unreleased。

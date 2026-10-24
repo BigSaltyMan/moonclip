@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 import hashlib
 import json
 import os
+import platform
 from pathlib import Path, PurePosixPath
 import re
 import shutil
@@ -30,6 +31,13 @@ TREE_APIS = (
     "boolean_tree", "boolean_tree_d", "offset_tree", "offset_tree_d",
     "stroke_tree", "stroke_tree_d",
 )
+INCREMENTAL_APIS = {
+    "rectclip": ("rect_clip_lines_d", "rect_clip_polygons_tree_d"),
+    "batch_stroke_query": (
+        "stroke_polylines_tree_d", "PolyTreeD::locate_many", "PolyTree64::locate",
+    ),
+    "minkowski_tree": ("minkowski_sum_tree_d",),
+}
 
 
 def require(condition, message):
@@ -66,11 +74,33 @@ def consumer_tree_apis(output):
     return list(TREE_APIS)
 
 
+def consumer_incremental_apis(output):
+    """Three completed flows, each backed by explicit consumer calls/assertions."""
+    markers = [line for line in output.splitlines() if line.startswith("INCREMENTAL_API_OK")]
+    expected = [f"INCREMENTAL_API_OK {flow}" for flow in INCREMENTAL_APIS]
+    require(len(markers) == len(expected) and set(markers) == set(expected),
+            "Missing, duplicate or unknown incremental API execution marker: " + repr(markers))
+    return {flow: dict(status="success", marker=f"INCREMENTAL_API_OK {flow}",
+                       apis_checked=list(apis)) for flow, apis in INCREMENTAL_APIS.items()}
+
+
 def run_consumer(target, consumer, report_dir):
     output = command(["moon", "run", "--target", target, "."], cwd=consumer)
     (report_dir / f"consumer-{target}.log").write_text(output, encoding="utf-8")
     checked = consumer_tree_apis(output)
-    return dict(status="success", marker=SUCCESS, tree_apis_checked=checked, rectclip_api_checked=True)
+    incremental = consumer_incremental_apis(output)
+    return dict(status="success", marker=SUCCESS, tree_apis_checked=checked, rectclip_api_checked=True,
+                incremental_flows=incremental,
+                incremental_apis_checked=[api for apis in INCREMENTAL_APIS.values() for api in apis],
+                log=f"consumer-{target}.log")
+
+
+def snapshot_report(source):
+    return dict(schema_version=1, status="running", module=MODULE, version=VERSION,
+                metadata_version=VERSION, publication_status="unpublished-development-snapshot",
+                recorded_at_utc=datetime.now(timezone.utc).isoformat(),
+                platform=dict(system=platform.system(), machine=platform.machine()),
+                source=source, consumers={}, commands=[])
 
 
 def metadata(text):
@@ -122,6 +152,10 @@ def audit(archive, expected):
     require(set(payload) == expected,
             "Missing distribution files: " + ", ".join(sorted(expected - set(payload))))
     metadata(payload["moon.mod"].decode())
+    interface = payload["pkg.generated.mbti"].decode()
+    for apis in INCREMENTAL_APIS.values():
+        for api in apis:
+            require(f"pub fn {api}(" in interface, f"Missing incremental public interface: {api}")
     license_text = payload["LICENSE"].decode()
     for term in ("Boost Software License - Version 1.0", "Angus Johnson 2010-2025", "BigSaltyMan", "THE SOFTWARE IS PROVIDED"):
         require(term in license_text, f"Missing license / copyright: {term}")
@@ -147,11 +181,8 @@ def main():
     args = parser.parse_args()
     report_path = (ROOT / args.report).resolve()
     report_path.parent.mkdir(parents=True, exist_ok=True)
-    report = dict(schema_version=1, status="running", module=MODULE, version=VERSION,
-                  publication_status="unpublished_candidate", recorded_at_utc=datetime.now(timezone.utc).isoformat(),
-                  source=dict(commit=git("rev-parse", "HEAD"),
-                              worktree_dirty=bool(git("status", "--porcelain", "--untracked-files=normal"))),
-                  consumers={}, commands=[])
+    report = snapshot_report(dict(commit=git("rev-parse", "HEAD"),
+                                  worktree_dirty=bool(git("status", "--porcelain", "--untracked-files=normal"))))
     try:
         version = command(["moon", "version", "--all"])
         require(all(v in version for v in TOOLCHAIN), "Use the fixed MoonBit toolchain")
@@ -181,13 +212,13 @@ def main():
             (report_path.parent / "package.log").write_text(package_log, encoding="utf-8")
             archives = list((source / "_build/publish").glob("*.zip"))
             require(len(archives) == 1, "Expected exactly one official package ZIP")
-            archive = report_path.parent / f"moonclip-{VERSION}.zip"
+            archive = report_path.parent / f"moonclip-{VERSION}-development-snapshot.zip"
             shutil.copy2(archives[0], archive)
             files, payload = audit(archive, expected)
             report["archive"] = dict(path=str(archive), sha256=sha(archive.read_bytes()),
                                      size=archive.stat().st_size, file_count=len(files), files=files,
                                      payload_sha256=sha(json.dumps(files, sort_keys=True).encode()))
-            print(f"Candidate archive: {MODULE}@{VERSION}; files={len(files)}; bytes={archive.stat().st_size}; SHA256={report['archive']['sha256']}", flush=True)
+            print(f"Unpublished development snapshot: {MODULE}; metadata_version={VERSION}; files={len(files)}; bytes={archive.stat().st_size}; SHA256={report['archive']['sha256']}", flush=True)
             for record in files:
                 print(f"  {record['path']}  {record['size']} bytes  {record['sha256']}")
             workspace = work / "consumer-workspace"
@@ -209,14 +240,19 @@ def main():
                 report["commands"].append(f"moon run --target {target} . (external consumer)")
                 try:
                     report["consumers"][target] = run_consumer(target, consumer, report_path.parent)
+                    require(all((library / name).read_bytes() == data for name, data in payload.items()),
+                            f"Consumer {target} compilation modified candidate payload")
+                    report["consumers"][target]["extracted_library_unchanged"] = True
                 except (OSError, ValueError, subprocess.SubprocessError) as exc:
                     report["consumers"][target] = dict(status="failure", error=str(exc))
                     raise
                 print(f"External candidate consumer {target}: success", flush=True)
                 print(f"Tree APIs checked {target}: " + ", ".join(report["consumers"][target]["tree_apis_checked"]), flush=True)
+                print(f"Incremental APIs checked {target}: " + ", ".join(report["consumers"][target]["incremental_apis_checked"]), flush=True)
             # Confirm compilation did not change the extracted library source/interface.
             require(all((library / name).read_bytes() == data for name, data in payload.items()),
                     "Consumer compilation modified candidate payload")
+            report["extracted_library_unchanged_after_compilation"] = True
         report["status"] = "success"
     except (OSError, ValueError, subprocess.SubprocessError, zipfile.BadZipFile) as exc:
         report["status"] = "failure"

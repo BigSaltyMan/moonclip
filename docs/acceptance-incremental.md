@@ -13,7 +13,7 @@
 | 1416 个参考案例、2308 项能力检查 | 原 1384／2276 加整数开放矩形裁剪 32／32；一个案例可有多项能力检查，两者不能混用 |
 | Commit 52 | 新增测试 0 项、执行几何测试 0 项；仅文档链接与差异检查，没有演示构建、参考重建或性能测量 |
 
-普通 CI 由 CHECK_SCOPE 选择范围。Commit 27 之后的功能增量使用轻量 scope，本笔为 docs；`full` 入口继续保留，普通 CI 绿色不自动表示执行过完整检查。参考目录也不意味着所有新接口已逐项上游对照。
+普通 CI 由 CHECK_SCOPE 选择范围。Commit 27 之后的功能增量使用轻量 scope，Commit 52 为 docs，Commit 53 为 package；`full` 入口继续保留，普通 CI 绿色不自动表示执行过完整检查。参考目录也不意味着所有新接口已逐项上游对照。
 
 ## 历史完整基线与参考
 
@@ -40,7 +40,7 @@ Commit 26：[`cff654190fdbb5bbb47c5cb11b208a6a9f209deb`](https://github.com/BigS
 | 整数树批量定位 | [C48 · aa8d3bd](https://github.com/BigSaltyMan/moonclip/commit/aa8d3bd3b7f55ae5bce6c27b1ec572cac2af3274) | tree-locate-batch | 3/3 | 3/3 | [运行](https://github.com/BigSaltyMan/moonclip/actions/runs/39969283589) |
 | 小数树单点／批量定位 | [C50 · f62a875](https://github.com/BigSaltyMan/moonclip/commit/f62a8758d4a341fc4b2ca3a9b37589873269e064) | tree-locate-decimal | 3/3 | 3/3 | [运行](https://github.com/BigSaltyMan/moonclip/actions/runs/40063468200) |
 
-本地历史结果单独处理：已核对 Commit 26 的摘要（native 47/47、JS 47/47），以及 Commit 43、45 的本地验收摘要（两笔分别为 native 3/3、JS 3/3，位于忽略目录 `_build/commit43-acceptance.json`、`_build/commit45-acceptance.json`）。[定位专题](polytree-query.md)另有 Commit 48、50 的 Windows 本地记录，两笔分别为 native 3/3、JS 3/3；这些都是原阶段记录，本笔未重跑。上表其余核心提交的本地历史结果在本次整理中**未核实**，不从 Linux CI 推算本地通过。当前基线的全量、性能及候选消费者验收**未执行**。
+本地历史结果单独处理：已核对 Commit 26 的摘要（native 47/47、JS 47/47），以及 Commit 43、45 的本地验收摘要（两笔分别为 native 3/3、JS 3/3，位于忽略目录 `_build/commit43-acceptance.json`、`_build/commit45-acceptance.json`）。[定位专题](polytree-query.md)另有 Commit 48、50 的 Windows 本地记录，两笔分别为 native 3/3、JS 3/3；这些都是原阶段记录，文档整理没有重跑。上表其余核心提交的本地历史结果在 Commit 52 整理中**未核实**，不从 Linux CI 推算本地通过。截至 Commit 51 的新增全量、性能及候选消费者验收**未执行**；后续开发源码包检查见下方 Commit 53 专节。
 
 这些定向测试针对新增入口的完整坐标、层级、错误、隔离或预算边界，覆盖范围见[窗口](rectclip.md)、[批量组合](composition.md)、[扫掠](minkowski.md)和[查询](polytree-query.md)专题。它们不是任意输入完备性证明。
 
@@ -66,7 +66,19 @@ Commit 26：[`cff654190fdbb5bbb47c5cb11b208a6a9f209deb`](https://github.com/BigS
 - [性能基线](benchmarks.md)属于 Commit 18：`6a116b45600cbe8ecd577664a71b50fdfa8ce5c0`，指定 Windows x64／native release 环境的 11 个案例。没有为本轮新增接口重测，也没有 JS 性能结论。
 - [0.1.0 发布](release-0.1.0.md)的源码为 `10a9a1012d5fb07a333936ea83ce22e1f98a03d5`；[0.2.0 发布](release-0.2.0.md)的源码为 `e0ef766b34562bcad2b3f3e0d50002adf7b05912`。历史候选清单、哈希、完整 CI 和消费者结果仍按原记录解释。
 - [0.2.1 发布](release-0.2.1.md)的源码为 `02a6043692c966b3687996f9eb5197470712aca0`，独立 registry 消费者 native／JS 已在当时验证；状态文档提交不能冒充发布源码。该发布没有包含本文所列后续增量。
-- [旧树接口验收](acceptance-trees.md)与旧候选包只证明当时范围。当前增量接口的完整候选包及注册表消费者**未执行**；没有新增版本、候选冻结或发布结论。
+- [旧树接口验收](acceptance-trees.md)与旧候选包只证明当时范围。Commit 52 整理时尚未进行增量接口包级验收；后续开发源码包验证见下节，增量接口的注册表消费者仍**未执行**。没有新增版本、候选冻结或发布结论。
+
+## 开发源码包外部消费者验证（Commit 53）
+
+基线为 `bdebf95b7c23fbcd9ea11ef9f5213cd2b7e20abd`。本笔补上代表性增量接口在实际分发 ZIP 中的导入和调用证据，运行范围为 package scope：固定工具链、格式／接口、受影响的发布工具测试文件、一次正式 `moon package`，以及真实 ZIP 仓库外解压后的 native、JS 消费者。**库测试新增 0 项、执行 0 项**，不产生新的完整回归、参考、性能或浏览器证据。
+
+三个新增流程分别调用小数开放窗口与闭合窗口树、小数批量描边树及同树批量查询／旧整数树单点查询、小数 Minkowski 树；检查完整坐标、顺序和层级。保留基础消费者与六个旧树、整数窗口标记。三个流程及其 API 名称见[审计流程](release-checklist.md#当前开发源码包审计commit-53unreleased)，不将流程数或断言数称作新增库测试，也不展开全部 API 组合。
+
+报告在 `_build/incremental-package/report.json`，显式区分 `metadata_version=0.2.1` 与 `publication_status=unpublished-development-snapshot`；逐目标记录流程状态、实际 API、日志及编译后库字节核对。外部依赖使用 moon.work 解析实际 ZIP 解压目录，不引用开发目录，也没有从注册表安装这些 Unreleased 接口。
+
+本地报告在提交前生成，保留父 SHA／dirty；最终交付以应分发文件哈希对应最终提交，再与同 SHA Linux CI 产物比较。Windows 与 Linux 各存 ZIP 大小及 SHA-256，逐文件路径和内容哈希须一致，ZIP 哈希无需相同。实际包清单、目标运行结果、工具测试数量、CI 链接和跨平台核对结果统一放入提交后 `_build/commit53/delivery.json`，此处不预填旧数字或自身最终 SHA。
+
+本笔未选择下一版版本号、未冻结发布候选、未发布或覆盖注册表 0.2.1，原发布记录和校验和保持原样。执行方法和产物位置见[开发源码包清单](release-checklist.md)。
 
 ## 本次文档检查的边界
 

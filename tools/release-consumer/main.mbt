@@ -31,9 +31,19 @@ fn check_rect(
 
 ///|
 fn main raise {
-  let window : @moonclip.Bounds64 = {min_x:0L,min_y:0L,max_x:10L,max_y:10L}
-  let point = fn(x,y) { @moonclip.Point64::new(x,y) }
-  assert_eq(@moonclip.rect_clip_lines(window,[[point(-10L,5L),point(5L,5L),point(20L,5L)]]),Ok([[point(0L,5L),point(5L,5L),point(10L,5L)]]))
+  let window : @moonclip.Bounds64 = {
+    min_x: 0L,
+    min_y: 0L,
+    max_x: 10L,
+    max_y: 10L,
+  }
+  let point = fn(x, y) { @moonclip.Point64::new(x, y) }
+  assert_eq(
+    @moonclip.rect_clip_lines(window, [
+      [point(-10L, 5L), point(5L, 5L), point(20L, 5L)],
+    ]),
+    Ok([[point(0L, 5L), point(5L, 5L), point(10L, 5L)]]),
+  )
   println("RECTCLIP_API_OK rect_clip_lines")
   let outer = rect(0L, 0L, 20L, 20L)
   let hole = rect(5L, 5L, 10L, 10L)
@@ -201,6 +211,9 @@ fn main raise {
     is Err(CoordinateOutOfRange({ vertex_index: Some(0), .. }, X, 1000000001L)),
   )
   check_stroke_trees()
+  check_incremental_rectclip()
+  check_incremental_batch_stroke_query(tree)
+  check_incremental_minkowski_tree()
   println(
     "MoonClip candidate consumer OK: Boolean PolyTree Offset Stroke Decimal Simplify Minkowski errors",
   )
@@ -322,4 +335,170 @@ fn check_decimal_boolean_tree() -> Unit raise {
   assert_true(!deepest.is_hole())
   assert_eq(deepest.children().length(), 0)
   println("TREE_API_OK boolean_tree_d")
+}
+
+///|
+fn decimal_path(points : Array[(Double, Double)]) -> @moonclip.PathD {
+  points.map(fn(pair) { @moonclip.PointD::new(pair.0, pair.1) })
+}
+
+///|
+fn check_contour_d(
+  actual : @moonclip.PathD,
+  expected : @moonclip.PathD,
+) -> Unit raise {
+  assert_eq(actual.length(), expected.length())
+  for start = 0; start < actual.length(); start = start + 1 {
+    if actual[start] == expected[0] {
+      for i = 0; i < expected.length(); i = i + 1 {
+        assert_eq(actual[(start + i) % actual.length()], expected[i])
+      }
+      return
+    }
+  }
+  fail("Expected complete decimal contour with original winding and vertices")
+}
+
+///|
+fn check_incremental_rectclip() -> Unit raise {
+  let precision = @moonclip.Precision::new(2).unwrap()
+  let window : @moonclip.BoundsD = {
+    min_x: -1.25,
+    min_y: -0.5,
+    max_x: 2.75,
+    max_y: 2.5,
+  }
+  let route = decimal_path([(-2.0, 0.25), (0.5, 0.25), (3.0, 0.25)])
+  let fragments = @moonclip.rect_clip_lines_d(window, [route], precision~).unwrap()
+  assert_eq(fragments, [
+    decimal_path([(-1.25, 0.25), (0.5, 0.25), (2.75, 0.25)]),
+  ])
+  let tree = @moonclip.rect_clip_polygons_tree_d(
+    window,
+    [
+      decimal_path([(-2.0, -1.0), (4.0, -1.0), (4.0, 4.0), (-2.0, 4.0)]),
+      decimal_path([(0.0, 0.0), (1.0, 0.0), (1.0, 1.0), (0.0, 1.0)]),
+    ],
+    precision~,
+    fill_rule=EvenOdd,
+  ).unwrap()
+  assert_eq(tree.roots().length(), 1)
+  let root = tree.roots()[0]
+  check_contour_d(
+    root.contour(),
+    decimal_path([(-1.25, -0.5), (2.75, -0.5), (2.75, 2.5), (-1.25, 2.5)]),
+  )
+  assert_eq(root.depth(), 1)
+  assert_true(!root.is_hole())
+  assert_eq(root.children().length(), 1)
+  let hole = root.children()[0]
+  check_contour_d(
+    hole.contour(),
+    decimal_path([(0.0, 0.0), (0.0, 1.0), (1.0, 1.0), (1.0, 0.0)]),
+  )
+  assert_eq(hole.depth(), 2)
+  assert_true(hole.is_hole())
+  assert_eq(hole.children().length(), 0)
+  println("INCREMENTAL_API_OK rectclip")
+}
+
+///|
+fn check_incremental_batch_stroke_query(
+  integer_tree : @moonclip.PolyTree64,
+) -> Unit raise {
+  let precision = @moonclip.Precision::new(2).unwrap()
+  let tree = @moonclip.stroke_polylines_tree_d(
+    [
+      decimal_path([(-1.0, 0.0), (1.0, 0.0)]),
+      decimal_path([(0.0, 0.0), (2.0, 0.0)]),
+    ],
+    0.5,
+    precision~,
+    cap=Butt,
+  ).unwrap()
+  let expected = decimal_path([
+    (-1.0, -0.25),
+    (2.0, -0.25),
+    (2.0, 0.25),
+    (-1.0, 0.25),
+  ])
+  assert_eq(tree.roots().length(), 1)
+  let root = tree.roots()[0]
+  check_contour_d(root.contour(), expected)
+  assert_eq(root.depth(), 1)
+  assert_true(!root.is_hole())
+  assert_eq(root.children().length(), 0)
+  // One call queries the same tree that supplied the complete merged contour.
+  let locations : Array[@moonclip.TreePointLocationD] = tree
+    .locate_many(decimal_path([(0.0, 0.0), (0.0, -0.25), (3.0, 0.0)]))
+    .unwrap()
+  assert_eq(locations.length(), 3)
+  match locations[0] {
+    Inside(node) => {
+      check_contour_d(node.contour(), expected)
+      assert_eq(node.depth(), 1)
+      assert_true(!node.is_hole())
+    }
+    _ => fail("Expected decimal filled interior")
+  }
+  match locations[1] {
+    OnBoundary(nodes) => {
+      assert_eq(nodes.length(), 1)
+      check_contour_d(nodes[0].contour(), expected)
+      assert_eq(nodes[0].depth(), 1)
+      assert_true(!nodes[0].is_hole())
+    }
+    _ => fail("Expected decimal boundary")
+  }
+  assert_true(locations[2] is Outside)
+  let integer_location : @moonclip.TreePointLocation64 = integer_tree
+    .locate(@moonclip.Point64::new(10L, 10L))
+    .unwrap()
+  match integer_location {
+    InHole(node) => {
+      let hole = rect(5L, 5L, 10L, 10L)
+      check_rect([node.contour()], Array::makei(4, fn(i) { hole[3 - i] }))
+      assert_eq(node.depth(), 2)
+      assert_true(node.is_hole())
+    }
+    _ => fail("Expected integer Boolean hole")
+  }
+  println("INCREMENTAL_API_OK batch_stroke_query")
+}
+
+///|
+fn check_incremental_minkowski_tree() -> Unit raise {
+  let tree = @moonclip.minkowski_sum_tree_d(
+    decimal_path([(-0.5, -0.25), (0.5, -0.25), (0.5, 0.25), (-0.5, 0.25)]),
+    decimal_path([(0.0, 0.0), (7.5, 0.0), (7.5, 5.0), (0.0, 5.0)]),
+    true,
+    precision=@moonclip.Precision::new(2).unwrap(),
+  ).unwrap()
+  // Locked rectangle construction, scaled by 1/4. Keep all 11 outer vertices.
+  let outer = decimal_path([
+    (0.5, -0.25),
+    (7.0, -0.25),
+    (8.0, -0.25),
+    (8.0, 0.25),
+    (8.0, 5.25),
+    (7.0, 5.25),
+    (0.5, 5.25),
+    (-0.5, 5.25),
+    (-0.5, 4.75),
+    (-0.5, 0.25),
+    (-0.5, -0.25),
+  ])
+  let inner = decimal_path([(0.5, 4.75), (7.0, 4.75), (7.0, 0.25), (0.5, 0.25)])
+  assert_eq(tree.roots().length(), 1)
+  let root = tree.roots()[0]
+  check_contour_d(root.contour(), outer)
+  assert_eq(root.depth(), 1)
+  assert_true(!root.is_hole())
+  assert_eq(root.children().length(), 1)
+  let hole = root.children()[0]
+  check_contour_d(hole.contour(), inner)
+  assert_eq(hole.depth(), 2)
+  assert_true(hole.is_hole())
+  assert_eq(hole.children().length(), 0)
+  println("INCREMENTAL_API_OK minkowski_tree")
 }

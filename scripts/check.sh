@@ -6,8 +6,8 @@ cd "$repo_root"
 
 scope=full
 if [[ $# -ne 0 ]]; then
-  if [[ $# -ne 2 || "$1" != --scope || ( "$2" != full && "$2" != docs && "$2" != minkowski-tree && "$2" != rectclip-tree && "$2" != stroke-batch-tree && "$2" != rectclip-lines-decimal && "$2" != rectclip-polygons-decimal && "$2" != rectclip-polygons && "$2" != stroke-batch-decimal && "$2" != stroke-batch && "$2" != minkowski-decimal && "$2" != tree-locate && "$2" != tree-locate-batch && "$2" != tree-locate-decimal && "$2" != demo-rectclip && "$2" != demo-minkowski-decimal && "$2" != demo-stroke-batch && "$2" != demo-tree-locate ) ]]; then
-    printf 'Usage: bash scripts/check.sh [--scope full|docs|minkowski-tree|rectclip-tree|stroke-batch-tree|rectclip-lines-decimal|rectclip-polygons-decimal|rectclip-polygons|stroke-batch-decimal|stroke-batch|minkowski-decimal|tree-locate|tree-locate-batch|tree-locate-decimal|demo-rectclip|demo-minkowski-decimal|demo-stroke-batch|demo-tree-locate]\n' >&2
+  if [[ $# -ne 2 || "$1" != --scope || ( "$2" != full && "$2" != docs && "$2" != package && "$2" != minkowski-tree && "$2" != rectclip-tree && "$2" != stroke-batch-tree && "$2" != rectclip-lines-decimal && "$2" != rectclip-polygons-decimal && "$2" != rectclip-polygons && "$2" != stroke-batch-decimal && "$2" != stroke-batch && "$2" != minkowski-decimal && "$2" != tree-locate && "$2" != tree-locate-batch && "$2" != tree-locate-decimal && "$2" != demo-rectclip && "$2" != demo-minkowski-decimal && "$2" != demo-stroke-batch && "$2" != demo-tree-locate ) ]]; then
+    printf 'Usage: bash scripts/check.sh [--scope full|docs|package|minkowski-tree|rectclip-tree|stroke-batch-tree|rectclip-lines-decimal|rectclip-polygons-decimal|rectclip-polygons|stroke-batch-decimal|stroke-batch|minkowski-decimal|tree-locate|tree-locate-batch|tree-locate-decimal|demo-rectclip|demo-minkowski-decimal|demo-stroke-batch|demo-tree-locate]\n' >&2
     exit 2
   fi
   scope="$2"
@@ -32,6 +32,13 @@ untracked_interfaces="$(git ls-files --others --exclude-standard -- '*.mbti')"
 if [[ -n "$untracked_interfaces" ]]; then
   printf 'Untracked public interfaces; review and stage them:\n%s\n' "$untracked_interfaces" >&2
   exit 1
+fi
+if [[ "$scope" == package ]]; then
+  mkdir -p _build/incremental-package
+  python -m unittest discover -s tools/conformance -p test_release.py -v 2>&1 | tee _build/incremental-package/tool-tests.log
+  python scripts/check_release.py --report _build/incremental-package/report.json
+  git diff --check
+  exit 0
 fi
 if [[ "$scope" == demo-rectclip || "$scope" == demo-minkowski-decimal || "$scope" == demo-stroke-batch || "$scope" == demo-tree-locate ]]; then
   selection='demo rectclip:'

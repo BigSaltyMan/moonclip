@@ -53,7 +53,7 @@ npm run dev
 
 [增量验收索引](docs/acceptance-incremental.md)区分历史完整回归、各次定向检查、浏览器操作和发布证据。Commit 26 的历史完整回归为 native **2370/2370**、JS **2370/2370**；当前完整入口的 **2406** 是配置期望数，未据此宣称当前源码已全量通过。参考目录为 **1416 个案例、2308 项能力检查**，不代表所有新增接口都有逐项上游对照。
 
-普通 CI 按 `CHECK_SCOPE` 选择检查范围，本笔为文档检查；核心和演示增量使用各自的轻量 scope。完整检查入口仍保留，需显式选择；当前执行范围见[工作流](.github/workflows/ci.yml)与[检查脚本](scripts/check.sh)。文档检查只验证指定材料的本地链接目标存在和差异空白，不构建或执行几何：
+普通 CI 按 `CHECK_SCOPE` 选择文档、核心、演示或开发源码包检查范围；一次成功不自动代表完整验收。完整检查入口仍保留，需显式选择；当前执行范围见[工作流](https://github.com/BigSaltyMan/moonclip/blob/main/.github/workflows/ci.yml)与[检查脚本](https://github.com/BigSaltyMan/moonclip/blob/main/scripts/check.sh)。文档检查只验证指定材料的本地链接目标存在和差异空白，不构建或执行几何：
 
 ```bash
 bash scripts/check.sh --scope docs
