@@ -122,6 +122,33 @@ fn run_lineclip_example() -> Unit raise {
     ],
     [@moonclip.Point64::new(7L, 5L), @moonclip.Point64::new(10L, 5L)],
   ])
+  let decimal_paths = [
+    [
+      @moonclip.PointD::new(-0.2, 0.5),
+      @moonclip.PointD::new(0.2, 0.5),
+      @moonclip.PointD::new(0.5, 0.5),
+      @moonclip.PointD::new(1.2, 0.5),
+    ],
+  ]
+  let decimal_clip = [
+    example_box_d(0.0, 0.0, 1.0, 1.0),
+    example_box_d(0.3, 0.3, 0.7, 0.7),
+  ]
+  assert_eq(
+    @moonclip.intersect_polylines_d(
+      decimal_paths,
+      decimal_clip,
+      precision=@moonclip.Precision::new(2).unwrap(),
+    ).unwrap(),
+    [
+      [
+        @moonclip.PointD::new(0.0, 0.5),
+        @moonclip.PointD::new(0.2, 0.5),
+        @moonclip.PointD::new(0.3, 0.5),
+      ],
+      [@moonclip.PointD::new(0.7, 0.5), @moonclip.PointD::new(1.0, 0.5)],
+    ],
+  )
 }
 
 ///|

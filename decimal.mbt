@@ -1242,3 +1242,60 @@ pub fn minkowski_sum_tree_d(
     max_work: 5000000,
   })
 }
+
+///|
+fn decimal_line_clip_execute(
+  paths : PathsD,
+  clip : PathsD,
+  precision : Precision,
+  fill_rule : FillRule,
+  limits : ScanLimits,
+  budget? : CallBudget,
+) -> Result[PathsD, ClipError] {
+  let budget = match budget {
+    Some(value) => value
+    None =>
+      new_call_budget(
+        limits,
+        generate_stage=LineClipEvaluate,
+        cleanup_stage=LineClipEvaluate,
+      )
+  }
+  try {
+    decimal_precheck(paths, clip, precision, budget)
+    // One collision table across both operands. Open routes must not be tested
+    // as closed contours; only the clip operand needs closed-grid validity.
+    let (routes, region) = decimal_quantize(
+      paths, clip, precision, false, budget,
+    )
+    for i = 0; i < region.length(); i = i + 1 {
+      let index = paths.length() + i // Combined count was checked before quantization.
+      decimal_spend(budget, 0, 1, location(DecimalQuantize, Some(index), None))
+      decimal_closed(region[i], index, budget)
+    }
+    // Preserve the integer entry's own raw preflight and its real work charge.
+    match line_clip_execute(routes, region, fill_rule, budget.limits, budget~) {
+      Ok(pieces) => Ok(decimal_output(pieces, precision, budget))
+      Err(error) => Err(decimal_error(error, precision))
+    }
+  } catch {
+    ScanAbort(error) => Err(decimal_error(error, precision))
+  }
+}
+
+///|
+/// Unreleased: intersect open decimal routes with a closed region on one grid.
+/// Only clip contours require closed validity; both operands share collision checks.
+/// Exact integer events include region boundaries and round half away from zero.
+pub fn intersect_polylines_d(
+  paths : PathsD,
+  clip : PathsD,
+  precision? : Precision = Default::default(),
+  fill_rule? : FillRule = EvenOdd,
+  limits? : Limits = Default::default(),
+) -> Result[PathsD, ClipError] {
+  decimal_line_clip_execute(paths, clip, precision, fill_rule, {
+    ..Default::default(),
+    input: limits,
+  })
+}

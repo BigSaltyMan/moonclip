@@ -33,6 +33,8 @@ pub fn cross(Point64, Point64, Point64, limits? : Limits) -> Result[Int64, ClipE
 
 pub fn intersect_polylines(Array[Array[Point64]], Array[Array[Point64]], fill_rule? : FillRule, limits? : Limits) -> Result[Array[Array[Point64]], ClipError]
 
+pub fn intersect_polylines_d(Array[Array[PointD]], Array[Array[PointD]], precision? : Precision, fill_rule? : FillRule, limits? : Limits) -> Result[Array[Array[PointD]], ClipError]
+
 pub fn minkowski_sum(Array[Point64], Array[Point64], Bool, limits? : Limits) -> Result[Array[Array[Point64]], ClipError]
 
 pub fn minkowski_sum_d(Array[PointD], Array[PointD], Bool, precision? : Precision, limits? : Limits) -> Result[Array[Array[PointD]], ClipError]
