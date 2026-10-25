@@ -72,7 +72,7 @@ class ReleaseTreeMarkers(unittest.TestCase):
     def test_release_candidate_report_fields(self):
         source = dict(commit="f" * 40, worktree_dirty=True)
         report = release.snapshot_report(source)
-        self.assertEqual(report["metadata_version"], "0.3.1")
+        self.assertEqual(report["metadata_version"], "0.3.2")
         self.assertEqual(report["version"], report["metadata_version"])
         self.assertEqual(report["publication_status"], "unpublished-release-candidate")
         self.assertEqual(report["source"], source)
