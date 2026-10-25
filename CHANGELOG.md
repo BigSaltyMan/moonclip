@@ -4,6 +4,8 @@
 
 后续变更在本节另行记录；已发布的 0.3.0 源码与归档保持冻结。
 
+- `intersect_polylines`：整数开放折线与任意闭合填充区域求交，统一保留最终区域内部和边界上的非零长度片段；精确有理事件切分，交点采用半整数远离零舍入。保持输入路线顺序、方向及普通共线中间点，原始预检、区域求值、事件和输出共用预算。见[契约说明](docs/lineclip.md)。仅开发源码提供，未包含在已发布的 0.3.2 中。
+
 ## 0.3.2 — 2026-10-25
 
 已发布至 [Mooncakes](https://mooncakes.io/docs/BigSaltyMan/moonclip@0.3.2/) 和 [GitHub Release](https://github.com/BigSaltyMan/moonclip/releases/tag/v0.3.2)。发布源码为 `2171a5e8be30a36ae9ed32d18fafd6bf40d2a958`；registry 消费者 native／JS 各一次成功，62 个下载文件与冻结候选一致。实际 README 蓝链和 GitHub 中文渲染已核验，见[发布记录](docs/release-0.3.2.md)。

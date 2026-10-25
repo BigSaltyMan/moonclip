@@ -1,5 +1,9 @@
 # 上游来源与移植记录
 
+## 整数开放折线区域求交（Unreleased）
+
+`lineclip.mbt` 复用既有固定 Clipper2 参考引擎的 `boolean_compute`，按选定填充规则先确定闭合整数区域；有理事件切分、精确分类、半整数远离零输出舍入及累计预算组织为 MoonClip 自行实现，版权 BigSaltyMan 2026、BSL-1.0。未直接改写新的上游开放边代码，不声称新增上游算法移植。统一包含最终区域边界，与 [Clipper2 部分共线段按相邻位置选择包含](https://www.angusj.com/clipper2/Docs/Overview.htm)的规则不同，不宣称逐项兼容。旧扫描器、矩形裁剪、参考清单和兼容统计均未改变，详见[契约](lineclip.md)。
+
 当前范围以[支持范围](scope.md)为准；窗口、批量描边、小数扫掠及六类区域树的整数／小数查询均自 0.3.0 提供。以下 Commit 章节保留移植和自有适配的阶段归属，其中 Unreleased 只描述当时状态，不表示当前能力尚未交付。
 
 ## Commit 50：小数树单点与批量定位（Unreleased）

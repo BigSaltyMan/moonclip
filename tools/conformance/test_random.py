@@ -72,7 +72,7 @@ class RandomTests(unittest.TestCase):
             # A stale full-suite count must not establish JS execution evidence.
             (root/'all-js.log').write_text('Total tests: 2403, passed: 2403, failed: 0.\n')
             with self.assertRaises(Invalid):random_execution_evidence(root)
-            (root/'all-js.log').write_text('Total tests: 2406, passed: 2406, failed: 0.\n')
+            (root/'all-js.log').write_text('Total tests: 2409, passed: 2409, failed: 0.\n')
             self.assertEqual(random_execution_evidence(root)['js']['passed'],24)
 
     def test_reducer_keeps_category_and_attempt_cap(self):

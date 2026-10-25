@@ -1,5 +1,6 @@
 ///|
 fn run_foundation_example() -> Unit raise {
+  run_lineclip_example()
   run_rectclip_example()
   run_decimal_rectclip_lines_example()
   run_rectclip_polygons_example()
@@ -92,6 +93,35 @@ fn run_foundation_example() -> Unit raise {
     @moonclip.normalize_paths([contour, []], @moonclip.Closed, limits~)
     is Err(ResourceLimitExceeded(_, InputPaths, 1)),
   )
+}
+
+///|
+fn run_lineclip_example() -> Unit raise {
+  let clip = [
+    example_rect(0L, 0L, 10L, 10L),
+    [
+      @moonclip.Point64::new(3L, 3L),
+      @moonclip.Point64::new(3L, 7L),
+      @moonclip.Point64::new(7L, 7L),
+      @moonclip.Point64::new(7L, 3L),
+    ],
+  ]
+  let paths = [
+    [
+      @moonclip.Point64::new(-2L, 5L),
+      @moonclip.Point64::new(2L, 5L),
+      @moonclip.Point64::new(5L, 5L),
+      @moonclip.Point64::new(12L, 5L),
+    ],
+  ]
+  assert_eq(@moonclip.intersect_polylines(paths, clip).unwrap(), [
+    [
+      @moonclip.Point64::new(0L, 5L),
+      @moonclip.Point64::new(2L, 5L),
+      @moonclip.Point64::new(3L, 5L),
+    ],
+    [@moonclip.Point64::new(7L, 5L), @moonclip.Point64::new(10L, 5L)],
+  ])
 }
 
 ///|

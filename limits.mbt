@@ -45,6 +45,9 @@ pub(all) enum Stage {
   RectClipParameters
   RectClipEvaluate
   RectClipOutput
+  LineClipParameters
+  LineClipEvaluate
+  LineClipOutput
 } derive(Eq, Debug)
 
 ///|

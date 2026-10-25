@@ -14,6 +14,8 @@ moon add BigSaltyMan/moonclip@0.3.2
 
 ## 0.3.0 能力
 
+开发源码另有 **Unreleased** 接口 `intersect_polylines`，用于整数开放折线与闭合填充区域求交；保留最终区域边界，输出有序开放片段。它不在上述注册表 0.3.2 包内，契约及与矩形裁剪的区别见[开放折线区域求交](https://github.com/BigSaltyMan/moonclip/blob/main/docs/lineclip.md)。下表仍描述已发布能力。
+
 | 能力 | 整数 | 小数 | 输出 | 使用说明 |
 | --- | --- | --- | --- | --- |
 | 开放折线窗口裁剪 | 支持 | 支持 | 有序开放片段 | [窗口裁剪](https://github.com/BigSaltyMan/moonclip/blob/c9ccdb9bff41c26119a924f6fea7dea5e0bed01d/docs/rectclip.md) |
