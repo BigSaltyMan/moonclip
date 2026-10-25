@@ -70,22 +70,29 @@ fn flag(
 }
 
 ///|
-fn coordinates(j : Json) -> @moonclip.PathsD raise DemoError {
+fn coordinates(
+  j : Json,
+  path_offset? : Int = 0,
+) -> @moonclip.PathsD raise DemoError {
   guard j is Array(paths) else {
     raise Input("Expected array of paths", None, None)
   }
   let result = []
   for i = 0; i < paths.length(); i = i + 1 {
     guard paths[i] is Array(points) else {
-      raise Input("Expected point array", Some(i), None)
+      raise Input("Expected point array", Some(path_offset + i), None)
     }
     let ring = []
     for k = 0; k < points.length(); k = k + 1 {
       guard points[k] is Array([Number(x, ..), Number(y, ..)]) else {
-        raise Input("Expected [x,y]", Some(i), Some(k))
+        raise Input("Expected [x,y]", Some(path_offset + i), Some(k))
       }
       if x - x != 0.0 || y - y != 0.0 {
-        raise Input("Coordinates must be finite", Some(i), Some(k))
+        raise Input(
+          "Coordinates must be finite",
+          Some(path_offset + i),
+          Some(k),
+        )
       }
       ring.push(@moonclip.PointD::new(x, y))
     }
@@ -95,7 +102,10 @@ fn coordinates(j : Json) -> @moonclip.PathsD raise DemoError {
 }
 
 ///|
-fn integer_paths(paths : @moonclip.PathsD) -> @moonclip.Paths64 raise DemoError {
+fn integer_paths(
+  paths : @moonclip.PathsD,
+  path_offset? : Int = 0,
+) -> @moonclip.Paths64 raise DemoError {
   let result = []
   for i = 0; i < paths.length(); i = i + 1 {
     let ring = []
@@ -107,7 +117,7 @@ fn integer_paths(paths : @moonclip.PathsD) -> @moonclip.Paths64 raise DemoError 
         p.y > 9007199254740991.0 {
         raise Input(
           "Integer coordinates must be exact JSON safe integers",
-          Some(i),
+          Some(path_offset + i),
           Some(k),
         )
       }
@@ -116,7 +126,7 @@ fn integer_paths(paths : @moonclip.PathsD) -> @moonclip.Paths64 raise DemoError 
       if x.to_double() != p.x || y.to_double() != p.y {
         raise Input(
           "Integer mode requires integer coordinates",
-          Some(i),
+          Some(path_offset + i),
           Some(k),
         )
       }
@@ -528,6 +538,75 @@ fn library_error(error : @moonclip.ClipError) -> Json {
 }
 
 ///|
+fn execute_lineclip(r : Map[String, Json]) -> Json raise DemoError {
+  let mode = text(r, "mode", "integer")
+  if mode != "integer" && mode != "decimal" {
+    raise Input("Unknown coordinate mode", None, None)
+  }
+  if text(r, "output", "paths") != "paths" {
+    raise Input("LineClip supports paths output only", None, None)
+  }
+  if r.get("query") is Some(_) {
+    raise Input("LineClip does not support point queries", None, None)
+  }
+  if flag(
+      object(r.get("simplify").unwrap_or(Json::object({}))),
+      "enabled",
+      false,
+    ) {
+    raise Input("LineClip does not apply simplification", None, None)
+  }
+  let params = object(r.get("params").unwrap_or(Json::object({})))
+  let rule = match text(params, "fill_rule", "EvenOdd") {
+    "EvenOdd" => @moonclip.EvenOdd
+    "NonZero" => @moonclip.NonZero
+    _ => raise Input("Unknown fill rule", None, None)
+  }
+  let digits = number(r, "precision", 3.0)
+  if digits < 0.0 || digits > 6.0 || digits.to_int().to_double() != digits {
+    raise Input("Precision must be an integer from 0 to 6", None, None)
+  }
+  let precision = value(@moonclip.Precision::new(digits.to_int()))
+  let paths = coordinates(r.get("paths").unwrap_or(Json::array([])))
+  let clip = coordinates(
+    r.get("clip").unwrap_or(Json::array([])),
+    path_offset=paths.length(),
+  )
+  let result = if mode == "decimal" {
+    encode_decimal(
+      value(
+        @moonclip.intersect_polylines_d(paths, clip, precision~, fill_rule=rule),
+      ),
+    )
+  } else {
+    encode_paths(
+      value(
+        @moonclip.intersect_polylines(
+          integer_paths(paths),
+          integer_paths(clip, path_offset=paths.length()),
+          fill_rule=rule,
+        ),
+      ),
+    )
+  }
+  Json::object({
+    "ok": true.to_json(),
+    "kernel": "MoonBit".to_json(),
+    "scene": "lineclip".to_json(),
+    "mode": mode.to_json(),
+    "output": "paths".to_json(),
+    "precision": if mode == "decimal" {
+      digits.to_json()
+    } else {
+      Json::null()
+    },
+    "geometry": "open-paths".to_json(),
+    "paths": result,
+    "simplification": Json::null(),
+  })
+}
+
+///|
 fn execute_rectclip(
   r : Map[String, Json],
   query_request : TreeQuery?,
@@ -712,6 +791,9 @@ fn execute(request : Json) -> Json raise DemoError {
     None
   }
   // Open paths must bypass closed-region preparation and all unrelated parameters.
+  if scene == "lineclip" {
+    return execute_lineclip(r)
+  }
   if scene == "rectclip" {
     return execute_rectclip(r, query_request, decimal_query_request)
   }

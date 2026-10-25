@@ -1,7 +1,7 @@
 import {cases,patterns} from './cases.js';
 import {viewFor,contourData,openPathData,resultSvg,openResultSvg,resultDocument} from './export.js';
 const $=id=>document.getElementById(id);
-const titles={boolean:'区域布尔',offset:'带孔偏移',stroke:'路线加宽',minkowski:'图案扫掠',rectclip:'窗口裁剪','stroke-batch':'批量加宽'};
+const titles={boolean:'区域布尔',offset:'带孔偏移',stroke:'路线加宽',minkowski:'图案扫掠',rectclip:'窗口裁剪',lineclip:'区域裁线','stroke-batch':'批量加宽'};
 let scene='boolean',input=null,valid=null,requestId=0,view=null,ready=false,selectedNode=null,selectedQuery=null;
 const worker=new Worker(new URL('./worker.js',import.meta.url),{type:'module'});
 worker.onerror=e=>{requestId++;showError({kind:'WorkerError',stage:'BrowserBridge',message:e.message});};
@@ -12,9 +12,9 @@ worker.onmessage=({data})=>{
   const r=data.response;showReport(r.simplification);
   if(!r.ok){showError(r.error,r.simplification);return;}
   valid={request:structuredClone(input),response:r};
-  $('status').textContent='计算完成';const units=input.mode==='decimal'?'小数 Precision '+input.precision:'整数';$('result-detail').textContent=scene==='rectclip'?`${units} · ${r.geometry==='closed-regions'?'闭合区域 / '+input.params.fill_rule:'开放折线'} · 窗口裁剪`:scene==='stroke-batch'?`${units} · 批量加宽 · 完整宽度 ${input.params.width} · ${input.params.cap} / ${input.params.join} · 重叠区域统一合并`:scene==='minkowski'?`${units} · 图案扫掠 · NonZero · 保留共线点`:scene==='stroke'?`${units} · 完整宽度 ${input.params.width} · ${input.params.cap} / ${input.params.join}`:scene==='offset'?`${units} · 偏移 ${input.params.delta} · ${input.params.join} / ${input.params.fill_rule}`:`${units} · ${input.params.operation} / ${input.params.fill_rule}`;
-  if(scene==='rectclip')$('contours-label').textContent=r.geometry==='open-paths'?'输出片段':'结果轮廓';
-  $('contours').textContent=r.paths.length;$('vertices').textContent=r.paths.reduce((n,p)=>n+p.length,0);$('elapsed').textContent=data.elapsed.toFixed(2);$('removed').textContent=['rectclip','stroke-batch'].includes(scene)?input.paths.length:(r.simplification?.removed_vertices??0);
+  $('status').textContent='计算完成';const units=input.mode==='decimal'?'小数 Precision '+input.precision:'整数';$('result-detail').textContent=scene==='lineclip'?`${units} · 区域裁线 / ${input.params.fill_rule} · 保留最终区域边界重合段`:scene==='rectclip'?`${units} · ${r.geometry==='closed-regions'?'闭合区域 / '+input.params.fill_rule:'开放折线'} · 窗口裁剪`:scene==='stroke-batch'?`${units} · 批量加宽 · 完整宽度 ${input.params.width} · ${input.params.cap} / ${input.params.join} · 重叠区域统一合并`:scene==='minkowski'?`${units} · 图案扫掠 · NonZero · 保留共线点`:scene==='stroke'?`${units} · 完整宽度 ${input.params.width} · ${input.params.cap} / ${input.params.join}`:scene==='offset'?`${units} · 偏移 ${input.params.delta} · ${input.params.join} / ${input.params.fill_rule}`:`${units} · ${input.params.operation} / ${input.params.fill_rule}`;
+  if(['rectclip','lineclip'].includes(scene))$('contours-label').textContent=r.geometry==='open-paths'?'输出片段':'结果轮廓';
+  $('contours').textContent=r.paths.length;$('vertices').textContent=r.paths.reduce((n,p)=>n+p.length,0);$('elapsed').textContent=data.elapsed.toFixed(2);$('removed').textContent=['rectclip','stroke-batch','lineclip'].includes(scene)?input.paths.length:(r.simplification?.removed_vertices??0);
   $('error').hidden=true;$('export-svg').disabled=false;$('export-json').disabled=false;
   renderTree();renderQuery();fit();
 };
@@ -76,6 +76,7 @@ function withTreeQuery(request){
   return request;
 }
 function readRequest(){
+  if(scene==='lineclip')return {version:1,scene,mode:$('mode').value,precision:numeric('precision'),output:'paths',paths:JSON.parse($('input-a').value),clip:JSON.parse($('input-b').value),params:{fill_rule:$('fill-rule').value},simplify:{enabled:false}};
   if(scene==='stroke-batch')return withTreeQuery({version:1,scene,mode:$('mode').value,precision:numeric('precision'),output:$('output').value,paths:JSON.parse($('input-a').value),params:{width:numeric('width'),cap:$('cap').value,join:$('join').value,miter_limit:numeric('miter-limit'),arc_tolerance:numeric('arc-tolerance')},simplify:{enabled:false}});
   if(scene==='rectclip')return withTreeQuery({version:1,scene,input_kind:$('input-kind').value,...($('input-kind').value==='polygons'?{params:{fill_rule:$('fill-rule').value}}:{}),mode:$('mode').value,precision:numeric('precision'),output:$('output').value,paths:JSON.parse($('input-a').value),rect:{min_x:numeric('min-x'),min_y:numeric('min-y'),max_x:numeric('max-x'),max_y:numeric('max-y')},simplify:{enabled:false}});
   const r={version:1,scene,output:$('output').value,mode:$('mode').value,precision:numeric('precision'),params:{operation:$('operation').value,fill_rule:$('fill-rule').value,delta:numeric('delta'),width:numeric('width'),join:$('join').value,cap:$('cap').value,miter_limit:numeric('miter-limit'),arc_tolerance:numeric('arc-tolerance'),path_is_closed:$('closed').checked},simplify:{enabled:$('simplify').checked,epsilon:numeric('epsilon')}};
@@ -98,21 +99,22 @@ function setVisibility(){
   $('query-fields').hidden=!$('query-enabled').checked;$('query-single').hidden=$('query-mode').value==='batch';$('query-batch').hidden=$('query-mode').value!=='batch';
   document.querySelectorAll('[data-for]').forEach(el=>{el.hidden=!el.dataset.for.split(' ').includes(scene);});
   if(scene==='rectclip')$('fill-controls').hidden=$('input-kind').value!=='polygons';
-  $('route-tabs').hidden=!['stroke','minkowski','rectclip','stroke-batch'].includes(scene);
+  $('route-tabs').hidden=!['stroke','minkowski','rectclip','stroke-batch','lineclip'].includes(scene);
+  $('lineclip-tab').classList.toggle('selected',scene==='lineclip');
   $('rectclip-tab').classList.toggle('selected',scene==='rectclip');$('batch-tab').classList.toggle('selected',scene==='stroke-batch');
-  $('coordinate-controls').hidden=false;$('output-controls').hidden=scene==='rectclip'&&$('input-kind').value==='lines';
-  $('contours-label').textContent=scene==='rectclip'&&$('input-kind').value==='lines'?'输出片段':'结果轮廓';$('removed-label').textContent=scene==='rectclip'&&$('input-kind').value==='polygons'?'输入轮廓':['rectclip','stroke-batch'].includes(scene)?'输入路线':'简化删点';
+  $('coordinate-controls').hidden=false;$('output-controls').hidden=scene==='lineclip'||(scene==='rectclip'&&$('input-kind').value==='lines');
+  $('contours-label').textContent=scene==='lineclip'||(scene==='rectclip'&&$('input-kind').value==='lines')?'输出片段':'结果轮廓';$('removed-label').textContent=scene==='rectclip'&&$('input-kind').value==='polygons'?'输入轮廓':['rectclip','stroke-batch','lineclip'].includes(scene)?'输入路线':'简化删点';
   $('stroke-tab').classList.toggle('selected',scene==='stroke');$('sweep-tab').classList.toggle('selected',scene==='minkowski');
   $('scene-title').textContent=titles[scene];
   $('output').disabled=false;
   $('mode').disabled=false;if(scene==='minkowski')$('simplify').checked=false;
-  $('precision').disabled=$('mode').value==='integer';$('simplify-control').hidden=['minkowski','rectclip','stroke-batch'].includes(scene);
-  if(scene==='rectclip'&&$('input-kind').value==='lines')$('output').value='paths';
-  if(['rectclip','stroke-batch'].includes(scene)){$('simplify').checked=false;$('closed').checked=false;}
+  $('precision').disabled=$('mode').value==='integer';$('simplify-control').hidden=['minkowski','rectclip','stroke-batch','lineclip'].includes(scene);
+  if(scene==='lineclip'||(scene==='rectclip'&&$('input-kind').value==='lines'))$('output').value='paths';
+  if(['rectclip','stroke-batch','lineclip'].includes(scene)){$('simplify').checked=false;$('closed').checked=false;}
   $('mode-badge').textContent=scene==='rectclip'?`${$('mode').value==='decimal'?'小数':'整数'} · ${$('input-kind').value==='polygons'?'闭合区域':'开放折线'}`:$('mode').value==='decimal'?'小数':'整数';
-  $('mode-note').textContent=scene==='stroke-batch'?'整批共享样式，重叠区域统一合并。小数模式使用共同精度网格，宽度和圆弧容差采用原始坐标单位。输入路线独立开放，输出为闭合区域。孔洞层级描述最终合并区域，不对应单条输入路线。':scene==='rectclip'?`${$('input-kind').value==='polygons'?'末点与首点按闭合区域解释。树描述裁剪后的区域；孔洞被窗口切开后，可能成为外边界凹口。':'输入与输出均为开放路线，不隐式连接末点与首点。'}同一组点在两种类型下含义不同；切换类型保留点数组，选择案例才会替换。小数按共同精度网格计算，有面积窗口可能因精度过粗而塌缩报错。`:scene==='minkowski'?'图案按相对锚点直接相加，不自动居中或补满端点。树描述最终扫掠区域，不对应生成四边形；闭合路线可能留孔，不代表填满内部。输出保留共线点，节点可能多于四点。小数使用共同网格，Precision 过粗可能报错。':$('mode').value==='decimal'?'Precision 0—6；距离与 epsilon 使用原始小数单位。':'整数坐标 ±10⁹；距离与宽度使用相同单位。';
-  $('input-a-label').textContent=scene==='rectclip'&&$('input-kind').value==='polygons'?'闭合区域轮廓集合 · Paths':['rectclip','stroke-batch'].includes(scene)?'开放路线集合 · Paths':scene==='boolean'?'操作数 A · Paths':scene==='offset'?'区域与孔洞 · Paths':'开放/闭合路线 · Path';
-  $('editor-b').hidden=scene!=='boolean'&&scene!=='minkowski';$('input-b-label').textContent=scene==='minkowski'?'图案 · Path（相对锚点）':'操作数 B · Paths';
+  $('mode-note').textContent=scene==='lineclip'?'独立开放路线与闭合填充区域求交；保留最终区域边界重合段。小数先共同量化，再作整数精确切分和交点舍入，不保证理想实数结果。':scene==='stroke-batch'?'整批共享样式，重叠区域统一合并。小数模式使用共同精度网格，宽度和圆弧容差采用原始坐标单位。输入路线独立开放，输出为闭合区域。孔洞层级描述最终合并区域，不对应单条输入路线。':scene==='rectclip'?`${$('input-kind').value==='polygons'?'末点与首点按闭合区域解释。树描述裁剪后的区域；孔洞被窗口切开后，可能成为外边界凹口。':'输入与输出均为开放路线，不隐式连接末点与首点。'}同一组点在两种类型下含义不同；切换类型保留点数组，选择案例才会替换。小数按共同精度网格计算，有面积窗口可能因精度过粗而塌缩报错。`:scene==='minkowski'?'图案按相对锚点直接相加，不自动居中或补满端点。树描述最终扫掠区域，不对应生成四边形；闭合路线可能留孔，不代表填满内部。输出保留共线点，节点可能多于四点。小数使用共同网格，Precision 过粗可能报错。':$('mode').value==='decimal'?'Precision 0—6；距离与 epsilon 使用原始小数单位。':'整数坐标 ±10⁹；距离与宽度使用相同单位。';
+  $('input-a-label').textContent=scene==='rectclip'&&$('input-kind').value==='polygons'?'闭合区域轮廓集合 · Paths':['rectclip','stroke-batch','lineclip'].includes(scene)?'开放路线集合 · Paths':scene==='boolean'?'操作数 A · Paths':scene==='offset'?'区域与孔洞 · Paths':'开放/闭合路线 · Path';
+  $('editor-b').hidden=!['boolean','minkowski','lineclip'].includes(scene);$('input-b-label').textContent=scene==='lineclip'?'闭合裁剪区域 · Paths（组合填充，允许孔洞）':scene==='minkowski'?'图案 · Path（相对锚点）':'操作数 B · Paths';
   $('epsilon-row').hidden=!$('simplify').checked;
 }
 function loadCase(){
@@ -132,10 +134,11 @@ function updateRectclipCases(preserveInput){
   $('case').replaceChildren(...(preserveInput?[new Option('保留当前输入 · 选择案例可替换','')]:[]),...items.map(c=>new Option(c.label,c.id)));
   if(preserveInput)$('case').value='';
 }
-function switchScene(next){scene=next;document.querySelectorAll('[data-scene]').forEach(b=>b.classList.toggle('active',b.dataset.scene===(['stroke','minkowski','rectclip','stroke-batch'].includes(scene)?'route':scene)));if(scene==='rectclip'){$('input-kind').value='lines';updateRectclipCases(false);}else $('case').replaceChildren(...cases[scene].map(c=>new Option(c.label,c.id)));loadCase();}
+function switchScene(next){scene=next;document.querySelectorAll('[data-scene]').forEach(b=>b.classList.toggle('active',b.dataset.scene===(['stroke','minkowski','rectclip','stroke-batch','lineclip'].includes(scene)?'route':scene)));if(scene==='rectclip'){$('input-kind').value='lines';updateRectclipCases(false);}else $('case').replaceChildren(...cases[scene].map(c=>new Option(c.label,c.id)));loadCase();}
 function inputLayers(){
   let r;try{r=readRequest();}catch{return [];}
   const safe=layers=>layers.filter(l=>Array.isArray(l.paths)&&l.paths.every(p=>Array.isArray(p)&&p.every(q=>Array.isArray(q)&&q.length===2&&q.every(Number.isFinite))));
+  if(scene==='lineclip')return safe([{name:'闭合裁剪区域 / '+r.params.fill_rule,paths:r.clip,color:'#3972bd',closed:true,region:true},{name:'独立开放路线',paths:r.paths,color:'#b9782e',closed:false}]);
   if(scene==='stroke-batch')return safe([{name:'独立输入路线',paths:r.paths,color:'#b9782e',closed:false}]);
   if(scene==='rectclip')return safe([{name:r.input_kind==='polygons'?'输入区域':'输入路线',paths:r.paths,color:'#b9782e',closed:r.input_kind==='polygons'},{name:'裁剪窗口',paths:[[[r.rect.min_x,r.rect.min_y],[r.rect.max_x,r.rect.min_y],[r.rect.max_x,r.rect.max_y],[r.rect.min_x,r.rect.max_y]]],color:'#8265a6',closed:true,window:true}]);
   if(scene==='boolean')return safe([{name:'操作数 A',paths:r.subject,color:'#3972bd',closed:true},{name:'操作数 B',paths:r.clip,color:'#bd792d',closed:true}]);
@@ -156,7 +159,7 @@ function draw(){
   if($('show-input').checked){
     for(const l of layers){if(!Array.isArray(l.paths)||!l.paths.every(p=>Array.isArray(p)&&p.every(q=>Array.isArray(q)&&q.length===2&&q.every(Number.isFinite))))continue;
       const d=l.closed?contourData(l.paths):openPathData(l.paths);
-      objects.push(`<path d="${d}" fill="${l.closed&&!l.window?l.color:'none'}" fill-opacity=".055" fill-rule="${$('fill-rule').value==='EvenOdd'?'evenodd':'nonzero'}" stroke="${l.color}" stroke-width="1.4" stroke-dasharray="${l.closed?'4 3':'none'}" vector-effect="non-scaling-stroke"/>`);
+      objects.push(`<path d="${d}" fill="${l.closed&&!l.window?l.color:'none'}" fill-opacity="${l.region?'.16':'.055'}" fill-rule="${$('fill-rule').value==='EvenOdd'?'evenodd':'nonzero'}" stroke="${l.color}" stroke-width="1.4" stroke-dasharray="${l.closed?'4 3':'none'}" vector-effect="non-scaling-stroke"/>`);
       const radius=view.w/500;
       for(const p of l.paths)for(const [x,y] of p)objects.push(`<circle cx="${x}" cy="${y}" r="${radius}" fill="white" stroke="${l.color}" stroke-width="1" vector-effect="non-scaling-stroke"/>`);
     }
@@ -179,7 +182,7 @@ function draw(){
 function download(type){if(!valid)return;const name=`moonclip-${valid.request.scene}`;const body=type==='svg'?(valid.response.geometry==='open-paths'?openResultSvg(valid.response):resultSvg(valid.response.paths)):JSON.stringify(resultDocument(valid.request,valid.response),null,2);const blob=new Blob([body],{type:type==='svg'?'image/svg+xml':'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name+'.'+type;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 document.querySelectorAll('[data-scene]').forEach(b=>b.onclick=()=>switchScene(b.dataset.scene==='route'?'stroke':b.dataset.scene));
 $('batch-tab').onclick=()=>switchScene('stroke-batch');
-$('rectclip-tab').onclick=()=>switchScene('rectclip');
+$('lineclip-tab').onclick=()=>switchScene('lineclip');$('rectclip-tab').onclick=()=>switchScene('rectclip');
 $('stroke-tab').onclick=()=>switchScene('stroke');$('sweep-tab').onclick=()=>switchScene('minkowski');
 $('pattern-select').replaceChildren(new Option('案例／自定义图案','custom'),...Object.entries(patterns).map(([id,p])=>new Option(p.label,id)));
 $('pattern-select').onchange=()=>{if($('pattern-select').value==='custom')return;$('input-b').value=JSON.stringify(patterns[$('pattern-select').value].points,null,2);invalidate();fit();calculate();};

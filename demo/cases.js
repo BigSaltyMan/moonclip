@@ -8,6 +8,10 @@ export const patterns={
 };
 const base={version:1,mode:'integer',precision:3,simplify:{enabled:false,epsilon:.5}};
 export const cases={
+  lineclip:[
+    {id:'hole-route',label:'整数路线 · 穿过带孔区域',version:1,scene:'lineclip',mode:'integer',output:'paths',paths:[[[-2,5],[2,5],[5,5],[12,5]]],clip:[rect(0,0,10,10),rect(3,3,4,4)],params:{fill_rule:'EvenOdd'},simplify:{enabled:false}},
+    {id:'hole-route-d',label:'小数路线 · 带孔区域 / Precision 2',version:1,scene:'lineclip',mode:'decimal',precision:2,output:'paths',paths:[[[-.2,.5],[.2,.5],[.5,.5],[1.2,.5]]],clip:[rect(0,0,1,1),rect(.3,.3,.4,.4)],params:{fill_rule:'EvenOdd'},simplify:{enabled:false}},
+  ],
   'stroke-batch':[
     {id:'overlap-lines',label:'两条直线 · 重叠合并',version:1,scene:'stroke-batch',mode:'integer',output:'paths',paths:[[[0,0],[10,0]],[[5,0],[15,0]]],params:{width:2,cap:'Butt',join:'Miter',miter_limit:2,arc_tolerance:0},simplify:{enabled:false}},
     {id:'two-turns',label:'两条转角路线 · 共享样式',version:1,scene:'stroke-batch',mode:'integer',output:'paths',paths:[[[0,0],[10,0],[10,10]],[[5,-5],[5,5],[15,5]]],params:{width:2,cap:'Butt',join:'Miter',miter_limit:2,arc_tolerance:0},simplify:{enabled:false}},

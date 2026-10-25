@@ -318,3 +318,27 @@ Uncaught TypeError: Failed to execute 'observe' on 'MutationObserver': parameter
 仅新增一张[小数查询与原始点位截图](https://raw.githubusercontent.com/BigSaltyMan/moonclip/52692624a4ef717d2b462b854cf0ea72390196be/docs/demo-screenshots/commit51-decimal-tree-query.png)。实际导出副本及重放、诊断记录保存在忽略目录 `demo/.qa/commit51/result.json`、`result.svg`、`replay.json`、`narrow-observation.json`，临时诊断不混入产品。三项检查保留整数单点／批量、无 query 兼容及错误检查；旧测试中“小数树查询必须失败”改为仍不支持的平铺查询，未运行整套旧桥接检查。
 
 代码审查确认公共 Boolean／Offset／Stroke／Minkowski 小数树、批量描边及闭合窗口小数树三条路由均使用统一小数查询辅助，同棵树先查询后编码；后四类未增加独立参数测试矩阵。根 `.mbti` 无变化，脚本与总数不变；根库、树存储、公开接口、参考、版本及发布标签未改。规划书、申报书和 `.vscode/` 原有改动保留，未运行库全量、全部工具测试、参考重建、性能、候选或发布验收，保持 Unreleased。
+
+
+## 开放折线区域求交：交互演示增量验收（Unreleased）
+
+2026-10-25，Windows，以 `d1f3c98508ac7a366fafe21a901f2149a3bc3d75` 为基线。`moon info`、`moon fmt` 后根 API／根 `.mbti` 无变化。复用 `demo-rectclip`：JS 静态检查、一次演示构建及原有三项桥接／导出检查扩展后 **3/3**；没有新增测试块、scope 或库测试。随后 `node build.mjs --dev --reuse` 启动 **http://127.0.0.1:4173/**，没有再次构建。Linux 同 SHA CI 单独归属，最终 SHA 与链接保存在提交后交付记录。
+
+| 本笔操作 | 实际结果 |
+| --- | --- |
+| 整数带孔案例 | 外矩形 [0,0]—[10,10]、同向内矩形 [3,3]—[7,7]，EvenOdd 实际输出 `[(0,5),(2,5),(3,5)]` 与 `[(7,5),(10,5)]`；2 片段／5 顶点／1 原路线 |
+| 组合填充切换 | 修改为 NonZero 立即禁用导出；计算后内矩形填满，输出一个 4 点片段。输入区域是一个含两个子轮廓的 SVG path，fill-rule 从 evenodd 变为 nonzero；没有逐轮廓独立填满 |
+| 小数与精度 | 小数案例 Precision=2，输出 `[(0,0.5),(0.2,0.5),(0.3,0.5)]` 和 `[(0.7,0.5),(1,0.5)]`。改为 Precision=3 后重新计算，摘要更新且同构型片段保持完整；输入不被前端缩放或取整 |
+| 非法输入 | Precision=3 时将路线改为 `[[[10000001,0]]]`，返回 DecimalCoordinateOutOfRange / DecimalQuantize、轴 X、path_index=0、vertex_index=0。旧结果路径数为 0，两个导出按钮禁用；恢复原路线及 Precision=2 后正常 |
+| 实际下载与重放 | 实际下载 `moonclip-lineclip.svg`、`moonclip-lineclip.json`；v3 保存原始 paths、clip、EvenOdd、模式及 Precision。将下载 JSON 的 request 再送入真实 MoonBit 桥接一次，完整有序片段逐点一致；不是读取保存结果冒充求值 |
+| 打开下载 SVG | 通过 HTTP 打开下载文件，实际 d 为 `M0,0.5L0.2,0.5L0.3,0.5 M0.7,0.5L1,0.5`，fill=none、无 Z，保留 scale(1,-1)，仅包含两个结果片段 |
+| 场景切回 | 窗口裁剪恢复四个窗口字段并隐藏区域编辑器；单路线加宽恢复完整宽度、端点和连接，隐藏填充规则。没有重做旧场景完整验收 |
+| 主页面与窄屏 | 主内容视口实测 1280×720，主页面 error／warn 为空。临时 iframe 内容实测 390×844、scrollWidth=375，两编辑区宽约 309.33；窄屏切换新页签、加载小数案例及编辑路线后得到 2 片段／5 顶点 |
+
+一次浏览器视口覆盖尝试未改变主页面的实际 1280×720 尺寸，未将设置目标值冒充窄屏证据；随后用临时同源 iframe 完成上述真实 390×844 对照，覆盖已复位。容器记录 `Uncaught TypeError: Failed to execute 'observe' on 'MutationObserver': parameter 1 is not of type 'Node'.`，时间 `2026-10-25T09:20:49.475Z`，没有来源地址和堆栈。**归因仍未确认，不定性为页面布局缺陷，也不宣称窄屏控制台完全无异常**。没有展开重复排查，临时容器已关闭。
+
+保存一张[区域裁线主要截图](https://raw.githubusercontent.com/BigSaltyMan/moonclip/main/docs/demo-screenshots/lineclip-region-demo.png)。实际下载副本、一次真实重放和窄屏观察记录位于忽略目录 `demo/.qa/lineclip/result.json`、`result.svg`、`download-replay.json`、`browser-observation.json`。截图是本地浏览器证据，不计为 Linux CI 浏览器验收。
+
+新桥接分派位于通用闭合准备之前，两种模式各只调用一次对应公开入口；整数和结构解析可保留 clip 的组合索引偏移，核心错误不改成本地编号。开放路线／片段无 Z、无填充；导出直接复用原开放辅助，无 export.js 修改或新协议。请求编号、失效及错误清理机制复用原逻辑。三个检查保留旧窗口 v1／v2／v3 兼容并增加新场景完整结果、深复制重放、非法整数、跨两侧碰撞、未知模式／填充和不支持输出的拒绝。
+
+根库、整数／小数算法、公开接口、参考清单、版本及发布标签未改；两入口和演示均为 Unreleased，注册表 0.3.2 不包含它们。未运行库筛选／全量、工具全集、参考重建、性能、旧浏览器流程或候选包检查，未发布。规划书、申报书及 `.vscode/` 原有改动保留。
