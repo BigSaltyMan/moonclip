@@ -1,5 +1,6 @@
 ///|
 fn run_foundation_example() -> Unit raise {
+  run_closed_stroke_example()
   run_lineclip_example()
   run_rectclip_example()
   run_decimal_rectclip_lines_example()
@@ -174,6 +175,21 @@ fn run_lineclip_example() -> Unit raise {
       [@moonclip.PointD::new(1.0, 0.5), @moonclip.PointD::new(1.2, 0.5)],
     ],
   )
+}
+
+///|
+fn run_closed_stroke_example() -> Unit raise {
+  let path = example_rect(0L, 0L, 10L, 10L)
+  let result = @moonclip.stroke_closed_polyline(path, 2.0).unwrap()
+  example_result(result, [
+    example_rect(-1L, -1L, 12L, 12L),
+    [
+      @moonclip.Point64::new(1L, 1L),
+      @moonclip.Point64::new(1L, 9L),
+      @moonclip.Point64::new(9L, 9L),
+      @moonclip.Point64::new(9L, 1L),
+    ],
+  ])
 }
 
 ///|

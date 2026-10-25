@@ -1,5 +1,9 @@
 # 上游来源与移植记录
 
+## 整数闭合中心线描边（Unreleased）
+
+`stroke_closed.mbt` 复用现有 Clipper2 参考来源的周期法线及 Miter／Bevel／Square／Round 连接公式、Positive Union 和平铺提取；没有直接改写新的上游几何代码，没有新增算法移植或参考矩阵。闭合整理、双向遍历、公开入口及调用侧预算适配由 MoonClip 自行实现（BigSaltyMan 2026，BSL-1.0）。[上游 EndType 说明](https://www.angusj.com/clipper2/Docs/Units/Clipper/Types/EndType.htm)中的 Joined 将首尾连接后按折线解释，有别于 Polygon 的填充区域语义；本入口采用该用途，但少于三个整理后顶点及小宽度等退化约定属于 MoonClip，不宣称所有特殊输入分支逐项一致。旧开放描边和偏移生成器未修改，新能力未包含在已发布 0.3.2 中。
+
 ## 整数开放折线区域求交（Unreleased）
 
 小数 `difference_polylines_d` 通过现有 `decimal_line_clip_execute` 的私有模式透传复用整数 KeepOutside；共同量化、仅 clip 闭合检查、预算及原 Precision 解码均复用已有流程。没有重写内外判断、事件、舍入或连接，没有新增上游移植、参考案例或覆盖声明。整数／小数求交和求差这四个接口均为 Unreleased，已发布 0.3.2 不包含；网页仍只接入求交。

@@ -14,6 +14,8 @@ moon add BigSaltyMan/moonclip@0.3.2
 
 ## 0.3.0 能力
 
+开发源码新增 **Unreleased** `stroke_closed_polyline`：以完整宽度加宽整数闭合中心线，首尾接缝使用连接样式，没有端点；输出覆盖区域可含孔洞。它不同于填充区域的偏移，旧开放 `stroke_polyline` 即使显式返回起点也仍是开放语义。已发布 0.3.2 不包含该入口，尚无小数、树、批量闭合或网页接入，见[组合与闭合描边](https://github.com/BigSaltyMan/moonclip/blob/main/docs/composition.md)。
+
 开发源码另有 **Unreleased** 接口 `intersect_polylines`／`intersect_polylines_d`，用于整数／小数开放折线与闭合填充区域求交；保留最终区域边界，输出有序开放片段。小数两侧共同量化，仅区域检查闭合有效性。整数／小数 `difference_polylines`／`difference_polylines_d` 则保留区域外部（包括孔洞）的区间，剔除内部及正长度边界重合段，切分端点仍可位于边界。源码演示的“路线实验 → 区域裁线”已接入整数／小数求交及求差，可编辑带孔区域并导出开放 SVG／v3 JSON；旧请求缺少操作字段时默认求交。这四个接口不在上述注册表 0.3.2 包内，契约及与矩形裁剪的区别见[开放折线区域裁剪](https://github.com/BigSaltyMan/moonclip/blob/main/docs/lineclip.md)。下表仍描述已发布能力。
 
 | 能力 | 整数 | 小数 | 输出 | 使用说明 |

@@ -1,6 +1,26 @@
 # Composition and cumulative resource protection
 
-下述增量能力自 **0.3.0** 提供，见[发布记录](release-0.3.0.md)。0.3.1 只修正文档表述，不改变运行库行为或接口；带 Commit 编号的验收记录按原阶段解释。
+除另标 Unreleased 的新增入口外，下述增量能力自 **0.3.0** 提供，见[发布记录](release-0.3.0.md)。0.3.1 只修正文档表述，不改变运行库行为或接口；带 Commit 编号的验收记录按原阶段解释。
+
+## Integer closed-centerline stroke (Unreleased)
+
+`stroke_closed_polyline(path, width, options=, limits=)` returns `Result[Paths64, ClipError]`. Width is full width: each side is width/2. The last vertex implicitly connects to the first; repeating the first vertex is unnecessary. There is no CapType parameter. Miter, Bevel, Square and Round, MiterLimit and ArcTolerance reuse OffsetOptions. Reversing the centerline does not change coverage. This source-only entry is not in published 0.3.2; decimal, tree, batch-closed and demo wrappers are not provided.
+
+| Entry | Input meaning |
+| --- | --- |
+| `offset_polygons` | Offset a filled closed region |
+| `stroke_polyline` | Widen an open centerline with end caps |
+| `stroke_closed_polyline` | Widen a closed centerline with joins and no ends |
+
+All original vertices count before preparation, including repeats; even an empty path consumes one input-path slot. Raw counts and coordinates are checked before creating arrays. Preparation removes consecutive repeats and repeated closing copies of the first vertex, retaining nonconsecutive repeats and ordinary collinear vertices. Fewer than three prepared vertices or width below one grid unit returns a charged empty result after validation. The lower bound concerns prepared vertex count, not a promise of three globally distinct positions; signed area is never used to reject a self-intersecting or retraced centerline. Width must be finite and nonnegative, and options and limits remain checked on empty inputs.
+
+The prepared route and its reverse enter the existing periodic offset generator together at radius=width/2, followed by one Positive Union and ordinary flat extraction. Every vertex, including the seam, uses the same corner logic; there are no caps, preliminary centerline Boolean, public offset calls or outer-minus-inner construction. Directed generated rings are retained rather than forcing every contour positive. The resulting region can have holes or multiple contours; interior holes may disappear as width grows, so one outer ring plus one hole is not a universal output guarantee. The existing open stroke still treats an explicit return to its start as an open endpoint.
+
+One ledger covers validation, preparation, reversed slots, generation, cleanup and extraction. Single-route preflight costs 2+N work as separate overflow-safe charges; the N original coordinates are checked before allocating copies. The prepared array costs one logical node, each retained slot one node and one work, with one work per visited original point and closing-duplicate comparison. Removed slots are not refunded. The reverse costs one array plus one slot and one work per prepared point. The generator input costs one array plus two slots (3 nodes, 2 work); the empty cleanup operand costs one array. Empty success separately charges its result array. Existing normals, corners, arc subdivisions, scan and output retain their own charges. These logical counts are not memory-byte measurements. Internal copies and generated contours do not consume raw input quotas again.
+
+Injected limits and historical consumption are authoritative; no reset or refund. Parameter errors use StrokeParameters, raw/prepare/generation errors use StrokeGenerate, and cleanup retains its real scan stages with StrokeCleanup. Raw locations identify the original route/vertex, internal generation has no fabricated source position. Failure publishes no partial region, does not modify input, and leaves an independent retry unaffected. Existing open-stroke code and fees are unchanged.
+
+Only three `closed stroke:` test blocks cover a complete Miter frame and hole, closing repeats and isolation; complete Bevel seam plus reverse traversal; raw checks, degeneracy and a deterministic consumed-budget failure/retry. Square and Round reuse existing formulas without new per-style reference evidence. `bash scripts/check.sh --scope stroke-closed` runs format/interface checks, native/JS static checks, three focused tests per target and the checked CLI example. The full-entry count 2421 is a configuration expectation only; no full suite, reference rebuild, performance, browser or candidate audit is run for this addition. See [upstream attribution](upstream.md).
 
 ## Batch stroke trees (since 0.3.0)
 
