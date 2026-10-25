@@ -39,6 +39,15 @@ test('demo rectclip: complete ordered open bridge result',()=>{
     assert.equal(clipped.mode,request.mode);assert.equal(clipped.precision,request.mode==='decimal'?2:null);
     assert.deepEqual(clipped.paths,expected);
   }
+  for(const [input,expected] of [
+    [cases.lineclip[0],[[[-2,5],[0,5]],[[3,5],[5,5],[7,5]],[[10,5],[12,5]]]],
+    [cases.lineclip[1],[[[-.2,.5],[0,.5]],[[.3,.5],[.5,.5],[.7,.5]],[[1,.5],[1.2,.5]]]],
+  ]){
+    const request={...input,params:{...input.params,operation:'Difference'}},response=run(request);
+    assert.equal(response.ok,true,JSON.stringify(response));assert.equal(response.geometry,'open-paths');
+    assert.equal(response.mode,input.mode);assert.equal(response.precision,input.mode==='decimal'?2:null);
+    assert.deepEqual(response.paths,expected);
+  }
 });
 
 test('demo rectclip: open SVG and replayable v3 JSON',()=>{
@@ -86,6 +95,20 @@ test('demo rectclip: open SVG and replayable v3 JSON',()=>{
   assert.deepEqual(run(lineDoc.request).paths,lineResponse.paths);
   const saved=structuredClone(lineResponse);lineDoc.result.paths[0][0][0]=99;lineDoc.request.clip[0][0][0]=88;
   assert.deepEqual(lineResponse,saved);assert.deepEqual(lineRequest,cases.lineclip[1]);
+  const differenceRequest={...structuredClone(cases.lineclip[1]),params:{fill_rule:'EvenOdd',operation:'Difference'}};
+  const differenceResponse=run(differenceRequest),differenceDoc=resultDocument(differenceRequest,differenceResponse);
+  assert.equal(differenceResponse.ok,true,JSON.stringify(differenceResponse));assert.equal(differenceDoc.version,3);
+  assert.equal(differenceDoc.result.geometry,'open-paths');assert.equal(differenceDoc.result.precision,2);
+  assert.equal(differenceDoc.request.params.operation,'Difference');assert.deepEqual(differenceDoc.request,differenceRequest);
+  assert.deepEqual(differenceDoc.request.clip,cases.lineclip[1].clip);
+  const differenceSvg=openResultSvg(differenceResponse),differenceD=differenceSvg.match(/<path d="([^"]*)"/)[1];
+  assert.equal(differenceD,'M-0.2,0.5L0,0.5 M0.3,0.5L0.5,0.5L0.7,0.5 M1,0.5L1.2,0.5');
+  assert.equal(/[zZ]/.test(differenceD),false);assert.match(differenceSvg,/fill="none"/);
+  assert.deepEqual(run(differenceDoc.request).paths,differenceResponse.paths);
+  const savedDifference=structuredClone(differenceResponse);
+  differenceDoc.result.paths[0][0][0]=99;differenceDoc.request.clip[0][0][0]=88;differenceDoc.request.params.operation='Intersection';
+  assert.deepEqual(differenceResponse,savedDifference);assert.equal(differenceRequest.params.operation,'Difference');
+  assert.deepEqual(differenceRequest.clip,cases.lineclip[1].clip);
 });
 
 test('demo rectclip: invalid requests cannot export a result',()=>{
@@ -97,11 +120,15 @@ test('demo rectclip: invalid requests cannot export a result',()=>{
   assert.equal(Object.hasOwn(request,'input_kind'),false);
   const legacy=run({...request,output:undefined});assert.equal(legacy.geometry,'open-paths');assert.equal(legacy.output,'paths');assert.equal(legacy.tree,undefined);assert.deepEqual(legacy.paths,[[[0,5],[5,5],[10,5]]]);
   const line=cases.lineclip[0],lineDecimal=cases.lineclip[1];
+  const unsupported=run({...line,params:{...line.params,operation:'Union'}});
+  const wrongType=run({...line,params:{...line.params,operation:42}});
+  assert.equal(unsupported.ok,false);assert.match(unsupported.error.message,/Unsupported LineClip operation/);
+  assert.equal(wrongType.ok,false);assert.match(wrongType.error.message,/Expected string: operation/);
   const lineCollision=run({...lineDecimal,paths:[[[.001,0],[.5,.5]]],clip:[rect(.002,0,1,1)]});
   assert.equal(lineCollision.ok,false);assert.equal(lineCollision.error.kind,'QuantizationFailure');assert.equal(lineCollision.error.stage,'DecimalQuantize');
   assert.equal(lineCollision.error.path_index,1);assert.equal(lineCollision.error.vertex_index,0);
   assert.deepEqual(lineCollision.error.related,{stage:'DecimalQuantize',path_index:0,vertex_index:0});
-  for(const bad of [reversed,collapsed,
+  for(const bad of [reversed,collapsed,unsupported,wrongType,
     lineCollision,run({...line,paths:[[[.5,5],[5,5]]]}),run({...line,mode:'unknown'}),run({...line,params:{fill_rule:'invalid'}}),
     run({...line,output:'tree'}),run({...line,query:{point:[1,1]}}),run({...line,simplify:{enabled:true}}),
     run({...request,input_kind:'unknown'}),run({...request,input_kind:'polygons',output:'unknown'}),

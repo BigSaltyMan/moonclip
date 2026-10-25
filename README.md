@@ -14,7 +14,7 @@ moon add BigSaltyMan/moonclip@0.3.2
 
 ## 0.3.0 能力
 
-开发源码另有 **Unreleased** 接口 `intersect_polylines`／`intersect_polylines_d`，用于整数／小数开放折线与闭合填充区域求交；保留最终区域边界，输出有序开放片段。小数两侧共同量化，仅区域检查闭合有效性。整数／小数 `difference_polylines`／`difference_polylines_d` 则保留区域外部（包括孔洞）的区间，剔除内部及正长度边界重合段，切分端点仍可位于边界。源码演示的“路线实验 → 区域裁线”当前只接入整数／小数求交，可编辑带孔区域并导出开放 SVG／v3 JSON，尚未接入求差。这四个接口不在上述注册表 0.3.2 包内，契约及与矩形裁剪的区别见[开放折线区域裁剪](https://github.com/BigSaltyMan/moonclip/blob/main/docs/lineclip.md)。下表仍描述已发布能力。
+开发源码另有 **Unreleased** 接口 `intersect_polylines`／`intersect_polylines_d`，用于整数／小数开放折线与闭合填充区域求交；保留最终区域边界，输出有序开放片段。小数两侧共同量化，仅区域检查闭合有效性。整数／小数 `difference_polylines`／`difference_polylines_d` 则保留区域外部（包括孔洞）的区间，剔除内部及正长度边界重合段，切分端点仍可位于边界。源码演示的“路线实验 → 区域裁线”已接入整数／小数求交及求差，可编辑带孔区域并导出开放 SVG／v3 JSON；旧请求缺少操作字段时默认求交。这四个接口不在上述注册表 0.3.2 包内，契约及与矩形裁剪的区别见[开放折线区域裁剪](https://github.com/BigSaltyMan/moonclip/blob/main/docs/lineclip.md)。下表仍描述已发布能力。
 
 | 能力 | 整数 | 小数 | 输出 | 使用说明 |
 | --- | --- | --- | --- | --- |

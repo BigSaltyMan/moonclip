@@ -557,6 +557,10 @@ fn execute_lineclip(r : Map[String, Json]) -> Json raise DemoError {
     raise Input("LineClip does not apply simplification", None, None)
   }
   let params = object(r.get("params").unwrap_or(Json::object({})))
+  let operation = text(params, "operation", "Intersection")
+  if operation != "Intersection" && operation != "Difference" {
+    raise Input("Unsupported LineClip operation: " + operation, None, None)
+  }
   let rule = match text(params, "fill_rule", "EvenOdd") {
     "EvenOdd" => @moonclip.EvenOdd
     "NonZero" => @moonclip.NonZero
@@ -575,17 +579,33 @@ fn execute_lineclip(r : Map[String, Json]) -> Json raise DemoError {
   let result = if mode == "decimal" {
     encode_decimal(
       value(
-        @moonclip.intersect_polylines_d(paths, clip, precision~, fill_rule=rule),
+        if operation == "Difference" {
+          @moonclip.difference_polylines_d(
+            paths,
+            clip,
+            precision~,
+            fill_rule=rule,
+          )
+        } else {
+          @moonclip.intersect_polylines_d(
+            paths,
+            clip,
+            precision~,
+            fill_rule=rule,
+          )
+        },
       ),
     )
   } else {
+    let paths = integer_paths(paths)
+    let clip = integer_paths(clip, path_offset=paths.length())
     encode_paths(
       value(
-        @moonclip.intersect_polylines(
-          integer_paths(paths),
-          integer_paths(clip, path_offset=paths.length()),
-          fill_rule=rule,
-        ),
+        if operation == "Difference" {
+          @moonclip.difference_polylines(paths, clip, fill_rule=rule)
+        } else {
+          @moonclip.intersect_polylines(paths, clip, fill_rule=rule)
+        },
       ),
     )
   }

@@ -342,3 +342,24 @@ Uncaught TypeError: Failed to execute 'observe' on 'MutationObserver': parameter
 新桥接分派位于通用闭合准备之前，两种模式各只调用一次对应公开入口；整数和结构解析可保留 clip 的组合索引偏移，核心错误不改成本地编号。开放路线／片段无 Z、无填充；导出直接复用原开放辅助，无 export.js 修改或新协议。请求编号、失效及错误清理机制复用原逻辑。三个检查保留旧窗口 v1／v2／v3 兼容并增加新场景完整结果、深复制重放、非法整数、跨两侧碰撞、未知模式／填充和不支持输出的拒绝。
 
 根库、整数／小数算法、公开接口、参考清单、版本及发布标签未改；两入口和演示均为 Unreleased，注册表 0.3.2 不包含它们。未运行库筛选／全量、工具全集、参考重建、性能、旧浏览器流程或候选包检查，未发布。规划书、申报书及 `.vscode/` 原有改动保留。
+
+
+## 开放折线区域求差：操作切换增量验收（Unreleased）
+
+2026-10-25，Windows，以 `fd0886bf80287a4d835aa4394489d6adf66b07c2` 为基线。`moon info`、`moon fmt` 后根 API／根 `.mbti` 无变化；复用 `demo-rectclip` 完成 JS 静态检查、一次演示构建及原有三项桥接／导出检查，**3/3** 通过。没有新增测试块、scope 或库测试。随后在 `demo` 运行 `node build.mjs --dev --reuse` 启动 http://127.0.0.1:4173/，没有重复构建。Linux 同 SHA CI 单独归属，最终 SHA 与日志链接保存在提交后交付记录。
+
+| 本笔操作 | 实际结果 |
+| --- | --- |
+| 整数求交切换求差 | 原案例缺少 operation，加载为 Intersection，结果为两个片段；选择独立“擦除区域”控件立即清除旧结果、禁用导出。路线、裁剪区域、模式、Precision 和填充规则原值保留；重新计算得到 `[(-2,5),(0,5)]`、`[(3,5),(5,5),(7,5)]`、`[(10,5),(12,5)]`，3 片段／7 顶点 |
+| 小数案例与边界提示 | 原小数案例同样默认求交，切换 Difference 后 Precision=2，得到 `[(-0.2,0.5),(0,0.5)]`、`[(0.3,0.5),(0.5,0.5),(0.7,0.5)]`、`[(1,0.5),(1.2,0.5)]`。摘要显示实际 Difference，明确剔除内部和边界重合区间，切分端点仍可能位于边界 |
+| 实际下载 JSON 与重放 | 下载 `moonclip-lineclip (1).json`，v3 保存 Difference、原始两侧点数组、EvenOdd 及 Precision=2。下载文件的 request 送入真实 MoonBit 桥接一次，完整有序三段逐点一致；再删除 operation 抽查旧请求，得到原有两段求交结果，没有读取保存结果冒充求值 |
+| 实际下载并打开 SVG | 下载 `moonclip-lineclip (1).svg`，复制到忽略目录后通过 HTTP 实际打开。路径为 `M-0.2,0.5L0,0.5 M0.3,0.5L0.5,0.5L0.7,0.5 M1,0.5L1.2,0.5`，fill=none，无 Z，保留 scale(1,-1)，没有输入区域或界面高亮 |
+| 窄屏与 Boolean 恢复 | 使用浏览器本身的实际内容视口 429×871，document scrollWidth=414，独立操作控件宽约 348.67，可切换、计算及下载；未以设置目标尺寸冒充实际尺寸。切回 Boolean 后显示 Intersection／Union／Difference／Xor 四项，独立裁线控件隐藏，Boolean Difference 可以正常计算 |
+
+本次主页面 warn/error 日志为空，未使用临时 iframe，也未重做历史容器异常排查。此前临时容器的无来源 MutationObserver 错误仍保持**归因未确认**，本笔不将其记为已解决或布局缺陷。
+
+保存一张[小数区域擦除主要截图](https://raw.githubusercontent.com/BigSaltyMan/moonclip/main/docs/demo-screenshots/lineclip-difference-demo.jpg)。实际下载副本与重放记录保存在忽略目录 `demo/.qa/lineclip-difference/result.json`、`result.svg`、`download-replay.json`、`browser-observation.json`。本地浏览器证据不计作 Linux 浏览器验收。
+
+桥接四种组合各只调用对应公开入口一次；缺省操作仍求交，未知操作和错误类型明确失败。继续拒绝树、查询和简化，保留组合错误索引。操作切换沿用请求编号及原失效流程，输入保留，迟到响应不能恢复旧结果。三个原检查同时保留旧求交断言，并补完整整数／小数求差、一个小数 v3 重放、深复制和两项非法操作检查。开放绘制、v3 和原 `export.js` 均复用，没有新增协议或案例。
+
+根库、公开接口、整数／小数算法、版本、参考及发布标签未改。四个库入口和本演示仍为 Unreleased，注册表 0.3.2 不包含。未运行库筛选、全量、工具全集、参考重建、性能或候选包验收，未发布；规划书、申报书及 `.vscode/` 原有改动保留。
