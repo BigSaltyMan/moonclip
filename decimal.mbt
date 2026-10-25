@@ -1329,3 +1329,88 @@ pub fn difference_polylines_d(
     mode=KeepOutside,
   )
 }
+
+///|
+fn decimal_stroke_closed_execute(
+  path : PathD,
+  width : Double,
+  precision : Precision,
+  options : OffsetOptions,
+  limits : ScanLimits,
+  budget? : CallBudget,
+) -> Result[PathsD, ClipError] {
+  let budget = match budget {
+    Some(value) => value
+    None =>
+      new_call_budget(
+        limits,
+        generate_stage=StrokeGenerate,
+        cleanup_stage=StrokeCleanup,
+      )
+  }
+  try {
+    if width.is_nan() || width.is_inf() || width < 0.0 {
+      raise ScanAbort(
+        InvalidInput(
+          location(DecimalParameters, None, None),
+          "Stroke width must be finite and non-negative",
+        ),
+      )
+    }
+    if offset_options_error(options, DecimalParameters) is Some(error) {
+      raise ScanAbort(error)
+    }
+    // Validate limits before charging the new borrowed-operand wrappers.
+    // decimal_precheck remains responsible for original counts and coordinates.
+    if budget.limits.input.max_input_paths < 0 ||
+      budget.limits.input.max_input_vertices < 0 ||
+      budget.limits.max_nodes < 0 ||
+      budget.limits.max_work < 0 {
+      raise ScanAbort(
+        InvalidInput(
+          location(DecimalParameters, None, None),
+          "Limits must be non-negative",
+        ),
+      )
+    }
+    decimal_spend(budget, 3, 1, location(DecimalQuantize, None, None))
+    let paths = [path] // One array + one slot; the empty operand is a second array.
+    let empty : PathsD = []
+    decimal_precheck(paths, empty, precision, budget)
+    // false skips filled-contour validity only. Integer execution closes the centerline.
+    let (grid, _) = decimal_quantize(paths, empty, precision, false, budget)
+    let scaled_width = decimal_parameter(width, precision)
+    let scaled_options = decimal_scaled_options(options, precision)
+    match
+      stroke_closed_execute(
+        grid[0],
+        scaled_width,
+        scaled_options,
+        budget.limits,
+        budget~,
+      ) {
+      Ok(region) => Ok(decimal_output(region, precision, budget))
+      Err(error) => Err(decimal_error(error, precision))
+    }
+  } catch {
+    ScanAbort(error) => Err(decimal_error(error, precision))
+  }
+}
+
+///|
+/// Unreleased: widen an implicitly closed decimal centerline with joins, no caps.
+/// Quantization skips filled-region validity; width and ArcTolerance use original units.
+/// Integer periodic generation and output decoding share the same call budget.
+pub fn stroke_closed_polyline_d(
+  path : PathD,
+  width : Double,
+  precision? : Precision = Default::default(),
+  options? : OffsetOptions = Default::default(),
+  limits? : Limits = Default::default(),
+) -> Result[PathsD, ClipError] {
+  decimal_stroke_closed_execute(path, width, precision, options, {
+    input: limits,
+    max_nodes: 500000,
+    max_work: 5000000,
+  })
+}

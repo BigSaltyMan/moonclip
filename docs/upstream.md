@@ -2,6 +2,8 @@
 
 ## 整数闭合中心线描边（Unreleased）
 
+小数 `stroke_closed_polyline_d` 为新增 MoonClip 独立适配：复用现有预检、不开启面域有效性检查的量化、宽度／ArcTolerance 缩放、整数周期执行和小数解码。MiterLimit 原样传递，全程共用原预算；未修改整数生成器、旧执行路径或复制连接公式，没有新增上游算法移植、依赖、参考案例或覆盖声明。整数及小数闭合入口均为 Unreleased，已发布 0.3.2 不包含。
+
 `stroke_closed.mbt` 复用现有 Clipper2 参考来源的周期法线及 Miter／Bevel／Square／Round 连接公式、Positive Union 和平铺提取；没有直接改写新的上游几何代码，没有新增算法移植或参考矩阵。闭合整理、双向遍历、公开入口及调用侧预算适配由 MoonClip 自行实现（BigSaltyMan 2026，BSL-1.0）。[上游 EndType 说明](https://www.angusj.com/clipper2/Docs/Units/Clipper/Types/EndType.htm)中的 Joined 将首尾连接后按折线解释，有别于 Polygon 的填充区域语义；本入口采用该用途，但少于三个整理后顶点及小宽度等退化约定属于 MoonClip，不宣称所有特殊输入分支逐项一致。旧开放描边和偏移生成器未修改，新能力未包含在已发布 0.3.2 中。
 
 ## 整数开放折线区域求交（Unreleased）

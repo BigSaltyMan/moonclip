@@ -363,7 +363,7 @@ def random_execution_evidence(directory):
         if not path.exists():path=directory/('all-'+target+'.log');full=True
         if not path.exists():result[target]={'status':'not_recorded'};continue
         totals=re.findall(r'Total tests: (\d+), passed: (\d+), failed: (\d+)\.',path.read_text(encoding='utf-8-sig'))
-        count=2421 if full else 24
+        count=2424 if full else 24
         require(totals==[(str(count),str(count),'0')],str(path),'unexpected random/full execution count')
         result[target]=dict(status='passed',executed=24,passed=24,source='full' if full else 'random-only')
     return result

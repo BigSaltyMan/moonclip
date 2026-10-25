@@ -1,5 +1,6 @@
 ///|
 fn run_foundation_example() -> Unit raise {
+  run_decimal_closed_stroke_example()
   run_closed_stroke_example()
   run_lineclip_example()
   run_rectclip_example()
@@ -175,6 +176,27 @@ fn run_lineclip_example() -> Unit raise {
       [@moonclip.PointD::new(1.0, 0.5), @moonclip.PointD::new(1.2, 0.5)],
     ],
   )
+}
+
+///|
+fn run_decimal_closed_stroke_example() -> Unit raise {
+  let path = example_box_d(0.0, 0.0, 1.0, 1.0)
+  let result = @moonclip.stroke_closed_polyline_d(
+    path,
+    0.2,
+    precision=@moonclip.Precision::new(2).unwrap(),
+  ).unwrap()
+  assert_eq(result.length(), 2)
+  let outer = example_box_d(-0.1, -0.1, 1.1, 1.1)
+  let hole = [
+    @moonclip.PointD::new(0.1, 0.1),
+    @moonclip.PointD::new(0.1, 0.9),
+    @moonclip.PointD::new(0.9, 0.9),
+    @moonclip.PointD::new(0.9, 0.1),
+  ]
+  let outer_index = if result[0].contains(outer[0]) { 0 } else { 1 }
+  example_decimal_ring(result[outer_index], outer)
+  example_decimal_ring(result[1 - outer_index], hole)
 }
 
 ///|

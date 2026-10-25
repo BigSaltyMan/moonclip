@@ -83,6 +83,8 @@ pub fn simplify_paths_d(Array[Array[PointD]], precision? : Precision, options? :
 
 pub fn stroke_closed_polyline(Array[Point64], Double, options? : OffsetOptions, limits? : Limits) -> Result[Array[Array[Point64]], ClipError]
 
+pub fn stroke_closed_polyline_d(Array[PointD], Double, precision? : Precision, options? : OffsetOptions, limits? : Limits) -> Result[Array[Array[PointD]], ClipError]
+
 pub fn stroke_polyline(Array[Point64], Double, cap? : CapType, options? : OffsetOptions, limits? : Limits) -> Result[Array[Array[Point64]], ClipError]
 
 pub fn stroke_polyline_d(Array[PointD], Double, precision? : Precision, cap? : CapType, options? : OffsetOptions, limits? : Limits) -> Result[Array[Array[PointD]], ClipError]

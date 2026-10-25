@@ -1,5 +1,15 @@
 # 小数坐标与统一十进制网格
 
+## 闭合中心线描边（Unreleased）
+
+`stroke_closed_polyline_d(path, width, precision=, options=, limits=)` 使用原单位完整宽度，Precision 默认 3、支持 0—6。首尾隐式相连，不接受端点样式，接缝使用 JoinType；它不同于已填充区域偏移或带端点开放描边。与整数 `stroke_closed_polyline` 均仅开发源码提供，已发布 0.3.2 不包含；目前只有平铺覆盖区域，树、批量闭合路线和网页未接入。
+
+原单位参数先检查，再预检原始数量及坐标，中心线按 `closed=false` 量化；这仅跳过面域非退化检查，不改变最终闭合生成。普通共线、自交或面积为零不因此拒绝；不同原始点合并仍为碰撞错误，相同坐标重复允许，显式重复首点由整数准备处理。整理后少于三个顶点沿用已计费空结果。宽度和 ArcTolerance 乘共同倍率，MiterLimit 不缩放。
+
+数值流程为原始 Double 中心线 → 十进制整数网格 → 周期两侧生成 → 一次区域清理 → 原精度 Double 输出。生成与舍入复用整数描边，无额外浮点连接公式或 epsilon；输出零坐标仍为正零。Precision 会影响中心线、接缝及覆盖区域，孔洞可能消失，不承诺总是一外一孔。缩放后宽度小于一个网格单位仍完成输入和量化检查，不能在原单位直接与整数阈值比较。
+
+独立小数适配不改通用 `decimal_execute` 或整数执行器。调用侧操作数两个数组和一个槽位先收取 3 逻辑节点、1 工作；预检、量化、闭合准备、反向副本、生成、清理、提取及解码继续共用一个账本。注入限制及历史消费保持权威，整数预检及费用不跳过；整数成功后仍可能在 DecimalOutput 失败。失败没有部分结果、输入不变、重试独立，阶段和错误映射沿用已有契约，计费细节见[组合流程](composition.md)。
+
 ## 开放折线与闭合区域求交（Unreleased）
 
 `intersect_polylines_d(paths, clip, precision=, fill_rule=, limits=)` 与 `difference_polylines_d(paths, clip, precision=, fill_rule=, limits=)` 默认 Precision=3，支持 0—6；EvenOdd 默认，NonZero 可选。求交与求差各有整数／小数入口，四个接口均为 Unreleased，不在注册表 0.3.2 中。源码网页已提供两种模式的求交，求差尚未接入。完整边界及片段契约见[开放折线区域裁剪](lineclip.md)。

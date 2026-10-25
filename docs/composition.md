@@ -2,9 +2,21 @@
 
 除另标 Unreleased 的新增入口外，下述增量能力自 **0.3.0** 提供，见[发布记录](release-0.3.0.md)。0.3.1 只修正文档表述，不改变运行库行为或接口；带 Commit 编号的验收记录按原阶段解释。
 
+## Decimal closed-centerline stroke (Unreleased)
+
+`stroke_closed_polyline_d(path, width, precision=, options=, limits=)` adds the decimal counterpart; Precision defaults to 3 and supports 0–6. Both closed-centerline APIs are Unreleased and absent from published 0.3.2. They return flat coverage only; there is no tree, batch-closed or demo adapter. Filled-region offset and capped open stroke retain their distinct input meanings described below.
+
+The independent `decimal_stroke_closed_execute` validates original width and options, performs decimal precheck, quantizes the centerline with closed=false, scales full width and ArcTolerance, calls the private integer executor, then decodes with the original Precision. MiterLimit is dimensionless and unchanged. closed=false only disables filled-contour nondegeneracy checks: it does not make generation open. The integer preparation removes consecutive and closing repeats and performs periodic traversal. Ordinary collinear, self-intersecting and signed-area-zero centerlines are not rejected by filled-region validity rules. Identical original coordinates may repeat; distinct positions colliding on the grid fail with their original indices.
+
+Width below one grid unit is tested after scaling. Empty output still performs raw and quantization checks; Precision may change the centerline, seam and resulting coverage. Generation and rounding use the unchanged integer implementation, without epsilon or a second decimal join formula. Decoding preserves positive zero. Holes may disappear and output need not always be one outer ring plus one hole.
+
+The borrowed-operand wrappers (one path array/slot and one empty array) are charged 3 logical nodes and 1 work before allocation, after parameter/limit validation. Decimal precheck, common-grid storage/collision detection, original integer precheck, preparation, reverse copy, periodic generation, cleanup and DecimalOutput all share the injected ledger. Original counts include repeats before preparation; internal generated contours do not consume raw quotas again. Integer success can still be followed by a DecimalOutput resource error. No reset, refund, partial output, input mutation or mutable cross-call cache is introduced; existing decimal execution code and integer files are unchanged.
+
+Only three `decimal closed stroke:` test blocks cover full Miter contours (including default Precision) and isolation; full Bevel seam, repeated start, collision and collinear acceptance; sub-grid validation and deterministic shared decode exhaustion/retry. `bash scripts/check.sh --scope stroke-closed-decimal` runs static checks and three focused tests on native and JS plus the CLI example. Full-entry expectation 2424 is configuration only, with no full-suite, old filter, reference, performance, browser or package run.
+
 ## Integer closed-centerline stroke (Unreleased)
 
-`stroke_closed_polyline(path, width, options=, limits=)` returns `Result[Paths64, ClipError]`. Width is full width: each side is width/2. The last vertex implicitly connects to the first; repeating the first vertex is unnecessary. There is no CapType parameter. Miter, Bevel, Square and Round, MiterLimit and ArcTolerance reuse OffsetOptions. Reversing the centerline does not change coverage. This source-only entry is not in published 0.3.2; decimal, tree, batch-closed and demo wrappers are not provided.
+`stroke_closed_polyline(path, width, options=, limits=)` returns `Result[Paths64, ClipError]`. Width is full width: each side is width/2. The last vertex implicitly connects to the first; repeating the first vertex is unnecessary. There is no CapType parameter. Miter, Bevel, Square and Round, MiterLimit and ArcTolerance reuse OffsetOptions. Reversing the centerline does not change coverage. This source-only entry is not in published 0.3.2; its decimal counterpart is described above. Tree, batch-closed and demo wrappers are not provided.
 
 | Entry | Input meaning |
 | --- | --- |
