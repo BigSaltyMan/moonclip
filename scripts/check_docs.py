@@ -24,6 +24,7 @@ DOCUMENTS = (
     "docs/polytree-query.md",
     "docs/release-0.3.0.md",
     "docs/release-0.3.1.md",
+    "docs/release-0.3.2.md",
     "docs/composition.md",
     "docs/release-checklist.md",
     "docs/numerics.md",

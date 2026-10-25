@@ -8,7 +8,7 @@ MoonClip 是用 MoonBit 实现的二维多边形几何库，提供整数和十�
 moon add BigSaltyMan/moonclip@0.3.2
 ```
 
-**0.3.2 是文档链接修正版**，将文档与示例入口指向固定提交的 GitHub 渲染页面，避免 Mooncakes 原始 Markdown 外链未声明编码时出现中文乱码。运行库行为、公开接口、依赖及工具链与 0.3.1 保持一致；下表能力自 0.3.0 提供。旧版本的发布和验证证据见 [0.3.1 发布记录](https://github.com/BigSaltyMan/moonclip/blob/c9ccdb9bff41c26119a924f6fea7dea5e0bed01d/docs/release-0.3.1.md)，不转记为本版注册表安装证据。
+**0.3.2 是文档链接修正版**，将文档与示例入口指向固定提交的 GitHub 渲染页面，避免 Mooncakes 原始 Markdown 外链未声明编码时出现中文乱码。运行库行为、公开接口、依赖及工具链与 0.3.1 保持一致；下表能力自 0.3.0 提供。旧版本的发布和验证证据见 [0.3.1 发布记录](https://github.com/BigSaltyMan/moonclip/blob/c9ccdb9bff41c26119a924f6fea7dea5e0bed01d/docs/release-0.3.1.md)，不转记为本版注册表安装证据。 0.3.2 已于 2026-10-25 正式发布，独立 registry 消费者 native／JS、主文档页及 GitHub 中文文档蓝链核验通过，见 [0.3.2 Release](https://github.com/BigSaltyMan/moonclip/releases/tag/v0.3.2)。
 
 在包的 `moon.pkg` 中导入 `BigSaltyMan/moonclip`；可参考受检的[示例配置](https://github.com/BigSaltyMan/moonclip/blob/c9ccdb9bff41c26119a924f6fea7dea5e0bed01d/cmd/example/moon.pkg)和 [CLI 示例](https://github.com/BigSaltyMan/moonclip/blob/c9ccdb9bff41c26119a924f6fea7dea5e0bed01d/cmd/example/main.mbt)。已发布的 Boolean、Offset、单路线 Stroke、显式简化及基础几何见[支持范围](https://github.com/BigSaltyMan/moonclip/blob/c9ccdb9bff41c26119a924f6fea7dea5e0bed01d/docs/scope.md)；0.2.0 增加的树接口见[旧树接口升级说明](https://github.com/BigSaltyMan/moonclip/blob/c9ccdb9bff41c26119a924f6fea7dea5e0bed01d/docs/upgrade-trees.md)。
 

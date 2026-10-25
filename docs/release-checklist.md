@@ -100,3 +100,7 @@ ZIP、report.json、package.log、consumer-native.log、consumer-js.log 位于 `
 - 获得后续明确发布授权后，再执行标签、Mooncakes 上传及 GitHub Release；成功后从注册表在干净外部项目验证对应新版本，才能增加安装与正式发布结论。正式申报及人员字段另按授权完成。
 
 最终 SHA、实际归档清单、两平台各自 ZIP 校验和、六入口结果及 CI 链接放在提交后的交付记录中。提交前报告保留父 SHA / dirty 状态，再以文件哈希对应最终源码，避免为填写自身 SHA 反复补提交。
+
+## 0.3.2 文档链接修正版
+
+[0.3.2 发布记录](release-0.3.2.md)区分冻结源码、Windows 实际上传包、Linux 候选、独立 registry 消费者和后续状态提交。README 使用固定 GitHub 渲染页面，包内检查之外，还核验实际 Mooncakes href 和中文专题页。已发布版本不覆盖、不移动标签；状态文字另交 docs scope，不能为补充说明重复上传同一版本。0.3.0／0.3.1 历史清单和校验和保留。

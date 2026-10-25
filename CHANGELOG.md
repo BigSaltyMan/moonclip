@@ -4,7 +4,9 @@
 
 后续变更在本节另行记录；已发布的 0.3.0 源码与归档保持冻结。
 
-## 0.3.2 — 待发布
+## 0.3.2 — 2026-10-25
+
+已发布至 [Mooncakes](https://mooncakes.io/docs/BigSaltyMan/moonclip@0.3.2/) 和 [GitHub Release](https://github.com/BigSaltyMan/moonclip/releases/tag/v0.3.2)。发布源码为 `2171a5e8be30a36ae9ed32d18fafd6bf40d2a958`；registry 消费者 native／JS 各一次成功，62 个下载文件与冻结候选一致。实际 README 蓝链和 GitHub 中文渲染已核验，见[发布记录](docs/release-0.3.2.md)。
 
 - README 的文档、示例、接口和许可链接使用固定 GitHub 提交的渲染页面，避开 Mooncakes 原始 Markdown 外链的编码声明问题。
 - 仅同步版本和候选审计配置，运行库执行代码、公开接口、依赖、工具链及消费者案例与 0.3.1 一致。
