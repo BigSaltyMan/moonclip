@@ -350,12 +350,19 @@ fn line_finish(
 }
 
 ///|
+priv enum LineClipMode {
+  KeepInside
+  KeepOutside
+}
+
+///|
 fn line_clip_execute(
   paths : Paths64,
   clip : Paths64,
   fill_rule : FillRule,
   limits : ScanLimits,
   budget? : CallBudget,
+  mode? : LineClipMode = KeepInside,
 ) -> Result[Paths64, ClipError] {
   let budget = match budget {
     Some(value) => value
@@ -422,12 +429,16 @@ fn line_clip_execute(
           budget_spend(budget, 0, 1, l)
           let lo = events[j - 1]
           let hi = events[j]
-          let keep = line_inside(
+          let in_region = line_inside(
             line_at(a, z, line_mid(lo, hi, budget, l), budget, l),
             region,
             budget,
             l,
           )
+          let keep = match mode {
+            KeepInside => in_region
+            KeepOutside => !in_region
+          }
           if keep {
             let fragment = match current {
               Some(value) => value
@@ -470,4 +481,23 @@ pub fn intersect_polylines(
     ..Default::default(),
     input: limits,
   })
+}
+
+///|
+/// Unreleased: subtract a closed filled region from independent open integer routes.
+/// Keeps exterior intervals, including holes; removes interior and boundary overlaps.
+/// Cut endpoints may lie on the boundary. Preserves route order and ordinary vertices.
+pub fn difference_polylines(
+  paths : Paths64,
+  clip : Paths64,
+  fill_rule? : FillRule = EvenOdd,
+  limits? : Limits = Default::default(),
+) -> Result[Paths64, ClipError] {
+  line_clip_execute(
+    paths,
+    clip,
+    fill_rule,
+    { ..Default::default(), input: limits, },
+    mode=KeepOutside,
+  )
 }

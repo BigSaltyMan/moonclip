@@ -122,6 +122,15 @@ fn run_lineclip_example() -> Unit raise {
     ],
     [@moonclip.Point64::new(7L, 5L), @moonclip.Point64::new(10L, 5L)],
   ])
+  assert_eq(@moonclip.difference_polylines(paths, clip).unwrap(), [
+    [@moonclip.Point64::new(-2L, 5L), @moonclip.Point64::new(0L, 5L)],
+    [
+      @moonclip.Point64::new(3L, 5L),
+      @moonclip.Point64::new(5L, 5L),
+      @moonclip.Point64::new(7L, 5L),
+    ],
+    [@moonclip.Point64::new(10L, 5L), @moonclip.Point64::new(12L, 5L)],
+  ])
   let decimal_paths = [
     [
       @moonclip.PointD::new(-0.2, 0.5),
