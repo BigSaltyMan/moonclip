@@ -2,6 +2,8 @@
 
 ## 整数开放折线区域求交（Unreleased）
 
+小数 `difference_polylines_d` 通过现有 `decimal_line_clip_execute` 的私有模式透传复用整数 KeepOutside；共同量化、仅 clip 闭合检查、预算及原 Precision 解码均复用已有流程。没有重写内外判断、事件、舍入或连接，没有新增上游移植、参考案例或覆盖声明。整数／小数求交和求差这四个接口均为 Unreleased，已发布 0.3.2 不包含；网页仍只接入求交。
+
 整数 `difference_polylines` 在相同执行流程内增加私有区间选择：对最终区域的精确内部／边界分类取反，保留外部与孔洞。复用现有区域求值、有理事件、连接、舍入和计费，没有新增上游移植、参考案例或兼容性覆盖声明。该区间契约移除正长度边界重合段，但允许切分端点位于边界；不宣称与 Clipper2 所有特殊贴边分支一致。求差仅开发源码可用，尚未接入网页。
 
 `lineclip.mbt` 复用既有固定 Clipper2 参考引擎的 `boolean_compute`，按选定填充规则先确定闭合整数区域；有理事件切分、精确分类、半整数远离零输出舍入及累计预算组织为 MoonClip 自行实现，版权 BigSaltyMan 2026、BSL-1.0。未直接改写新的上游开放边代码，不声称新增上游算法移植。求交统一包含最终区域边界，与 [Clipper2 部分共线段按相邻位置选择包含](https://www.angusj.com/clipper2/Docs/Overview.htm)的规则不同，不宣称逐项兼容。旧扫描器、矩形裁剪、参考清单和兼容统计均未改变，详见[契约](lineclip.md)。

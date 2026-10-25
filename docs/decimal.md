@@ -2,7 +2,9 @@
 
 ## 开放折线与闭合区域求交（Unreleased）
 
-`intersect_polylines_d(paths, clip, precision=, fill_rule=, limits=)` 默认 Precision=3，支持 0—6；EvenOdd 默认，NonZero 可选。它和整数入口均仅为开发源码能力，不在注册表 0.3.2 中，网页未接入。完整边界及片段契约见[开放折线求交](lineclip.md)。
+`intersect_polylines_d(paths, clip, precision=, fill_rule=, limits=)` 与 `difference_polylines_d(paths, clip, precision=, fill_rule=, limits=)` 默认 Precision=3，支持 0—6；EvenOdd 默认，NonZero 可选。求交与求差各有整数／小数入口，四个接口均为 Unreleased，不在注册表 0.3.2 中。源码网页已提供两种模式的求交，求差尚未接入。完整边界及片段契约见[开放折线区域裁剪](lineclip.md)。
+
+小数求差只为现有 `decimal_line_clip_execute` 增加私有模式透传，显式使用 KeepOutside；旧小数求交继续默认 KeepInside，不增加逻辑容器或原费用。不调用公开整数求差另建账，也不改整数事件、分类、舍入或连接。求差保留最终区域外部与孔洞中的非零区间，剔除内部及正长度边界重合区间；输出切分端点仍可在边界上，不能称所有输出点严格位于区域外。
 
 先以整批原始数量和坐标预检，再用一次 `decimal_quantize(..., closed=false)` 共同量化路线与区域，保持跨两侧碰撞表。不同原始位置量化合并报错，完全相同坐标重复允许；不同于树查询允许量化重合的约定。之后仅对 clip 逐条使用既有 `decimal_closed`，位置索引为原始 paths.length()+clip 索引。开放路线允许空、单点、两点及重复点，不套用闭合退化检查；非空 clip 必须存在三个不同非共线网格点，空轮廓允许。不用有向面积为零排除自交区域。
 

@@ -4,12 +4,12 @@
 
 小数入口 `intersect_polylines_d(paths : PathsD, clip : PathsD, precision=, fill_rule=, limits=)` 返回 `Result[PathsD, ClipError]`，同为 Unreleased，Precision 默认 3、支持 0—6。两侧先共同量化到一个网格，只有 clip 做闭合有效性检查，再复用下述整数求交并按原精度解码。原始小数与网格几何的区别见[小数适配](decimal.md)。
 
-整数 `difference_polylines(paths, clip, fill_rule=EvenOdd, limits=)` 返回 `Result[Paths64, ClipError]`，表示开放路线减去闭合填充区域。它同样仅在开发源码中提供，未包含在已发布 0.3.2 中；目前没有小数求差入口。
+整数 `difference_polylines(paths, clip, fill_rule=EvenOdd, limits=)` 返回 `Result[Paths64, ClipError]`，小数 `difference_polylines_d(paths, clip, precision=, fill_rule=, limits=)` 返回 `Result[PathsD, ClipError]`，均表示开放路线减去闭合填充区域。小数 Precision 默认 3、支持 0—6。求交与求差这四个入口均为 Unreleased，仅在开发源码中提供，未包含在已发布 0.3.2 中。
 
 | 操作 | 保留区间 |
 | --- | --- |
 | `intersect_polylines`／`intersect_polylines_d` | 最终填充区域内部及边界 |
-| `difference_polylines` | 最终填充区域外部，包括孔洞 |
+| `difference_polylines`／`difference_polylines_d` | 最终填充区域外部，包括孔洞 |
 
 `paths` 是独立的开放路线，不隐式连接首尾；显式返回起点则按真实输入线段处理。`clip` 是共同按 EvenOdd 或 NonZero 解释的闭合填充区域，可以有孔洞、重叠、自交或退化轮廓。先调用一次已有私有 Boolean Union 确定该区域，再沿路线切分，不逐轮廓裁剪后拼接，也不将开放边加入扫描器。
 
@@ -33,7 +33,7 @@
 
 输出坐标以正分母上的整数商和余数实现**半整数远离零**舍入，正负数使用同一规则。分类与片段是否连续先由精确事件确定，舍入只用于存储结果。舍入导致的连续同点可消除；不足两个不同点的片段丢弃。被剔除区间两侧即使舍入后端点相同，也分别结束，不能跨过它重新拼接。
 
-这与旧 `rect_clip_lines` 及其小数包装的向零截断和特殊贴边规则不同。旧入口实现不变，不改为调用本入口。这里提供整数／小数求交及整数求差，没有 Union、Xor 或树输出。源码网页的独立“区域裁线”页签仍只提供整数／小数求交，未接入求差；矩形窗口页签仍使用原入口。
+这与旧 `rect_clip_lines` 及其小数包装的向零截断和特殊贴边规则不同。旧入口实现不变，不改为调用本入口。这里提供整数／小数求交与求差，没有 Union、Xor 或树输出。源码网页的独立“区域裁线”页签仍只提供整数／小数求交，未接入求差；矩形窗口页签仍使用原入口。
 
 ## 预检、位置与累计预算
 
@@ -77,6 +77,14 @@ Int64 边访问工作包含有界叉积和普通分支；BigInt 临时值单独�
 小数入口不跳过整数原有预检和收费，两次预检、量化、区域求值、事件及解码均在同一账本；仅新增 clip 外层访问每条 1 工作，其他逻辑复用原收费。限制和历史消费保持权威，失败不退款、无部分结果、输入隔离。正零解码沿用既有规则；输出依次经过输入网格量化、整数区域规范化、精确有理切分、网格交点半整数远离零舍入及 Double 解码，不承诺理想实数结果。
 
 小数适配仅三个 `decimal line clip:` 测试块，分别覆盖完整带孔片段及双向隔离、混合量化及真实组合位置、默认精度手工斜线结果及整数成功后解码耗尽。`bash scripts/check.sh --scope lineclip-decimal` 仅运行这三项、两目标静态检查及 CLI 示例，不追加整数筛选。完整入口期望维护为 2412，仅为配置数；没有运行全量、工具全集、参考重建、性能、浏览器或候选包检查。现有参考案例和能力检查数不变。
+
+## 小数求差适配及其定向验证
+
+`decimal_line_clip_execute` 的私有模式默认 KeepInside；旧 `intersect_polylines_d` 不传模式，新 `difference_polylines_d` 显式传 KeepOutside，透传给整数私有执行入口。两侧共同预检、量化及碰撞表，只有非空 clip 接受闭合网格有效性检查；开放两点路线合法。空擦除区域仍完成全部既定检查，再独立构造有效片段，不返回调用方数组。
+
+数值依次为 Double → 十进制网格 → 整数区域规范化 → 精确有理区间分类 → 选择外部区间 → 网格交点半整数远离零舍入 → 原 Precision 解码。孔洞属于外部，正长度边界重合区间剔除；输出切分端点仍可位于边界。Precision 影响可表达区域和片段，不添加浮点相交、epsilon 或额外内外判断；正零解码、片段塌缩与跨剔除区间不拼接均沿用原实现。
+
+预算注入、量化、clip 闭合检查、整数预检／求差及解码使用同一账本，限制和历史消费保持权威，不重置或退款。默认求交没有新增逻辑容器或费用；错误仍用既有 Decimal／LineClip 阶段及组合位置，失败无部分结果、输入不变。三个 `decimal line difference:` 测试块覆盖完整带孔片段及双向隔离（附旧小数求交完整回归）、手工斜线舍入及量化位置、共享解码预算耗尽及独立重试。`bash scripts/check.sh --scope lineclip-difference-decimal` 仅执行两目标静态检查、各三项定向测试及 CLI 示例。完整入口 2418 只为配置期望，本笔未执行全量，也没有新增参考矩阵或上游移植。
 
 ## 区域裁线交互演示（Unreleased）
 

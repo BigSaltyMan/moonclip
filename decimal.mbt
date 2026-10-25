@@ -1251,6 +1251,7 @@ fn decimal_line_clip_execute(
   fill_rule : FillRule,
   limits : ScanLimits,
   budget? : CallBudget,
+  mode? : LineClipMode = KeepInside,
 ) -> Result[PathsD, ClipError] {
   let budget = match budget {
     Some(value) => value
@@ -1274,7 +1275,15 @@ fn decimal_line_clip_execute(
       decimal_closed(region[i], index, budget)
     }
     // Preserve the integer entry's own raw preflight and its real work charge.
-    match line_clip_execute(routes, region, fill_rule, budget.limits, budget~) {
+    match
+      line_clip_execute(
+        routes,
+        region,
+        fill_rule,
+        budget.limits,
+        budget~,
+        mode~,
+      ) {
       Ok(pieces) => Ok(decimal_output(pieces, precision, budget))
       Err(error) => Err(decimal_error(error, precision))
     }
@@ -1298,4 +1307,25 @@ pub fn intersect_polylines_d(
     ..Default::default(),
     input: limits,
   })
+}
+
+///|
+/// Unreleased: subtract a closed filled region from open decimal routes on one grid.
+/// Both operands share quantization; only clip contours require closed validity.
+/// Removes interior and boundary-overlap intervals; cut endpoints may lie on boundaries.
+pub fn difference_polylines_d(
+  paths : PathsD,
+  clip : PathsD,
+  precision? : Precision = Default::default(),
+  fill_rule? : FillRule = EvenOdd,
+  limits? : Limits = Default::default(),
+) -> Result[PathsD, ClipError] {
+  decimal_line_clip_execute(
+    paths,
+    clip,
+    precision,
+    fill_rule,
+    { ..Default::default(), input: limits, },
+    mode=KeepOutside,
+  )
 }

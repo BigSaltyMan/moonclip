@@ -33,6 +33,8 @@ pub fn cross(Point64, Point64, Point64, limits? : Limits) -> Result[Int64, ClipE
 
 pub fn difference_polylines(Array[Array[Point64]], Array[Array[Point64]], fill_rule? : FillRule, limits? : Limits) -> Result[Array[Array[Point64]], ClipError]
 
+pub fn difference_polylines_d(Array[Array[PointD]], Array[Array[PointD]], precision? : Precision, fill_rule? : FillRule, limits? : Limits) -> Result[Array[Array[PointD]], ClipError]
+
 pub fn intersect_polylines(Array[Array[Point64]], Array[Array[Point64]], fill_rule? : FillRule, limits? : Limits) -> Result[Array[Array[Point64]], ClipError]
 
 pub fn intersect_polylines_d(Array[Array[PointD]], Array[Array[PointD]], precision? : Precision, fill_rule? : FillRule, limits? : Limits) -> Result[Array[Array[PointD]], ClipError]

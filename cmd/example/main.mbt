@@ -158,6 +158,22 @@ fn run_lineclip_example() -> Unit raise {
       [@moonclip.PointD::new(0.7, 0.5), @moonclip.PointD::new(1.0, 0.5)],
     ],
   )
+  assert_eq(
+    @moonclip.difference_polylines_d(
+      decimal_paths,
+      decimal_clip,
+      precision=@moonclip.Precision::new(2).unwrap(),
+    ).unwrap(),
+    [
+      [@moonclip.PointD::new(-0.2, 0.5), @moonclip.PointD::new(0.0, 0.5)],
+      [
+        @moonclip.PointD::new(0.3, 0.5),
+        @moonclip.PointD::new(0.5, 0.5),
+        @moonclip.PointD::new(0.7, 0.5),
+      ],
+      [@moonclip.PointD::new(1.0, 0.5), @moonclip.PointD::new(1.2, 0.5)],
+    ],
+  )
 }
 
 ///|
