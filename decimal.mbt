@@ -1414,3 +1414,93 @@ pub fn stroke_closed_polyline_d(
     max_work: 5000000,
   })
 }
+
+///|
+fn decimal_stroke_closed_tree_execute(
+  path : PathD,
+  width : Double,
+  precision : Precision,
+  options : OffsetOptions,
+  limits : ScanLimits,
+  budget? : CallBudget,
+) -> Result[PolyTreeD, ClipError] {
+  let budget = match budget {
+    Some(value) => value
+    None =>
+      new_call_budget(
+        limits,
+        generate_stage=StrokeGenerate,
+        cleanup_stage=StrokeCleanup,
+      )
+  }
+  try {
+    if width.is_nan() || width.is_inf() || width < 0.0 {
+      raise ScanAbort(
+        InvalidInput(
+          location(DecimalParameters, None, None),
+          "Stroke width must be finite and non-negative",
+        ),
+      )
+    }
+    if offset_options_error(options, DecimalParameters) is Some(error) {
+      raise ScanAbort(error)
+    }
+    // Validate limits before charging the new borrowed-operand wrappers.
+    // decimal_precheck remains responsible for original counts and coordinates.
+    if budget.limits.input.max_input_paths < 0 ||
+      budget.limits.input.max_input_vertices < 0 ||
+      budget.limits.max_nodes < 0 ||
+      budget.limits.max_work < 0 {
+      raise ScanAbort(
+        InvalidInput(
+          location(DecimalParameters, None, None),
+          "Limits must be non-negative",
+        ),
+      )
+    }
+    decimal_spend(budget, 3, 1, location(DecimalQuantize, None, None))
+    let paths = [path] // One array + one slot; the empty operand is a second array.
+    let empty : PathsD = []
+    decimal_precheck(paths, empty, precision, budget)
+    // false skips filled-contour validity only. Integer execution closes the centerline.
+    let (grid, _) = decimal_quantize(paths, empty, precision, false, budget)
+    let scaled_width = decimal_parameter(width, precision)
+    let scaled_options = decimal_scaled_options(options, precision)
+    match
+      stroke_closed_compute(
+        grid[0],
+        scaled_width,
+        scaled_options,
+        budget.limits,
+        fn(state) raise ScanAbort {
+          decimal_tree_output(tree_build(state), precision, budget)
+        },
+        fn(budget) raise ScanAbort {
+          decimal_tree_output(tree_empty(budget), precision, budget)
+        },
+        budget~,
+      ) {
+      Ok(tree) => Ok(tree)
+      Err(error) => Err(decimal_error(error, precision))
+    }
+  } catch {
+    ScanAbort(error) => Err(decimal_error(error, precision))
+  }
+}
+
+///|
+/// Unreleased: closed-centerline coverage hierarchy on the shared decimal grid.
+/// Integer tree construction and decimal conversion run inside final scan cleanup.
+/// Query methods use this tree's original Precision; no caps or filled-input checks.
+pub fn stroke_closed_tree_d(
+  path : PathD,
+  width : Double,
+  precision? : Precision = Default::default(),
+  options? : OffsetOptions = Default::default(),
+  limits? : Limits = Default::default(),
+) -> Result[PolyTreeD, ClipError] {
+  decimal_stroke_closed_tree_execute(path, width, precision, options, {
+    ..Default::default(),
+    input: limits,
+  })
+}

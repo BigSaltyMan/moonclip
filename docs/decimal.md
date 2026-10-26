@@ -2,7 +2,7 @@
 
 ## 闭合中心线描边（Unreleased）
 
-`stroke_closed_polyline_d(path, width, precision=, options=, limits=)` 使用原单位完整宽度，Precision 默认 3、支持 0—6。首尾隐式相连，不接受端点样式，接缝使用 JoinType；它不同于已填充区域偏移或带端点开放描边。与整数 `stroke_closed_polyline` 均仅开发源码提供，已发布 0.3.2 不包含；目前只有平铺覆盖区域，树、批量闭合路线和网页未接入。
+`stroke_closed_polyline_d(path, width, precision=, options=, limits=)` 使用原单位完整宽度，Precision 默认 3、支持 0—6。首尾隐式相连，不接受端点样式，接缝使用 JoinType；它不同于已填充区域偏移或带端点开放描边。与整数 `stroke_closed_polyline` 均仅开发源码提供，已发布 0.3.2 不包含；现有平铺覆盖区域及 `stroke_closed_tree_d` 孔洞树；网页仅接闭合平铺，树、查询及批量闭合未接入。
 
 原单位参数先检查，再预检原始数量及坐标，中心线按 `closed=false` 量化；这仅跳过面域非退化检查，不改变最终闭合生成。普通共线、自交或面积为零不因此拒绝；不同原始点合并仍为碰撞错误，相同坐标重复允许，显式重复首点由整数准备处理。整理后少于三个顶点沿用已计费空结果。宽度和 ArcTolerance 乘共同倍率，MiterLimit 不缩放。
 
@@ -227,3 +227,8 @@ Precision::new(digits) 返回 Result，支持 0—6，默认 3；digits() 读取
 `PolyTreeD::locate` 和 `locate_many` 使用树原建树 Precision 量化查询点，返回 TreePointLocationD 及原小数节点视图；不另传精度。接近边界的点可能量化到边界，不同查询点量化到同一点允许发生，不触发几何输入碰撞错误。空树同样检查有限性和原精度范围。
 
 现有全部小数树在 decimal_tree_output 中保存私有精度，不增加元数据容器或改变原转换费用、源树复制隔离；查询只临时恢复一次整数视图，复用精确定位并按原索引映射回来，批量共享恢复与求值预算。恢复范围推导、严格回解码和计费见[树点定位](polytree-query.md)。结果是网格位置，无浮点 epsilon 或实数无限精度承诺。Commit 50 当时的网页仍只支持整数查询；当前六类小数区域树均已接入，见[演示说明](demo.md)。
+
+
+## 闭合中心线树适配（Unreleased）
+
+`stroke_closed_tree_d` 采用独立适配，保留原单位参数检查、原始包装数组及槽位费用，以 closed=false 量化中心线后缩放宽度及 ArcTolerance，MiterLimit 不变，不调用 decimal_closed。在最终清理回调内先构建整数树，再调用既有 decimal_tree_output；转换失败也走扫描清理。空分支直接 tree_empty 后转换，不先分配平铺空数组。全部阶段共享注入账本及历史消费，失败不退款、不发布部分树。层级复制整数拓扑，保存原 Precision，可用已有单点／批量定位；不新增树存储或浮点包含判断。整数／小数树入口均为 Unreleased，0.3.2 不包含，网页仍只有闭合平铺。

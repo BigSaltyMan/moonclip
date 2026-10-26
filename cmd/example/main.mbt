@@ -1,5 +1,6 @@
 ///|
 fn run_foundation_example() -> Unit raise {
+  run_closed_stroke_tree_example()
   run_decimal_closed_stroke_example()
   run_closed_stroke_example()
   run_lineclip_example()
@@ -1455,4 +1456,29 @@ fn run_decimal_tree_locate_example() -> Unit raise {
   assert_eq(nodes.length(), 1)
   assert_eq(nodes[0].depth(), 1)
   assert_true(results[2] is Outside)
+}
+
+///|
+fn run_closed_stroke_tree_example() -> Unit raise {
+  let tree = @moonclip.stroke_closed_tree_d(
+    example_box_d(0.0, 0.0, 1.0, 1.0),
+    0.2,
+    precision=@moonclip.Precision::new(2).unwrap(),
+  ).unwrap()
+  let roots = tree.roots()
+  assert_eq(roots.length(), 1)
+  assert_eq(roots[0].depth(), 1)
+  assert_eq(roots[0].is_hole(), false)
+  example_decimal_ring(roots[0].contour(), example_box_d(-0.1, -0.1, 1.1, 1.1))
+  let holes = roots[0].children()
+  assert_eq(holes.length(), 1)
+  assert_eq(holes[0].depth(), 2)
+  assert_eq(holes[0].is_hole(), true)
+  assert_eq(holes[0].children().length(), 0)
+  example_decimal_ring(holes[0].contour(), [
+    @moonclip.PointD::new(0.1, 0.1),
+    @moonclip.PointD::new(0.1, 0.9),
+    @moonclip.PointD::new(0.9, 0.9),
+    @moonclip.PointD::new(0.9, 0.1),
+  ])
 }

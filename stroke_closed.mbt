@@ -48,13 +48,15 @@ fn stroke_closed_prepare(
 }
 
 ///|
-fn stroke_closed_execute(
+fn[T] stroke_closed_compute(
   path : Path64,
   width : Double,
   options : OffsetOptions,
   limits : ScanLimits,
+  extract : (ScanState) -> T raise ScanAbort,
+  empty : (CallBudget) -> T raise ScanAbort,
   budget? : CallBudget,
-) -> Result[Paths64, ClipError] {
+) -> Result[T, ClipError] {
   if width.is_nan() || width.is_inf() || width < 0.0 {
     return Err(
       InvalidInput(
@@ -89,8 +91,7 @@ fn stroke_closed_execute(
   try {
     let prepared = stroke_closed_prepare(path, budget)
     if width < 1.0 || prepared.length() < 3 {
-      offset_spend(budget, 1, 0)
-      return Ok([])
+      return Ok(empty(budget))
     }
     offset_spend(budget, 1, 0)
     let reversed : Path64 = []
@@ -111,15 +112,72 @@ fn stroke_closed_execute(
       Union,
       budget.limits,
       Positive,
-      fn(state) raise ScanAbort {
-        output_extract(state, preserve_collinear=false)
-      },
+      extract,
       budget~,
       internal_input=true,
     )
   } catch {
     ScanAbort(error) => Err(error)
   }
+}
+
+///|
+fn stroke_closed_execute(
+  path : Path64,
+  width : Double,
+  options : OffsetOptions,
+  limits : ScanLimits,
+  budget? : CallBudget,
+) -> Result[Paths64, ClipError] {
+  stroke_closed_compute(
+    path,
+    width,
+    options,
+    limits,
+    fn(state) raise ScanAbort {
+      output_extract(state, preserve_collinear=false)
+    },
+    fn(budget) raise ScanAbort {
+      // Preserve the original flat shortcut: one array, no extra work unit.
+      offset_spend(budget, 1, 0)
+      []
+    },
+    budget?,
+  )
+}
+
+///|
+fn stroke_closed_tree_execute(
+  path : Path64,
+  width : Double,
+  options : OffsetOptions,
+  limits : ScanLimits,
+  budget? : CallBudget,
+) -> Result[PolyTree64, ClipError] {
+  stroke_closed_compute(
+    path,
+    width,
+    options,
+    limits,
+    tree_build,
+    tree_empty,
+    budget?,
+  )
+}
+
+///|
+/// Unreleased: hierarchy of closed-centerline coverage, built during final cleanup.
+/// Width is full width; there are joins but no caps. Roots and holes describe coverage.
+pub fn stroke_closed_tree(
+  path : Path64,
+  width : Double,
+  options? : OffsetOptions = Default::default(),
+  limits? : Limits = Default::default(),
+) -> Result[PolyTree64, ClipError] {
+  stroke_closed_tree_execute(path, width, options, {
+    ..Default::default(),
+    input: limits,
+  })
 }
 
 ///|
