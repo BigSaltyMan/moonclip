@@ -772,6 +772,88 @@ fn execute_rectclip(
 }
 
 ///|
+fn execute_closed_stroke(
+  r : Map[String, Json],
+  mode : String,
+) -> Json raise DemoError {
+  if text(r, "output", "paths") != "paths" {
+    raise Input("Closed stroke supports paths output only", None, None)
+  }
+  if r.get("query") is Some(_) {
+    raise Input("Closed stroke does not support point queries", None, None)
+  }
+  if flag(
+      object(r.get("simplify").unwrap_or(Json::object({}))),
+      "enabled",
+      false,
+    ) {
+    raise Input("Closed stroke does not apply simplification", None, None)
+  }
+  let params = object(r.get("params").unwrap_or(Json::object({})))
+  if params.get("cap") is Some(_) {
+    raise Input("Closed centerline has no cap parameter", None, None)
+  }
+  let join = match text(params, "join", "Miter") {
+    "Miter" => @moonclip.Miter
+    "Bevel" => @moonclip.Bevel
+    "Square" => @moonclip.Square
+    "Round" => @moonclip.Round
+    _ => raise Input("Unknown join type", None, None)
+  }
+  let options = @moonclip.OffsetOptions::new(
+    join~,
+    miter_limit=number(params, "miter_limit", 2.0),
+    arc_tolerance=number(params, "arc_tolerance", 0.0),
+  )
+  let digits = number(r, "precision", 3.0)
+  if digits < 0.0 || digits > 6.0 || digits.to_int().to_double() != digits {
+    raise Input("Precision must be an integer from 0 to 6", None, None)
+  }
+  let precision = value(@moonclip.Precision::new(digits.to_int()))
+  let width = number(params, "width", 8.0)
+  let paths = coordinates(
+    Json::array([r.get("path").unwrap_or(Json::array([]))]),
+  )
+  let result = if mode == "decimal" {
+    encode_decimal(
+      value(
+        @moonclip.stroke_closed_polyline_d(
+          paths[0],
+          width,
+          precision~,
+          options~,
+        ),
+      ),
+    )
+  } else {
+    encode_paths(
+      value(
+        @moonclip.stroke_closed_polyline(
+          integer_paths(paths)[0],
+          width,
+          options~,
+        ),
+      ),
+    )
+  }
+  Json::object({
+    "ok": true.to_json(),
+    "kernel": "MoonBit".to_json(),
+    "scene": "stroke".to_json(),
+    "mode": mode.to_json(),
+    "output": "paths".to_json(),
+    "precision": if mode == "decimal" {
+      digits.to_json()
+    } else {
+      Json::null()
+    },
+    "geometry": "closed-regions".to_json(),
+    "paths": result,
+    "simplification": Json::null(),
+  })
+}
+
+///|
 fn execute(request : Json) -> Json raise DemoError {
   let r = object(request)
   if number(r, "version", 1.0) != 1.0 {
@@ -781,6 +863,14 @@ fn execute(request : Json) -> Json raise DemoError {
   let mode = text(r, "mode", "integer")
   if mode != "integer" && mode != "decimal" {
     raise Input("Unknown coordinate mode", None, None)
+  }
+  if scene == "stroke" {
+    let params = object(r.get("params").unwrap_or(Json::object({})))
+    match text(params, "route_mode", "Open") {
+      "Closed" => return execute_closed_stroke(r, mode)
+      "Open" => ()
+      _ => raise Input("Unknown stroke route mode", None, None)
+    }
   }
   if r.get("query") is Some(_) &&
     (

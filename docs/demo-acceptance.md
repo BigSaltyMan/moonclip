@@ -363,3 +363,25 @@ Uncaught TypeError: Failed to execute 'observe' on 'MutationObserver': parameter
 桥接四种组合各只调用对应公开入口一次；缺省操作仍求交，未知操作和错误类型明确失败。继续拒绝树、查询和简化，保留组合错误索引。操作切换沿用请求编号及原失效流程，输入保留，迟到响应不能恢复旧结果。三个原检查同时保留旧求交断言，并补完整整数／小数求差、一个小数 v3 重放、深复制和两项非法操作检查。开放绘制、v3 和原 `export.js` 均复用，没有新增协议或案例。
 
 根库、公开接口、整数／小数算法、版本、参考及发布标签未改。四个库入口和本演示仍为 Unreleased，注册表 0.3.2 不包含。未运行库筛选、全量、工具全集、参考重建、性能或候选包验收，未发布；规划书、申报书及 `.vscode/` 原有改动保留。
+
+
+## 闭合折线描边：交互演示增量验收（Unreleased）
+
+2026-10-25，Windows，以 `454bf71e427d80b95635a5dd71ccbcbc81b1e99b` 为基线。`moon info`、`moon fmt` 后根 API／根 `.mbti` 无变化；复用 `demo-stroke-batch` 完成 JS 静态检查、一次演示构建及原有三个扩展桥接／导出检查，**3/3** 通过。没有新增测试块、scope 或库测试。随后运行 `node build.mjs --dev --reuse` 时发现 4173 已被已有服务占用（EADDRINUSE），复用原服务并刷新 http://127.0.0.1:4173/；没有再次构建或修改服务环境。Linux 同 SHA CI 单独归属，最终 SHA 与日志链接保存于提交后交付记录。
+
+| 本笔操作 | 实际结果 |
+| --- | --- |
+| 整数方框与模式切换 | 闭合案例的四点数组不重复首点，Miter／宽度 2 实际显示完整外框 [-1,-1]—[11,11] 和反向孔洞 [1,1]—[9,9]，2 轮廓／8 点。切到 Open 再回 Closed，原点数组、宽度、连接及坐标模式均保留；切换立即清除结果并禁用导出，没有自动增删首点 |
+| 端点与接缝 | Closed 隐藏端点、结果结构、简化和查询；四种连接仍可选。改成 Bevel 后得到八点外轮廓与四点孔洞（12 顶点），包括首尾接缝的斜切。输入中心线的 d 含 Z 且 fill=none，结果用单一组合区域路径、NonZero 填充 |
+| 小数与错误清理 | 小数方框 Precision=2、宽度 0.2、ArcTolerance=0.01，完整外轮廓 [-0.1,-0.1]—[1.1,1.1] 和反向孔洞 [0.1,0.1]—[0.9,0.9]。宽度改为 -0.1 后，编辑立即失效旧结果；计算返回 InvalidInput / DecimalParameters、原位置为 null，结果路径清空、导出禁用。恢复 0.2 后正常 |
+| 实际下载 JSON 与重放 | 下载 `moonclip-stroke (1).json`，为 v1，保存 route_mode=Closed、完整原始四点中心线、宽度 0.2、Precision=2、Miter、MiterLimit=2、ArcTolerance=0.01，无 cap。下载 request 真实重放一次，外框与孔洞逐点及绕向一致，只忽略环起点和轮廓排列 |
+| 实际下载并打开 SVG | 下载 `moonclip-stroke.svg`，复制到忽略目录后经 HTTP 实际打开。只有一个 NonZero 组合 path，d 为 `M1.1,1.1L-0.1,1.1L-0.1,-0.1L1.1,-0.1Z M0.1,0.1L0.1,0.9L0.9,0.9L0.9,0.1Z`；保留 scale(1,-1)，孔洞未被单独填满，没有中心线或高亮 |
+| 窄屏与开放控件恢复 | 使用实际主内容视口 429×871，document scrollWidth=414，中心线模式／连接控件宽约 348.67，可操作。切回 Open 后端点、结果结构及显式简化控件恢复；小数中心线、宽度和连接保持原值，输入 d 不再有闭合命令，导出保持禁用直至重新计算 |
+
+本次主页面 warn/error 日志为空，未使用临时 iframe，也未重复排查历史容器错误。此前无来源 MutationObserver 异常继续保留**归因未确认**，不记作已解决或布局缺陷。
+
+保存一张[小数闭合中心线与孔洞截图](https://raw.githubusercontent.com/BigSaltyMan/moonclip/main/docs/demo-screenshots/closed-stroke-demo.jpg)。下载副本、一次真实重放及浏览器记录位于忽略目录 `demo/.qa/stroke-closed/result.json`、`result.svg`、`download-replay.json`、`browser-observation.json`。截图是 Windows 本地浏览器证据，不计为 Linux CI 浏览器验收。
+
+桥接只在 stroke 场景解析 route_mode，缺省 Open；未知值和错误类型明确拒绝。Closed 在通用简化及树处理之前独立分派，直接调用整数／小数闭合入口各一次，拒绝树、query、启用简化及 cap 字段；不使用 Minkowski 的 path_is_closed 切换描边语义。三个检查保留批量断言，并补闭合完整坐标／绕向、旧缺省开放完整结果（携带 path_is_closed 仍开放）、模式限制、真实核心错误、v1 重放和深复制。旧返回起点的开放案例保持原义，仅增加两个闭合输入案例，导出代码和协议不变。
+
+根 API、根 `.mbti`、运行库、依赖、版本、参考及标签未改；闭合整数／小数入口及本演示仍为 Unreleased，注册表 0.3.2 不包含。未运行库筛选、全量、工具全集、参考重建、性能、旧浏览器流程或候选验收，未发布；规划书、申报书及 `.vscode/` 原有改动保留。

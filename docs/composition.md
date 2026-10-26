@@ -4,7 +4,7 @@
 
 ## Decimal closed-centerline stroke (Unreleased)
 
-`stroke_closed_polyline_d(path, width, precision=, options=, limits=)` adds the decimal counterpart; Precision defaults to 3 and supports 0–6. Both closed-centerline APIs are Unreleased and absent from published 0.3.2. They return flat coverage only; there is no tree, batch-closed or demo adapter. Filled-region offset and capped open stroke retain their distinct input meanings described below.
+`stroke_closed_polyline_d(path, width, precision=, options=, limits=)` adds the decimal counterpart; Precision defaults to 3 and supports 0–6. Both closed-centerline APIs are Unreleased and absent from published 0.3.2. They return flat coverage only; there is no tree or batch-closed adapter. The source demo now supports the integer/decimal closed mode described below. Filled-region offset and capped open stroke retain their distinct input meanings described below.
 
 The independent `decimal_stroke_closed_execute` validates original width and options, performs decimal precheck, quantizes the centerline with closed=false, scales full width and ArcTolerance, calls the private integer executor, then decodes with the original Precision. MiterLimit is dimensionless and unchanged. closed=false only disables filled-contour nondegeneracy checks: it does not make generation open. The integer preparation removes consecutive and closing repeats and performs periodic traversal. Ordinary collinear, self-intersecting and signed-area-zero centerlines are not rejected by filled-region validity rules. Identical original coordinates may repeat; distinct positions colliding on the grid fail with their original indices.
 
@@ -16,7 +16,7 @@ Only three `decimal closed stroke:` test blocks cover full Miter contours (inclu
 
 ## Integer closed-centerline stroke (Unreleased)
 
-`stroke_closed_polyline(path, width, options=, limits=)` returns `Result[Paths64, ClipError]`. Width is full width: each side is width/2. The last vertex implicitly connects to the first; repeating the first vertex is unnecessary. There is no CapType parameter. Miter, Bevel, Square and Round, MiterLimit and ArcTolerance reuse OffsetOptions. Reversing the centerline does not change coverage. This source-only entry is not in published 0.3.2; its decimal counterpart is described above. Tree, batch-closed and demo wrappers are not provided.
+`stroke_closed_polyline(path, width, options=, limits=)` returns `Result[Paths64, ClipError]`. Width is full width: each side is width/2. The last vertex implicitly connects to the first; repeating the first vertex is unnecessary. There is no CapType parameter. Miter, Bevel, Square and Round, MiterLimit and ArcTolerance reuse OffsetOptions. Reversing the centerline does not change coverage. This source-only entry is not in published 0.3.2; its decimal counterpart is described above. Tree and batch-closed wrappers are not provided; the source demo supports flat integer/decimal closed strokes.
 
 | Entry | Input meaning |
 | --- | --- |
@@ -128,3 +128,11 @@ Protocol v4 locks 24 recipes before MoonClip execution, eight per flow. The pinn
 Each recipe counts once: 748 old inputs plus 24 =772. Native and JS each run 1414 library cases; 24 recipe filters per target require their own selection marker. 179 offline tool tests and 51 real adapter tests are separate. Local execution, Linux ordinary CI, and Linux independent C++ rebuild are separate evidence. Resource rejection tests establish MoonClip's own protection, not Clipper2 budget parity.
 
 The v4 hole reference uses outer [0,0]–[40,40] and reversed [8,8]–[32,32]: inset -4 collapses the entire region, then the real second call returns an empty tree. This case covers empty intermediate propagation; the manual [10,10]–[30,30] example remains separate.
+
+## Closed-centerline demo (Unreleased)
+
+In “路线实验 → 路线加宽”, the independent stroke-mode selector chooses Open or Closed. The bridge reads params.route_mode; omission defaults to Open, while unknown values and wrong types fail explicitly. The older Minkowski path_is_closed field never changes stroke semantics. Existing open examples that explicitly return to their start remain open routes with caps.
+
+Closed requests dispatch before generic open simplification/tree processing and call stroke_closed_polyline or stroke_closed_polyline_d exactly once. Only paths output is accepted; tree, query, enabled simplification and any cap field are rejected. The request preserves the original path without adding a closing point. All vertices, including the implicit seam, use JoinType. UI switching preserves points, width, join and coordinate mode, invalidates the old result and disables exports; switching back restores the open controls. The closed centerline is drawn with its closing edge and no fill, independently of the final filled coverage and holes.
+
+Flat JSON remains v1 and preserves route_mode, original centerline, full width, Precision and styles. Replay recomputes from the request; older missing-field requests stay Open. SVG contains only the actual combined coverage with NonZero fill and hole winding, without the centerline or selection. Two new frame cases contain only integer/decimal inputs. The existing three demo stroke batch: checks are extended without new test blocks or scope; local and CI use demo-stroke-batch with one build each. Actual downloads, replay and narrow-screen observations are recorded in [demo acceptance](demo-acceptance.md). This demo and both closed library entries remain Unreleased and absent from published 0.3.2.

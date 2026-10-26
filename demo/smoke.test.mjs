@@ -319,6 +319,17 @@ test('demo stroke batch: complete merged rectangle',()=>{
     assert.deepEqual(canonical([tree.paths[0]]),canonical([outer]));assert.deepEqual(canonical([tree.paths[1]]),canonical([hole]));
     assert.equal(tree.query,undefined);
   }
+  for(const [id,outer,hole] of [
+    ['closed-frame',rect(-1,-1,12,12),rect(1,1,8,8).reverse()],
+    ['closed-frame-d',[[-.1,-.1],[1.1,-.1],[1.1,1.1],[-.1,1.1]],[[.1,.1],[.1,.9],[.9,.9],[.9,.1]]],
+  ]){
+    const input=cases.stroke.find(c=>c.id===id),r=exact(input,[outer,hole]);
+    assert.equal(r.geometry,'closed-regions');assert.equal(r.output,'paths');assert.equal(r.tree,undefined);
+    assert.equal(r.mode,input.mode);assert.equal(r.precision,input.mode==='decimal'?2:null);
+  }
+  const legacy={scene:'stroke',path:[[0,0],[10,0]],params:{width:2,cap:'Butt',join:'Miter',path_is_closed:true}};
+  assert.equal(Object.hasOwn(legacy.params,'route_mode'),false);
+  exact(legacy,[rect(0,-1,10,2)]);
 });
 
 test('demo stroke batch: subsequent route error and unsupported requests',()=>{
@@ -330,6 +341,17 @@ test('demo stroke batch: subsequent route error and unsupported requests',()=>{
   assert.equal(collision.ok,false);assert.equal(collision.error.kind,'QuantizationFailure');assert.equal(collision.error.stage,'DecimalQuantize');
   assert.equal(collision.error.path_index,1);assert.equal(collision.error.vertex_index,0);
   assert.equal(collision.error.related.path_index,0);assert.equal(collision.error.related.vertex_index,0);
+  const closed=cases.stroke.find(c=>c.id==='closed-frame');
+  const core=run({...closed,params:{...closed.params,width:-1}});
+  assert.equal(core.ok,false);assert.equal(core.error.kind,'InvalidInput');assert.equal(core.error.stage,'StrokeParameters');
+  for(const bad of [core,
+    run({...closed,params:{...closed.params,route_mode:'invalid'}}),run({...closed,params:{...closed.params,route_mode:42}}),
+    run({...closed,output:'tree'}),run({...closed,query:{point:[0,0]}}),
+    run({...closed,simplify:{enabled:true}}),run({...closed,params:{...closed.params,cap:'Butt'}}),
+  ]){
+    assert.equal(bad.ok,false);assert.equal(bad.paths,undefined);assert.equal(bad.tree,undefined);
+    assert.throws(()=>resultDocument(closed,bad));
+  }
   for(const bad of [later,collision,run({...request,mode:'unknown'}),run({...request,paths:decimal.paths}),run({...request,output:'unknown'}),run({...request,simplify:{enabled:true}})]){
     assert.equal(bad.ok,false);assert.equal(bad.tree,undefined);assert.equal(bad.paths,undefined);assert.throws(()=>resultDocument(request,bad));
   }
@@ -356,6 +378,19 @@ test('demo stroke batch: closed region export and replay',()=>{
   const svg=resultSvg(response.paths);assert.match(svg,/fill-rule="nonzero"/);
   assert.equal((svg.match(/<path d="([^"]*)"/)[1].match(/Z/g)||[]).length,2);
   for(const contour of response.paths)for(const [x,y] of contour)assert.ok(svg.includes(`${x},${y}`));
+  const closedRequest=structuredClone(cases.stroke.find(c=>c.id==='closed-frame-d'));
+  const closedResponse=run(closedRequest),closedDoc=resultDocument(closedRequest,closedResponse);
+  assert.equal(closedResponse.ok,true,JSON.stringify(closedResponse));assert.equal(closedDoc.version,1);
+  assert.equal(closedDoc.request.params.route_mode,'Closed');assert.equal(closedDoc.request.precision,2);
+  assert.equal(Object.hasOwn(closedDoc.request.params,'cap'),false);assert.deepEqual(closedDoc.request,closedRequest);
+  assert.deepEqual(canonical(closedDoc.result.paths),canonical([[[-.1,-.1],[1.1,-.1],[1.1,1.1],[-.1,1.1]],[[.1,.1],[.1,.9],[.9,.9],[.9,.1]]]));
+  assert.deepEqual(canonical(run(closedDoc.request).paths),canonical(closedDoc.result.paths));
+  const closedSvg=resultSvg(closedResponse.paths),closedD=closedSvg.match(/<path d="([^"]*)"/)[1];
+  assert.equal((closedD.match(/Z/g)||[]).length,2);assert.match(closedSvg,/fill-rule="nonzero"/);
+  assert.equal((closedSvg.match(/<path /g)||[]).length,1);
+  for(const contour of closedResponse.paths)for(const [x,y] of contour)assert.ok(closedD.includes(`${x},${y}`));
+  const savedClosed=structuredClone(closedResponse);closedDoc.result.paths[0][0][0]=99;closedDoc.request.path[0][0]=88;
+  assert.deepEqual(closedResponse,savedClosed);assert.deepEqual(closedRequest,cases.stroke.find(c=>c.id==='closed-frame-d'));
 
 });
 

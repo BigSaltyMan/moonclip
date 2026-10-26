@@ -42,6 +42,8 @@ export const cases={
     {id:'turns',label:'折线路线 · 多个转角',...base,scene:'stroke',path:[[-52,-24],[-22,24],[12,-12],[52,20]],params:{width:12,cap:'Round',join:'Round',miter_limit:2,arc_tolerance:.25}},
     {id:'return',label:'返回起点 · 开放路径',...base,scene:'stroke',path:[[-40,-24],[36,-24],[36,24],[-40,-24]],params:{width:9,cap:'Square',join:'Bevel',miter_limit:2,arc_tolerance:.25}},
     {id:'tree-return',label:'层级查看 · 返回起点的开放路线',...base,scene:'stroke',output:'tree',path:[[0,0],[30,0],[30,30],[0,30],[0,0]],params:{width:4,cap:'Square',join:'Miter',miter_limit:2,arc_tolerance:.25}},
+    {id:'closed-frame',label:'整数闭合中心线 · 方框与孔洞',...base,scene:'stroke',output:'paths',path:rect(0,0,10,10),params:{route_mode:'Closed',width:2,join:'Miter',miter_limit:2,arc_tolerance:0}},
+    {id:'closed-frame-d',label:'小数闭合中心线 · Precision 2',...base,scene:'stroke',mode:'decimal',precision:2,output:'paths',path:rect(0,0,1,1),params:{route_mode:'Closed',width:.2,join:'Miter',miter_limit:2,arc_tolerance:.01}},
   ],
   minkowski:[
     {id:'open',label:'开放折线 · 图案直接相加',...base,scene:'minkowski',path:[[-45,-20],[-10,22],[40,-12]],pattern:patterns.rectangle.points,params:{path_is_closed:false}},
