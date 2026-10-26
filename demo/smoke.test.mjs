@@ -326,6 +326,10 @@ test('demo stroke batch: complete merged rectangle',()=>{
     const input=cases.stroke.find(c=>c.id===id),r=exact(input,[outer,hole]);
     assert.equal(r.geometry,'closed-regions');assert.equal(r.output,'paths');assert.equal(r.tree,undefined);
     assert.equal(r.mode,input.mode);assert.equal(r.precision,input.mode==='decimal'?2:null);
+    const tree=exact({...input,output:'tree'},[outer,hole]);
+    assert.equal(tree.output,'tree');assert.equal(tree.geometry,'closed-regions');assert.equal(tree.query,undefined);
+    assert.deepEqual(tree.tree,{roots:[0],nodes:[{parent:null,children:[1],depth:1,is_hole:false},{parent:0,children:[],depth:2,is_hole:true}]});
+    assert.deepEqual(canonical([tree.paths[0]]),canonical([outer]));assert.deepEqual(canonical([tree.paths[1]]),canonical([hole]));
   }
   const legacy={scene:'stroke',path:[[0,0],[10,0]],params:{width:2,cap:'Butt',join:'Miter',path_is_closed:true}};
   assert.equal(Object.hasOwn(legacy.params,'route_mode'),false);
@@ -346,12 +350,15 @@ test('demo stroke batch: subsequent route error and unsupported requests',()=>{
   assert.equal(core.ok,false);assert.equal(core.error.kind,'InvalidInput');assert.equal(core.error.stage,'StrokeParameters');
   for(const bad of [core,
     run({...closed,params:{...closed.params,route_mode:'invalid'}}),run({...closed,params:{...closed.params,route_mode:42}}),
-    run({...closed,output:'tree'}),run({...closed,query:{point:[0,0]}}),
+    run({...closed,output:'unknown'}),run({...closed,query:{point:[0,0]}}),run({...closed,output:'tree',query:{point:[0,0],points:[]}}),
     run({...closed,simplify:{enabled:true}}),run({...closed,params:{...closed.params,cap:'Butt'}}),
   ]){
     assert.equal(bad.ok,false);assert.equal(bad.paths,undefined);assert.equal(bad.tree,undefined);
     assert.throws(()=>resultDocument(closed,bad));
   }
+  const empty=run({...closed,output:'tree',params:{...closed.params,width:0},query:{points:[]}});
+  assert.equal(empty.ok,true,JSON.stringify(empty));assert.deepEqual(empty.paths,[]);assert.deepEqual(empty.tree,{roots:[],nodes:[]});
+  assert.deepEqual(empty.query,{mode:'batch',points:[],results:[]});assert.equal(resultDocument(closed,empty).version,2);
   for(const bad of [later,collision,run({...request,mode:'unknown'}),run({...request,paths:decimal.paths}),run({...request,output:'unknown'}),run({...request,simplify:{enabled:true}})]){
     assert.equal(bad.ok,false);assert.equal(bad.tree,undefined);assert.equal(bad.paths,undefined);assert.throws(()=>resultDocument(request,bad));
   }
@@ -391,6 +398,24 @@ test('demo stroke batch: closed region export and replay',()=>{
   for(const contour of closedResponse.paths)for(const [x,y] of contour)assert.ok(closedD.includes(`${x},${y}`));
   const savedClosed=structuredClone(closedResponse);closedDoc.result.paths[0][0][0]=99;closedDoc.request.path[0][0]=88;
   assert.deepEqual(closedResponse,savedClosed);assert.deepEqual(closedRequest,cases.stroke.find(c=>c.id==='closed-frame-d'));
+  const queryRequest={...structuredClone(closedRequest),output:'tree',query:{points:[[0,.5],[.5,.5],[.1,.5],[2,.5]]}};
+  const queried=run(queryRequest);assert.equal(queried.ok,true,JSON.stringify(queried));
+  assert.deepEqual(queried.query.points,queryRequest.query.points);
+  assert.deepEqual(queried.query.results.map(q=>q.status),['Inside','InHole','OnBoundary','Outside']);
+  const expectedOuter=[[-.1,-.1],[1.1,-.1],[1.1,1.1],[-.1,1.1]],expectedHole=[[.1,.1],[.1,.9],[.9,.9],[.9,.1]];
+  for(const [index,q] of queried.query.results.entries()){
+    assert.deepEqual(q.point,queryRequest.query.points[index]);assert.equal(q.node_indices.length,index===3?0:1);
+    if(index<3){const i=q.node_indices[0],hole=index!==0;assert.deepEqual(canonical([queried.paths[i]]),canonical([hole?expectedHole:expectedOuter]));assert.equal(queried.tree.nodes[i].depth,hole?2:1);assert.equal(queried.tree.nodes[i].is_hole,hole);}
+  }
+  const treeDoc=resultDocument(queryRequest,queried);assert.equal(treeDoc.version,2);assert.equal(treeDoc.request.params.route_mode,'Closed');assert.equal(treeDoc.request.precision,2);
+  assert.deepEqual(treeDoc.request,queryRequest);assert.deepEqual(treeDoc.result.tree,queried.tree);assert.deepEqual(treeDoc.result.query,queried.query);
+  const treeReplay=run(treeDoc.request);assert.deepEqual(treeReplay.paths,queried.paths);assert.deepEqual(treeReplay.tree,queried.tree);
+  const hits=r=>r.query.results.map(q=>({point:q.point,status:q.status,hits:q.node_indices.map(i=>({contour:r.paths[i],...r.tree.nodes[i]}))}));
+  assert.deepEqual(hits(treeReplay),hits(queried));
+  const treeSvg=resultSvg(queried.paths);assert.match(treeSvg,/fill-rule="nonzero"/);assert.equal((treeSvg.match(/<path d="([^"]*)"/)[1].match(/Z/g)||[]).length,2);assert.doesNotMatch(treeSvg,/data-query|data-node/);
+  const original=structuredClone(queried);treeDoc.request.path[0][0]=99;treeDoc.result.paths[0][0][0]=98;treeDoc.result.tree.nodes[0].children.length=0;treeDoc.result.query.results[0].node_indices.length=0;
+  assert.deepEqual(queried,original);assert.deepEqual(queryRequest.query.points,[[0,.5],[.5,.5],[.1,.5],[2,.5]]);
+
 
 });
 

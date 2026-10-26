@@ -14,7 +14,7 @@ moon add BigSaltyMan/moonclip@0.3.2
 
 ## 0.3.0 能力
 
-开发源码新增 **Unreleased** `stroke_closed_polyline`／`stroke_closed_polyline_d`：以原单位完整宽度加宽整数／小数闭合中心线，首尾接缝使用连接样式，没有端点；输出覆盖区域可含孔洞。它不同于填充区域的偏移，旧开放 `stroke_polyline` 即使显式返回起点也仍是开放语义。小数中心线量化不套用面域非退化检查，宽度及 ArcTolerance 随 Precision 缩放、MiterLimit 不变。已发布 0.3.2 不包含这两个入口，库另提供 `stroke_closed_tree`／`stroke_closed_tree_d`，直接在最终清理中构建层级，小数转换共用预算；树可用既有定位方法，`to_paths()` 会丢失父子关系。源码网页“路线加宽”已支持整数／小数开放／闭合切换；网页闭合模式仍只有平铺，尚无树、查询、简化或批量入口，见[组合与闭合描边](https://github.com/BigSaltyMan/moonclip/blob/main/docs/composition.md)。
+开发源码新增 **Unreleased** `stroke_closed_polyline`／`stroke_closed_polyline_d`：以原单位完整宽度加宽整数／小数闭合中心线，首尾接缝使用连接样式，没有端点；输出覆盖区域可含孔洞。它不同于填充区域的偏移，旧开放 `stroke_polyline` 即使显式返回起点也仍是开放语义。小数中心线量化不套用面域非退化检查，宽度及 ArcTolerance 随 Precision 缩放、MiterLimit 不变。已发布 0.3.2 不包含这两个入口，库另提供 `stroke_closed_tree`／`stroke_closed_tree_d`，直接在最终清理中构建层级，小数转换共用预算；树可用既有定位方法，`to_paths()` 会丢失父子关系。源码网页“路线加宽”已支持整数／小数开放／闭合切换；网页闭合模式已支持整数／小数平铺、孔洞树及单点／批量查询；仍无闭合简化或批量闭合入口，见[组合与闭合描边](https://github.com/BigSaltyMan/moonclip/blob/main/docs/composition.md)。
 
 开发源码另有 **Unreleased** 接口 `intersect_polylines`／`intersect_polylines_d`，用于整数／小数开放折线与闭合填充区域求交；保留最终区域边界，输出有序开放片段。小数两侧共同量化，仅区域检查闭合有效性。整数／小数 `difference_polylines`／`difference_polylines_d` 则保留区域外部（包括孔洞）的区间，剔除内部及正长度边界重合段，切分端点仍可位于边界。源码演示的“路线实验 → 区域裁线”已接入整数／小数求交及求差，可编辑带孔区域并导出开放 SVG／v3 JSON；旧请求缺少操作字段时默认求交。这四个接口不在上述注册表 0.3.2 包内，契约及与矩形裁剪的区别见[开放折线区域裁剪](https://github.com/BigSaltyMan/moonclip/blob/main/docs/lineclip.md)。下表仍描述已发布能力。
 

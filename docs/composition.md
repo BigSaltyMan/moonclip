@@ -129,7 +129,7 @@ Each recipe counts once: 748 old inputs plus 24 =772. Native and JS each run 141
 
 The v4 hole reference uses outer [0,0]–[40,40] and reversed [8,8]–[32,32]: inset -4 collapses the entire region, then the real second call returns an empty tree. This case covers empty intermediate propagation; the manual [10,10]–[30,30] example remains separate.
 
-## Closed-centerline demo (Unreleased)
+## Closed-centerline flat demo stage (historical Unreleased acceptance)
 
 In “路线实验 → 路线加宽”, the independent stroke-mode selector chooses Open or Closed. The bridge reads params.route_mode; omission defaults to Open, while unknown values and wrong types fail explicitly. The older Minkowski path_is_closed field never changes stroke semantics. Existing open examples that explicitly return to their start remain open routes with caps.
 
@@ -148,4 +148,11 @@ The flat empty shortcut still costs exactly one result array and zero extra work
 
 Root depth is 1, holes depth 2, with existing winding and alternating hierarchy. Accessors copy arrays/contours; to_paths() loses explicit parentage. Decimal hierarchy copies integer topology and retains original Precision, so both trees support existing locate/locate_many. Failure returns Err without partial output or input mutation. The checked CLI example reads complete decimal outer/hole contours. Only three closed stroke tree: tests are added, native and JS each selecting 3. The full configuration expectation is 2427; no full-suite/reference/performance evidence is claimed.
 
-Both tree entries remain Unreleased and absent from 0.3.2. The webpage supports closed flat integer/decimal coverage only, without closed trees, queries, simplification or batch-closed routes.
+Both tree entries remain Unreleased and absent from 0.3.2. The webpage now supports integer/decimal closed flat coverage, trees and tree queries; simplification and batch-closed routes remain unavailable.
+
+
+## Closed-centerline tree demo (Unreleased)
+
+Closed stroke requests accept paths (default) or tree. Each tree branch calls its integer/decimal public builder once, then uses encode_integer_tree_result / encode_decimal_tree_result to query and encode that same tree. Paths and hierarchy share one encoding; hit matching uses exact complete contours, depth and hole flags. Flat queries remain invalid, unknown outputs fail, caps and enabled simplification remain rejected. Decimal queries use retained tree Precision without another query precision.
+
+Existing output, hierarchy and single/batch query controls are reused. Closed input retains its seam edge, caps and simplification stay hidden, and changing inputs clears old tree/selection/query/export state. Empty trees and empty query lists remain valid. Selecting a query row changes presentation only; manual node selection is independent. Existing frame cases are reused without additions. Flat JSON stays v1 and tree JSON v2, preserving the original Closed request; replay recomputes the tree and query. SVG contains only the complete region and holes. The original three demo stroke batch: checks are extended, not new library tests. Historical flat-only acceptance remains attributed to its earlier stage; see [browser evidence](demo-acceptance.md).

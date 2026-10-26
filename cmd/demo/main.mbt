@@ -776,11 +776,12 @@ fn execute_closed_stroke(
   r : Map[String, Json],
   mode : String,
 ) -> Json raise DemoError {
-  if text(r, "output", "paths") != "paths" {
-    raise Input("Closed stroke supports paths output only", None, None)
+  let output = text(r, "output", "paths")
+  if output != "paths" && output != "tree" {
+    raise Input("Unknown closed stroke output mode", None, None)
   }
-  if r.get("query") is Some(_) {
-    raise Input("Closed stroke does not support point queries", None, None)
+  if r.get("query") is Some(_) && output != "tree" {
+    raise Input("Point query requires tree output", None, None)
   }
   if flag(
       object(r.get("simplify").unwrap_or(Json::object({}))),
@@ -814,7 +815,36 @@ fn execute_closed_stroke(
   let paths = coordinates(
     Json::array([r.get("path").unwrap_or(Json::array([]))]),
   )
-  let result = if mode == "decimal" {
+  let mut tree = Json::null()
+  let mut query_result : Json? = None
+  let result = if output == "tree" {
+    let encoded = if mode == "decimal" {
+      let query = match r.get("query") {
+        Some(query) => Some(parse_decimal_tree_query(query))
+        None => None
+      }
+      encode_decimal_tree_result(
+        value(
+          @moonclip.stroke_closed_tree_d(paths[0], width, precision~, options~),
+        ),
+        query,
+      )
+    } else {
+      let query = match r.get("query") {
+        Some(query) => Some(parse_tree_query(query))
+        None => None
+      }
+      encode_integer_tree_result(
+        value(
+          @moonclip.stroke_closed_tree(integer_paths(paths)[0], width, options~),
+        ),
+        query,
+      )
+    }
+    tree = encoded.1
+    query_result = encoded.2
+    encoded.0
+  } else if mode == "decimal" {
     encode_decimal(
       value(
         @moonclip.stroke_closed_polyline_d(
@@ -836,12 +866,12 @@ fn execute_closed_stroke(
       ),
     )
   }
-  Json::object({
+  let response = {
     "ok": true.to_json(),
     "kernel": "MoonBit".to_json(),
     "scene": "stroke".to_json(),
     "mode": mode.to_json(),
-    "output": "paths".to_json(),
+    "output": output.to_json(),
     "precision": if mode == "decimal" {
       digits.to_json()
     } else {
@@ -850,7 +880,14 @@ fn execute_closed_stroke(
     "geometry": "closed-regions".to_json(),
     "paths": result,
     "simplification": Json::null(),
-  })
+  }
+  if output == "tree" {
+    response["tree"] = tree
+  }
+  if query_result is Some(query) {
+    response["query"] = query
+  }
+  Json::object(response)
 }
 
 ///|
