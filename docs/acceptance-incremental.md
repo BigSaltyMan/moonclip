@@ -120,6 +120,14 @@ native、JS 各运行一次原消费者，基础检查、六个旧树入口、�
 
 [Mooncakes 0.3.2 页面](https://mooncakes.io/docs/BigSaltyMan/moonclip@0.3.2/)及代表性 README 蓝链已核验，树点定位专题在 GitHub 正常显示中文。该修正绕开原始 Markdown 外链，不宣称修改了源站 charset。发布包、三个 Release 附件、双平台校验和及详细范围见[0.3.2 记录](release-0.3.2.md)。本次库测试新增与执行均为 0，没有全量、参考重建、性能、演示浏览器或赛事申报。状态文档提交仅运行 docs scope，最终 SHA、docs CI 与交付回执放在 `_build/release-0.3.2/publication-final-delivery.json`。
 
+## 0.4.0 正式发布与注册表交付
+
+2026-10-26 正式发布源码为 [`63db64f23582390d78acac38a9fbfda11a0216b3`](https://github.com/BigSaltyMan/moonclip/commit/63db64f23582390d78acac38a9fbfda11a0216b3)，标签 v0.4.0 固定指向该提交。沿用[该 SHA package CI](https://github.com/BigSaltyMan/moonclip/actions/runs/40316832927)及 `339947be1cb0ac87ab3a16b9658093806d0a4736` 的[完整验收](full-acceptance.md)；两种证据不合并、不转记为发布时重跑。
+
+实际上传 Windows 冻结 ZIP 为 67 文件、334263 字节，SHA-256 `e47d4e3e54678104e05eb80cfe43bf0f32acdf56bcbdfb02a0705cae30a7cbc4`，服务端 checksum 一致。仓库外 registry 消费者 native、JS 各运行一次冻结夹具，原检查和新增两个流程均通过，实际调用八接口及返回小数树的孔洞查询；未使用 moon.work 或本地替换。下载文件在编译前后逐字节匹配冻结包。
+
+[Mooncakes 页面](https://mooncakes.io/docs/BigSaltyMan/moonclip@0.4.0/)的版本、安装、README、八接口及版本注释实际可见；18 个唯一目标标签渲染链接均可访问，区域裁线与小数专题中文渲染已抽查。[Release](https://github.com/BigSaltyMan/moonclip/releases/tag/v0.4.0)三个附件重新下载一致。新增及执行库测试均为 0，未重跑参考、性能或浏览器演示。状态文档仅运行 docs，最终 SHA、同 SHA docs CI 和分阶段结果放在 `_build/release-0.4.0/publication-final-delivery.json`，详见[正式发布记录](release-0.4.0.md)。
+
 ## Commit 52 文档检查的边界
 
 `bash scripts/check.sh --scope docs` 在工具链检查前进入文档分支，检查指定文档的常规本地 Markdown 文件和图片链接目标，去除片段后解析相对路径，并运行 `git diff --check`。它不访问外网、不递归扫描全仓、不验证全部标题锚点；锚点仅人工抽查。

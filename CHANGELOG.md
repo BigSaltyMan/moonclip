@@ -4,7 +4,9 @@
 
 后续变更在本节另行记录。
 
-## 0.4.0 — 待发布
+## 0.4.0 — 2026-10-26
+
+已发布至 [Mooncakes](https://mooncakes.io/docs/BigSaltyMan/moonclip@0.4.0/) 和 [GitHub Release](https://github.com/BigSaltyMan/moonclip/releases/tag/v0.4.0)。源码与标签固定为 `63db64f23582390d78acac38a9fbfda11a0216b3`；实际上传 Windows 冻结包为 67 文件、334263 字节。独立 registry 消费者 native／JS 各一次通过，下载内容与冻结清单一致；文档页、八接口、版本蓝链及三个 Release 附件已核验，见[发布记录](docs/release-0.4.0.md)。完整回归继续归属 `339947be…`，发布时未重跑。
 
 - 新增整数／小数开放折线区域求交：intersect_polylines、intersect_polylines_d；保留最终填充区域内部及边界上的有序开放片段。
 - 新增整数／小数区域擦除：difference_polylines、difference_polylines_d；保留外部及孔洞中的区间，剔除内部与正长度边界重合区间；切分端点仍可在边界。三个 LineClipParameters／LineClipEvaluate／LineClipOutput 阶段保留真实错误来源。

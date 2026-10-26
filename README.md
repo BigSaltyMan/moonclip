@@ -8,7 +8,7 @@ MoonClip 是用 MoonBit 实现的二维多边形几何库，提供整数和十�
 moon add BigSaltyMan/moonclip@0.4.0
 ```
 
-**自 0.4.0 提供开放折线区域求交、求差和闭合中心线描边**，整数／小数使用一致的调用契约。运行库不增加依赖，固定工具链不变。安装命令按目标版本给出；各版本变更见 CHANGELOG。0.3.2 的发布、注册表和中文链接验证仍归属[原发布记录](https://github.com/BigSaltyMan/moonclip/releases/tag/v0.3.2)，不转记为 0.4.0 的安装证据。
+**0.4.0 已于 2026-10-26 正式发布**，提供开放折线区域求交、求差和闭合中心线描边，整数／小数使用一致的调用契约。运行库不增加依赖，固定工具链不变。上述安装命令已由仓库外 registry 消费者 native／JS 验证，下载内容、Mooncakes 文档及中文链接均已核验，见[0.4.0 发布记录](https://github.com/BigSaltyMan/moonclip/blob/main/docs/release-0.4.0.md)与[GitHub Release](https://github.com/BigSaltyMan/moonclip/releases/tag/v0.4.0)。0.3.2 的历史验证仍归属[原发布记录](https://github.com/BigSaltyMan/moonclip/releases/tag/v0.3.2)，不转记为 0.4.0 证据。
 
 在包的 `moon.pkg` 中导入 `BigSaltyMan/moonclip`；可参考受检的[示例配置](https://github.com/BigSaltyMan/moonclip/blob/v0.4.0/cmd/example/moon.pkg)和 [CLI 示例](https://github.com/BigSaltyMan/moonclip/blob/v0.4.0/cmd/example/main.mbt)。已发布的 Boolean、Offset、单路线 Stroke、显式简化及基础几何见[支持范围](https://github.com/BigSaltyMan/moonclip/blob/v0.4.0/docs/scope.md)；0.2.0 增加的树接口见[旧树接口升级说明](https://github.com/BigSaltyMan/moonclip/blob/c9ccdb9bff41c26119a924f6fea7dea5e0bed01d/docs/upgrade-trees.md)。
 
@@ -67,6 +67,8 @@ npm run dev
 ## 验证证据与检查入口
 
 完整回归归属 `339947be1cb0ac87ab3a16b9658093806d0a4736`：Windows／Linux 的 native、JS 分别 **2427/2427**，conformance 工具 294 项、桥接 31/31，见[完整验收](https://github.com/BigSaltyMan/moonclip/blob/339947be1cb0ac87ab3a16b9658093806d0a4736/docs/full-acceptance.md)和[该 SHA CI](https://github.com/BigSaltyMan/moonclip/actions/runs/40313466815)。本版本候选仅另做版本、实际包内容和外部消费者检查，不能写成候选 SHA 重新全量通过。历史定向及浏览器证据保留各自提交归属，参考目录 **1416 个案例、2308 项能力检查**不代表新增八接口已有逐项上游对照。
+
+0.4.0 发布源码及标签固定为 `63db64f23582390d78acac38a9fbfda11a0216b3`，其 [CI 为 package 检查](https://github.com/BigSaltyMan/moonclip/actions/runs/40316832927)。正式上传后另从注册表运行 native、JS 消费者各一次，67 个下载文件在编译前后均对应冻结包；状态文档单独提交，仅运行 docs，不移动发布标签。
 
 普通 CI 按 `CHECK_SCOPE` 选择文档、核心、演示或包检查范围；发布源码、状态文档和文档修正版候选的证据按各自提交与 scope 记录，package 或 docs 成功均不表示完整回归通过。完整检查入口仍保留，需显式选择；实际执行范围见[工作流](https://github.com/BigSaltyMan/moonclip/blob/main/.github/workflows/ci.yml)与[检查脚本](https://github.com/BigSaltyMan/moonclip/blob/main/scripts/check.sh)。文档检查只验证指定材料的本地链接目标存在和差异空白，不构建或执行几何：
 
