@@ -73,7 +73,13 @@ class RandomTests(unittest.TestCase):
             (root/'all-js.log').write_text('Total tests: 2403, passed: 2403, failed: 0.\n')
             with self.assertRaises(Invalid):random_execution_evidence(root)
             (root/'all-js.log').write_text('Total tests: 2424, passed: 2424, failed: 0.\n')
+            with self.assertRaises(Invalid):random_execution_evidence(root)
+            (root/'all-js.log').write_text('Total tests: 2427, passed: 2427, failed: 0.\n')
             self.assertEqual(random_execution_evidence(root)['js']['passed'],24)
+            (root/'random-js.log').write_text('Total tests: 24, passed: 24, failed: 0.\n')
+            self.assertEqual(random_execution_evidence(root)['js']['source'],'full')
+            (root/'all-js.log').write_text('Total tests: 2424, passed: 2424, failed: 0.\n')
+            with self.assertRaises(Invalid):random_execution_evidence(root)
 
     def test_reducer_keeps_category_and_attempt_cap(self):
         original=copy.deepcopy(self.records[0][1]);seen=[]
