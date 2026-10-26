@@ -5,32 +5,43 @@ MoonClip 是用 MoonBit 实现的二维多边形几何库，提供整数和十�
 ## 安装与使用
 
 ```bash
-moon add BigSaltyMan/moonclip@0.3.2
+moon add BigSaltyMan/moonclip@0.4.0
 ```
 
-**0.3.2 是文档链接修正版**，将文档与示例入口指向固定提交的 GitHub 渲染页面，避免 Mooncakes 原始 Markdown 外链未声明编码时出现中文乱码。运行库行为、公开接口、依赖及工具链与 0.3.1 保持一致；下表能力自 0.3.0 提供。旧版本的发布和验证证据见 [0.3.1 发布记录](https://github.com/BigSaltyMan/moonclip/blob/c9ccdb9bff41c26119a924f6fea7dea5e0bed01d/docs/release-0.3.1.md)，不转记为本版注册表安装证据。 0.3.2 已于 2026-10-25 正式发布，独立 registry 消费者 native／JS、主文档页及 GitHub 中文文档蓝链核验通过，见 [0.3.2 Release](https://github.com/BigSaltyMan/moonclip/releases/tag/v0.3.2)。
+**自 0.4.0 提供开放折线区域求交、求差和闭合中心线描边**，整数／小数使用一致的调用契约。运行库不增加依赖，固定工具链不变。安装命令按目标版本给出；各版本变更见 CHANGELOG。0.3.2 的发布、注册表和中文链接验证仍归属[原发布记录](https://github.com/BigSaltyMan/moonclip/releases/tag/v0.3.2)，不转记为 0.4.0 的安装证据。
 
-在包的 `moon.pkg` 中导入 `BigSaltyMan/moonclip`；可参考受检的[示例配置](https://github.com/BigSaltyMan/moonclip/blob/c9ccdb9bff41c26119a924f6fea7dea5e0bed01d/cmd/example/moon.pkg)和 [CLI 示例](https://github.com/BigSaltyMan/moonclip/blob/c9ccdb9bff41c26119a924f6fea7dea5e0bed01d/cmd/example/main.mbt)。已发布的 Boolean、Offset、单路线 Stroke、显式简化及基础几何见[支持范围](https://github.com/BigSaltyMan/moonclip/blob/c9ccdb9bff41c26119a924f6fea7dea5e0bed01d/docs/scope.md)；0.2.0 增加的树接口见[旧树接口升级说明](https://github.com/BigSaltyMan/moonclip/blob/c9ccdb9bff41c26119a924f6fea7dea5e0bed01d/docs/upgrade-trees.md)。
+在包的 `moon.pkg` 中导入 `BigSaltyMan/moonclip`；可参考受检的[示例配置](https://github.com/BigSaltyMan/moonclip/blob/v0.4.0/cmd/example/moon.pkg)和 [CLI 示例](https://github.com/BigSaltyMan/moonclip/blob/v0.4.0/cmd/example/main.mbt)。已发布的 Boolean、Offset、单路线 Stroke、显式简化及基础几何见[支持范围](https://github.com/BigSaltyMan/moonclip/blob/v0.4.0/docs/scope.md)；0.2.0 增加的树接口见[旧树接口升级说明](https://github.com/BigSaltyMan/moonclip/blob/c9ccdb9bff41c26119a924f6fea7dea5e0bed01d/docs/upgrade-trees.md)。
 
-## 0.3.0 能力
+## 0.4.0 新增能力
 
-开发源码新增 **Unreleased** `stroke_closed_polyline`／`stroke_closed_polyline_d`：以原单位完整宽度加宽整数／小数闭合中心线，首尾接缝使用连接样式，没有端点；输出覆盖区域可含孔洞。它不同于填充区域的偏移，旧开放 `stroke_polyline` 即使显式返回起点也仍是开放语义。小数中心线量化不套用面域非退化检查，宽度及 ArcTolerance 随 Precision 缩放、MiterLimit 不变。已发布 0.3.2 不包含这两个入口，库另提供 `stroke_closed_tree`／`stroke_closed_tree_d`，直接在最终清理中构建层级，小数转换共用预算；树可用既有定位方法，`to_paths()` 会丢失父子关系。源码网页“路线加宽”已支持整数／小数开放／闭合切换；网页闭合模式已支持整数／小数平铺、孔洞树及单点／批量查询；仍无闭合简化或批量闭合入口，见[组合与闭合描边](https://github.com/BigSaltyMan/moonclip/blob/main/docs/composition.md)。
+| 任务 | 整数／小数入口 | 结果 |
+| --- | --- | --- |
+| 开放路线保留区域内 | intersect_polylines／intersect_polylines_d | 内部及最终边界上的有序开放片段 |
+| 开放路线区域擦除 | difference_polylines／difference_polylines_d | 外部及孔洞中的有序片段，剔除正长度边界重合区间 |
+| 闭合中心线描边 | stroke_closed_polyline／stroke_closed_polyline_d | 平铺覆盖区域，可以有孔洞 |
+| 闭合描边层级 | stroke_closed_tree／stroke_closed_tree_d | 同次清理生成的孔洞树，可单点／批量查询 |
 
-开发源码另有 **Unreleased** 接口 `intersect_polylines`／`intersect_polylines_d`，用于整数／小数开放折线与闭合填充区域求交；保留最终区域边界，输出有序开放片段。小数两侧共同量化，仅区域检查闭合有效性。整数／小数 `difference_polylines`／`difference_polylines_d` 则保留区域外部（包括孔洞）的区间，剔除内部及正长度边界重合段，切分端点仍可位于边界。源码演示的“路线实验 → 区域裁线”已接入整数／小数求交及求差，可编辑带孔区域并导出开放 SVG／v3 JSON；旧请求缺少操作字段时默认求交。这四个接口不在上述注册表 0.3.2 包内，契约及与矩形裁剪的区别见[开放折线区域裁剪](https://github.com/BigSaltyMan/moonclip/blob/main/docs/lineclip.md)。下表仍描述已发布能力。
+路线输出保持方向、顺序及有效中间点；求差的切分端点仍可在边界，不能称所有输出点严格位于外部。统一边界包含／排除规则是 MoonClip 契约，不宣称与 Clipper2 所有特殊贴边分支一致。小数路线和区域共同量化，只有区域接受闭合有效性检查，数值路线见[区域裁线](https://github.com/BigSaltyMan/moonclip/blob/v0.4.0/docs/lineclip.md)。
+
+闭合描边隐式连接中心线末首，没有端点参数，不等于已填充区域的偏移；树直接来自最终清理，不作第二次公开求值。没有批量闭合入口或闭合模式简化，见[组合与闭合描边](https://github.com/BigSaltyMan/moonclip/blob/v0.4.0/docs/composition.md)。每次公开调用独立建账，内部阶段共享预算，不重置或退款。
+
+网页已接入整数／小数区域裁线求交与求差、闭合描边平铺／树及树查询；SVG 只导出结果，JSON 沿用区域 v1、树 v2、开放片段 v3。
+
+## 既有能力（自 0.3.0 或更早）
 
 | 能力 | 整数 | 小数 | 输出 | 使用说明 |
 | --- | --- | --- | --- | --- |
-| 开放折线窗口裁剪 | 支持 | 支持 | 有序开放片段 | [窗口裁剪](https://github.com/BigSaltyMan/moonclip/blob/c9ccdb9bff41c26119a924f6fea7dea5e0bed01d/docs/rectclip.md) |
-| 闭合区域窗口裁剪 | 支持 | 支持 | 平铺／孔洞树 | [窗口裁剪](https://github.com/BigSaltyMan/moonclip/blob/c9ccdb9bff41c26119a924f6fea7dea5e0bed01d/docs/rectclip.md) |
-| 多路线批量描边 | 支持 | 支持 | 平铺／孔洞树 | [组合流程](https://github.com/BigSaltyMan/moonclip/blob/c9ccdb9bff41c26119a924f6fea7dea5e0bed01d/docs/composition.md) |
-| Minkowski Sum | 支持 | 支持 | 平铺／孔洞树 | [图案扫掠](https://github.com/BigSaltyMan/moonclip/blob/c9ccdb9bff41c26119a924f6fea7dea5e0bed01d/docs/minkowski.md) |
-| 树单点／批量定位 | 支持 | 支持 | 定位状态与命中节点 | [树点定位](https://github.com/BigSaltyMan/moonclip/blob/c9ccdb9bff41c26119a924f6fea7dea5e0bed01d/docs/polytree-query.md) |
+| 开放折线窗口裁剪 | 支持 | 支持 | 有序开放片段 | [窗口裁剪](https://github.com/BigSaltyMan/moonclip/blob/v0.4.0/docs/rectclip.md) |
+| 闭合区域窗口裁剪 | 支持 | 支持 | 平铺／孔洞树 | [窗口裁剪](https://github.com/BigSaltyMan/moonclip/blob/v0.4.0/docs/rectclip.md) |
+| 多路线批量描边 | 支持 | 支持 | 平铺／孔洞树 | [组合流程](https://github.com/BigSaltyMan/moonclip/blob/v0.4.0/docs/composition.md) |
+| Minkowski Sum | 支持 | 支持 | 平铺／孔洞树 | [图案扫掠](https://github.com/BigSaltyMan/moonclip/blob/v0.4.0/docs/minkowski.md) |
+| 树单点／批量定位 | 支持 | 支持 | 定位状态与命中节点 | [树点定位](https://github.com/BigSaltyMan/moonclip/blob/v0.4.0/docs/polytree-query.md) |
 
-整数平铺 `minkowski_sum` 已在 0.1.0 提供；表中小数、树及其他增量的发布边界见[源码升级说明](https://github.com/BigSaltyMan/moonclip/blob/c9ccdb9bff41c26119a924f6fea7dea5e0bed01d/docs/upgrade-incremental.md)。详细接口以[生成接口](https://github.com/BigSaltyMan/moonclip/blob/c9ccdb9bff41c26119a924f6fea7dea5e0bed01d/pkg.generated.mbti)为准，[CHANGELOG](https://github.com/BigSaltyMan/moonclip/blob/c9ccdb9bff41c26119a924f6fea7dea5e0bed01d/CHANGELOG.md)按版本记录变化。
+整数平铺 `minkowski_sum` 已在 0.1.0 提供；表中小数、树及其他增量的发布边界见[源码升级说明](https://github.com/BigSaltyMan/moonclip/blob/v0.4.0/docs/upgrade-incremental.md)。详细接口以[生成接口](https://github.com/BigSaltyMan/moonclip/blob/v0.4.0/pkg.generated.mbti)为准，[CHANGELOG](https://github.com/BigSaltyMan/moonclip/blob/v0.4.0/CHANGELOG.md)按版本记录变化。
 
 ## 从源码开始使用
 
-使用[固定工具链](https://github.com/BigSaltyMan/moonclip/blob/c9ccdb9bff41c26119a924f6fea7dea5e0bed01d/docs/toolchain.md)，Windows 的 shell 脚本通过 Git Bash 执行：
+使用[固定工具链](https://github.com/BigSaltyMan/moonclip/blob/v0.4.0/docs/toolchain.md)，Windows 的 shell 脚本通过 Git Bash 执行：
 
 ```bash
 git clone https://github.com/BigSaltyMan/moonclip.git
@@ -38,9 +49,9 @@ cd moonclip
 moon run --target native cmd/example
 ```
 
-[`cmd/example/main.mbt`](https://github.com/BigSaltyMan/moonclip/blob/c9ccdb9bff41c26119a924f6fea7dea5e0bed01d/cmd/example/main.mbt) 包含完整轮廓、孔洞、复制隔离、错误和查询断言，是源码 API 的使用起点。需要迁移现有调用时，先阅读[增量升级说明](https://github.com/BigSaltyMan/moonclip/blob/c9ccdb9bff41c26119a924f6fea7dea5e0bed01d/docs/upgrade-incremental.md)，再按任务进入专题文档。
+[`cmd/example/main.mbt`](https://github.com/BigSaltyMan/moonclip/blob/v0.4.0/cmd/example/main.mbt) 包含完整轮廓、孔洞、复制隔离、错误和查询断言，是源码 API 的使用起点。需要迁移现有调用时，先阅读[增量升级说明](https://github.com/BigSaltyMan/moonclip/blob/v0.4.0/docs/upgrade-incremental.md)，再按任务进入专题文档。
 
-Point64 保存 Int64，几何计算接受每轴 ±1,000,000,000；PointD 使用 Precision 0—6（默认 3）量化到同一整数网格，原单位范围随精度缩小。几何输入的量化合并可能报错，查询点量化重合则允许。计算返回 `Result`，失败不修改输入或发布部分结果；合法坐标和输入数量也可能因内部累计预算而被拒绝。数值与所有权契约见[支持范围](https://github.com/BigSaltyMan/moonclip/blob/c9ccdb9bff41c26119a924f6fea7dea5e0bed01d/docs/scope.md)、[数值路线](https://github.com/BigSaltyMan/moonclip/blob/c9ccdb9bff41c26119a924f6fea7dea5e0bed01d/docs/numerics.md)和[小数适配](https://github.com/BigSaltyMan/moonclip/blob/c9ccdb9bff41c26119a924f6fea7dea5e0bed01d/docs/decimal.md)。
+Point64 保存 Int64，几何计算接受每轴 ±1,000,000,000；PointD 使用 Precision 0—6（默认 3）量化到同一整数网格，原单位范围随精度缩小。几何输入的量化合并可能报错，查询点量化重合则允许。计算返回 `Result`，失败不修改输入或发布部分结果；合法坐标和输入数量也可能因内部累计预算而被拒绝。数值与所有权契约见[支持范围](https://github.com/BigSaltyMan/moonclip/blob/v0.4.0/docs/scope.md)、[数值路线](https://github.com/BigSaltyMan/moonclip/blob/v0.4.0/docs/numerics.md)和[小数适配](https://github.com/BigSaltyMan/moonclip/blob/v0.4.0/docs/decimal.md)。
 
 ## 浏览器演示
 
@@ -51,11 +62,11 @@ npm run dev
 
 服务启动后打开 **http://127.0.0.1:4173/**。Boolean、Offset、单路线描边、批量描边、闭合窗口裁剪及 Minkowski 六类区域树均支持整数／小数、层级查看、节点高亮和单点／批量定位。开放窗口裁剪返回开放片段；开放片段和平铺结果不支持树查询。
 
-小数定位使用本次建树 Precision，靠近边界的点可能量化到边界；页面标记仍显示原始输入坐标。JSON 保存真实请求和结果：平铺区域 v1、孔洞树 v2、开放片段 v3；SVG 按区域或开放线条导出。启动、操作及协议见[演示说明](https://github.com/BigSaltyMan/moonclip/blob/c9ccdb9bff41c26119a924f6fea7dea5e0bed01d/docs/demo.md)，历史下载重放与窄屏观察见[浏览器验收](https://github.com/BigSaltyMan/moonclip/blob/c9ccdb9bff41c26119a924f6fea7dea5e0bed01d/docs/demo-acceptance.md)。
+小数定位使用本次建树 Precision，靠近边界的点可能量化到边界；页面标记仍显示原始输入坐标。JSON 保存真实请求和结果：平铺区域 v1、孔洞树 v2、开放片段 v3；SVG 按区域或开放线条导出。启动、操作及协议见[演示说明](https://github.com/BigSaltyMan/moonclip/blob/v0.4.0/docs/demo.md)，历史下载重放与窄屏观察见[浏览器验收](https://github.com/BigSaltyMan/moonclip/blob/c9ccdb9bff41c26119a924f6fea7dea5e0bed01d/docs/demo-acceptance.md)。
 
 ## 验证证据与检查入口
 
-[增量验收索引](https://github.com/BigSaltyMan/moonclip/blob/c9ccdb9bff41c26119a924f6fea7dea5e0bed01d/docs/acceptance-incremental.md)区分历史完整回归、各次定向检查、浏览器操作和发布证据。Commit 26 的历史完整回归为 native **2370/2370**、JS **2370/2370**；当前完整入口的 **2406** 是配置期望数，未据此宣称当前源码已全量通过。参考目录为 **1416 个案例、2308 项能力检查**，不代表所有新增接口都有逐项上游对照。
+完整回归归属 `339947be1cb0ac87ab3a16b9658093806d0a4736`：Windows／Linux 的 native、JS 分别 **2427/2427**，conformance 工具 294 项、桥接 31/31，见[完整验收](https://github.com/BigSaltyMan/moonclip/blob/339947be1cb0ac87ab3a16b9658093806d0a4736/docs/full-acceptance.md)和[该 SHA CI](https://github.com/BigSaltyMan/moonclip/actions/runs/40313466815)。本版本候选仅另做版本、实际包内容和外部消费者检查，不能写成候选 SHA 重新全量通过。历史定向及浏览器证据保留各自提交归属，参考目录 **1416 个案例、2308 项能力检查**不代表新增八接口已有逐项上游对照。
 
 普通 CI 按 `CHECK_SCOPE` 选择文档、核心、演示或包检查范围；发布源码、状态文档和文档修正版候选的证据按各自提交与 scope 记录，package 或 docs 成功均不表示完整回归通过。完整检查入口仍保留，需显式选择；实际执行范围见[工作流](https://github.com/BigSaltyMan/moonclip/blob/main/.github/workflows/ci.yml)与[检查脚本](https://github.com/BigSaltyMan/moonclip/blob/main/scripts/check.sh)。文档检查只验证指定材料的本地链接目标存在和差异空白，不构建或执行几何：
 
@@ -67,4 +78,4 @@ bash scripts/check.sh --scope docs
 
 ## 来源与许可
 
-固定参考 **Clipper2 2.0.1 / `Clipper2_2.0.1` / `21ebba05db8894f0c7217ad35ea518080f324946`**，采用 BSL-1.0。C# 是主要引擎阅读与移植参考；固定 C++ 适配器用于生成、复核测试数据，运行库不依赖它。普通 CI 不下载或构建 C++ 参考。移植范围、自有适配和上游关系见[来源说明](https://github.com/BigSaltyMan/moonclip/blob/c9ccdb9bff41c26119a924f6fea7dea5e0bed01d/docs/upstream.md)、[相关工作](https://github.com/BigSaltyMan/moonclip/blob/c9ccdb9bff41c26119a924f6fea7dea5e0bed01d/docs/related-work.md)及[许可证](https://github.com/BigSaltyMan/moonclip/blob/c9ccdb9bff41c26119a924f6fea7dea5e0bed01d/LICENSE)。
+固定参考 **Clipper2 2.0.1 / `Clipper2_2.0.1` / `21ebba05db8894f0c7217ad35ea518080f324946`**，采用 BSL-1.0。C# 是主要引擎阅读与移植参考；固定 C++ 适配器用于生成、复核测试数据，运行库不依赖它。普通 CI 不下载或构建 C++ 参考。移植范围、自有适配和上游关系见[来源说明](https://github.com/BigSaltyMan/moonclip/blob/v0.4.0/docs/upstream.md)、[相关工作](https://github.com/BigSaltyMan/moonclip/blob/v0.4.0/docs/related-work.md)及[许可证](https://github.com/BigSaltyMan/moonclip/blob/v0.4.0/LICENSE)。

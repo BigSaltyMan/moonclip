@@ -1293,7 +1293,7 @@ fn decimal_line_clip_execute(
 }
 
 ///|
-/// Unreleased: intersect open decimal routes with a closed region on one grid.
+/// Since 0.4.0: intersect open decimal routes with a closed region on one grid.
 /// Only clip contours require closed validity; both operands share collision checks.
 /// Exact integer events include region boundaries and round half away from zero.
 pub fn intersect_polylines_d(
@@ -1310,7 +1310,7 @@ pub fn intersect_polylines_d(
 }
 
 ///|
-/// Unreleased: subtract a closed filled region from open decimal routes on one grid.
+/// Since 0.4.0: subtract a closed filled region from open decimal routes on one grid.
 /// Both operands share quantization; only clip contours require closed validity.
 /// Removes interior and boundary-overlap intervals; cut endpoints may lie on boundaries.
 pub fn difference_polylines_d(
@@ -1398,7 +1398,7 @@ fn decimal_stroke_closed_execute(
 }
 
 ///|
-/// Unreleased: widen an implicitly closed decimal centerline with joins, no caps.
+/// Since 0.4.0: widen an implicitly closed decimal centerline with joins, no caps.
 /// Quantization skips filled-region validity; width and ArcTolerance use original units.
 /// Integer periodic generation and output decoding share the same call budget.
 pub fn stroke_closed_polyline_d(
@@ -1489,7 +1489,7 @@ fn decimal_stroke_closed_tree_execute(
 }
 
 ///|
-/// Unreleased: closed-centerline coverage hierarchy on the shared decimal grid.
+/// Since 0.4.0: closed-centerline coverage hierarchy on the shared decimal grid.
 /// Integer tree construction and decimal conversion run inside final scan cleanup.
 /// Query methods use this tree's original Precision; no caps or filled-input checks.
 pub fn stroke_closed_tree_d(

@@ -7,6 +7,7 @@ import json
 import os
 import platform
 from pathlib import Path, PurePosixPath
+from urllib.parse import unquote, urlsplit
 import re
 import shutil
 import subprocess
@@ -16,7 +17,7 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 MODULE = "BigSaltyMan/moonclip"
-VERSION = "0.3.2"
+VERSION = "0.4.0"
 EXPECTED = {
     "name": MODULE, "version": VERSION, "readme": "README.md", "license": "BSL-1.0",
     "repository": "https://github.com/BigSaltyMan/moonclip",
@@ -37,6 +38,8 @@ INCREMENTAL_APIS = {
         "stroke_polylines_tree_d", "PolyTreeD::locate_many", "PolyTree64::locate",
     ),
     "minkowski_tree": ("minkowski_sum_tree_d",),
+    "lineclip": ("intersect_polylines", "intersect_polylines_d", "difference_polylines", "difference_polylines_d"),
+    "closed_stroke": ("stroke_closed_polyline", "stroke_closed_polyline_d", "stroke_closed_tree", "stroke_closed_tree_d", "PolyTreeD::locate"),
 }
 
 
@@ -75,7 +78,7 @@ def consumer_tree_apis(output):
 
 
 def consumer_incremental_apis(output):
-    """Three completed flows, each backed by explicit consumer calls/assertions."""
+    """Completed flows, each backed by explicit consumer calls/assertions."""
     markers = [line for line in output.splitlines() if line.startswith("INCREMENTAL_API_OK")]
     expected = [f"INCREMENTAL_API_OK {flow}" for flow in INCREMENTAL_APIS]
     require(len(markers) == len(expected) and set(markers) == set(expected),
@@ -91,6 +94,7 @@ def run_consumer(target, consumer, report_dir):
     incremental = consumer_incremental_apis(output)
     return dict(status="success", marker=SUCCESS, tree_apis_checked=checked, rectclip_api_checked=True,
                 incremental_flows=incremental,
+                release_040_apis_checked=[api for flow in ("lineclip", "closed_stroke") for api in INCREMENTAL_APIS[flow] if "::" not in api],
                 incremental_apis_checked=[api for apis in INCREMENTAL_APIS.values() for api in apis],
                 log=f"consumer-{target}.log")
 
@@ -167,6 +171,11 @@ def audit(archive, expected):
         if not name.endswith(".md"):
             continue
         for target in re.findall(r'\]\(([^)]+)\)', data.decode()):
+            rendered_prefix = f"https://github.com/BigSaltyMan/moonclip/blob/v{VERSION}/"
+            if target.startswith(rendered_prefix):
+                member = unquote(urlsplit(target).path.split(f"/blob/v{VERSION}/", 1)[1])
+                require(member in payload, f"Missing target-version rendered link member: {name} -> {member}")
+                continue
             if "://" in target or target.startswith("#"):
                 continue
             target = target.split("#", 1)[0]
@@ -177,7 +186,7 @@ def audit(archive, expected):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--report", type=Path, default=Path("_build/release-0.3.2/report.json"))
+    parser.add_argument("--report", type=Path, default=Path("_build/release-0.4.0/report.json"))
     parser.add_argument("--publication-status", choices=(
         "unpublished-release-candidate", "unpublished-source-test-snapshot"),
         default="unpublished-release-candidate")

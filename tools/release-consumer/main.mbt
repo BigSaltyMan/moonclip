@@ -80,7 +80,7 @@ fn main raise {
     fail("Offset failed")
   }
   check_rect(expanded, rect(-2L, -2L, 24L, 24L))
-  // Both new Unreleased entries must be present in the audited ZIP itself.
+  // These existing tree entries must be present in the audited ZIP itself.
   let reverse_hole = Array::makei(hole.length(), fn(i) {
     hole[hole.length() - 1 - i]
   })
@@ -214,6 +214,8 @@ fn main raise {
   check_incremental_rectclip()
   check_incremental_batch_stroke_query(tree)
   check_incremental_minkowski_tree()
+  check_incremental_lineclip()
+  check_incremental_closed_stroke()
   println(
     "MoonClip candidate consumer OK: Boolean PolyTree Offset Stroke Decimal Simplify Minkowski errors",
   )
@@ -501,4 +503,97 @@ fn check_incremental_minkowski_tree() -> Unit raise {
   assert_true(hole.is_hole())
   assert_eq(hole.children().length(), 0)
   println("INCREMENTAL_API_OK minkowski_tree")
+}
+
+///|
+fn integer_path(points : Array[(Int64, Int64)]) -> @moonclip.Path64 {
+  points.map(fn(p) { @moonclip.Point64::new(p.0, p.1) })
+}
+
+///|
+fn check_incremental_lineclip() -> Unit raise {
+  let paths = [integer_path([(-2L, 5L), (2L, 5L), (5L, 5L), (12L, 5L)])]
+  let clip = [rect(0L, 0L, 10L, 10L), rect(3L, 3L, 4L, 4L)]
+  assert_eq(@moonclip.intersect_polylines(paths, clip).unwrap(), [
+    integer_path([(0L, 5L), (2L, 5L), (3L, 5L)]),
+    integer_path([(7L, 5L), (10L, 5L)]),
+  ])
+  assert_eq(@moonclip.difference_polylines(paths, clip).unwrap(), [
+    integer_path([(-2L, 5L), (0L, 5L)]),
+    integer_path([(3L, 5L), (5L, 5L), (7L, 5L)]),
+    integer_path([(10L, 5L), (12L, 5L)]),
+  ])
+  let routes = [decimal_path([(-0.2, 0.5), (0.2, 0.5), (0.5, 0.5), (1.2, 0.5)])]
+  let region = [decimal_rect(0.0, 1.0), decimal_rect(0.3, 0.7)]
+  let precision = @moonclip.Precision::new(2).unwrap()
+  assert_eq(
+    @moonclip.intersect_polylines_d(routes, region, precision~).unwrap(),
+    [
+      decimal_path([(0.0, 0.5), (0.2, 0.5), (0.3, 0.5)]),
+      decimal_path([(0.7, 0.5), (1.0, 0.5)]),
+    ],
+  )
+  assert_eq(
+    @moonclip.difference_polylines_d(routes, region, precision~).unwrap(),
+    [
+      decimal_path([(-0.2, 0.5), (0.0, 0.5)]),
+      decimal_path([(0.3, 0.5), (0.5, 0.5), (0.7, 0.5)]),
+      decimal_path([(1.0, 0.5), (1.2, 0.5)]),
+    ],
+  )
+  println("INCREMENTAL_API_OK lineclip")
+}
+
+///|
+fn check_incremental_closed_stroke() -> Unit raise {
+  let path = rect(0L, 0L, 10L, 10L)
+  let outer = rect(-1L, -1L, 12L, 12L)
+  let inner = rect(1L, 1L, 8L, 8L)
+  let hole = Array::makei(4, fn(i) { inner[3 - i] })
+  let flat = @moonclip.stroke_closed_polyline(path, 2.0).unwrap()
+  assert_eq(flat.length(), 2)
+  let index = if flat[0].contains(outer[0]) { 0 } else { 1 }
+  check_rect([flat[index]], outer)
+  check_rect([flat[1 - index]], hole)
+  let tree = @moonclip.stroke_closed_tree(path, 2.0).unwrap()
+  let roots = tree.roots()
+  assert_eq(roots.length(), 1)
+  check_rect([roots[0].contour()], outer)
+  assert_eq(roots[0].depth(), 1)
+  assert_eq(roots[0].is_hole(), false)
+  let children = roots[0].children()
+  assert_eq(children.length(), 1)
+  check_rect([children[0].contour()], hole)
+  assert_eq(children[0].depth(), 2)
+  assert_eq(children[0].is_hole(), true)
+  assert_eq(children[0].children().length(), 0)
+
+  let route = decimal_rect(0.0, 1.0)
+  let outside = decimal_rect(-0.1, 1.1)
+  let inside = decimal_path([(0.1, 0.1), (0.1, 0.9), (0.9, 0.9), (0.9, 0.1)])
+  let precision = @moonclip.Precision::new(2).unwrap()
+  let result = @moonclip.stroke_closed_polyline_d(route, 0.2, precision~).unwrap()
+  assert_eq(result.length(), 2)
+  let index = if result[0].contains(outside[0]) { 0 } else { 1 }
+  check_contour_d(result[index], outside)
+  check_contour_d(result[1 - index], inside)
+  let decimal_tree = @moonclip.stroke_closed_tree_d(route, 0.2, precision~).unwrap()
+  let roots = decimal_tree.roots()
+  assert_eq(roots.length(), 1)
+  check_contour_d(roots[0].contour(), outside)
+  assert_eq(roots[0].depth(), 1)
+  assert_eq(roots[0].is_hole(), false)
+  let holes = roots[0].children()
+  assert_eq(holes.length(), 1)
+  check_contour_d(holes[0].contour(), inside)
+  assert_eq(holes[0].depth(), 2)
+  assert_eq(holes[0].is_hole(), true)
+  assert_eq(holes[0].children().length(), 0)
+  guard decimal_tree.locate(@moonclip.PointD::new(0.5, 0.5)) is Ok(InHole(node)) else {
+    fail("Expected hole in the same closed decimal stroke tree")
+  }
+  check_contour_d(node.contour(), inside)
+  assert_eq(node.depth(), 2)
+  assert_eq(node.is_hole(), true)
+  println("INCREMENTAL_API_OK closed_stroke")
 }

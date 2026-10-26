@@ -166,7 +166,7 @@ fn stroke_closed_tree_execute(
 }
 
 ///|
-/// Unreleased: hierarchy of closed-centerline coverage, built during final cleanup.
+/// Since 0.4.0: hierarchy of closed-centerline coverage, built during final cleanup.
 /// Width is full width; there are joins but no caps. Roots and holes describe coverage.
 pub fn stroke_closed_tree(
   path : Path64,
@@ -181,7 +181,7 @@ pub fn stroke_closed_tree(
 }
 
 ///|
-/// Unreleased: widen one implicitly closed integer centerline, with no end caps.
+/// Since 0.4.0: widen one implicitly closed integer centerline, with no end caps.
 /// Width is full width; all vertices, including the seam, use the chosen join.
 /// Returns cleaned coverage, possibly with holes; does not fill the centerline interior.
 pub fn stroke_closed_polyline(

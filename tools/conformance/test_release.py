@@ -72,7 +72,7 @@ class ReleaseTreeMarkers(unittest.TestCase):
     def test_release_candidate_report_fields(self):
         source = dict(commit="f" * 40, worktree_dirty=True)
         report = release.snapshot_report(source)
-        self.assertEqual(report["metadata_version"], "0.3.2")
+        self.assertEqual(report["metadata_version"], "0.4.0")
         self.assertEqual(report["version"], report["metadata_version"])
         self.assertEqual(report["publication_status"], "unpublished-release-candidate")
         self.assertEqual(report["source"], source)
@@ -80,7 +80,7 @@ class ReleaseTreeMarkers(unittest.TestCase):
         self.assertEqual(set(report["platform"]), {"system", "machine"})
         snapshot = release.snapshot_report(source, "unpublished-source-test-snapshot")
         self.assertEqual(snapshot["publication_status"], "unpublished-source-test-snapshot")
-        self.assertEqual(snapshot["metadata_version"], "0.3.2")
+        self.assertEqual(snapshot["metadata_version"], "0.4.0")
 
     def test_native_result_cannot_replace_js_execution(self):
         for omitted in ("TREE_API_OK boolean_tree_d", "INCREMENTAL_API_OK batch_stroke_query"):
@@ -94,6 +94,12 @@ class ReleaseTreeMarkers(unittest.TestCase):
                 self.assertEqual(native["incremental_apis_checked"], [
                     "rect_clip_lines_d", "rect_clip_polygons_tree_d", "stroke_polylines_tree_d",
                     "PolyTreeD::locate_many", "PolyTree64::locate", "minkowski_sum_tree_d",
+                    "intersect_polylines", "intersect_polylines_d", "difference_polylines", "difference_polylines_d",
+                    "stroke_closed_polyline", "stroke_closed_polyline_d", "stroke_closed_tree", "stroke_closed_tree_d", "PolyTreeD::locate",
+                ])
+                self.assertEqual(native["release_040_apis_checked"], [
+                    "intersect_polylines", "intersect_polylines_d", "difference_polylines", "difference_polylines_d",
+                    "stroke_closed_polyline", "stroke_closed_polyline_d", "stroke_closed_tree", "stroke_closed_tree_d",
                 ])
                 self.assertEqual(native["log"], "consumer-native.log")
                 with self.assertRaises(ValueError):

@@ -1,10 +1,10 @@
-# 开放折线与闭合区域求交（Unreleased）
+# 开放折线与闭合区域求交（自 0.4.0）
 
-`intersect_polylines(paths, clip, fill_rule=EvenOdd, limits=)` 返回 `Result[Paths64, ClipError]`。该接口仅在开发源码中提供，版本元数据仍为 0.3.2；已发布 0.3.2 不包含它。受检示例见 [run_lineclip_example](../cmd/example/main.mbt)。
+`intersect_polylines(paths, clip, fill_rule=EvenOdd, limits=)` 返回 `Result[Paths64, ClipError]`。该接口自 0.4.0 提供。受检示例见 [run_lineclip_example](../cmd/example/main.mbt)。
 
-小数入口 `intersect_polylines_d(paths : PathsD, clip : PathsD, precision=, fill_rule=, limits=)` 返回 `Result[PathsD, ClipError]`，同为 Unreleased，Precision 默认 3、支持 0—6。两侧先共同量化到一个网格，只有 clip 做闭合有效性检查，再复用下述整数求交并按原精度解码。原始小数与网格几何的区别见[小数适配](decimal.md)。
+小数入口 `intersect_polylines_d(paths : PathsD, clip : PathsD, precision=, fill_rule=, limits=)` 返回 `Result[PathsD, ClipError]`，同样自 0.4.0 提供，Precision 默认 3、支持 0—6。两侧先共同量化到一个网格，只有 clip 做闭合有效性检查，再复用下述整数求交并按原精度解码。原始小数与网格几何的区别见[小数适配](decimal.md)。
 
-整数 `difference_polylines(paths, clip, fill_rule=EvenOdd, limits=)` 返回 `Result[Paths64, ClipError]`，小数 `difference_polylines_d(paths, clip, precision=, fill_rule=, limits=)` 返回 `Result[PathsD, ClipError]`，均表示开放路线减去闭合填充区域。小数 Precision 默认 3、支持 0—6。求交与求差这四个入口均为 Unreleased，仅在开发源码中提供，未包含在已发布 0.3.2 中。
+整数 `difference_polylines(paths, clip, fill_rule=EvenOdd, limits=)` 返回 `Result[Paths64, ClipError]`，小数 `difference_polylines_d(paths, clip, precision=, fill_rule=, limits=)` 返回 `Result[PathsD, ClipError]`，均表示开放路线减去闭合填充区域。小数 Precision 默认 3、支持 0—6。求交与求差这四个入口均自 0.4.0 提供。
 
 | 操作 | 保留区间 |
 | --- | --- |
@@ -62,6 +62,8 @@ Int64 边访问工作包含有界叉积和普通分支；BigInt 临时值单独�
 
 没有空间索引或扫描线级性能承诺。设路线非零段数为 S、规范区域边数为 B，每段至多 2B+2 个候选事件。有序插入排序最坏 O(B²)，逐区间扫描全部边也为 O(B²)，路线阶段总计最坏 O(S(B+1)²)，另加区域 Boolean 的成本。复杂输入可因累计事件、比较和分类触及默认预算，即使原始数量合法也可能失败。
 
+以下定向验证文字记录各入口最初的 Unreleased 开发阶段，配置数和“未执行全量”只指当笔；后续完整验收归属 339947be，见 full-acceptance.md，不转记为 0.4.0 候选重跑。
+
 ## 整数首笔验证范围
 
 仅三个 `line clip:` 测试块：带孔完整有序片段与隔离；边界、抵消及手工有理交点；组合预检、累计账本耗尽和重试。native 与 JS 分别记录，不新增上游参考或案例矩阵。`bash scripts/check.sh --scope lineclip` 包含格式／接口、两目标静态检查、各三项定向测试和受检 CLI 示例。完整入口配置期望增加到 2409，不能据此宣称本提交已跑全量。具体 SHA 与 CI 归属见提交后交付记录。
@@ -86,7 +88,7 @@ Int64 边访问工作包含有界叉积和普通分支；BigInt 临时值单独�
 
 预算注入、量化、clip 闭合检查、整数预检／求差及解码使用同一账本，限制和历史消费保持权威，不重置或退款。默认求交没有新增逻辑容器或费用；错误仍用既有 Decimal／LineClip 阶段及组合位置，失败无部分结果、输入不变。三个 `decimal line difference:` 测试块覆盖完整带孔片段及双向隔离（附旧小数求交完整回归）、手工斜线舍入及量化位置、共享解码预算耗尽及独立重试。`bash scripts/check.sh --scope lineclip-difference-decimal` 仅执行两目标静态检查、各三项定向测试及 CLI 示例。完整入口 2418 只为配置期望，本笔未执行全量，也没有新增参考矩阵或上游移植。
 
-## 区域裁线交互演示（Unreleased）
+## 区域裁线交互演示（自 0.4.0）
 
 在源码演示的“路线实验 → 区域裁线”编辑开放路线集合与闭合裁剪区域，选择整数／小数、Precision 和 EvenOdd／NonZero，点击计算。独立 line-operation 控件支持 Intersection（保留区域内）／Difference（擦除区域），不复用 Boolean 的四操作控件，不提供树、查询、简化、连接或端点参数。两个案例分别为整数带孔矩形和相同构型的小数版本，案例只保存输入，不保存输出。
 
@@ -94,10 +96,10 @@ Int64 边访问工作包含有界叉积和普通分支；BigInt 临时值单独�
 
 输入或参数变化立即清除有效结果并禁用导出，失败没有部分结果；迟到响应仍受编号保护。核心的组合路径位置保持路线在前、区域在后，桥接整数／结构解析也采用该偏移。导出复用通用开放 SVG（只含实际片段）和 v3 JSON（含完整 paths、clip、参数和结果）；重放将 request 按原 scene 重新送入核心，不读取保存结果。旧窗口裁剪 v3 和区域 v1／v2 分派不变。
 
-本笔扩展既有三个 `demo rectclip:` 桥接／导出检查，不新增测试块、库测试或 scope；普通 CI 使用 `demo-rectclip`。浏览器实际下载、重放及窄屏观察见[演示验收](demo-acceptance.md)。能力仍为 Unreleased，已发布 0.3.2 不包含它们。
+本笔扩展既有三个 `demo rectclip:` 桥接／导出检查，不新增测试块、库测试或 scope；普通 CI 使用 `demo-rectclip`。浏览器实际下载、重放及窄屏观察见[演示验收](demo-acceptance.md)。这些演示能力自 0.4.0 提供；检查与浏览器记录归属原开发阶段。
 
-## 区域擦除操作接入（Unreleased）
+## 区域擦除操作接入（自 0.4.0）
 
 请求使用 params.operation，缺省为 Intersection；存在时必须是 Intersection 或 Difference 字符串，Union、Xor、未知字符串及错误类型均拒绝，不回退求交。两个原案例仍省略操作字段，加载时默认求交，不增加案例。操作切换保留两侧点数组、模式、Precision 和填充规则，清除旧结果、选择及错误并禁用导出；迟到响应仍受请求编号保护。
 
-求差沿用开放线条显示及 v3 JSON／开放 SVG，不作为多边形差集绘制。JSON 保存真实请求的 params.operation，重放请求再次调用核心；旧请求没有操作字段时仍求交。SVG 只含实际结果，不含输入区域。原有三个 demo rectclip: 检查扩展完整整数／小数求差、一个小数 v3 重放及非法操作拒绝；没有新增测试块、scope 或库测试，实际浏览器记录见[演示验收](demo-acceptance.md)。四个库入口仍为 Unreleased，已发布 0.3.2 不包含。
+求差沿用开放线条显示及 v3 JSON／开放 SVG，不作为多边形差集绘制。JSON 保存真实请求的 params.operation，重放请求再次调用核心；旧请求没有操作字段时仍求交。SVG 只含实际结果，不含输入区域。原有三个 demo rectclip: 检查扩展完整整数／小数求差、一个小数 v3 重放及非法操作拒绝；没有新增测试块、scope 或库测试，实际浏览器记录见[演示验收](demo-acceptance.md)。四个库入口自 0.4.0 提供，原验收仍按当时提交归属。

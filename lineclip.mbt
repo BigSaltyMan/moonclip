@@ -468,7 +468,7 @@ fn line_clip_execute(
 }
 
 ///|
-/// Unreleased: intersect independent open integer routes with a closed filled region.
+/// Since 0.4.0: intersect independent open integer routes with a closed filled region.
 /// Includes final-region boundaries; preserves route order and ordinary input vertices.
 /// Exact rational events round half away from zero, unlike rect_clip_lines truncation.
 pub fn intersect_polylines(
@@ -484,7 +484,7 @@ pub fn intersect_polylines(
 }
 
 ///|
-/// Unreleased: subtract a closed filled region from independent open integer routes.
+/// Since 0.4.0: subtract a closed filled region from independent open integer routes.
 /// Keeps exterior intervals, including holes; removes interior and boundary overlaps.
 /// Cut endpoints may lie on the boundary. Preserves route order and ordinary vertices.
 pub fn difference_polylines(

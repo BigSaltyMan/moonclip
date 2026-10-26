@@ -1,8 +1,8 @@
 # 小数坐标与统一十进制网格
 
-## 闭合中心线描边（Unreleased）
+## 闭合中心线描边（自 0.4.0）
 
-`stroke_closed_polyline_d(path, width, precision=, options=, limits=)` 使用原单位完整宽度，Precision 默认 3、支持 0—6。首尾隐式相连，不接受端点样式，接缝使用 JoinType；它不同于已填充区域偏移或带端点开放描边。与整数 `stroke_closed_polyline` 均仅开发源码提供，已发布 0.3.2 不包含；现有平铺覆盖区域及 `stroke_closed_tree_d` 孔洞树；网页仅接闭合平铺，树、查询及批量闭合未接入。
+`stroke_closed_polyline_d(path, width, precision=, options=, limits=)` 使用原单位完整宽度，Precision 默认 3、支持 0—6。首尾隐式相连，不接受端点样式，接缝使用 JoinType；它不同于已填充区域偏移或带端点开放描边。与整数 `stroke_closed_polyline` 均自 0.4.0 提供；现有平铺覆盖区域及 `stroke_closed_tree_d` 孔洞树；网页已接平铺、树及单点／批量查询，尚无批量闭合或闭合简化。
 
 原单位参数先检查，再预检原始数量及坐标，中心线按 `closed=false` 量化；这仅跳过面域非退化检查，不改变最终闭合生成。普通共线、自交或面积为零不因此拒绝；不同原始点合并仍为碰撞错误，相同坐标重复允许，显式重复首点由整数准备处理。整理后少于三个顶点沿用已计费空结果。宽度和 ArcTolerance 乘共同倍率，MiterLimit 不缩放。
 
@@ -10,9 +10,9 @@
 
 独立小数适配不改通用 `decimal_execute` 或整数执行器。调用侧操作数两个数组和一个槽位先收取 3 逻辑节点、1 工作；预检、量化、闭合准备、反向副本、生成、清理、提取及解码继续共用一个账本。注入限制及历史消费保持权威，整数预检及费用不跳过；整数成功后仍可能在 DecimalOutput 失败。失败没有部分结果、输入不变、重试独立，阶段和错误映射沿用已有契约，计费细节见[组合流程](composition.md)。
 
-## 开放折线与闭合区域求交（Unreleased）
+## 开放折线与闭合区域求交（自 0.4.0）
 
-`intersect_polylines_d(paths, clip, precision=, fill_rule=, limits=)` 与 `difference_polylines_d(paths, clip, precision=, fill_rule=, limits=)` 默认 Precision=3，支持 0—6；EvenOdd 默认，NonZero 可选。求交与求差各有整数／小数入口，四个接口均为 Unreleased，不在注册表 0.3.2 中。源码网页已提供两种模式的求交，求差尚未接入。完整边界及片段契约见[开放折线区域裁剪](lineclip.md)。
+`intersect_polylines_d(paths, clip, precision=, fill_rule=, limits=)` 与 `difference_polylines_d(paths, clip, precision=, fill_rule=, limits=)` 默认 Precision=3，支持 0—6；EvenOdd 默认，NonZero 可选。求交与求差各有整数／小数入口，四个接口均自 0.4.0 提供，网页已提供整数／小数求交与求差。完整边界及片段契约见[开放折线区域裁剪](lineclip.md)。
 
 小数求差只为现有 `decimal_line_clip_execute` 增加私有模式透传，显式使用 KeepOutside；旧小数求交继续默认 KeepInside，不增加逻辑容器或原费用。不调用公开整数求差另建账，也不改整数事件、分类、舍入或连接。求差保留最终区域外部与孔洞中的非零区间，剔除内部及正长度边界重合区间；输出切分端点仍可在边界上，不能称所有输出点严格位于区域外。
 
@@ -229,6 +229,6 @@ Precision::new(digits) 返回 Result，支持 0—6，默认 3；digits() 读取
 现有全部小数树在 decimal_tree_output 中保存私有精度，不增加元数据容器或改变原转换费用、源树复制隔离；查询只临时恢复一次整数视图，复用精确定位并按原索引映射回来，批量共享恢复与求值预算。恢复范围推导、严格回解码和计费见[树点定位](polytree-query.md)。结果是网格位置，无浮点 epsilon 或实数无限精度承诺。Commit 50 当时的网页仍只支持整数查询；当前六类小数区域树均已接入，见[演示说明](demo.md)。
 
 
-## 闭合中心线树适配（Unreleased）
+## 闭合中心线树适配（自 0.4.0）
 
-`stroke_closed_tree_d` 采用独立适配，保留原单位参数检查、原始包装数组及槽位费用，以 closed=false 量化中心线后缩放宽度及 ArcTolerance，MiterLimit 不变，不调用 decimal_closed。在最终清理回调内先构建整数树，再调用既有 decimal_tree_output；转换失败也走扫描清理。空分支直接 tree_empty 后转换，不先分配平铺空数组。全部阶段共享注入账本及历史消费，失败不退款、不发布部分树。层级复制整数拓扑，保存原 Precision，可用已有单点／批量定位；不新增树存储或浮点包含判断。整数／小数树入口均为 Unreleased，0.3.2 不包含，网页仍只有闭合平铺。
+`stroke_closed_tree_d` 采用独立适配，保留原单位参数检查、原始包装数组及槽位费用，以 closed=false 量化中心线后缩放宽度及 ArcTolerance，MiterLimit 不变，不调用 decimal_closed。在最终清理回调内先构建整数树，再调用既有 decimal_tree_output；转换失败也走扫描清理。空分支直接 tree_empty 后转换，不先分配平铺空数组。全部阶段共享注入账本及历史消费，失败不退款、不发布部分树。层级复制整数拓扑，保存原 Precision，可用已有单点／批量定位；不新增树存储或浮点包含判断。整数／小数树入口均自 0.4.0 提供，网页支持闭合平铺、树及查询。

@@ -1,10 +1,10 @@
 # Composition and cumulative resource protection
 
-除另标 Unreleased 的新增入口外，下述增量能力自 **0.3.0** 提供，见[发布记录](release-0.3.0.md)。0.3.1 只修正文档表述，不改变运行库行为或接口；带 Commit 编号的验收记录按原阶段解释。
+闭合中心线平铺／树及其演示自 **0.4.0** 提供，其余下述增量能力自 **0.3.0** 提供，见[发布记录](release-0.3.0.md)。0.3.1 只修正文档表述，不改变运行库行为或接口；带 Commit 编号的验收记录按原阶段解释。
 
-## Decimal closed-centerline stroke (Unreleased)
+## Decimal closed-centerline stroke (since 0.4.0)
 
-`stroke_closed_polyline_d(path, width, precision=, options=, limits=)` adds the decimal counterpart; Precision defaults to 3 and supports 0–6. Both closed-centerline APIs are Unreleased and absent from published 0.3.2. Flat and tree coverage APIs are available; there is no batch-closed adapter. The source demo now supports the integer/decimal closed mode described below. Filled-region offset and capped open stroke retain their distinct input meanings described below.
+`stroke_closed_polyline_d(path, width, precision=, options=, limits=)` adds the decimal counterpart; Precision defaults to 3 and supports 0–6. Both closed-centerline APIs are provided since 0.4.0. Flat and tree coverage APIs are available; there is no batch-closed adapter. The source demo now supports the integer/decimal closed mode described below. Filled-region offset and capped open stroke retain their distinct input meanings described below.
 
 The independent `decimal_stroke_closed_execute` validates original width and options, performs decimal precheck, quantizes the centerline with closed=false, scales full width and ArcTolerance, calls the private integer executor, then decodes with the original Precision. MiterLimit is dimensionless and unchanged. closed=false only disables filled-contour nondegeneracy checks: it does not make generation open. The integer preparation removes consecutive and closing repeats and performs periodic traversal. Ordinary collinear, self-intersecting and signed-area-zero centerlines are not rejected by filled-region validity rules. Identical original coordinates may repeat; distinct positions colliding on the grid fail with their original indices.
 
@@ -14,9 +14,9 @@ The borrowed-operand wrappers (one path array/slot and one empty array) are char
 
 Only three `decimal closed stroke:` test blocks cover full Miter contours (including default Precision) and isolation; full Bevel seam, repeated start, collision and collinear acceptance; sub-grid validation and deterministic shared decode exhaustion/retry. `bash scripts/check.sh --scope stroke-closed-decimal` runs static checks and three focused tests on native and JS plus the CLI example. Full-entry expectation 2424 is configuration only, with no full-suite, old filter, reference, performance, browser or package run.
 
-## Integer closed-centerline stroke (Unreleased)
+## Integer closed-centerline stroke (since 0.4.0)
 
-`stroke_closed_polyline(path, width, options=, limits=)` returns `Result[Paths64, ClipError]`. Width is full width: each side is width/2. The last vertex implicitly connects to the first; repeating the first vertex is unnecessary. There is no CapType parameter. Miter, Bevel, Square and Round, MiterLimit and ArcTolerance reuse OffsetOptions. Reversing the centerline does not change coverage. This source-only entry is not in published 0.3.2; its decimal counterpart is described above. Tree wrappers are described below; batch-closed wrappers are not provided; the source demo supports flat integer/decimal closed strokes.
+`stroke_closed_polyline(path, width, options=, limits=)` returns `Result[Paths64, ClipError]`. Width is full width: each side is width/2. The last vertex implicitly connects to the first; repeating the first vertex is unnecessary. There is no CapType parameter. Miter, Bevel, Square and Round, MiterLimit and ArcTolerance reuse OffsetOptions. Reversing the centerline does not change coverage. This entry is provided since 0.4.0; its decimal counterpart is described above. Tree wrappers are described below; batch-closed wrappers are not provided; the source demo supports flat integer/decimal closed strokes.
 
 | Entry | Input meaning |
 | --- | --- |
@@ -138,7 +138,7 @@ Closed requests dispatch before generic open simplification/tree processing and 
 Flat JSON remains v1 and preserves route_mode, original centerline, full width, Precision and styles. Replay recomputes from the request; older missing-field requests stay Open. SVG contains only the actual combined coverage with NonZero fill and hole winding, without the centerline or selection. Two new frame cases contain only integer/decimal inputs. The existing three demo stroke batch: checks are extended without new test blocks or scope; local and CI use demo-stroke-batch with one build each. Actual downloads, replay and narrow-screen observations are recorded in [demo acceptance](demo-acceptance.md). This demo and both closed library entries remain Unreleased and absent from published 0.3.2.
 
 
-## Closed-centerline trees (Unreleased)
+## Closed-centerline trees (since 0.4.0)
 
 `stroke_closed_tree(path, width, options=, limits=)` and `stroke_closed_tree_d(path, width, precision=, options=, limits=)` return PolyTree64 / PolyTreeD. They share full width, implicit closure and joins without caps with the flat entries. Reversing the centerline preserves coverage; roots, holes and islands describe final cleaned coverage, not a filled centerline interior. Width can remove an inner hole, and arbitrary centerlines need not produce one root or one hole.
 
@@ -146,12 +146,12 @@ The private stroke_closed_compute retains preparation, reverse traversal, period
 
 The flat empty shortcut still costs exactly one result array and zero extra work. Tree empties call tree_empty directly (4 logical nodes, 1 work), without allocating a flat result; empty decimal conversion retains its existing 4-node / 1-work fee. Spent preparation remains charged. Quantization, preparation, generation, cleanup, integer tree and decimal output share authoritative limits and history without reset or refund. Internal generated rings do not count as raw input again; errors retain actual StrokeParameters, StrokeGenerate, StrokeCleanup, PolyTree or DecimalOutput stages.
 
-Root depth is 1, holes depth 2, with existing winding and alternating hierarchy. Accessors copy arrays/contours; to_paths() loses explicit parentage. Decimal hierarchy copies integer topology and retains original Precision, so both trees support existing locate/locate_many. Failure returns Err without partial output or input mutation. The checked CLI example reads complete decimal outer/hole contours. Only three closed stroke tree: tests are added, native and JS each selecting 3. The full configuration expectation is 2427; no full-suite/reference/performance evidence is claimed.
+Root depth is 1, holes depth 2, with existing winding and alternating hierarchy. Accessors copy arrays/contours; to_paths() loses explicit parentage. Decimal hierarchy copies integer topology and retains original Precision, so both trees support existing locate/locate_many. Failure returns Err without partial output or input mutation. The checked CLI example reads complete decimal outer/hole contours. The original feature commit added three closed stroke tree: tests, native and JS each selecting 3; its 2427 full-suite configuration was not an executed full result. Later full regression belongs to baseline 339947be (see full-acceptance.md), while candidate packaging does not rerun it or reference/performance measurements.
 
-Both tree entries remain Unreleased and absent from 0.3.2. The webpage now supports integer/decimal closed flat coverage, trees and tree queries; simplification and batch-closed routes remain unavailable.
+Both tree entries are provided since 0.4.0. The webpage now supports integer/decimal closed flat coverage, trees and tree queries; simplification and batch-closed routes remain unavailable.
 
 
-## Closed-centerline tree demo (Unreleased)
+## Closed-centerline tree demo (since 0.4.0)
 
 Closed stroke requests accept paths (default) or tree. Each tree branch calls its integer/decimal public builder once, then uses encode_integer_tree_result / encode_decimal_tree_result to query and encode that same tree. Paths and hierarchy share one encoding; hit matching uses exact complete contours, depth and hole flags. Flat queries remain invalid, unknown outputs fail, caps and enabled simplification remain rejected. Decimal queries use retained tree Precision without another query precision.
 
