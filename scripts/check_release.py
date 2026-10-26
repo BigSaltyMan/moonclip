@@ -95,9 +95,9 @@ def run_consumer(target, consumer, report_dir):
                 log=f"consumer-{target}.log")
 
 
-def snapshot_report(source):
+def snapshot_report(source, publication_status="unpublished-release-candidate"):
     return dict(schema_version=1, status="running", module=MODULE, version=VERSION,
-                metadata_version=VERSION, publication_status="unpublished-release-candidate",
+                metadata_version=VERSION, publication_status=publication_status,
                 recorded_at_utc=datetime.now(timezone.utc).isoformat(),
                 platform=dict(system=platform.system(), machine=platform.machine()),
                 source=source, consumers={}, commands=[])
@@ -178,11 +178,15 @@ def audit(archive, expected):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--report", type=Path, default=Path("_build/release-0.3.2/report.json"))
+    parser.add_argument("--publication-status", choices=(
+        "unpublished-release-candidate", "unpublished-source-test-snapshot"),
+        default="unpublished-release-candidate")
     args = parser.parse_args()
     report_path = (ROOT / args.report).resolve()
     report_path.parent.mkdir(parents=True, exist_ok=True)
     report = snapshot_report(dict(commit=git("rev-parse", "HEAD"),
-                                  worktree_dirty=bool(git("status", "--porcelain", "--untracked-files=normal"))))
+                                  worktree_dirty=bool(git("status", "--porcelain", "--untracked-files=normal"))),
+                             publication_status=args.publication_status)
     try:
         version = command(["moon", "version", "--all"])
         require(all(v in version for v in TOOLCHAIN), "Use the fixed MoonBit toolchain")
@@ -218,7 +222,7 @@ def main():
             report["archive"] = dict(path=str(archive), sha256=sha(archive.read_bytes()),
                                      size=archive.stat().st_size, file_count=len(files), files=files,
                                      payload_sha256=sha(json.dumps(files, sort_keys=True).encode()))
-            print(f"Unpublished release candidate: {MODULE}; metadata_version={VERSION}; files={len(files)}; bytes={archive.stat().st_size}; SHA256={report['archive']['sha256']}", flush=True)
+            print(f"Package audit: {MODULE}; publication_status={report['publication_status']}; metadata_version={VERSION}; files={len(files)}; bytes={archive.stat().st_size}; SHA256={report['archive']['sha256']}", flush=True)
             for record in files:
                 print(f"  {record['path']}  {record['size']} bytes  {record['sha256']}")
             workspace = work / "consumer-workspace"

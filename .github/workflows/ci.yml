@@ -12,10 +12,10 @@ permissions:
 jobs:
   native-js:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 45
     # Switch to full explicitly for a later complete acceptance run.
     env:
-      CHECK_SCOPE: demo-stroke-batch
+      CHECK_SCOPE: full
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
@@ -46,23 +46,47 @@ jobs:
           echo "MOON_HOME=$MOON_HOME" >> "$GITHUB_ENV"
           echo "$MOON_HOME/bin" >> "$GITHUB_PATH"
       - name: Check selected scope
-        run: bash scripts/check.sh --scope "$CHECK_SCOPE"
+        run: |
+          set -euo pipefail
+          mkdir -p _build/full-acceptance
+          bash scripts/check.sh --scope "$CHECK_SCOPE" 2>&1 | tee _build/full-acceptance/full.log
+      - name: Check local documentation targets
+        if: env.CHECK_SCOPE == 'full'
+        run: |
+          set -euo pipefail
+          python scripts/check_docs.py 2>&1 | tee _build/full-acceptance/docs.log
       - name: Build static MoonBit demo
         if: env.CHECK_SCOPE == 'full'
         working-directory: demo
-        run: npm run build
+        run: |
+          set -euo pipefail
+          npm run build 2>&1 | tee ../_build/full-acceptance/demo-build.log
       - name: Smoke test the real JS geometry bridge
         if: env.CHECK_SCOPE == 'full'
         working-directory: demo
-        run: npm test
+        run: |
+          set -euo pipefail
+          npm test 2>&1 | tee ../_build/full-acceptance/demo-tests.log
       - name: Check bounded benchmark runner (no performance threshold)
         if: env.CHECK_SCOPE == 'full'
         run: |
-          python -m unittest discover -s scripts -p test_bench.py
-          bash scripts/bench.sh --target native --smoke --report _build/bench/smoke.json
-      - name: Audit real candidate package and external native/JS consumers
+          set -euo pipefail
+          python -m unittest discover -s scripts -p test_bench.py 2>&1 | tee _build/full-acceptance/bench-tools.log
+          bash scripts/bench.sh --target native --smoke --report _build/full-acceptance/bench-smoke.json 2>&1 | tee _build/full-acceptance/bench.log
+      - name: Audit source snapshot and external native/JS consumers
         if: env.CHECK_SCOPE == 'full'
-        run: python scripts/check_release.py --report _build/release/report.json
+        run: |
+          set -euo pipefail
+          python scripts/check_release.py --report _build/full-acceptance/package/report.json --publication-status unpublished-source-test-snapshot 2>&1 | tee _build/full-acceptance/package.log
+      - name: Save full acceptance evidence
+        if: always() && env.CHECK_SCOPE == 'full'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: full-acceptance-linux
+          path: |
+            _build/full-acceptance/
+            _build/conformance/
+          if-no-files-found: error
       - name: Save 0.3.2 release candidate and external consumer evidence
         if: always() && env.CHECK_SCOPE == 'package'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2

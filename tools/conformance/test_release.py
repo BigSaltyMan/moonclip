@@ -78,6 +78,9 @@ class ReleaseTreeMarkers(unittest.TestCase):
         self.assertEqual(report["source"], source)
         self.assertEqual(report["consumers"], {})
         self.assertEqual(set(report["platform"]), {"system", "machine"})
+        snapshot = release.snapshot_report(source, "unpublished-source-test-snapshot")
+        self.assertEqual(snapshot["publication_status"], "unpublished-source-test-snapshot")
+        self.assertEqual(snapshot["metadata_version"], "0.3.2")
 
     def test_native_result_cannot_replace_js_execution(self):
         for omitted in ("TREE_API_OK boolean_tree_d", "INCREMENTAL_API_OK batch_stroke_query"):
