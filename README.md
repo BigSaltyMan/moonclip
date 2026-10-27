@@ -66,6 +66,8 @@ npm run dev
 
 ## 验证证据与检查入口
 
+评审材料入口：[成果说明](https://github.com/BigSaltyMan/moonclip/blob/main/docs/submission.md)与[赛事验收导航](https://github.com/BigSaltyMan/moonclip/blob/main/docs/contest-acceptance.md)。
+
 完整回归归属 `339947be1cb0ac87ab3a16b9658093806d0a4736`：Windows／Linux 的 native、JS 分别 **2427/2427**，conformance 工具 294 项、桥接 31/31，见[完整验收](https://github.com/BigSaltyMan/moonclip/blob/339947be1cb0ac87ab3a16b9658093806d0a4736/docs/full-acceptance.md)和[该 SHA CI](https://github.com/BigSaltyMan/moonclip/actions/runs/40313466815)。本版本候选仅另做版本、实际包内容和外部消费者检查，不能写成候选 SHA 重新全量通过。历史定向及浏览器证据保留各自提交归属，参考目录 **1416 个案例、2308 项能力检查**不代表新增八接口已有逐项上游对照。
 
 0.4.0 发布源码及标签固定为 `63db64f23582390d78acac38a9fbfda11a0216b3`，其 [CI 为 package 检查](https://github.com/BigSaltyMan/moonclip/actions/runs/40316832927)。正式上传后另从注册表运行 native、JS 消费者各一次，67 个下载文件在编译前后均对应冻结包；状态文档单独提交，仅运行 docs，不移动发布标签。

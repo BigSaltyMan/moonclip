@@ -12,6 +12,8 @@ from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
 DOCUMENTS = (
+    "docs/submission.md",
+    "docs/contest-acceptance.md",
     "docs/full-acceptance.md",
     "docs/lineclip.md",
     "README.md",

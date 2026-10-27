@@ -54,8 +54,8 @@ C# 源码是主要引擎阅读与移植参考，偏移、简化、扫掠等实�
 | 维度 | MoonClip | MoonGeoKit 当次公开接口 |
 | --- | --- | --- |
 | 主要用途 | 构造和生成合并、裁剪、缓冲及描边后的区域边界 | 基础几何关系、距离与包含、凸包、面积 / 周长 / 重心，以及空间候选检索 |
-| 区域结果 | Boolean、Offset、Stroke 平铺结果；整数／小数树（新增部分为 0.2.0），以及整数 Minkowski Sum | README / 该 API 未列出这些多边形 Boolean、孔洞树和扫掠入口；Bounds::union 是包围盒并集 |
-| 查询与索引 | 精确方向、单轮廓 EvenOdd 点包含；无动态空间索引 | GridSpatialIndex 的 insert / update / remove（含批量）、query_bounds / query_point / query_nearest |
+| 区域结果 | Boolean、Offset、Stroke 平铺及整数／小数树，开放路线区域求交／求差，以及整数／小数 Minkowski Sum 平铺／树 | README / 该 API 未列出这些多边形 Boolean、孔洞树和扫掠入口；Bounds::union 是包围盒并集 |
+| 查询与索引 | 精确方向、单轮廓 EvenOdd 点包含，整数／小数树单点与批量定位；无动态空间索引 | GridSpatialIndex 的 insert / update / remove（含批量）、query_bounds / query_point / query_nearest |
 | 坐标与输出 | Int64 限定网格、统一十进制 Precision、小数结果与结构化错误；演示导出 SVG / JSON | Double 基础类型、*_eps 容差谓词、GeoJSON 输出；不据此比较两者数值精度优劣 |
 
 MoonClip 面向二维区域构造与拓扑运算；MoonGeoKit 侧重基础关系和动态网格空间索引。一个可行用途是先用 MoonGeoKit 筛选空间候选对象，再用 MoonClip 生成合并、裁剪、缓冲或描边边界，形成互补。这是用途说明，本笔没有集成依赖、跨库适配或配对性能测量，不声称生态唯一、全面领先或更快。[成果说明](submission.md)引用本表，不维护另一份详细对照。
